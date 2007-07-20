@@ -1,0 +1,97 @@
+This file only lists a short summary of the changes between FileZilla versions. For a full list of changes, please read the ChangeLog file.
+
+Legend:
+  ! Security related bugfix or otherwise critical bugfix 
+  + New feature or important bugfix
+  - Bugfixes
+
+Beta 11 (2007-07-20):
+
++ Improved queue
++ Import and export dialogs including import of Sitemanager data from legacy FZ 2.x
++ Tab key can be used to switch between panes
++ F6 toggles between quickconnect bar and local/remote path edit fields
++ Location of settings directory can be specified in fzdefaults.xml
+- Engine state could get mixed up if transfers failed
+- Transfer of empty files could incorrectly time out
+- Fix directory cache coherency if removing/renaming directories
+- Work around lack of thread-safety in wxWidgets causing random misbehaviour
+- Properly disconnect idle transfer engines after 30 seconds
+- Update selections if changing sort order of file lists
+- Various minor fixes
+
+Beta 10 (2007-06-03):
+
++ Fix bug that made Beta 9 unusable
+
+Beta 9 (2007-06-01):
+
++ Add "View hidden files" option to server menu
++ Add dialog to clear private data
++ Performance improvements of message log
++ Avoid sending unnecessary TYPE commands
+- Updated TinyXML component, fixes problems with filenames containing ampersands or other special XML entities.
+- Fix deadlock in sftp component under Windows
+- Don't retry connecting if user cancels new/changed hostkey notification
+
+Beta 8 (2007-05-09):
+
+! Fix data corruption on FTPS uploads
++ Implement speed limits
++ Last used local directory will be remembered
++ New option for the sorting of the filelists. Directories can be kept on top or sorted inline.
++ Display warning if detecting a Windows system with a networking bug confirmed by Microsoft
++ Right-clicking the Sitemanager button in the toolbar displays a popup menu with the sites for quick access. On Windows, a dropdown arrow got added.
+- Directorylisting-parser fixes, including support for Microware OS-9
+- Small SFTP transfer speed improvement under Windows
+- Autocompletion did not work properly on GTK based systems
+- Uninstalling FileZilla on Windows should no longer leave registry keys behind 
+- lots of small bugfixes
+
+Beta 7 (2007-03-27):
+
++ New optionspage to change layout of file and directory panes
++ Loading of predefined Sitemanager entries from fzdefaults.xml
++ UTF-8 support for SFTP, merged in upstream changes from PuTTY.
+- Ascii file FTP transfers should now work properly on non-Windows systems
+- Fix SFTP transfers of filenames containing the following characters: [ ] \ * ?
+- lots of small bugfixes and performance improvements
+
+Beta 6 (2007-02-19):
+
++ Vastly improved drag and drop support, including
++ Shell extension under Windows to allow dragging of files from FileZilla into Explorer
++ CTRL+A will select all files in currently focused file list
++ Display warning if trying to connect to SFTP server using FTP protocol
+- Fix timing issue in socket event handling, fixes transfers not starting on some systems
+- Cosmetic fixes under non-Windows platforms.
+
+Beta 5 (2007-01-11):
+
+! Fix format string vulnerabilities
++ Partial drag and drop support.
+- Lots of small bugfixes
+
+Beta 4 (2006-12-14):
+
+- Fix bug that made Beta 3 unusable
+
+Beta 3 (2006-12-13):
+
+- FTP over TLS/SSL support
+- Major performance improvements
+- Automatic connection attempt retries
+- Improved compatibility with legacy systems and other exotic servers
+- Lots of small bugfixes
+
+Beta 2 (2006-10-15):
+
+- Fix timeouts
+- "Update available" notification did not go away after updating
+- Upload progress for SFTP transfers did advance too fast
+- Filters did not apply properly
+- UNC paths can now be browsed locally
+- Directory listings can now be sorted by timestamp and permissions
+
+Beta 1 (2006-10-05):
+- First beta

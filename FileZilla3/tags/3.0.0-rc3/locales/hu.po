@@ -1,0 +1,4103 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FileZilla 3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-08-31 17:52+0200\n"
+"PO-Revision-Date: 2007-08-31 04:11+0100\n"
+"Last-Translator: Bata György <bagyurek@freestart.hu>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Hungarian\n"
+"X-Poedit-Country: HUNGARY\n"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:49
+#: ../../locales/../src/interface/statuslinectrl.cpp:98
+msgid "%H:%M:%S elapsed"
+msgstr "Eltelt: %H:%M:%S"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:53
+#: ../../locales/../src/interface/statuslinectrl.cpp:122
+msgid "%H:%M:%S left"
+msgstr "Hátralévő: %H:%M:%S"
+
+#: ../../locales/../src/interface/QueueView.cpp:2083
+#, c-format
+msgid "%d files added to queue"
+msgstr ""
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:47
+#, c-format
+msgid "%s - Certificate expired!"
+msgstr ""
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:31
+#, c-format
+msgid "%s - Not yet valid!"
+msgstr ""
+
+#: ../../locales/../src/interface/updatewizard.cpp:667
+#, c-format
+msgid "%s bytes"
+msgstr "%s byte"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:114
+#: ../../locales/../src/interface/updatewizard.cpp:651
+#, c-format
+msgid "%s bytes (%d B/s)"
+msgstr "%s byte (%d B/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:112
+#: ../../locales/../src/interface/updatewizard.cpp:649
+#, c-format
+msgid "%s bytes (%d.%d KB/s)"
+msgstr "%s byte (%d.%d KB/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:110
+#: ../../locales/../src/interface/updatewizard.cpp:647
+#, c-format
+msgid "%s bytes (%d.%d MB/s)"
+msgstr "%s byte (%d.%d MB/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:132
+#, c-format
+msgid "%s bytes (? B/s)"
+msgstr "%s byte (? B/s)"
+
+#: ../../locales/../src/interface/FileZilla.cpp:735
+#, c-format
+msgid ""
+"%s could not be found. Without this component of FileZilla, SFTP will not "
+"work.\n"
+"\n"
+"Possible solutions:\n"
+"- Make sure %s is in a directory listed in your PATH environment variable.\n"
+"- Set the full path to %s in the FZ_FZSFTP environment variable."
+msgstr ""
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:64
+#, c-format
+msgid "%s with %d bits"
+msgstr ""
+
+#: resources.h:403
+msgid "&About..."
+msgstr "Névjegy..."
+
+#: resources.h:83
+msgid "&Account:"
+msgstr "Fiók:"
+
+#: resources.h:97 resources.h:154 resources.h:471
+msgid "&Active"
+msgstr "Aktív"
+
+#: resources.h:407 resources.h:417 resources.h:452
+msgid "&Add files to queue"
+msgstr "Várólistához adás"
+
+#: resources.h:21
+msgid "&Always trust certificate in future sessions."
+msgstr "A továbbiakban mindig fogadja el ezt a bizonyítványt."
+
+#: resources.h:236
+msgid "&Always trust this host, add this key to the cache"
+msgstr ""
+"A továbbiakban mindig fogadja el ezt a címkulcsot, és tárolja el a "
+"regisztrációs adatbázisban."
+
+#: resources.h:59
+msgid "&Always use this action"
+msgstr "A továbbiakban mindig ez legyen a beállítás"
+
+#: resources.h:320 resources.h:339
+msgid "&Ask for action"
+msgstr "Rákérdezés"
+
+#: resources.h:127
+msgid "&Auto"
+msgstr "Automatikus"
+
+#: resources.h:103
+msgid "&Autodetect"
+msgstr "Automatikus"
+
+#: resources.h:449
+msgid "&Automatically remove successful transfers"
+msgstr "Sikeres átvitelek automatikus eltávolítása"
+
+#: resources.h:129
+msgid "&Binary"
+msgstr "Bináris"
+
+#: resources.h:89
+msgid "&Browse..."
+msgstr "Tallózás..."
+
+#: resources.h:40
+msgid "&Burst tolerance:"
+msgstr "Burst tűrés:"
+
+#: resources.h:63 resources.h:121 resources.h:125 resources.h:194
+#: resources.h:238 resources.h:250
+msgid "&Cancel"
+msgstr "Mégse"
+
+#: resources.h:302
+msgid "&Check for beta versions of FileZilla"
+msgstr "Keresse a FileZilla beta verzióit is"
+
+#: resources.h:391
+msgid "&Clear private data..."
+msgstr "Személyes adatok törlése..."
+
+#: resources.h:109
+msgid "&Connect"
+msgstr "Csatlakozás"
+
+#: resources.h:271
+msgid "&Copy"
+msgstr "Másolás"
+
+#: resources.h:438
+msgid "&Copy to clipboard"
+msgstr "Másolás a vágólapra"
+
+#: resources.h:441
+msgid "&Crash"
+msgstr "Összeomlasztás"
+
+#: resources.h:409 resources.h:419 resources.h:454
+msgid "&Create directory"
+msgstr "Könyvtár létrehozása"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:448
+msgid "&Debug"
+msgstr "Hibakeresés"
+
+#: resources.h:183
+msgid "&Debug information in message log:"
+msgstr "Hibakeresési információk követése az üzenet naplóban:"
+
+#: resources.h:393 resources.h:430
+msgid "&Default file exists action..."
+msgstr "Fájl felülírás beállítása..."
+
+#: resources.h:69 resources.h:253 resources.h:269
+msgid "&Delete"
+msgstr "Törlés"
+
+#: resources.h:396
+msgid "&Disconnect"
+msgstr "Lekapcsolódás"
+
+#: ../../locales/../src/interface/conditionaldialog.cpp:22
+msgid "&Don't show this dialog again."
+msgstr "Ezt az ablakot ne jelenítse meg a továbbiakban."
+
+#: resources.h:415 resources.h:450
+msgid "&Download"
+msgstr "Letöltés"
+
+#: resources.h:384
+msgid "&Edit"
+msgstr "Szerkesztés"
+
+#: resources.h:255
+msgid "&Edit filters..."
+msgstr "Szűrők szerkesztése..."
+
+#: resources.h:177
+msgid "&Enable automatic update check"
+msgstr "Automatikus frissítés keresés engedélyezése"
+
+#: resources.h:107
+msgid "&Encoding:"
+msgstr "Kódolás:"
+
+#: resources.h:437
+msgid "&Enter custom command..."
+msgstr "Egyéni parancs beírása..."
+
+#: resources.h:200
+msgid "&Execute"
+msgstr "Végrehajtás"
+
+#: resources.h:366
+msgid "&Export Site Manager entries"
+msgstr "Kedvenc Helyek bejegyzéseinek exportálása"
+
+#: resources.h:389
+msgid "&Export..."
+msgstr "Exportálás..."
+
+#: resources.h:4
+msgid "&Fall back to active mode"
+msgstr "Áttérés aktív módra"
+
+#: resources.h:379
+msgid "&File"
+msgstr "Fájl"
+
+#: resources.h:425 resources.h:460
+msgid "&File Attributes..."
+msgstr "Attribútumok..."
+
+#: resources.h:252
+msgid "&Filter sets:"
+msgstr "Szűrőkészletek:"
+
+#: resources.h:267
+msgid "&Filters:"
+msgstr "Szűrők:"
+
+#: resources.h:400
+msgid "&Help"
+msgstr "Súgó"
+
+#: resources.h:432
+msgid "&Highest"
+msgstr "Legmagasabb"
+
+#: resources.h:289
+msgid "&Highest available port:"
+msgstr "Legmagasabb elérhető port:"
+
+#: resources.h:72 resources.h:509
+msgid "&Host:"
+msgstr "Cím:"
+
+#: resources.h:390
+msgid "&Import..."
+msgstr "Importálás..."
+
+#: resources.h:286
+msgid "&Limit local ports used by FileZilla"
+msgstr "A FileZilla által használt helyi portok korlátozása"
+
+#: resources.h:99
+msgid "&Limit number of simultaneous connections"
+msgstr "Az egyidejű kapcsolati szálak számának korlátozása"
+
+#: resources.h:75
+msgid "&Logontype:"
+msgstr "Bejelentkezés típusa:"
+
+#: resources.h:435
+msgid "&Low"
+msgstr "Alacsony"
+
+#: resources.h:100
+msgid "&Maximum number of connections:"
+msgstr "A kapcsolati szálak maximális száma:"
+
+#: resources.h:387
+msgid "&Network configuration wizard..."
+msgstr "Hálózati beállítások varázsló..."
+
+#: resources.h:268
+msgid "&New"
+msgstr "Új"
+
+#: resources.h:66
+msgid "&New Site"
+msgstr "Új állomás"
+
+#: ../../locales/../src/interface/updatewizard.cpp:800
+msgid "&New version available!"
+msgstr ""
+
+#: resources.h:434
+msgid "&Normal"
+msgstr "Normál"
+
+#: resources.h:209
+msgid "&Numeric value:"
+msgstr "Számérték:"
+
+#: resources.h:110 resources.h:120 resources.h:124
+msgid "&OK"
+msgstr "OK"
+
+#: resources.h:54 resources.h:321 resources.h:340
+msgid "&Overwrite"
+msgstr "Felülírás"
+
+#: resources.h:98
+msgid "&Passive"
+msgstr "Passzív"
+
+#: resources.h:118
+msgid "&Password:"
+msgstr "Jelszó:"
+
+#: resources.h:73 resources.h:513
+msgid "&Port:"
+msgstr "Port:"
+
+#: resources.h:375
+msgid "&Queue"
+msgstr "Átviteli várólista"
+
+#: resources.h:515
+msgid "&Quickconnect"
+msgstr "Csatlakozás"
+
+#: resources.h:198
+msgid "&Read"
+msgstr "Olvasás"
+
+#: resources.h:395
+msgid "&Reconnect"
+msgstr "Újracsatlakozás"
+
+#: resources.h:119
+msgid "&Remember password for this session"
+msgstr "Jelszó megjegyzése erre a munkamenetre"
+
+#: resources.h:133
+msgid "&Remove"
+msgstr "Eltávolítás"
+
+#: resources.h:429
+msgid "&Remove selected"
+msgstr "Kijelölt fájlok eltávolítása a várólistából"
+
+#: resources.h:68 resources.h:270 resources.h:413 resources.h:423
+#: resources.h:458
+msgid "&Rename"
+msgstr "Átnevezés"
+
+#: resources.h:508
+msgid "&Restart Wizard"
+msgstr "Varázsló újraindítása"
+
+#: resources.h:56 resources.h:323 resources.h:342
+msgid "&Resume"
+msgstr "Folytatás"
+
+#: resources.h:151
+msgid "&Run configuration wizard now..."
+msgstr "Hálózati beállítások varázsló futtatása..."
+
+#: resources.h:180
+msgid "&Run update check now..."
+msgstr "Frissítések keresésének futtatása most..."
+
+#: resources.h:254
+msgid "&Save as..."
+msgstr "Mentés másként..."
+
+#: resources.h:174
+msgid "&Select language:"
+msgstr "Válassza ki a FileZilla által használt nyelvet:"
+
+#: resources.h:394
+msgid "&Server"
+msgstr "Kiszolgáló"
+
+#: resources.h:374
+msgid "&Settings"
+msgstr "Beállítások"
+
+#: resources.h:385
+msgid "&Settings..."
+msgstr "Beállítások..."
+
+#: resources.h:182
+msgid "&Show debug menu"
+msgstr "A Hibakeresés menü engedélyezése"
+
+#: resources.h:380
+msgid "&Site Manager..."
+msgstr "Kedvenc Helyek..."
+
+#: resources.h:58
+msgid "&Skip"
+msgstr "Kihagyás"
+
+#: resources.h:143
+msgid "&Swap local and remote panes"
+msgstr "A helyi és a távoli panelek felcserélése"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:223
+msgid "&Test"
+msgstr "Teszt"
+
+#: resources.h:164
+msgid "&Theme:"
+msgstr "Téma:"
+
+#: resources.h:392
+msgid "&Transfer"
+msgstr "Átvitel"
+
+#: resources.h:95
+msgid "&Transfer mode:"
+msgstr "Átviteli mód:"
+
+#: resources.h:136
+msgid "&Treat dotfiles (filenames starting with a dot) as Ascii files"
+msgstr "A ponttal kezdődő fájlnevű fájlok kezelése Ascii fájlokként történjen"
+
+#: resources.h:248
+msgid "&Update cached key for this host"
+msgstr ""
+"Módosítsa a regisztrációs adatbázisban eltárolt címkulcsot ehhez a címhez."
+
+#: resources.h:405
+msgid "&Upload"
+msgstr "Feltöltés"
+
+#: resources.h:3
+msgid "&Use the server's external IP address instead"
+msgstr "Ehelyett, a kiszolgáló külső IP címének használata"
+
+#: resources.h:81
+msgid "&User:"
+msgstr "Felhasználónév:"
+
+#: resources.h:511
+msgid "&Username:"
+msgstr "Felhasználónév:"
+
+#: ../../locales/../src/interface/updatewizard.cpp:798
+#, c-format
+msgid "&Version %s"
+msgstr ""
+
+#: resources.h:199
+msgid "&Write"
+msgstr "Írás"
+
+#: ../../locales/../src/interface/state.cpp:103
+#, c-format
+msgid "'%s' does not exist or cannot be accessed."
+msgstr ""
+
+#: ../../locales/../src/interface/sitemanager.cpp:519
+msgid "'Account' logontype not supported by selected protocol"
+msgstr ""
+
+#: ../../locales/../src/interface/Mainfrm.cpp:501
+msgid ""
+"'quote' is usually a local command used by commandline clients to send the "
+"arguments following 'quote' to the server. You might want to enter the raw "
+"command without the leading 'quote'."
+msgstr ""
+
+#: resources.h:28 resources.h:30
+msgid "(0 for no limit)"
+msgstr "(0 ha nincs korlátozás)"
+
+#: resources.h:159
+msgid "(0-99)"
+msgstr "(0-99)"
+
+#: resources.h:161
+msgid "(0-999 seconds)"
+msgstr "(0-999 másodperc)"
+
+#: resources.h:26
+msgid "(1-10)"
+msgstr "(1-10)"
+
+#: resources.h:33
+msgid "(5-9999, 0 to disable)"
+msgstr "(5-9999, 0 a letiltáshoz)"
+
+#: resources.h:179
+msgid "(At least 7 days)"
+msgstr "naponta. (Legalább 7 nap.)"
+
+#: resources.h:37 resources.h:39
+msgid "(in KB/s)"
+msgstr "(KB/s, 0 ha nincs korlátozás)"
+
+#: ../../locales/../src/interface/updatewizard.cpp:659
+msgid ", %H:%M:%S left"
+msgstr ", hátralévő: %H:%M:%S"
+
+#: ../../locales/../src/interface/updatewizard.cpp:663
+msgid ", --:--:-- left"
+msgstr ", hátralévő: --:--:--"
+
+#: resources.h:496
+msgid "-"
+msgstr "-"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:126
+#: ../../locales/../src/interface/statuslinectrl.cpp:131
+msgid "--:--:-- left"
+msgstr "Hátralévő: --:--:--"
+
+#: resources.h:184
+msgid "0 - None"
+msgstr "0 - Nincs"
+
+#: resources.h:185
+msgid "1 - Warning"
+msgstr "1 - Figyelmeztetések"
+
+#: resources.h:186
+msgid "2 - Info"
+msgstr "2 - Információk"
+
+#: resources.h:187
+msgid "3 - Verbose"
+msgstr "3 - Részletes"
+
+#: resources.h:188
+msgid "4 - Debug"
+msgstr "4 - Hibakeresés"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:139
+#: ../../locales/../src/interface/RemoteTreeView.cpp:106
+msgid "A directory cannot be dragged into one if its subdirectories."
+msgstr ""
+
+#: resources.h:468
+msgid ""
+"A few servers don't allow passive mode or are misconfigured. In such cases "
+"you would have to use active mode. In active mode, FileZilla opens a port "
+"and asks the server to connect to it."
+msgstr ""
+"Néhány szerver nem támogatja a passzív módot, vagy rosszul van beállítva. "
+"Ezekben az esetekben az aktív módot kell használnia. Aktív módban, a "
+"FileZilla megnyit egy portot, majd kéri a kiszolgálót hogy ehhez "
+"csatlakozzon."
+
+#: ../../locales/../src/interface/FileZilla.cpp:627
+msgid ""
+"A local filename could not be decoded.\n"
+"Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
+"correctly.\n"
+"Unless you fix this problem, files might be missing in the file listings.\n"
+"No further warning will be displayed this session."
+msgstr ""
+
+#: resources.h:304
+msgid "A newer version of FileZilla is available:"
+msgstr "A FileZilla egy újabb verziója elérhető:"
+
+#: resources.h:132
+msgid "A&dd"
+msgstr "Hozzáadás"
+
+#: resources.h:353
+msgid "A&llow resume of ascii files"
+msgstr "Ascii fájlok átviteli folytatásának engedélyezése"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:99
+msgid "A&pply only to downloads"
+msgstr "Csak a letöltésekre alkalmazza"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:155
+msgid "A&pply only to uploads"
+msgstr "Csak a feltöltésekre alkalmazza"
+
+#: resources.h:212
+msgid "A&pply to all files and directories"
+msgstr "Alkalmazás az összes fájlra és mappára"
+
+#: resources.h:128
+msgid "A&scii"
+msgstr "Ascii"
+
+#: resources.h:328 resources.h:346
+msgid "A&sk for action"
+msgstr "Rákérdezés"
+
+#: resources.h:217
+msgid "About FileZilla"
+msgstr "FileZilla névjegye"
+
+#: resources.h:80 ../../locales/../src/interface/sitemanager.cpp:516
+#: ../../locales/../src/interface/sitemanager.cpp:566
+#: ../../locales/../src/interface/sitemanager.cpp:759
+#: ../../locales/../src/interface/sitemanager.cpp:760
+#: ../../locales/../src/interface/sitemanager.cpp:798
+#: ../../locales/../src/interface/sitemanager.cpp:1014
+msgid "Account"
+msgstr "Fiókos"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:97
+msgid "Active mode"
+msgstr "Aktív mód"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:593
+msgid ""
+"Active mode FTP test failed. FileZilla does not know the correct external IP "
+"address."
+msgstr ""
+"Az aktív módú FTP teszt nem sikerült. A FileZilla nem tudja a helyes külső "
+"IP címet."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:580
+msgid ""
+"Active mode FTP test failed. FileZilla does not know the correct external IP "
+"address. In addition to that, your router has modified the sent address."
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:568
+msgid ""
+"Active mode FTP test failed. FileZilla knows the correct external IP "
+"address, but your router has misleadingly modified the sent address."
+msgstr ""
+
+#: resources.h:297
+msgid "Active mode IP"
+msgstr "IP cím aktív módban"
+
+#: resources.h:277
+msgid "Add &more"
+msgstr "Hozzáadás"
+
+#: resources.h:453
+msgid "Add selected directory to the transfer queue"
+msgstr ""
+
+#: resources.h:408 resources.h:418
+msgid "Add selected files and folders to the transfer queue"
+msgstr ""
+
+#: resources.h:91
+msgid "Adjust server timezone offset:"
+msgstr "A kiszolgáló időzónájának időeltolódása:"
+
+#: resources.h:85
+msgid "Advanced"
+msgstr "Speciális"
+
+#: resources.h:301
+msgid "Advanced options:"
+msgstr "Speciális opciók:"
+
+#: resources.h:497
+msgid "All ports in the given range have to be between 1024 and 65535."
+msgstr "A megadott port tartománynak 1024 és 65535 között kell lennie."
+
+#: resources.h:155
+msgid "Allow fall back to other transfer mode on failure"
+msgstr "Áttérés a másik átviteli módra, ha hiba történik"
+
+#: resources.h:472
+msgid "Allow fallback to other transfer mode on failure"
+msgstr "Áttérés a másik átviteli módra, ha hiba történik"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:557
+msgid ""
+"Also, not all servers support this feature and may return incorrect listings "
+"if 'View hidden files' is enabled. Although FileZilla performs some tests to "
+"see if the server supports this feature, the test may fail."
+msgstr ""
+"Vegye figyelembe, hogy nem minden kiszolgáló támogatja ezt a funkciót, így "
+"ezeken a kiszolgálókon a fájlok kilistázása hibás lehet, amennyiben a "
+"'Rejtett fájlok megjelenítése' engedélyezve van. Bár a FileZilla néhány "
+"tesztet végrehajt a kiszolgálón a funkció támogatásának ellenőrzésére, de a "
+"teszt esetleg sikertelen is lehet."
+
+#: ../../locales/../src/interface/updatewizard.cpp:836
+msgid ""
+"Alternatively, visit http://filezilla-project.org to download the most "
+"recent version."
+msgstr ""
+"Másik megoldásként, meglátogathatja a http://filezilla-project.org webcímet "
+"a legfrissebb verzió letöltéséhez."
+
+#: resources.h:76 ../../locales/../src/interface/sitemanager.cpp:557
+#: ../../locales/../src/interface/sitemanager.cpp:758
+#: ../../locales/../src/interface/sitemanager.cpp:951
+#: ../../locales/../src/interface/sitemanager.cpp:1017
+msgid "Anonymous"
+msgstr "Névtelen"
+
+#: resources.h:275
+msgid "Any of the following"
+msgstr "Bármelyikének"
+
+#: resources.h:214
+msgid "App&ly to directories only"
+msgstr "Alkalmazás csak a mappákra"
+
+#: resources.h:265
+msgid "Apply"
+msgstr "Alkalmaz"
+
+#: resources.h:60
+msgid "Apply to &current queue only"
+msgstr "Csak az aktuális várólistára alkalmazza"
+
+#: resources.h:213
+msgid "Apply to &files only"
+msgstr "Alkalmazás csak a fájlokra"
+
+#: ../../locales/../src/interface/updatewizard.cpp:195
+msgid "Archive"
+msgstr ""
+
+#: resources.h:78 ../../locales/../src/interface/sitemanager.cpp:794
+#: ../../locales/../src/interface/sitemanager.cpp:1008
+msgid "Ask for password"
+msgstr "Jelszó bekérése"
+
+#: resources.h:493
+msgid "Ask operating system for a port."
+msgstr "Port kérése az operációs rendszertől"
+
+#: resources.h:291 resources.h:483
+msgid "Ask your operating system for the external IP address"
+msgstr "A külső IP cím elkérése az operációs rendszertől"
+
+#: ../../locales/../src/interface/filteredit.cpp:547
+msgid "At least one filter condition is incomplete"
+msgstr "Legalább egy szűrő feltétel nem érvényes."
+
+#: resources.h:502
+msgid "At this point, all required information has been gathered."
+msgstr "A hálózati beállításokhoz minden információ megadásra került."
+
+#: resources.h:165
+msgid "Author:"
+msgstr "Szerző:"
+
+#: resources.h:130
+msgid "Automatic file type classification"
+msgstr "Fájltípusok automatikus besorolása"
+
+#: resources.h:176
+msgid "Automatic update check"
+msgstr "Automatikus frissítés keresés"
+
+#: resources.h:142
+msgid "Blackboard"
+msgstr "Blackboard"
+
+#: ../../locales/../src/interface/state.cpp:257
+msgid "Break current connection?"
+msgstr "Megszünteti a jelenlegi kapcsolatot?"
+
+#: resources.h:224
+msgid "Build date:"
+msgstr "Változat dátuma:"
+
+#: resources.h:222
+msgid "Build information"
+msgstr "Program változat"
+
+#: resources.h:287
+msgid ""
+"By default uses any available local port to establish transfers in active "
+"mode. If you want to limit FileZilla to use only a small range of ports, "
+"please enter the port range below."
+msgstr ""
+"Alapesetben, aktív módban bármelyik szabad helyi port használható a "
+"kapcsolat létesítéséhez. Ha azt szeretné, hogy a FileZilla csak a portoknak "
+"egy kis tartományát használja, adja meg a port tartomány határait."
+
+#: resources.h:303
+msgid "C&heck for nightly builds of FileZilla"
+msgstr "Keresse a FileZilla napi programváltozatait is"
+
+#: resources.h:439
+msgid "C&lear all"
+msgstr "Napló törlése"
+
+#: ../../locales/../src/engine/transfersocket.cpp:567
+msgid "Can't read from file"
+msgstr ""
+
+#: ../../locales/../src/engine/transfersocket.cpp:541
+msgid "Can't write data to file, disk is full."
+msgstr ""
+
+#: ../../locales/../src/engine/transfersocket.cpp:543
+#: ../../locales/../src/engine/transfersocket.cpp:546
+#: ../../locales/../src/engine/transfersocket.cpp:611
+msgid "Can't write data to file."
+msgstr ""
+
+#: resources.h:23 resources.h:216 resources.h:264 resources.h:284
+#: resources.h:336 resources.h:363 resources.h:370 resources.h:378
+msgid "Cancel"
+msgstr "Mégse"
+
+#: resources.h:530
+msgid "Cancel current operation"
+msgstr "Az aktuális művelet megszakítása"
+
+#: resources.h:531
+msgid "Cancels the current operation"
+msgstr "Az aktuális művelet megszakítása"
+
+#: ../../locales/../src/interface/state.cpp:115
+#, c-format
+msgid "Cannot access '%s', no media inserted or drive not ready."
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:251
+msgid ""
+"Cannot establish FTP connection to an SFTP server. Please select proper "
+"protocol."
+msgstr ""
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:30
+msgid "Cannot load Quickconnect bar from resource file"
+msgstr ""
+
+#: ../../locales/../src/interface/import.cpp:25
+msgid "Cannot load file, not a valid XML file."
+msgstr ""
+
+#: ../../locales/../src/interface/Mainfrm.cpp:434
+msgid "Cannot load main menu from resource file"
+msgstr ""
+
+#: ../../locales/../src/interface/Mainfrm.cpp:685
+msgid "Cannot load toolbar from resource file"
+msgstr ""
+
+#: ../../locales/../src/interface/sitemanager.cpp:643
+msgid "Cannot rename entry"
+msgstr "Többszörös név"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1718
+msgid "Cannot rename file"
+msgstr ""
+
+#: resources.h:357
+msgid "Categories"
+msgstr "Kategóriák"
+
+#: resources.h:18
+msgid "Certificate issuer"
+msgstr "Bizonyítvány kiállítója"
+
+#: resources.h:117
+msgid "Challenge:"
+msgstr "Kérdés:"
+
+#: resources.h:195
+msgid "Change file attributes"
+msgstr "Attribútumok módosítása"
+
+#: resources.h:426 resources.h:461
+msgid "Change the file permissions."
+msgstr ""
+
+#: ../../locales/../src/interface/FileZilla.cpp:627
+msgid "Character encoding issue"
+msgstr ""
+
+#: resources.h:101
+msgid "Charset"
+msgstr "Karakterkészlet"
+
+#: resources.h:401
+msgid "Check for &updates..."
+msgstr "Frissítések keresése..."
+
+#: resources.h:402
+msgid "Check for newer versions of FileZilla"
+msgstr "A FileZilla újabb verzióinak keresése"
+
+#: ../../locales/../src/interface/updatewizard.cpp:59
+msgid "Check for updates"
+msgstr "Frissítések keresése"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:748
+msgid "Checking for correct external IP address"
+msgstr "A helyes külső IP cím ellenőrzése"
+
+#: resources.h:299
+msgid "Checking for updates"
+msgstr "Frissítések keresése"
+
+#: ../../locales/../src/interface/sitemanager.cpp:891
+msgid "Choose the default local directory"
+msgstr "Válassza ki az alapértelmezett helyi mappát"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:814
+msgid "Chunk data improperly terminated"
+msgstr ""
+
+#: resources.h:139
+msgid "Classic"
+msgstr "Klasszikus"
+
+#: resources.h:360
+msgid "Clear &Site Manager entries"
+msgstr "Kedvenc Helyek bejegyzéseinek törlése"
+
+#: resources.h:440
+msgid "Clear &layout cache"
+msgstr "Elrendezés gyorsítótár törlése"
+
+#: resources.h:358
+msgid "Clear &quickconnect history"
+msgstr "Gyorskapcsolódás előzmények törlése"
+
+#: resources.h:359
+msgid "Clear &reconnect information"
+msgstr "Újracsatlakozás adatok törlése"
+
+#: resources.h:361
+msgid "Clear &transfer queue"
+msgstr "Átviteli várólista törlése"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:123
+msgid "Clear history"
+msgstr "Előzmények törlése"
+
+#: resources.h:355 ../../locales/../src/interface/clearprivatedata.cpp:34
+#: ../../locales/../src/interface/clearprivatedata.cpp:40
+#: ../../locales/../src/interface/clearprivatedata.cpp:46
+#: ../../locales/../src/interface/clearprivatedata.cpp:68
+#: ../../locales/../src/interface/clearprivatedata.cpp:90
+msgid "Clear private data"
+msgstr "Személyes adatok törlése"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:122
+msgid "Clear quickconnect bar"
+msgstr "Beírt címadatok törlése"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:560
+msgid "Click on Finish to save your configuration."
+msgstr "Kattintson a Befejezés gombra a beállítások mentéséhez."
+
+#: ../../locales/../src/interface/updatewizard.cpp:835
+msgid "Click on next to download the new version."
+msgstr "Kattintson a Következő gombra az új verzió letöltéséhez."
+
+#: resources.h:383
+msgid "Close FileZilla"
+msgstr "A FileZilla bezárása"
+
+#: resources.h:84
+msgid "Co&mments:"
+msgstr "Megjegyzések:"
+
+#: ../../locales/../src/engine/engineprivate.cpp:217
+msgid "Command not supported by this protocol"
+msgstr ""
+
+#: ../../locales/../src/interface/StatusView.cpp:184
+#: ../../locales/../src/interface/StatusView.cpp:219
+msgid "Command:"
+msgstr "Parancs:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:120
+msgid "Common name:"
+msgstr "Rövid név:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:418
+#: ../../locales/../src/interface/netconfwizard.cpp:433
+msgid "Communication tainted by router"
+msgstr ""
+
+#: resources.h:225
+msgid "Compiled with:"
+msgstr "Fordító:"
+
+#: resources.h:226
+msgid "Compiler flags:"
+msgstr "Kapcsolók:"
+
+#: resources.h:24
+msgid "Concurrent transfers"
+msgstr "Egyidejű kapcsolatok"
+
+#: resources.h:279
+msgid "Conditions are c&ase sensitive"
+msgstr "Kis- és nagybetűk megkülönböztetése a szabályok alkalmazásakor"
+
+#: resources.h:501
+msgid "Configuration test"
+msgstr "Beállítások tesztje"
+
+#: resources.h:475
+msgid "Configure passive mode"
+msgstr "Passzív mód beállítása"
+
+#: resources.h:491
+msgid "Configure port range"
+msgstr "Port tartomány beállítása"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1417
+#: ../../locales/../src/interface/RemoteListView.cpp:1438
+msgid "Confirmation needed"
+msgstr "Megerősítés szükséges"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:556
+msgid "Congratulations, your configuration seems to be working."
+msgstr "Gratulálunk, úgy tűnik a hálózati beállítás megfelelően működik."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:607
+msgid "Connected"
+msgstr "A csatlakozás sikerült"
+
+#: ../../locales/../src/interface/QueueView.cpp:1204
+msgid "Connecting"
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:202
+#: ../../locales/../src/interface/statuslinectrl.cpp:156
+#, c-format
+msgid "Connecting to %s"
+msgstr "Csatlakozás a következő kiszolgálóhoz: %s"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:963
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:492
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:324
+#, c-format
+msgid "Connecting to %s:%d..."
+msgstr "Csatlakozás a következő kiszolgálóhoz: %s:%d..."
+
+#: ../../locales/../src/interface/updatewizard.cpp:232
+#: ../../locales/../src/interface/updatewizard.cpp:754
+msgid "Connecting to server"
+msgstr ""
+
+#: ../../locales/../src/interface/settingsdialog.cpp:96
+msgid "Connection"
+msgstr "Kapcsolat"
+
+#: ../../locales/../src/interface/QueueView.cpp:906
+msgid "Connection attempt failed"
+msgstr ""
+
+#: ../../locales/../src/engine/ControlSocket.cpp:122
+#: ../../locales/../src/engine/engineprivate.cpp:369
+msgid "Connection attempt interrupted by user"
+msgstr "A csatlakozási kísérletet a felhasználó megszakította"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:535
+msgid "Connection closed"
+msgstr "A kapcsolat bezáródott."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:297
+msgid "Connection established, initializing TLS..."
+msgstr "Az adatkapcsolat létrejött, a TLS inicializálása..."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:319
+msgid "Connection established, sending HTTP request"
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:326
+msgid "Connection established, waiting for welcome message..."
+msgstr "Az adatkapcsolat létrejött, várakozás az üdvözlő üzenetre..."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:333
+msgid "Connection lost"
+msgstr ""
+
+#: ../../locales/../src/engine/ControlSocket.cpp:596
+msgid "Connection timed out"
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:552
+msgid "Connection with server got closed prematurely."
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:544
+msgid "Connection with the test server failed."
+msgstr "A teszt szerverrel történő kapcsolatfelvétel nem sikerült."
+
+#: resources.h:70
+msgid "Cop&y"
+msgstr "Másolás"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1165
+#, c-format
+msgid "Copy (%d) of %s"
+msgstr ""
+
+#: ../../locales/../src/interface/sitemanager.cpp:1142
+#, c-format
+msgid "Copy of %s"
+msgstr ""
+
+#: ../../locales/../src/engine/ControlSocket.cpp:124
+msgid "Could not connect to server"
+msgstr "A kiszolgálóhoz nem sikerült a csatlakozás"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2234
+#: ../../locales/../src/interface/RemoteTreeView.cpp:829
+msgid ""
+"Could not determine the target of the Drag&Drop operation.\n"
+"Either the shell extension is not installed properly or you didn't drop the "
+"files into an Explorer window."
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3421
+msgid "Could not establish connection to server"
+msgstr ""
+
+#: ../../locales/../src/interface/FileZilla.cpp:362
+msgid ""
+"Could not find the resource files for FileZilla, closing FileZilla.\n"
+"You can set the data directory of FileZilla using the '--datadir "
+"<custompath>' commandline option or by setting the FZ_DATADIR environment "
+"variable."
+msgstr ""
+
+#: ../../locales/../src/interface/Options.cpp:102
+#, c-format
+msgid ""
+"Could not load \"%s\", make sure the file is valid.\n"
+"For this session, default settings will be used and any changes to the "
+"settings are not persistent."
+msgstr ""
+
+#: ../../locales/../src/interface/wrapengine.cpp:820
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed."
+msgstr ""
+
+#: ../../locales/../src/interface/filter.cpp:167
+#: ../../locales/../src/interface/filter.cpp:252
+#: ../../locales/../src/interface/sitemanager.cpp:353
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"Any changes made in the Site Manager could not be saved."
+msgstr ""
+
+#: ../../locales/../src/interface/import.cpp:99
+#: ../../locales/../src/interface/import.cpp:278
+#: ../../locales/../src/interface/sitemanager.cpp:252
+#: ../../locales/../src/interface/sitemanager.cpp:1297
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"Any changes made in the Site Manager will not be saved."
+msgstr ""
+
+#: ../../locales/../src/interface/QueueView.cpp:1629
+#: ../../locales/../src/interface/QueueView.cpp:1656
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"The queue will not be saved."
+msgstr ""
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:70
+msgid "Could not parse server address:"
+msgstr "A kiszolgáló címe nem elemezhető:"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2030
+#, c-format
+msgid "Could not seek to offset %s within file"
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1961
+msgid "Could not seek to the end of the file"
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2050
+msgid "Could not spawn IO thread"
+msgstr ""
+
+#: ../../locales/../src/interface/QueueView.cpp:932
+#: ../../locales/../src/interface/QueueView.cpp:937
+msgid "Could not start transfer"
+msgstr ""
+
+#: ../../locales/../src/interface/sitemanager.cpp:379
+#, c-format
+msgid ""
+"Could not write \"%s\", any changes to the Site Manager could not be saved: %"
+"s"
+msgstr ""
+
+#: ../../locales/../src/interface/QueueView.cpp:1639
+#: ../../locales/../src/interface/QueueView.cpp:1675
+#, c-format
+msgid "Could not write \"%s\", the queue could not be saved."
+msgstr ""
+
+#: ../../locales/../src/interface/wrapengine.cpp:988
+#, c-format
+msgid "Could not write \"%s\": %s"
+msgstr ""
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:124
+msgid "Country:"
+msgstr "Ország:"
+
+#: resources.h:442
+msgid "Crashes FileZilla instantly. Only used to debug the exception handler"
+msgstr ""
+"A FileZilla azonnali összeomlasztása. Kizárólag a kivételkezelő "
+"hibakeresésénél használatos."
+
+#: resources.h:410 resources.h:420 resources.h:455
+msgid "Create a new subdirectory in the current directory"
+msgstr ""
+
+#: ../../locales/../src/interface/LocalListView.cpp:1316
+#: ../../locales/../src/interface/RemoteListView.cpp:1383
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1192
+msgid "Create directory"
+msgstr "Könyvtár létrehozása"
+
+#: ../../locales/../src/interface/QueueView.cpp:1277
+msgid "Creating directory"
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2589
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1618
+#, c-format
+msgid "Creating directory '%s'..."
+msgstr "Mappa létrehozása: '%s'..."
+
+#: ../../locales/../src/engine/ControlSocket.cpp:111
+msgid "Critical error"
+msgstr "Kritikus hiba"
+
+#: ../../locales/../src/interface/filter.cpp:116
+msgid "Custom filter set"
+msgstr "Egyéni szűrőkészlet"
+
+#: resources.h:96
+msgid "D&efault"
+msgstr "Alapértelmezett"
+
+#: resources.h:411 resources.h:421 resources.h:456
+msgid "D&elete"
+msgstr "Törlés"
+
+#: resources.h:258
+msgid "D&isable all"
+msgstr "Mind tiltása"
+
+#: resources.h:111
+msgid "D&iscard"
+msgstr "Mégse"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:963
+#: ../../locales/../src/interface/netconfwizard.cpp:1029
+msgid "Data socket closed too early."
+msgstr ""
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:68
+#: ../../locales/../src/interface/fileexistsdlg.cpp:92
+#: ../../locales/../src/interface/fileexistsdlg.cpp:124
+#: ../../locales/../src/interface/fileexistsdlg.cpp:148
+msgid "Date/time unknown"
+msgstr ""
+
+#: ../../locales/../src/interface/settingsdialog.cpp:108
+msgid "Debug"
+msgstr "Hibakeresés"
+
+#: resources.h:181
+msgid "Debugging settings"
+msgstr "Hibakeresés beállítások"
+
+#: resources.h:87 ../../locales/../src/interface/sitemanager.cpp:957
+#: ../../locales/../src/interface/sitemanager.cpp:1046
+msgid "Default"
+msgstr "Alapértelmezett"
+
+#: resources.h:88
+msgid "Default &local directory:"
+msgstr "Alapértelmezett helyi mappa:"
+
+#: resources.h:316
+msgid "Default file exists action"
+msgstr "Fájl felülírás beállítása"
+
+#: resources.h:90
+msgid "Default r&emote directory:"
+msgstr "Alapértelmezett távoli mappa:"
+
+#: resources.h:469
+msgid "Default transfer mode:"
+msgstr "Alapértelmezett átviteli mód:"
+
+#: resources.h:126
+msgid "Default transfer type:"
+msgstr "Átvitel alapértelmezett típusa:"
+
+#: resources.h:295 resources.h:488
+msgid "Default: http://ip.filezilla-project.org/ip.php"
+msgstr "Alapértelmezett: http://ip.filezilla-project.org/ip.php"
+
+#: ../../locales/../src/interface/optionspage_connection.cpp:57
+msgid ""
+"Delay between failed connection attempts has to be between 1 and 999 seconds."
+msgstr ""
+"A sikertelen bejelentkezési kísérletek közötti késleltetésnek 1 és 999 "
+"másodperc közöttinek kell lennie."
+
+#: resources.h:160
+msgid "Delay between failed login attempts:"
+msgstr "Késleltetés a bejelentkezési kísérletek között:"
+
+#: ../../locales/../src/engine/engineprivate.cpp:663
+msgid "Delaying connection due to previously failed connection attempt..."
+msgstr ""
+
+#: resources.h:457
+msgid "Delete selected directory"
+msgstr ""
+
+#: resources.h:412 resources.h:422
+msgid "Delete selected files and folders"
+msgstr ""
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:907
+msgid "Desktop"
+msgstr ""
+
+#: resources.h:7 resources.h:230
+msgid "Details"
+msgstr "Részletek"
+
+#: resources.h:242
+msgid "Details for new key:"
+msgstr "Az új kulcs részletei:"
+
+#: resources.h:282
+msgid "Dire&ctories"
+msgstr "Mappákra"
+
+#: ../../locales/../src/interface/queue.cpp:1150
+msgid "Direction"
+msgstr "Irány"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:128
+msgid "Directory listing aborted by user"
+msgstr ""
+
+#: ../../locales/../src/interface/RemoteListView.cpp:661
+msgid "Directory listing failed"
+msgstr ""
+
+#: resources.h:251
+msgid "Directory listing filters"
+msgstr "Könyvtár listázás szűrése"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:132
+msgid "Directory listing successful"
+msgstr "A könyvtár listázás sikerült"
+
+#: resources.h:261
+msgid "Disa&ble all"
+msgstr "Mind tiltása"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:558
+msgid "Disable this option if you cannot see your files anymore."
+msgstr ""
+"Kapcsolja ki ezt a beállítást, amennyiben egyáltalán nem látja a fájlokat a "
+"kiszolgálón."
+
+#: resources.h:532
+msgid "Disconnect from server"
+msgstr "Lekapcsolódás a kiszolgálóról"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:66
+#: ../../locales/../src/engine/ControlSocket.cpp:911
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:156
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:894
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:896
+#: ../../locales/../src/interface/QueueView.cpp:904
+#: ../../locales/../src/interface/QueueView.cpp:929
+msgid "Disconnected from server"
+msgstr "Lekapcsolódva a kiszolgálóról"
+
+#: ../../locales/../src/interface/QueueView.cpp:1179
+#: ../../locales/../src/interface/statuslinectrl.cpp:150
+msgid "Disconnecting from previous server"
+msgstr ""
+
+#: resources.h:533
+msgid "Disconnects from the currently visible server"
+msgstr "Lekapcsolódás a kiszolgálóról"
+
+#: resources.h:404
+msgid "Display about dialog"
+msgstr "A FileZilla névjegye"
+
+#: ../../locales/../src/interface/updatewizard.cpp:137
+msgid ""
+"Do you really want to check for beta versions?\n"
+"Unless you want to test new features, keep using stable versions."
+msgstr ""
+"Biztosan szeretne frissítést keresni a beta verzók között is?\n"
+"Hacsak nem kívánja tesztelni az új funkciókat, használja inkább a stabil "
+"verziókat."
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:34
+msgid ""
+"Do you really want to delete all Site Manager entries and the transfer queue?"
+msgstr ""
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:46
+msgid "Do you really want to delete all Site Manager entries?"
+msgstr ""
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:40
+msgid "Do you really want to delete the transfer queue?"
+msgstr ""
+
+#: ../../locales/../src/interface/Mainfrm.cpp:502
+#, c-format
+msgid "Do you really want to send '%s' to the server?"
+msgstr ""
+
+#: resources.h:296 resources.h:490
+msgid "Don't use external IP address on &local connections."
+msgstr "Ne használja a külső IP címet helyi kapcsolatok esetén."
+
+#: resources.h:36
+msgid "Download &limit:"
+msgstr "Letöltés korlátozása:"
+
+#: resources.h:451
+msgid "Download selected directory"
+msgstr ""
+
+#: resources.h:416
+msgid "Download selected files and folders"
+msgstr ""
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:336
+#: ../../locales/../src/interface/updatewizard.cpp:224
+#, c-format
+msgid "Downloading %s"
+msgstr "A következő letöltése: %s"
+
+#: resources.h:318 resources.h:338
+msgid "Downloads"
+msgstr "Letöltések"
+
+#: ../../locales/../src/interface/LocalListView.cpp:88
+#: ../../locales/../src/interface/LocalTreeView.cpp:88
+#: ../../locales/../src/interface/QueueView.cpp:67
+#: ../../locales/../src/interface/RemoteListView.cpp:86
+#: ../../locales/../src/interface/RemoteTreeView.cpp:79
+msgid ""
+"Drag&drop between different instances of FileZilla has not been implemented "
+"yet."
+msgstr ""
+
+#: ../../locales/../src/interface/LocalListView.cpp:94
+#: ../../locales/../src/interface/LocalTreeView.cpp:94
+#: ../../locales/../src/interface/QueueView.cpp:78
+#: ../../locales/../src/interface/RemoteListView.cpp:92
+#: ../../locales/../src/interface/RemoteTreeView.cpp:85
+msgid "Drag&drop between different servers has not been implemented yet."
+msgstr ""
+
+#: ../../locales/../src/interface/filteredit.cpp:334
+#: ../../locales/../src/interface/filteredit.cpp:397
+#: ../../locales/../src/interface/filteredit.cpp:437
+msgid "Duplicate filter name"
+msgstr "Többszörös szűrőnév"
+
+#: resources.h:257
+msgid "E&nable all"
+msgstr "Mind engedélyezése"
+
+#: resources.h:204
+msgid "E&xecute"
+msgstr "Végrehajtás"
+
+#: resources.h:382
+msgid "E&xit"
+msgstr "Kilépés"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:128
+msgid "E-Mail:"
+msgstr "E-Mail:"
+
+#: ../../locales/../src/interface/filteredit.cpp:536
+msgid "Each filter needs at least one condition."
+msgstr "Minden szűrőnek legalább egy szabállyal kell rendelkeznie."
+
+#: resources.h:266
+msgid "Edit filters"
+msgstr "Szűrők szerkesztése"
+
+#: resources.h:167
+msgid "Email:"
+msgstr "Email:"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:663
+msgid "Empty directory listing"
+msgstr ""
+
+#: ../../locales/../src/interface/filteredit.cpp:388
+#: ../../locales/../src/interface/filteredit.cpp:431
+msgid "Empty filter names are not allowed."
+msgstr ""
+
+#: ../../locales/../src/interface/filteredit.cpp:388
+#: ../../locales/../src/interface/filteredit.cpp:431
+msgid "Empty name"
+msgstr ""
+
+#: resources.h:260
+msgid "En&able all"
+msgstr "Mind engedélyezése"
+
+#: resources.h:397
+msgid "Enter &custom command..."
+msgstr "Egyéni parancs beírása..."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:490
+msgid "Enter custom command"
+msgstr "Egyéni parancs beírása"
+
+#: ../../locales/../src/interface/filteredit.cpp:327
+#: ../../locales/../src/interface/filteredit.cpp:380
+#: ../../locales/../src/interface/filteredit.cpp:424
+msgid "Enter filter name"
+msgstr "Szűrőnév megadása"
+
+#: ../../locales/../src/interface/filter.cpp:601
+msgid "Enter name for filterset"
+msgstr "Szűrőkészlet név megadása"
+
+#: resources.h:112
+msgid "Enter password"
+msgstr "Jelszó megadása"
+
+#: resources.h:510
+msgid ""
+"Enter the address of the server.\n"
+"To specify the server protocol, prepend the host with the protocol "
+"identifier. If no protocol is specified, the default protocol (ftp://) will "
+"be used.\n"
+"You can also enter complete URLS in the form protocol://user:pass@host:port "
+"here, the values in the other fields will be overwritten then."
+msgstr ""
+"Adja meg a kiszolgáló címét.\n"
+"A szerver protokoll meghatározásához a cím előtagjaként adja meg a "
+"protokollazonosítót. Ha a protokoll nincs meghatározva, az alapértelmezett "
+"az ftp:// lesz.\n"
+"Teljes URL címeket is megadhat a következő formátumban: protokoll://"
+"felhasználónév:jelszó@cím:port. Ekkor a gyorskapcsolódás többi mezőjének "
+"értékei felülíródnak."
+
+#: resources.h:514
+msgid ""
+"Enter the port on which the server listens.\n"
+"The default for FTP is 21, the default for SFTP is 22."
+msgstr ""
+"Adja meg azt a kiszolgáló portját.\n"
+"FTP esetében az alapértelmezett a 21-es, SFTP esetében a 22-es port."
+
+#: ../../locales/../src/engine/transfersocket.cpp:312
+#, c-format
+msgid "Error %d writing to socket"
+msgstr ""
+
+#: ../../locales/../src/interface/export.cpp:26
+msgid "Error exporting settings"
+msgstr "Exportálási hiba"
+
+#: ../../locales/../src/interface/import.cpp:25
+#: ../../locales/../src/interface/import.cpp:88
+msgid "Error importing"
+msgstr ""
+
+#: ../../locales/../src/interface/filter.cpp:168
+#: ../../locales/../src/interface/filter.cpp:253
+#: ../../locales/../src/interface/import.cpp:100
+#: ../../locales/../src/interface/import.cpp:279
+#: ../../locales/../src/interface/Options.cpp:103
+#: ../../locales/../src/interface/QueueView.cpp:1630
+#: ../../locales/../src/interface/QueueView.cpp:1657
+#: ../../locales/../src/interface/sitemanager.cpp:253
+#: ../../locales/../src/interface/sitemanager.cpp:354
+#: ../../locales/../src/interface/sitemanager.cpp:1298
+#: ../../locales/../src/interface/wrapengine.cpp:821
+msgid "Error loading xml file"
+msgstr ""
+
+#: ../../locales/../src/interface/QueueView.cpp:1640
+#: ../../locales/../src/interface/QueueView.cpp:1676
+#: ../../locales/../src/interface/sitemanager.cpp:380
+#: ../../locales/../src/interface/wrapengine.cpp:989
+msgid "Error writing xml file"
+msgstr ""
+
+#: ../../locales/../src/interface/StatusView.cpp:182
+#: ../../locales/../src/interface/StatusView.cpp:215
+msgid "Error:"
+msgstr "Hiba:"
+
+#: resources.h:208
+msgid "Exe&cute"
+msgstr "Végrehajtás"
+
+#: ../../locales/../src/interface/updatewizard.cpp:193
+msgid "Executable"
+msgstr ""
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1235
+msgid "Executable contains no version info, cannot check for updates."
+msgstr ""
+
+#: resources.h:140
+msgid "Explorer"
+msgstr "Intéző-szerű"
+
+#: resources.h:368
+msgid "Export &Queue"
+msgstr "Átviteli várólista exportálása"
+
+#: resources.h:367
+msgid "Export &Settings"
+msgstr "Beállítások exportálása"
+
+#: resources.h:364
+msgid "Export settings"
+msgstr "Exportálás beállításai"
+
+#: resources.h:272
+msgid "F&ilter name:"
+msgstr "Szűrő neve:"
+
+#: ../../locales/../src/interface/sitemanager.cpp:950
+msgid "FTP"
+msgstr ""
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:50
+msgid "FTP Engine not initialized, can't connect"
+msgstr ""
+
+#: resources.h:466
+msgid ""
+"FTP uses secondary connections for data transfers. These additional "
+"connections can be established in two ways."
+msgstr ""
+"Az FTP protokoll az adatok átvitelére másodlagos kapcsolati szálat használ. "
+"Ez a járulékos adatkapcsolat kétféle módon létesíthető."
+
+#: ../../locales/../src/engine/server.cpp:17
+msgid "FTPES - FTP over explicit TLS/SSL"
+msgstr "FTPES - FTP explicit TLS/SSL felett"
+
+#: ../../locales/../src/engine/server.cpp:16
+msgid "FTPS - FTP over implicit TLS/SSL"
+msgstr "FTPS - FTP implicit TLS/SSL felett"
+
+#: ../../locales/../src/interface/LocalListView.cpp:550
+#: ../../locales/../src/interface/LocalListView.cpp:1537
+#: ../../locales/../src/interface/LocalTreeView.cpp:784
+#: ../../locales/../src/interface/viewheader.cpp:479
+msgid "Failed to change directory"
+msgstr ""
+
+#: ../../locales/../src/interface/FileZilla.cpp:158
+#: ../../locales/../src/interface/optionspage_language.cpp:65
+msgid "Failed to change language"
+msgstr ""
+
+#: ../../locales/../src/interface/updatewizard.cpp:262
+msgid "Failed to check for newer version of FileZilla."
+msgstr "A FileZilla frissítéseinek keresése nem sikerült."
+
+#: ../../locales/../src/interface/xmlfunctions.cpp:374
+msgid "Failed to create backup copy of xml file"
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:774
+msgid "Failed to create listen socket, aborting"
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3400
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3404
+msgid "Failed to create listening socket for active mode transfer"
+msgstr ""
+
+#: ../../locales/../src/interface/updatewizard.cpp:264
+msgid "Failed to download the latest version of FileZilla."
+msgstr ""
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:562
+msgid "Failed to get 'My Documents' path"
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:936
+msgid "Failed to get data peer address, connection closed."
+msgstr ""
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:549
+msgid "Failed to get desktop path"
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:928
+msgid "Failed to get peer address, connection closed."
+msgstr ""
+
+#: ../../locales/../src/interface/Mainfrm.cpp:175
+msgid "Failed to initialize FTP engine"
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:306
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:473
+msgid "Failed to initialize TLS."
+msgstr ""
+
+#: ../../locales/../src/interface/settingsdialog.cpp:133
+msgid "Failed to load panels, invalid resource files?"
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1950
+#, c-format
+msgid "Failed to open \"%s\" for appending / writing"
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2014
+#, c-format
+msgid "Failed to open \"%s\" for reading"
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1993
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:376
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:421
+#, c-format
+msgid "Failed to open \"%s\" for writing"
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:992
+msgid "Failed to receive data"
+msgstr ""
+
+#: ../../locales/../src/engine/ControlSocket.cpp:130
+msgid "Failed to retrieve directory listing"
+msgstr "A könyvtár lista lekérdezése nem sikerült"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:702
+msgid "Failed to retrieve external ip address, aborting"
+msgstr "A külső IP cím lekérdezése nem sikerült, megszakítás."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3127
+msgid "Failed to retrieve external ip address, using local address"
+msgstr "A külső IP cím lekérdezése nem sikerült, a helyi IP cím használata"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3148
+msgid "Failed to retrieve local ip address."
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:671
+msgid "Failed to retrieve local ip address. Aborting"
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:604
+msgid "Failed to retrieve the external IP address."
+msgstr "A külső IP cím lekérdezése sem sikerült."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:302
+msgid "Failed to send command."
+msgstr ""
+
+#: ../../locales/../src/interface/FileZilla.cpp:158
+#: ../../locales/../src/interface/optionspage_language.cpp:65
+#, c-format
+msgid "Failed to set language to %s, using default system language"
+msgstr ""
+
+#: ../../locales/../src/interface/optionspage.cpp:6
+msgid "Failed to validate settings"
+msgstr "A beállítások érvényesítése nem sikerült"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:549
+#, c-format
+msgid "Failed to write to file %s"
+msgstr ""
+
+#: ../../locales/../src/interface/xmlfunctions.cpp:388
+msgid "Failed to write xml file"
+msgstr ""
+
+#: ../../locales/../src/interface/queueview_failed.cpp:13
+msgid "Failed transfers"
+msgstr "Sikertelen átvitelek"
+
+#: resources.h:481
+msgid "Fall back to active mode"
+msgstr "Áttérés aktív módra"
+
+#: resources.h:281
+msgid "Fil&es"
+msgstr "Fájlokra"
+
+#: ../../locales/../src/interface/LocalListView.cpp:722
+#: ../../locales/../src/interface/LocalListView.cpp:740
+#: ../../locales/../src/interface/LocalListView.cpp:744
+#: ../../locales/../src/interface/RemoteListView.cpp:1169
+#: ../../locales/../src/interface/RemoteListView.cpp:1187
+#: ../../locales/../src/interface/RemoteListView.cpp:1191
+msgid "File"
+msgstr ""
+
+#: ../../locales/../src/interface/settingsdialog.cpp:100
+msgid "File Types"
+msgstr "Fájltípusok"
+
+#: ../../locales/../src/interface/import.cpp:88
+msgid "File does not contain any importable data."
+msgstr ""
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1733
+msgid "File exists"
+msgstr ""
+
+#: ../../locales/../src/interface/settingsdialog.cpp:101
+msgid "File exists action"
+msgstr "Fájl felülírás"
+
+#: ../../locales/../src/interface/FileZilla.cpp:736
+msgid "File not found"
+msgstr ""
+
+#: ../../locales/../src/engine/ControlSocket.cpp:153
+msgid "File transfer successful"
+msgstr "A fájl átvitel sikerült"
+
+#: ../../locales/../src/interface/FileZilla.cpp:363
+#: ../../locales/../src/interface/quickconnectbar.cpp:50
+msgid "FileZilla Error"
+msgstr ""
+
+#: resources.h:503
+msgid ""
+"FileZilla can now test your configuration to ensure everything is configured "
+"properly."
+msgstr ""
+"Most tesztelheti a kialakított beállításokat annak ellenőrzésére, hogy "
+"minden megfelelően működik-e."
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:107
+msgid "FileZilla does not support the HTTP protocol"
+msgstr "A FileZilla nem támogatja a HTTP protokollt."
+
+#: resources.h:144
+msgid "Filelists"
+msgstr "Fájl listázás"
+
+#: ../../locales/../src/interface/filteredit.cpp:52
+#: ../../locales/../src/interface/LocalListView.cpp:229
+#: ../../locales/../src/interface/RemoteListView.cpp:305
+msgid "Filename"
+msgstr "Fájlnév"
+
+#: resources.h:388
+msgid "Filename &filters..."
+msgstr "Könyvtár listázás szűrése..."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1718
+msgid "Filename invalid"
+msgstr ""
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:226
+msgid "Filename unchanged"
+msgstr ""
+
+#: ../../locales/../src/interface/LocalListView.cpp:1721
+msgid "Filenames may not contain any of the following characters: / * ? < > |"
+msgstr ""
+
+#: ../../locales/../src/interface/LocalListView.cpp:1686
+msgid ""
+"Filenames may not contain any of the following characters: / \\ : * ? \" < > "
+"|"
+msgstr ""
+
+#: ../../locales/../src/interface/filteredit.cpp:53
+#: ../../locales/../src/interface/LocalListView.cpp:230
+#: ../../locales/../src/interface/RemoteListView.cpp:306
+msgid "Filesize"
+msgstr "Fájlméret"
+
+#: ../../locales/../src/interface/LocalListView.cpp:231
+#: ../../locales/../src/interface/RemoteListView.cpp:307
+msgid "Filetype"
+msgstr "Fájltípus"
+
+#: resources.h:273
+msgid "Filter &out all files that:"
+msgstr "Minden olyan fájl/mappa kiszűrése, amely megfelel az alábbi szabályok:"
+
+#: resources.h:280
+msgid "Filter applies to:"
+msgstr "A szűrő vonatkozik:"
+
+#: ../../locales/../src/interface/filteredit.cpp:578
+msgid "Filter name already exists"
+msgstr ""
+
+#: ../../locales/../src/interface/filter.cpp:610
+msgid "Filter set already exists"
+msgstr ""
+
+#: resources.h:536 resources.h:537
+msgid "Filter the directory listings"
+msgstr "Könyvtár listázás szűrése"
+
+#: ../../locales/../src/interface/filteredit.cpp:536
+#: ../../locales/../src/interface/filteredit.cpp:547
+#: ../../locales/../src/interface/filteredit.cpp:558
+#: ../../locales/../src/interface/filteredit.cpp:569
+#: ../../locales/../src/interface/filteredit.cpp:578
+msgid "Filter validation failed"
+msgstr "A szűrő érvényesítése nem sikerült"
+
+#: resources.h:14
+msgid "Fingerprint (MD5):"
+msgstr "Ujjlenyomat (MD5):"
+
+#: resources.h:15
+msgid "Fingerprint (SHA-1):"
+msgstr "Ujjlenyomat (SHA-1):"
+
+#: resources.h:233 resources.h:245
+msgid "Fingerprint:"
+msgstr "Ujjlenyomat:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:39
+msgid "Firewall and router configuration wizard"
+msgstr "Hálózati beállítások varázsló"
+
+#: ../../locales/../src/interface/LocalListView.cpp:744
+#: ../../locales/../src/interface/RemoteListView.cpp:1191
+msgid "Folder"
+msgstr ""
+
+#: resources.h:150
+msgid ""
+"For more detailed information about what these options do, please run the "
+"network configuration wizard."
+msgstr ""
+"Futtassa a Hálózati beállítások varázslót, amennyiben részletes "
+"információkra kíváncsi az itt megjelenő hálózati beállításokkal kapcsolatban."
+
+#: resources.h:498
+msgid "For reliability you should specify a range of at least 10 ports."
+msgstr ""
+"A megbízhatóság érdekében, legalább 10 portos tartományt javasolt megadni."
+
+#: resources.h:105
+msgid "Force &UTF-8"
+msgstr "UTF-8 kényszerítése"
+
+#: resources.h:71
+msgid "General"
+msgstr "Általános"
+
+#: resources.h:294 resources.h:487
+msgid "Get external IP address from the following URL:"
+msgstr "Külső IP cím lekérdezése az alábbi URL-ről:"
+
+#: ../../locales/../src/interface/filter.cpp:610
+msgid "Given filterset name already exists, overwrite filter set?"
+msgstr ""
+
+#: resources.h:201
+msgid "Group permissions"
+msgstr "Csoport engedélyek"
+
+#: resources.h:433
+msgid "H&igh"
+msgstr "Magas"
+
+#: resources.h:42 ../../locales/../src/interface/queue.cpp:868
+#: ../../locales/../src/interface/queue.cpp:949
+msgid "High"
+msgstr "Magas"
+
+#: ../../locales/../src/interface/queue.cpp:870
+#: ../../locales/../src/interface/queue.cpp:951
+msgid "Highest"
+msgstr "Legmagasabb"
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:82
+msgid "Highest available port has to be a number between 1024 and 65535."
+msgstr ""
+"A legmagasabb elérhető portnak egy 1024 és 65535 közötti számnak kell lennie."
+
+#: resources.h:262
+msgid ""
+"Hold the shift key to toggle the filter state on both sides simultanously."
+msgstr ""
+"Tartsa a shift billentyűt lenyomva a szűrők állapotának mindkét oldali "
+"változtatásához."
+
+#: resources.h:220
+msgid "Homepage:"
+msgstr "Honlap:"
+
+#: resources.h:239
+msgid "Host key mismatch"
+msgstr "Címkulcs eltérés"
+
+#: resources.h:8 resources.h:115 resources.h:223 resources.h:231
+#: resources.h:243
+msgid "Host:"
+msgstr "Cím:"
+
+#: resources.h:92
+msgid "Hours,"
+msgstr "Óra,"
+
+#: resources.h:34
+msgid ""
+"If no data can be sent or received during this time, the connection will be "
+"closed and FileZilla will try to reconnect."
+msgstr ""
+"Amennyiben ezidő alatt nem történik adatátvitel, a FileZilla bezárja a "
+"kapcsolatot, és megpróbál újracsatlakozni."
+
+#: resources.h:190
+msgid "If reporting bugs, please provide logs with \"Verbose\" logging level."
+msgstr ""
+"Amennyiben hibaleírást szeretne küldeni, a napló legalább \"Részletes\" "
+"szintű legyen."
+
+#: resources.h:478
+msgid ""
+"If the automatic test at the end of this wizard succeeds, but you cannot "
+"transfer files to a particular server, the server might be misconfigured and "
+"you should try active mode. You can set the transfer mode on a per-server "
+"basis in the Site Manager."
+msgstr ""
+"Amennyiben a varázsló végén lévő automatikus teszt sikeres, de nem tud "
+"sikeres fájl átvitelt létrehozni egy bizonyos szerverrel, akkor lehet hogy a "
+"kiszolgáló rosszul van beállítva, és ekkor javasolt az aktív mód "
+"kipróbálása. Az átviteli módot szerverenként külön-külön lehet állítani a "
+"Kedvenc Helyek-ben."
+
+#: resources.h:473
+msgid ""
+"If the fallback option is enabled, you will be able to connect to "
+"misconfigured servers which reject the selected transfer mode."
+msgstr ""
+"Ha az áttérés funkció engedélyezve van, akkor csatlakozni fog tudni olyan "
+"rosszul beállított kiszolgálókhoz is, amelyek visszautasítják a kiválasztott "
+"átviteli módot."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:612
+msgid ""
+"If this problem persists, please contact your router or firewall "
+"manufacturer for a solution."
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:570
+msgid "If this problem stays, please contact your router manufacturer."
+msgstr ""
+
+#: resources.h:334 resources.h:352
+msgid ""
+"If using 'overwrite if newer', your system time has to be synchronized with "
+"the server. If the time differs (e.g. different timezone), specify a "
+"timezone offset in the site manager."
+msgstr ""
+"A 'Felülírás, ha újabb' beállítás használata esetén, a rendszer időnek a "
+"kiszolgálóval szinkronizáltnak kell lennie. Amennyiben az idő eltér (pl. "
+"különböző időzónák), akkor adja meg a kiszolgáló időzónájának időeltolódását "
+"a Kedvenc Helyek speciális beállításánál."
+
+#: resources.h:175
+msgid "If you change the language, you should restart FileZilla."
+msgstr "Ha nyelvet módosít, a FileZilla újraindítása szükséges."
+
+#: resources.h:504
+msgid ""
+"If you click on test, FileZilla will connect to probe.filezilla-project.org "
+"and will perform some simple tests."
+msgstr ""
+"Ha a Teszt gombra kattint, a FileZilla a 'probe.filezilla-project.org' címre "
+"csatlakozik, és néhány egyszerű tesztet hajt végre."
+
+#: resources.h:134
+msgid ""
+"If you enter the wrong filetypes, those files may get corrupted when "
+"transferred."
+msgstr "Ha rossz fájltípust ad meg, azok az átvitel során meghibásodhatnak."
+
+#: resources.h:505
+msgid "If you get any errors, your configuration is not correct."
+msgstr ""
+"Amennyiben bármilyen hibát kap eredményül, akkor a beállítások nem "
+"megfelelőek."
+
+#: resources.h:156
+msgid ""
+"If you have problems to retrieve directory listings or to transfer files, "
+"try to change the default transfer mode."
+msgstr ""
+"Ha a könyvtári fájllistázással vagy a fájlok átvitelével problémákat "
+"tapasztal, akkor módosítsa az alapértelmezett átviteli módot."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:558
+msgid ""
+"If you keep having problems with a specific server, the server itself or a "
+"remote router might be misconfigured. In this case try to toggle passive "
+"mode and contact the server administrator for help."
+msgstr ""
+"Amennyiben bizonyos szerverekkel problémái támadnak, akkor valószínűleg a "
+"szerver maga vagy egy távoli router hibásan van beállítva. Ebben az esetben "
+"próbálja meg az átviteli mód (aktív/passzív) átkapcsolását, vagy lépjen "
+"kapcsolatba a kiszolgáló rendszergazdájával a segítségért."
+
+#: resources.h:464
+msgid ""
+"If you sucessfully complete the wizard and the final test succeeds, any "
+"firewalls and routers you have should be configured properly."
+msgstr ""
+"Ha a varázsló lépéseit sikeresen elvégzi és a végső teszt sikeres, akkor a "
+"tűzfalak és router-ek is megfelelően vannak beállítva."
+
+#: resources.h:500
+msgid ""
+"If you use a firewall, make sure FileZilla is allowed to accept connection "
+"on all given ports."
+msgstr ""
+"Amennyiben tűzfalat használ, legyen biztos benne, hogy a FileZilla bejövő "
+"kapcsolatokat tud fogadni a megadott tartomány minden portján."
+
+#: resources.h:499
+msgid ""
+"If you use a router, make sure all these ports are forwarded to the machine "
+"you're running FileZilla on."
+msgstr ""
+"Ha router-t használ, legyen biztos benne, hogy a megadott tartomány "
+"mindegyik portja továbbítva van ahhoz a számítógéphez, amelyen a FileZilla-t "
+"használja."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:583
+msgid ""
+"If your router keeps changing the IP address, please contact your router "
+"manufacturer."
+msgstr ""
+
+#: ../../locales/../src/interface/import.cpp:79
+msgid "Import data from older version"
+msgstr ""
+
+#: resources.h:371
+msgid "Import settings"
+msgstr "Importálás beállításai"
+
+#: ../../locales/../src/interface/import.cpp:65
+#: ../../locales/../src/interface/import.cpp:68
+msgid "Import successful"
+msgstr "Sikeres importálás"
+
+#: resources.h:492
+msgid ""
+"In active mode, FileZilla has to listen on a port for data transfers. You "
+"have to specify which ports FileZilla will use."
+msgstr ""
+"Aktív módban, a FileZilla-nak egy helyi porton kell figyelnie, hogy történik-"
+"e adatkapcsolat létesítése. Meg kell adnia, hogy a FileZilla mely portokat "
+"használhatja."
+
+#: resources.h:494
+msgid ""
+"In case you have a router, you will have to forward all available ports, as "
+"FileZilla has no influence on the ports your system chooses."
+msgstr ""
+"Amennyiben a számítógép egy router mögött van, az összes elérhető portot "
+"továbbítania kell, mivel a FileZilla nincs hatással arra, hogy az operációs "
+"rendszer milyen portot választ."
+
+#: resources.h:315
+msgid ""
+"In case you prefer automatic updates, you can enable automatic update checks "
+"in the settings dialog."
+msgstr ""
+"Ha jobban kedveli az automatikus frissítéseket, akkor engedélyezheti azt a "
+"beállításokban."
+
+#: resources.h:290 resources.h:482
+msgid ""
+"In order to use active mode, FileZilla needs to know your external IP "
+"address."
+msgstr ""
+"Az aktív mód használatához, a külső IP cím ismerete szükséges a FileZilla "
+"számára."
+
+#: resources.h:467
+msgid ""
+"In passive mode, which is recommended for most users, FileZilla asks the "
+"server for a port and connects to the given port. Not much configuration has "
+"to be done for this."
+msgstr ""
+"Passzív módban, amely a legtöbb felhasználó számára megfelelő, a FileZilla a "
+"kiszolgálótól kér egy portot, és az adott porthoz csatlakozik. Ehhez nem "
+"szükséges bonyolult konfiguráció."
+
+#: ../../locales/../src/interface/QueueView.cpp:900
+msgid "Incorrect password"
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:463
+msgid "Initializing TLS..."
+msgstr "TLS inicializálása..."
+
+#: resources.h:79 ../../locales/../src/interface/sitemanager.cpp:796
+#: ../../locales/../src/interface/sitemanager.cpp:1011
+msgid "Interactive"
+msgstr "Interaktív"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:102
+msgid "Interface"
+msgstr "Megjelenés"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:158
+#: ../../locales/../src/interface/QueueView.cpp:865
+#: ../../locales/../src/interface/QueueView.cpp:1332
+msgid "Interrupted by user"
+msgstr ""
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:732
+msgid "Invalid Content-Length"
+msgstr ""
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:606
+msgid "Invalid HTTP Response"
+msgstr ""
+
+#: ../../locales/../src/engine/ControlSocket.cpp:462
+#: ../../locales/../src/engine/ControlSocket.cpp:522
+msgid ""
+"Invalid character sequence received, disabling UTF-8. Select UTF-8 option in "
+"site manager to force UTF-8."
+msgstr ""
+"Érvénytelen karaktersorozat érkezett, UTF-8 tiltása. Válassza az UTF-8 "
+"kényszerítését a Kedvenc Helyek beállításaiban."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:856
+msgid "Invalid chunk size"
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:348
+#: ../../locales/../src/interface/netconfwizard.cpp:358
+#: ../../locales/../src/interface/netconfwizard.cpp:367
+msgid "Invalid data received"
+msgstr ""
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:40
+#: ../../locales/../src/interface/verifycertdialog.cpp:56
+msgid "Invalid date"
+msgstr ""
+
+#: ../../locales/../src/interface/LocalListView.cpp:1686
+#: ../../locales/../src/interface/LocalListView.cpp:1721
+msgid "Invalid filename"
+msgstr ""
+
+#: ../../locales/../src/engine/ControlSocket.cpp:958
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:147
+msgid "Invalid hostname or host not found"
+msgstr "Érvénytelen az állomásnév, vagy a cím nem található."
+
+#: ../../locales/../src/engine/server.cpp:128
+#: ../../locales/../src/engine/server.cpp:141
+msgid "Invalid port given. The port has to be a value from 1 to 65535."
+msgstr ""
+"Érvénytelen portot adott meg. A port értékének 1 és 65535 közöttinek kell "
+"lennie. "
+
+#: ../../locales/../src/engine/server.cpp:47
+msgid ""
+"Invalid protocol specified. Valid protocols are:\n"
+"ftp:// for normal FTP,\n"
+"sftp:// for SSH file transfer protocol,\n"
+"ftps:// for FTP over SSL (implicit) and\n"
+"ftpes:// for FTP over SSL (explicit)."
+msgstr ""
+"Érvénytelen protokollt határozott meg. Az alábbi érvényes protokollok "
+"lehetségesek:\n"
+"ftp:// a normál FTP-hez,\n"
+"sftp:// az SSH File Transfer Protocol-hoz,\n"
+"ftps:// az FTP implicit SSL felett használatához, és\n"
+"ftpes:// az FTP explicit SSL felett használatához."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:616
+msgid "Invalid response code"
+msgstr ""
+
+#: ../../locales/../src/interface/filteredit.cpp:558
+msgid "Invalid size in condition"
+msgstr "Érvénytelen méret a feltétel mezőben."
+
+#: ../../locales/../src/engine/server.cpp:92
+msgid "Invalid username given."
+msgstr ""
+
+#: resources.h:147
+msgid "Keep directories on top"
+msgstr "Mappák mindig felül legyenek"
+
+#: resources.h:436
+msgid "L&owest"
+msgstr "Legalacsonyabb"
+
+#: resources.h:288
+msgid "L&owest available port:"
+msgstr "Legalacsonyabb elérhető port:"
+
+#: resources.h:173 ../../locales/../src/interface/settingsdialog.cpp:104
+msgid "Language"
+msgstr "Nyelvek"
+
+#: resources.h:172
+msgid "Large icons"
+msgstr "Nagy ikonok"
+
+#: ../../locales/../src/interface/LocalListView.cpp:232
+#: ../../locales/../src/interface/RemoteListView.cpp:308
+msgid "Last modified"
+msgstr "Módosítás ideje"
+
+#: resources.h:137
+msgid "Layout"
+msgstr "Panelek elrendezése"
+
+#: resources.h:138
+msgid "Layout of file and directory panes:"
+msgstr "A fájlablak és könyvtárfa panelek elrendezése:"
+
+#: resources.h:27
+msgid "Limit for concurrent &downloads:"
+msgstr "Egyidejű letöltések maximális száma:"
+
+#: resources.h:29
+msgid "Limit for concurrent &uploads:"
+msgstr "Egyidejű feltöltések maximális száma:"
+
+#: resources.h:285
+msgid "Limit local ports"
+msgstr "Helyi portok korlátozása"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:799
+msgid "Line length exceeded"
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:262
+msgid "Listen socket closed"
+msgstr ""
+
+#: ../../locales/../src/interface/StatusView.cpp:193
+#: ../../locales/../src/interface/StatusView.cpp:234
+msgid "Listing:"
+msgstr "Listázás:"
+
+#: resources.h:256
+msgid "Local filters:"
+msgstr "Helyi szűrők:"
+
+#: ../../locales/../src/interface/viewheader.cpp:316
+msgid "Local site:"
+msgstr "Helyi fájlok:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:126
+msgid "Locality:"
+msgstr "Helység:"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:508
+msgid ""
+"Login data contains non-ascii characters and server might not be UTF-8 "
+"aware. Trying local charset."
+msgstr ""
+
+#: ../../locales/../src/interface/queue.cpp:863
+#: ../../locales/../src/interface/queue.cpp:944
+msgid "Low"
+msgstr "Alacsony"
+
+#: ../../locales/../src/interface/queue.cpp:861
+#: ../../locales/../src/interface/queue.cpp:942
+msgid "Lowest"
+msgstr "Legalacsonyabb"
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:71
+msgid "Lowest available port has to be a number between 1024 and 65535."
+msgstr ""
+"A legalacsonyabb elérhető portnak egy 1024 és 65535 közötti számnak kell "
+"lennie."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:787
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:799
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:814
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:856
+#, c-format
+msgid "Malformed chunk data: %s"
+msgstr ""
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:732
+#, c-format
+msgid "Malformed header: %s"
+msgstr ""
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:576
+msgid "Malformed reply, server not sending proper lineendings"
+msgstr ""
+
+#: resources.h:274
+msgid "Match all of the following"
+msgstr "Mindegyikének"
+
+#: resources.h:158
+msgid "Maximum number of retries:"
+msgstr "Újrapróbálkozások maximális száma:"
+
+#: resources.h:25
+msgid "Maximum simultaneous &transfers:"
+msgstr "Az egyidejű kapcsolati szálak maximális száma:"
+
+#: resources.h:171
+msgid "Medium icons"
+msgstr "Közepes ikonok"
+
+#: resources.h:93
+msgid "Minutes"
+msgstr "Perc"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:926
+msgid "My Computer"
+msgstr ""
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:916
+msgid "My Documents"
+msgstr ""
+
+#: ../../locales/../src/interface/sitemanager.cpp:239
+#: ../../locales/../src/interface/sitemanager.cpp:241
+#: ../../locales/../src/interface/sitemanager.cpp:1338
+msgid "My Sites"
+msgstr "Kedvenc állomásaim"
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:58
+#: ../../locales/../src/interface/optionspage_themes.cpp:60
+#: ../../locales/../src/interface/optionspage_themes.cpp:201
+#: ../../locales/../src/interface/optionspage_themes.cpp:203
+msgid "N/a"
+msgstr ""
+
+#: ../../locales/../src/interface/sitemanager.cpp:643
+msgid "Name already exists"
+msgstr "A megadott név már létezik."
+
+#: resources.h:114
+msgid "Name:"
+msgstr "Név:"
+
+#: ../../locales/../src/interface/filteredit.cpp:569
+msgid "Need to enter filter name"
+msgstr ""
+
+#: ../../locales/../src/interface/sitemanager.cpp:551
+msgid "Need to specify a character encoding"
+msgstr ""
+
+#: resources.h:67
+msgid "New &Folder"
+msgstr "Új mappa"
+
+#: ../../locales/../src/interface/filteredit.cpp:322
+msgid "New filter"
+msgstr "Új szűrő"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1397
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1206
+#: ../../locales/../src/interface/sitemanager.cpp:455
+#: ../../locales/../src/interface/sitemanager.cpp:478
+msgid "New folder"
+msgstr "Új mappa"
+
+#: ../../locales/../src/interface/sitemanager.cpp:711
+#: ../../locales/../src/interface/sitemanager.cpp:734
+msgid "New site"
+msgstr "Új állomás"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:728
+msgid "No"
+msgstr "Nem"
+
+#: ../../locales/../src/interface/export.cpp:26
+msgid "No category to export selected"
+msgstr "Nem jelölt ki egyetlen kategóriát sem az exportálásra."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3094
+msgid "No external IP address set, trying default."
+msgstr ""
+
+#: ../../locales/../src/engine/server.cpp:32
+#: ../../locales/../src/engine/server.cpp:121
+#: ../../locales/../src/engine/server.cpp:151
+msgid "No host given, please enter a host."
+msgstr "Kérem adja meg a címet."
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:166
+msgid "No images available"
+msgstr "Nincs elérhető kép"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1304
+#: ../../locales/../src/interface/sitemanager.cpp:1316
+#: ../../locales/../src/interface/sitemanager.cpp:1347
+msgid "No sites available"
+msgstr ""
+
+#: ../../locales/../src/interface/themeprovider.cpp:76
+msgid "No themes in themes.xml"
+msgstr ""
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:62
+msgid "None"
+msgstr ""
+
+#: resources.h:276
+msgid "None of the following"
+msgstr "Egyikének sem"
+
+#: resources.h:41 resources.h:77 ../../locales/../src/interface/queue.cpp:866
+#: ../../locales/../src/interface/queue.cpp:947
+#: ../../locales/../src/interface/sitemanager.cpp:759
+#: ../../locales/../src/interface/sitemanager.cpp:792
+#: ../../locales/../src/interface/sitemanager.cpp:1005
+msgid "Normal"
+msgstr "Normál"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:688
+msgid "Not connected to any server"
+msgstr "Nincs kapcsolat kiszolgálóval"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:556
+msgid "Note that this feature is only supported using the FTP protocol."
+msgstr ""
+"Fontos, hogy ez a beállítás csak az FTP protokoll használatakor támogatott."
+
+#: resources.h:178
+msgid "Number of days between update checks:"
+msgstr "Frissítés keresések gyakorisága:"
+
+#: ../../locales/../src/interface/optionspage_connection.cpp:46
+msgid "Number of retries has to be between 0 and 99."
+msgstr ""
+"Az újrapróbálkozások maximális számának 0 és 99 közöttinek kell lennie."
+
+#: resources.h:329 resources.h:347
+msgid "O&verwrite"
+msgstr "Felülírás"
+
+#: resources.h:22 resources.h:62 resources.h:193 resources.h:215
+#: resources.h:227 resources.h:237 resources.h:249 resources.h:263
+#: resources.h:283 resources.h:362 resources.h:369 resources.h:377
+msgid "OK"
+msgstr ""
+
+#: resources.h:335
+msgid "Ok"
+msgstr ""
+
+#: resources.h:474
+msgid ""
+"On the following pages, the selected transfer mode will be configured, as "
+"well as the fallback mode if enabled."
+msgstr ""
+"A következő lépésekben, az egyes átviteli módok beállításai következnek."
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:738
+msgid "Once"
+msgstr "Csak most"
+
+#: resources.h:516 resources.h:517
+msgid "Open the Site Manager"
+msgstr "A Kedvenc Helyek megnyitása"
+
+#: resources.h:386
+msgid "Open the settings dialog of FileZilla"
+msgstr "A FileZilla Beállítások ablakjának megnyitása"
+
+#: resources.h:381
+msgid "Opens the Site Manager"
+msgstr "A Kedvenc Helyek megnyitása"
+
+#: ../../locales/../src/interface/FileZilla.cpp:209
+msgid "Operating system problem detected"
+msgstr ""
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:121
+msgid "Organization:"
+msgstr "Szervezet:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:136
+msgid "Other:"
+msgstr ""
+
+#: resources.h:322 resources.h:341
+msgid "Ov&erwrite if newer"
+msgstr "Felülírás, ha újabb"
+
+#: resources.h:330 resources.h:348
+msgid "Over&write if newer"
+msgstr "Felülírás, ha újabb"
+
+#: resources.h:149
+msgid "Overview"
+msgstr "Áttekintés"
+
+#: resources.h:55
+msgid "Overwrite &if newer"
+msgstr "Felülírás, ha újabb"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:310
+msgid "Owner / Group"
+msgstr "Tulajdonos / Csoport"
+
+#: resources.h:197
+msgid "Owner permissions"
+msgstr "Tulajdonos engedélyei"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:452
+msgid "PORT command tainted by router."
+msgstr ""
+
+#: resources.h:153
+msgid "Pa&ssive (recommended)"
+msgstr "Passzív (ajánlott)"
+
+#: ../../locales/../src/interface/updatewizard.cpp:197
+msgid "Package"
+msgstr ""
+
+#: resources.h:82 resources.h:512
+msgid "Pass&word:"
+msgstr "Jelszó:"
+
+#: resources.h:470
+msgid "Passive (recommended)"
+msgstr "Passzív (ajánlott)"
+
+#: resources.h:1 ../../locales/../src/interface/settingsdialog.cpp:98
+msgid "Passive mode"
+msgstr "Passzív mód"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:576
+#: ../../locales/../src/interface/netconfwizard.cpp:589
+#: ../../locales/../src/interface/netconfwizard.cpp:600
+msgid "Passive mode has been set as default transfer mode."
+msgstr ""
+
+#: ../../locales/../src/interface/RemoteListView.cpp:309
+msgid "Permissions"
+msgstr "Engedélyek"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:605
+msgid ""
+"Pleae make sure FileZilla is allowed to establish outgoing connections and "
+"make sure you typed the address of the address resolver correctly."
+msgstr ""
+"Legyen biztos benne, hogy a kimenő kapcsolatok létesítése engedélyezve van "
+"FileZilla számára, és ellenőrizze, hogy a helyesen írta-e be a külső IP cím "
+"lekérdezéséhez szükséges webcímet."
+
+#: resources.h:312
+msgid ""
+"Please check http://filezilla-project.org for the most recent version of "
+"FileZilla."
+msgstr ""
+"Kérem ellenőrizze a http://filezilla-project.org webcímen a FileZilla "
+"legfrissebb verzióját."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:545
+msgid ""
+"Please check on http://filezilla-project.org/probe.php that the server is "
+"running and carefully check your settings again."
+msgstr ""
+"Kérem ellenőrizze a http://filezilla-project.org/probe.php webcímen, hogy a "
+"kiszolgáló fut-e, és figyelmesen ellenőrizze a beállításait ismét."
+
+#: ../../locales/../src/interface/updatewizard.cpp:819
+msgid ""
+"Please check the package manager of your system for an updated package or "
+"visit http://filezilla-project.org to download the source code of FileZilla."
+msgstr ""
+
+#: resources.h:476
+msgid ""
+"Please configure any firewalls and routers so that FileZilla can establish "
+"outgoing connection to arbitrary ports."
+msgstr ""
+"Ha van tűzfal vagy router a hálózatban, állítsa be azokat úgy, hogy a "
+"FileZilla kimenő kapcsolatot létesíthessen tetszőleges portra."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:611
+msgid "Please disable settings like 'DMZ mode' or 'Game mode' on your router."
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:553
+msgid ""
+"Please ensure you have a stable internet connection and check on http://"
+"filezilla-project.org/probe.php that the server is running."
+msgstr ""
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:75
+msgid "Please enter a download speedlimit greater or equal to 0 KB/s."
+msgstr ""
+"A letöltés sebességének korlátozásához 0 KB/s-nál nagyobb vagy azzal egyenlő "
+"értéket írjon be."
+
+#: ../../locales/../src/interface/filteredit.cpp:327
+msgid "Please enter a name for the new filter."
+msgstr "Kérem adjon meg egy nevet az új szűrőhöz:"
+
+#: ../../locales/../src/interface/filteredit.cpp:424
+msgid "Please enter a new name for the copied filter."
+msgstr "Kérem adjon meg egy új nevet a másolt szűrőhöz:"
+
+#: ../../locales/../src/interface/filteredit.cpp:380
+msgid "Please enter a new name for the filter."
+msgstr "Kérem adjon meg egy új nevet a szűrőhöz:"
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:51
+msgid ""
+"Please enter a number between 0 and 10 for the number of concurrent "
+"downloads."
+msgstr ""
+"Az egyidejű letöltések maximális számához egy 0 és 10 közötti számot írjon "
+"be."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:59
+msgid ""
+"Please enter a number between 0 and 10 for the number of concurrent uploads."
+msgstr ""
+"Az egyidejű feltöltések maximális számához egy 0 és 10 közötti számot írjon "
+"be."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:43
+msgid ""
+"Please enter a number between 1 and 10 for the number of concurrent "
+"transfers."
+msgstr ""
+"Az egyidejű kapcsolati szálak maximális számához egy 1 és 10 közötti számot "
+"írjon be."
+
+#: resources.h:113
+msgid "Please enter a password for this server:"
+msgstr "Kérem adja meg a jelszót ehhez a kiszolgálóhoz:"
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:67
+msgid ""
+"Please enter a timeout between 5 and 9999 seconds or 0 to disable timeouts."
+msgstr ""
+"Az időtúllépéshez egy 5 és 9999 másodperc közötti értéket írjon be, vagy 0-"
+"át ha az időtúllépést le akarja tiltani."
+
+#: ../../locales/../src/interface/filter.cpp:601
+msgid "Please enter a unique name for this filter set"
+msgstr "Kérem adjon meg egy egyedi nevet ehhez a szűrőkészlethez:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:177
+msgid "Please enter a valid portrange."
+msgstr "Kérem adjon meg egy érvényes port tartományt."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:156
+msgid "Please enter an URL where to get your external address from"
+msgstr ""
+"Kérem adjon meg egy olyan URL címet, ahonnan a külső IP cím lekérdezhető."
+
+#: ../../locales/../src/interface/optionspage_updatecheck.cpp:38
+msgid "Please enter an update interval of at least 7 days"
+msgstr "A frissítés keresések gyakoriságához legalább 7 nap értéket írjon be."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:83
+msgid "Please enter an upload speedlimit greater or equal to 0 KB/s."
+msgstr ""
+"A feltöltés sebességének korlátozásához 0 KB/s-nál nagyobb vagy azzal "
+"egyenlő értéket írjon be."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:490
+msgid ""
+"Please enter raw FTP command.\n"
+"Using raw ftp commands will clear the directory cache."
+msgstr ""
+"Kérem adja meg a nyers FTP parancsot, amit a kiszolgálóra kíván küldeni.\n"
+"Nyers FTP parancsok használatakor a távoli könyvtár gyorsítótára törlésre "
+"kerül."
+
+#: ../../locales/../src/interface/LocalListView.cpp:1316
+#: ../../locales/../src/interface/RemoteListView.cpp:1383
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1192
+msgid "Please enter the name of the directory which should be created:"
+msgstr "Kérem adja meg a létrehozni kívánt új könyvtár nevét:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:137
+msgid "Please enter your external IP address"
+msgstr "Kérem adja meg a külső IP címét."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:581
+#: ../../locales/../src/interface/netconfwizard.cpp:594
+msgid ""
+"Please enter your external IP address on the active mode page of this "
+"wizard. In case you have a dynamic address or don't know your external "
+"address, use the external resolver option."
+msgstr ""
+"Kérem adja meg a külső IP címét a varázsló aktív módot beállító oldalán. "
+"Amennyiben dinamikus IP címmel rendelkezik, vagy nem tudja a külső IP címét, "
+"akkor használja a külső IP cím lekérdezése opciót."
+
+#: resources.h:463
+msgid ""
+"Please follow the instructions carefully, as wrong configuration will "
+"prevent successful FTP connections."
+msgstr ""
+"Kérem, az útmutatókat kövesse figyelemmel, mert a rossz hálózati beállítás "
+"megakadályozhatja a sikeres FTP kapcsolatokat."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:564
+msgid ""
+"Please make sure you are running the latest version of FileZilla. Visit "
+"http://filezilla-project.org for details."
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:582
+msgid ""
+"Please make sure your router is using the latest available firmware. "
+"Furthermore, your router has to be configured properly. You will have to "
+"manual port forwarding. Don't run your router in the so called 'DMZ mode' or "
+"'game mode'."
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:569
+msgid ""
+"Please make sure your router is using the latest available firmware. "
+"Furthermore, your router has to be configured properly. You will have to use "
+"manual port forwarding. Don't run your router in the so called 'DMZ mode' or "
+"'game mode'."
+msgstr ""
+
+#: resources.h:477
+msgid ""
+"Please note that FileZilla has no influence on the port the server chooses. "
+"So the server might choose a port which your firewall thinks is only used by "
+"trojans or other malware. This might raise a false alarm you can safely "
+"discard."
+msgstr ""
+"Vegye figyelembe, hogy a FileZilla nincs hatással arra, hogy a szerver "
+"milyen portot választ. Így a kiszolgáló olyan portot is választhat, amelyről "
+"a tűzfal azt gondolja, hogy valamely vírus vagy más káros szándékú program "
+"használja. Ez egy téves riasztást okozhat, amelyet nyugodtan elvethet."
+
+#: resources.h:162
+msgid ""
+"Please note that some servers might ban you if you try to reconnect too "
+"often or in too short intervals."
+msgstr ""
+"Vegye figyelembe, hogy néhány kiszolgáló letilthatja a felhasználót, ha túl "
+"sokszor próbál csatlakozni, vagy túl rövid időközönként."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:559
+msgid ""
+"Please run this wizard again should you change your network environment or "
+"in case you suddenly encounter problems with servers that did work "
+"previously."
+msgstr ""
+"Futtassa a Hálózati beállítások varázslót ismét, amennyiben a hálózati "
+"környezetben változások történnek, vagy hirtelen problémákat tapasztal olyan "
+"állomásokkal, amelyek azelőtt megfelelően működtek."
+
+#: resources.h:53
+msgid "Please select an action:"
+msgstr "Válassza ki a műveletet:"
+
+#: resources.h:376
+msgid "Please select the categories you would like to import."
+msgstr "Kérem jelölje ki a beimportálandó kategóriákat."
+
+#: resources.h:465
+msgid "Please select the default transfer mode you would like to use."
+msgstr "Válassza ki a használni kívánt alapértelmezett átviteli módot."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:38
+#, c-format
+msgid "Please select the new attributes for the directory \"%s\"."
+msgstr ""
+
+#: ../../locales/../src/interface/chmoddialog.cpp:27
+#, c-format
+msgid "Please select the new attributes for the file \"%s\"."
+msgstr ""
+
+#: ../../locales/../src/interface/chmoddialog.cpp:41
+msgid "Please select the new attributes for the selected directories."
+msgstr ""
+
+#: ../../locales/../src/interface/chmoddialog.cpp:44
+msgid ""
+"Please select the new attributes for the selected files and directories."
+msgstr ""
+
+#: ../../locales/../src/interface/chmoddialog.cpp:30
+msgid "Please select the new attributes for the selected files."
+msgstr ""
+
+#: resources.h:314
+msgid ""
+"Please visit http://filezilla-project.org for more information about "
+"FileZilla."
+msgstr ""
+"Kérem látogassa meg a http://filezilla-project.org webcímet, ha több "
+"információt szeretne a FileZilla-ról."
+
+#: ../../locales/../src/interface/updatewizard.cpp:817
+#: ../../locales/../src/interface/updatewizard.cpp:829
+msgid ""
+"Please visit http://filezilla-project.org to download the most recent "
+"version."
+msgstr ""
+
+#: ../../locales/../src/interface/sitemanager.cpp:1202
+#: ../../locales/../src/interface/sitemanager.cpp:1337
+msgid "Predefined Sites"
+msgstr ""
+
+#: resources.h:169
+msgid "Preview"
+msgstr "Előnézet"
+
+#: ../../locales/../src/engine/tlssocket.cpp:792
+msgid "Primary connection and data connection certificates don't match."
+msgstr ""
+
+#: resources.h:146
+msgid "Prioritize directories (default)"
+msgstr "Mappák előnyben részesítése (alapértelmezett) "
+
+#: ../../locales/../src/interface/queue.cpp:1153
+msgid "Priority"
+msgstr "Prioritás"
+
+#: resources.h:427
+msgid "Process &Queue"
+msgstr "Várólista végrehajtása"
+
+#: resources.h:13
+msgid "Public key algorithm:"
+msgstr "Nyilvános kulcsú algoritmus:"
+
+#: resources.h:205
+msgid "Public permissions"
+msgstr "Nyilvános engedélyek"
+
+#: ../../locales/../src/interface/QueueView.cpp:1498
+#, c-format
+msgid "Queue: %s%d KB"
+msgstr "Várólista: %s%d kB"
+
+#: ../../locales/../src/interface/QueueView.cpp:1493
+#, c-format
+msgid "Queue: %s%d MB"
+msgstr "Várólista: %s%d MB"
+
+#: ../../locales/../src/interface/QueueView.cpp:1501
+#, c-format
+msgid "Queue: %s%d bytes"
+msgstr "Várólista: %s%d byte"
+
+#: ../../locales/../src/interface/QueueView.cpp:1489
+msgid "Queue: empty"
+msgstr "Várólista: üres"
+
+#: ../../locales/../src/interface/QueueView.cpp:396
+msgid "Queued files"
+msgstr "Várólista"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:499
+msgid "Raw FTP command"
+msgstr ""
+
+#: resources.h:202
+msgid "Re&ad"
+msgstr "Olvasás"
+
+#: resources.h:57 resources.h:324 resources.h:343
+msgid "Re&name"
+msgstr "Átnevezés"
+
+#: resources.h:206
+msgid "Rea&d"
+msgstr "Olvasás"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:747
+msgid "Really cancel current operation?"
+msgstr "Biztosan megszakítja az aktuális műveletet?"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1417
+#: ../../locales/../src/interface/RemoteListView.cpp:1438
+msgid "Really delete all selected files and/or directories?"
+msgstr "Biztosan törölni szeretné a kijelölt fájlokat és/vagy mappákat?"
+
+#: ../../locales/../src/interface/queueview_failed.cpp:15
+msgid "Reason"
+msgstr "A hiba oka"
+
+#: resources.h:211
+msgid "Rec&urse into subdirectories"
+msgstr "Rekurzív beállítás az almappákra is:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:976
+#: ../../locales/../src/interface/netconfwizard.cpp:985
+#: ../../locales/../src/interface/netconfwizard.cpp:1009
+msgid "Received data tainted"
+msgstr ""
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:68
+msgid ""
+"Reconnect information cannot be cleared while connected to a server.\n"
+"If you continue, your connection will be disconnected."
+msgstr ""
+
+#: resources.h:157
+msgid "Reconnection settings"
+msgstr "Újracsatlakozás beállításai"
+
+#: resources.h:534 resources.h:535
+msgid "Reconnects to the last used server"
+msgstr "Újracsatlakozás az utoljára használt kiszolgálóhoz"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:681
+msgid "Redirection to invalid address"
+msgstr ""
+
+#: resources.h:526 resources.h:527
+msgid "Refresh the file and folder lists"
+msgstr "A fájlablakok frissítése"
+
+#: ../../locales/../src/engine/tlssocket.cpp:744
+msgid "Remote certificate not trusted."
+msgstr "A távoli bizonyítványi nem megbízható"
+
+#: ../../locales/../src/interface/queue.cpp:1151
+msgid "Remote file"
+msgstr "Távoli fájlnév"
+
+#: resources.h:259
+msgid "Remote filters:"
+msgstr "Távoli szűrők:"
+
+#: ../../locales/../src/interface/viewheader.cpp:508
+msgid "Remote site:"
+msgstr "Távoli fájlok:"
+
+#: resources.h:443 resources.h:446
+msgid "Remove &all"
+msgstr "Összes eltávolítása"
+
+#: resources.h:278 resources.h:444 resources.h:447
+msgid "Remove &selected"
+msgstr "Kijelölt elemek eltávolítása a listáról"
+
+#: resources.h:332 resources.h:350
+msgid "Rena&me"
+msgstr "Átnevezés"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:214
+msgid "Rename file"
+msgstr ""
+
+#: resources.h:459
+msgid "Rename selected directory"
+msgstr ""
+
+#: resources.h:414 resources.h:424
+msgid "Rename selected files and folders"
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2799
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2061
+#, c-format
+msgid "Renaming '%s' to '%s'"
+msgstr "Objektum átnevezése erről: '%s' erre: '%s'"
+
+#: resources.h:331 resources.h:349
+msgid "Res&ume"
+msgstr "Folytatás"
+
+#: resources.h:445 resources.h:448
+msgid "Reset and requeue selected files"
+msgstr "Kijelölt fájlok állapotának törlése és újbóli várólistába helyezése"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:929
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:467
+#, c-format
+msgid "Resolving IP-Address for %s"
+msgstr "IP cím feloldása a következőhöz: %s"
+
+#: ../../locales/../src/interface/updatewizard.cpp:172
+msgid "Resolving hostname"
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:387
+#: ../../locales/../src/interface/StatusView.cpp:187
+#: ../../locales/../src/interface/StatusView.cpp:223
+msgid "Response:"
+msgstr "Válasz:"
+
+#: resources.h:354
+msgid ""
+"Resuming ascii files can cause problems if server uses a different line "
+"ending format than the client."
+msgstr ""
+"Az ascii fájlok átviteli folytatása problémákat okozhat, amennyiben a "
+"kiszolgáló más sorvégződés formátumot használ, mint a kliens."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:848
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:799
+msgid "Retrieving directory listing..."
+msgstr "Könyvtár lista lekérdezése..."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3112
+#: ../../locales/../src/interface/netconfwizard.cpp:690
+#, c-format
+msgid "Retrieving external IP address from %s"
+msgstr "A külső IP cím lekérdezése a következő helyről: %s"
+
+#: resources.h:325 resources.h:344
+msgid "S&kip"
+msgstr "Kihagyás"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:826
+msgid "Save settings?"
+msgstr "Beállítások mentése"
+
+#: ../../locales/../src/interface/QueueView.cpp:1553
+msgid "Scanning for files to add to queue"
+msgstr ""
+
+#: ../../locales/../src/interface/QueueView.cpp:1555
+msgid "Scanning for files to upload"
+msgstr ""
+
+#: resources.h:123
+msgid "Select &page:"
+msgstr "Válassza ki az oldalt:"
+
+#: resources.h:65
+msgid "Select Entry:"
+msgstr "Válassza ki a bejegyzést:"
+
+#: resources.h:163
+msgid "Select Theme"
+msgstr "Téma kiválasztása"
+
+#: resources.h:337
+msgid ""
+"Select default action to perform if target file of a transfer already exists."
+msgstr ""
+"Válassza ki az alapértelmezett műveletet arra az esetre, ha a célfájl már "
+"létezik."
+
+#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:18
+msgid ""
+"Select default file exists action if the target file already exists. This "
+"selection is valid only for the current session."
+msgstr ""
+"Válassza ki az alapértelmezett műveletet arra az esetre, ha a célfájl már "
+"létezik. Ez a beállítás csak az aktuális munkamenetre érvényes."
+
+#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:16
+msgid ""
+"Select default file exists action only for the currently selected files in "
+"the queue."
+msgstr ""
+"Válassza ki az alapértelmezett műveletet arra az esetre, ha a célfájl már "
+"létezik. Ez a beállítás csak a várólistában aktuálisan kijelölt fájlokra "
+"érvényes."
+
+#: ../../locales/../src/interface/updatewizard.cpp:201
+msgid "Select download location for package"
+msgstr "Adjon meg egy elérési útvonalat a letöltendő csomag számára"
+
+#: ../../locales/../src/interface/export.cpp:30
+msgid "Select file for exported settings"
+msgstr "Adja meg a fájlnevet az exportáláshoz"
+
+#: ../../locales/../src/interface/import.cpp:15
+msgid "Select file to import settings from"
+msgstr "Válassza ki a fájlt az importáláshoz"
+
+#: resources.h:365
+msgid "Select the categories to export:"
+msgstr "Válassza ki a kiexportálandó kategóriákat:"
+
+#: resources.h:356
+msgid "Select the private data you would like to delete."
+msgstr "Válassza ki a törölni kívánt személyes adatokat."
+
+#: ../../locales/../src/engine/engineprivate.cpp:330
+msgid "Selected port usually in use by a different protocol."
+msgstr "A megadott portot általában egy másik protokoll használja"
+
+#: resources.h:398
+msgid "Send custom command to the server otherwise not available"
+msgstr "Egyéni FTP parancsok küldése a kiszolgálóra"
+
+#: resources.h:12
+msgid "Serial number:"
+msgstr "Sorozatszám:"
+
+#: ../../locales/../src/interface/queue.cpp:1149
+msgid "Server / Local file"
+msgstr "Kiszolgáló / Helyi fájlnév"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3479
+#, c-format
+msgid "Server does not support resume of files > %d GB."
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3475
+#, c-format
+msgid ""
+"Server does not support resume of files > %d GB. End transfer since "
+"filesizes match."
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1895
+msgid "Server does not support resume of files > 2GB."
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1890
+msgid "Server does not support resume of files > 4GB."
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3490
+#, c-format
+msgid ""
+"Server may not support resume of files > %d GB. End transfer since filesizes "
+"match."
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:714
+msgid ""
+"Server requires an account. Please specify an account using the Site Manager"
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:395
+#: ../../locales/../src/interface/netconfwizard.cpp:402
+#: ../../locales/../src/interface/netconfwizard.cpp:441
+#: ../../locales/../src/interface/netconfwizard.cpp:460
+#: ../../locales/../src/interface/netconfwizard.cpp:467
+#: ../../locales/../src/interface/netconfwizard.cpp:479
+#: ../../locales/../src/interface/netconfwizard.cpp:493
+#: ../../locales/../src/interface/netconfwizard.cpp:502
+#: ../../locales/../src/interface/netconfwizard.cpp:513
+msgid "Server sent invalid reply."
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3063
+msgid ""
+"Server sent passive reply with unroutable address. Using server address "
+"instead."
+msgstr ""
+
+#: resources.h:74 resources.h:86
+msgid "Server&type:"
+msgstr "Adatkapcsolat típusa:"
+
+#: resources.h:431
+msgid "Set &Priority"
+msgstr "Prioritás beállítása"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2940
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1956
+#, c-format
+msgid "Set permissions of '%s' to '%s'"
+msgstr "Engedélyek módosítása a '%s' objektumon erre: '%s'"
+
+#: resources.h:122
+msgid "Settings"
+msgstr "Beállítások"
+
+#: resources.h:191
+msgid "Show &raw directory listing"
+msgstr "Nyers könyvtár lista megjelenítése az üzenet naplóban"
+
+#: resources.h:373
+msgid "Site &Manager entries"
+msgstr "Kedvenc Helyek bejegyzései"
+
+#: resources.h:64
+msgid "Site Manager"
+msgstr "Kedvenc Helyek"
+
+#: ../../locales/../src/interface/sitemanager.cpp:51
+msgid "Site Manager already open"
+msgstr ""
+
+#: ../../locales/../src/interface/queue.cpp:1152
+msgid "Size"
+msgstr "Méret"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:59
+#: ../../locales/../src/interface/fileexistsdlg.cpp:83
+#: ../../locales/../src/interface/fileexistsdlg.cpp:115
+#: ../../locales/../src/interface/fileexistsdlg.cpp:139
+msgid "Size unknown"
+msgstr ""
+
+#: resources.h:333 resources.h:351
+msgid "Sk&ip"
+msgstr "Kihagyás"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2165
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2250
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:206
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:246
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:622
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:695
+#, c-format
+msgid "Skipping download of %s"
+msgstr "Letöltés kihagyása: %s"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2169
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2254
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:210
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:250
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:626
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:699
+#, c-format
+msgid "Skipping upload of %s"
+msgstr "Feltöltés kihagyása: %s"
+
+#: resources.h:170
+msgid "Small icons"
+msgstr "Kis ikonok"
+
+#: resources.h:2 resources.h:479
+msgid ""
+"Some misconfigured remote servers which are behind a router, may reply with "
+"their local ip address."
+msgstr ""
+"Néhány, router mögött található és rosszul beállított távoli kiszolgáló, "
+"esetleg a saját helyi IP címével válaszolhat."
+
+#: resources.h:148
+msgid "Sort directories inline"
+msgstr "Mappák rendezése a fájlok között"
+
+#: resources.h:145
+msgid "Sorting mode:"
+msgstr "Rendezés módja:"
+
+#: ../../locales/../src/interface/RemoteTreeView.cpp:92
+msgid "Source and path of the drop operation are identical"
+msgstr ""
+
+#: ../../locales/../src/interface/RemoteListView.cpp:125
+msgid "Source and target of the drop operation are identical"
+msgstr ""
+
+#: resources.h:35
+msgid "Speed limits"
+msgstr "Sebességkorlátozás"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1587
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1330
+#, c-format
+msgid "Starting download of %s"
+msgstr "Letöltés indítása: %s"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1591
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1334
+#, c-format
+msgid "Starting upload of %s"
+msgstr "Feltöltés indítása: %s"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:125
+msgid "State:"
+msgstr "Megye:"
+
+#: ../../locales/../src/interface/QueueView.cpp:415
+msgid "Status"
+msgstr "Állapot"
+
+#: ../../locales/../src/interface/StatusView.cpp:196
+#: ../../locales/../src/interface/StatusView.cpp:238
+msgid "Status:"
+msgstr "Állapot:"
+
+#: resources.h:428
+msgid "Stop and remove &all"
+msgstr "Összes megállítása és eltávolítása"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:127
+msgid "Street:"
+msgstr ""
+
+#: resources.h:16
+msgid "Subject of certificate"
+msgstr "Bizonyítvány tulajdonosa"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:565
+msgid ""
+"Submit a bug report if this problem persists even with the latest version of "
+"FileZilla."
+msgstr ""
+
+#: ../../locales/../src/interface/queueview_successful.cpp:11
+msgid "Successful transfers"
+msgstr "Sikeres átvitelek"
+
+#: resources.h:507
+msgid "Summary of test results:"
+msgstr "A tesztek eredménye:"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:73
+#: ../../locales/../src/interface/quickconnectbar.cpp:107
+msgid "Syntax error"
+msgstr "Szintaktikai hiba"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:318
+msgid "TLS/SSL connection established, waiting for welcome message..."
+msgstr "A TLS/SSL adatkapcsolat létrejött, várakozás az üdvözlő üzenetre..."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:322
+msgid "TLS/SSL connection established."
+msgstr "A TLS/SSL adatkapcsolat létrejött"
+
+#: resources.h:44
+msgid "Target file already exists"
+msgstr "A fájl már létezik"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1733
+msgid "Target filename already exists, really continue?"
+msgstr ""
+
+#: resources.h:506
+msgid "Test results"
+msgstr "Teszt eredmények"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3496
+msgid "Testing resume capabilities of server"
+msgstr ""
+
+#: ../../locales/../src/interface/sitemanager.cpp:50
+msgid ""
+"The Site Manager is opened in another instance of FileZilla 3.\n"
+"Do you want to continue? Any changes made in the Site Manager won't be saved "
+"then."
+msgstr ""
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:90
+msgid ""
+"The Site Manager is opened in another instance of FileZilla 3.\n"
+"Please close it or the data cannot be deleted."
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:606
+#, c-format
+msgid "The address you entered was: %s"
+msgstr "Az Ön által megadott cím: %s"
+
+#: ../../locales/../src/interface/filteredit.cpp:334
+#: ../../locales/../src/interface/filteredit.cpp:397
+#: ../../locales/../src/interface/filteredit.cpp:437
+msgid "The entered filter name already exists."
+msgstr "A megadott szűrőnév már létezik."
+
+#: ../../locales/../src/interface/optionspage_filetype.cpp:160
+#, c-format
+msgid "The extension '%s' does already exist in the list"
+msgstr ""
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:204
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:211
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"Please enter a new name:"
+msgstr ""
+
+#: ../../locales/../src/interface/import.cpp:78
+msgid ""
+"The file you have selected contains site manager data from a previous "
+"version of FileZilla.\n"
+"Due to differences in the storage format, only host, port, username and "
+"password will be imported.\n"
+"Continue with the import?"
+msgstr ""
+
+#: resources.h:189
+msgid ""
+"The higher the debug level, the more information will be displayed in the "
+"message log. Displaying debug information has a negative impact on "
+"performance."
+msgstr ""
+"Minél magasabb a hibakeresés szintje, annál több információ jelenik meg az "
+"üzenet naplóban. A hibakeresési információk megjelenítése negatív hatással "
+"van a teljesítményre."
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:89
+msgid ""
+"The lowest available port has to be less or equal than the highest available "
+"port."
+msgstr ""
+
+#: ../../locales/../src/interface/updatewizard.cpp:385
+msgid ""
+"The most recent version has been downloaded. Click on Finish to close "
+"FileZilla and to start the installation."
+msgstr ""
+"A legfrissebb verzió letöltésre került. Kattintson a Befejezés gombra a "
+"FileZilla bezárásához és a telepítés indításához."
+
+#: ../../locales/../src/interface/updatewizard.cpp:387
+msgid ""
+"The most recent version has been downloaded. Please install like you did "
+"install this version."
+msgstr ""
+
+#: ../../locales/../src/interface/import.cpp:68
+msgid "The selected categories have been imported."
+msgstr "A kijelölt kategóriák beimportálásra kerültek."
+
+#: resources.h:372
+msgid ""
+"The selected file contains importable data for the following categories:"
+msgstr ""
+"A kiválasztott fájl a következő kategóriák beimportálható adatait "
+"tartalmazza:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:563
+msgid "The server sent an unrecognized reply."
+msgstr ""
+
+#: resources.h:102
+msgid "The server uses following charset encoding for filenames:"
+msgstr ""
+"A kiszolgáló a következő karakterkészletet alkalmazza a fájlnevek kódolására:"
+
+#: resources.h:6
+msgid ""
+"The server's certificate is unknown. Please carefully examine the "
+"certificate to make sure the server can be trusted."
+msgstr ""
+"A kiszolgáló bizonyítványa nem ismert. Kérem a bizonyítványt az alábbiakban "
+"figyelmesen vizsgálja meg, hogy biztos legyen a szerver megbízhatóságában."
+
+#: resources.h:241
+msgid ""
+"The server's host key does not match the key that has been cached. This "
+"means that either the administrator has changed the host key, or you are "
+"actually trying to connect to another computer pretending to be the server.\n"
+"If the host key change was not expected, please contact the server "
+"administrator."
+msgstr ""
+"A kiszolgáló címkulcsa nem egyezik a regisztrációs adatbázisban tárolttal. "
+"Ez vagy azt jelenti, hogy a rendszergazda megváltoztatta a címkulcsot, vagy "
+"azt, hogy most egy olyan másik számítógéphez próbál csatlakozni, amely úgy "
+"tesz mintha a kiszolgáló lenne.\n"
+"Amennyiben a címkulcs változására nem számított, kérem lépjen kapcsolatba a "
+"szerver rendszergazdájával."
+
+#: resources.h:229
+msgid ""
+"The server's host key is not cached in the registry. You have no guarantee "
+"that the server is the computer you think it is."
+msgstr ""
+"A kiszolgáló címkulcsa nincs a regisztrációs adatbázisban. Semmi sem "
+"garantálja, hogy a szerver az a számítógép, melyre csatlakozni szeretne."
+
+#: ../../locales/../src/interface/import.cpp:65
+msgid ""
+"The settings have been imported. You have to restart FileZilla for all "
+"settings to have effect."
+msgstr ""
+"A beállítások beimportálásra kerültek. Az összes beállítás érvénybe "
+"lépéséhez a FileZilla újraindítása szükséges."
+
+#: resources.h:45
+msgid ""
+"The target file already exists.\n"
+"Would you like to replace the file"
+msgstr ""
+"A célfájl már létezik.\n"
+"Le szeretné cserélni a létező fájlt"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:826
+msgid "The test did not succeed. Do you really want to save the settings?"
+msgstr "A teszt nem sikerült. Biztosan menteni szeretné a beállításokat?"
+
+#: ../../locales/../src/interface/themeprovider.cpp:57
+#: ../../locales/../src/interface/themeprovider.cpp:76
+msgid "Theme error"
+msgstr ""
+
+#: ../../locales/../src/interface/settingsdialog.cpp:103
+msgid "Themes"
+msgstr "Témák"
+
+#: ../../locales/../src/interface/filter.cpp:638
+msgid "This filter set cannot be removed"
+msgstr "Ez a szűrőkészlet nem távolítható el."
+
+#: resources.h:484
+msgid ""
+"This only works if you are not behind a router, else your system would just "
+"return your internal address."
+msgstr ""
+"Ez csak akkor működik, ha a számítógép nincs egy router mögött, különben az "
+"operációs rendszer csak a belső címet fogja visszaadni a programnak."
+
+#: resources.h:462
+msgid ""
+"This wizard will help you to properly configure any routers and firewalls "
+"you have and tests your configuration."
+msgstr ""
+"A varázsló a hálózati beállítások megfelelő kialakításában és tesztelésében "
+"segít, különösen ha router vagy tűzfal is található a hálózaton."
+
+#: resources.h:32
+msgid "Time&out in seconds:"
+msgstr "Időtúllépés beállítása másodpercben:"
+
+#: resources.h:31 ../../locales/../src/interface/QueueView.cpp:902
+#: ../../locales/../src/interface/QueueView.cpp:927
+msgid "Timeout"
+msgstr "Időtúllépés"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:123
+msgid "Title:"
+msgstr ""
+
+#: resources.h:528 resources.h:529
+msgid "Toggles processing of the transfer queue"
+msgstr "A várólista végrehajtása"
+
+#: resources.h:520 resources.h:521
+msgid "Toggles the display of the local directory tree"
+msgstr "A helyi könyvtárfa megjelenítése vagy elrejtése"
+
+#: resources.h:518 resources.h:519
+msgid "Toggles the display of the message log"
+msgstr "Az üzenet napló megjelenítése vagy elrejtése"
+
+#: resources.h:522 resources.h:523
+msgid "Toggles the display of the remote directory tree"
+msgstr "A távoli könyvtárfa megjelenítése vagy elrejtése"
+
+#: resources.h:524 resources.h:525
+msgid "Toggles the display of the transfer queue"
+msgstr "A várólista megjelenítése vagy elrejtése"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:588
+msgid "Too long header line"
+msgstr ""
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:649
+msgid "Too many redirects"
+msgstr ""
+
+#: ../../locales/../src/interface/StatusView.cpp:190
+#: ../../locales/../src/interface/StatusView.cpp:230
+msgid "Trace:"
+msgstr "Követés:"
+
+#: resources.h:152
+msgid "Transfer Mode"
+msgstr "Átviteli mód:"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:151
+msgid "Transfer aborted by user"
+msgstr "Az átvitelt a felhasználó megszakította"
+
+#: resources.h:94
+msgid "Transfer settings"
+msgstr "Átviteli beállítások"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:609
+msgid "Transferred data got tainted."
+msgstr ""
+
+#: ../../locales/../src/interface/QueueView.cpp:1241
+#: ../../locales/../src/interface/statuslinectrl.cpp:159
+msgid "Transferring"
+msgstr "Átvitel folyamatban"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:99
+msgid "Transfers"
+msgstr "Átvitel"
+
+#: resources.h:135
+msgid "Treat files &without extention as Ascii file"
+msgstr "A kiterjesztés nélküli fájlok kezelése Ascii fájlokként történjen"
+
+#: resources.h:131
+msgid "Treat the &following filetypes as Ascii files:"
+msgstr "Az alábbi fájltípusok kezelése Ascii fájlokként történjen:"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:725
+msgid "Trust changed Hostkey: "
+msgstr "Módosított címkulcs elfogadása: "
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:723
+msgid "Trust new Hostkey: "
+msgstr "Új címkulcs elfogadása: "
+
+#: resources.h:247
+msgid "Trust the new key and carry on connecting?"
+msgstr "Megbízik az új címkulcsban, és folytatni szeretné a csatlakozást?"
+
+#: resources.h:20
+msgid "Trust this certificate and carry on connecting"
+msgstr "Elfogadja a bizonyítványt, és folytatni szeretné a csatlakozást?"
+
+#: resources.h:235
+msgid "Trust this host and carry on connecting?"
+msgstr "Megbízik a címkulcsban, és folytatni szeretné a csatlakozást?"
+
+#: resources.h:38
+msgid "U&pload limit:"
+msgstr "Feltöltés korlátozása:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:122
+msgid "Unit:"
+msgstr "Egység:"
+
+#: resources.h:5
+msgid "Unknown certificate"
+msgstr "Ismeretlen bizonyítvány"
+
+#: resources.h:228
+msgid "Unknown host key"
+msgstr "Ismeretlen címkulcs"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:584
+#: ../../locales/../src/interface/netconfwizard.cpp:595
+msgid ""
+"Unless these problems get fixed, active mode FTP will not work and passive "
+"mode has to be used."
+msgstr ""
+"Amíg ezek a problémák meg nem oldódnak, az aktív módú FTP nem fog működni, "
+"és a passzív módot kell használnia."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:571
+msgid ""
+"Unless this problem gets fixed, active mode FTP will not work and passive "
+"mode has to be used."
+msgstr ""
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:633
+msgid "Unsuppored redirect"
+msgstr ""
+
+#: ../../locales/../src/interface/settingsdialog.cpp:106
+msgid "Update Check"
+msgstr "Frissítés keresés"
+
+#: ../../locales/../src/interface/updatewizard.cpp:137
+#: ../../locales/../src/interface/updatewizard.cpp:145
+msgid "Update wizard"
+msgstr "Frissítés varázsló"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1235
+msgid "Updatecheck failed"
+msgstr ""
+
+#: resources.h:406
+msgid "Upload selected files and folders"
+msgstr ""
+
+#: resources.h:326 resources.h:345
+msgid "Uploads"
+msgstr "Feltöltések"
+
+#: resources.h:106
+msgid "Use &custom charset"
+msgstr "Egyéni karakterkészlet használata:"
+
+#: resources.h:319
+msgid "Use &default"
+msgstr "Alapértelmezett beállítás"
+
+#: resources.h:327
+msgid "Use d&efault"
+msgstr "Alapértelmezett beállítás"
+
+#: resources.h:292 resources.h:485
+msgid "Use the following IP address:"
+msgstr "A következő IP cím használata:"
+
+#: resources.h:495
+msgid "Use the following port range:"
+msgstr "Az alábbi port tartomány használata"
+
+#: resources.h:480
+msgid "Use the server's external IP address instead"
+msgstr "Ehelyett, a kiszolgáló külső IP címének használata"
+
+#: resources.h:293 resources.h:486
+msgid ""
+"Use this if you're behind a router and have a static external IP address."
+msgstr "Ezt használja, ha egy router mögött van, és a külső IP címe statikus."
+
+#: resources.h:489
+msgid ""
+"Use this option if you have a dynamic IP address. FileZilla will contact the "
+"above server once each session as soon as you use active mode for the first "
+"time. Only the version of FileZilla you're using is submitted to the server."
+msgstr ""
+"Ezt az opciót használja, ha dinamikus IP címmel rendelkezik. A FileZilla a "
+"fent megadott című szerverre csatlakozik munkamenetenként egy alkalommal, "
+"amikor az aktív módot először használja. Az IP cím lekérdezésekor csak a "
+"FileZilla verziószáma továbbítódik a kiszolgálóra."
+
+#: resources.h:116
+msgid "User:"
+msgstr "Felhasználónév:"
+
+#: resources.h:104
+msgid "Uses UTF-8 if the server supports it, else use local charset."
+msgstr ""
+"Amennyiben a kiszolgáló támogatja, akkor UTF-8 használata, egyébként a helyi "
+"karakterkészlet használata."
+
+#: resources.h:108
+msgid ""
+"Using the wrong charset can result in filenames not displaying properly."
+msgstr ""
+"A nem megfelelő karakterkészlet használata a fájlnevek helytelen "
+"megjelenését eredményezheti."
+
+#: resources.h:298
+msgid "Using this wizard you can check for available updates to FileZilla."
+msgstr "Ezzel a varázslóval a FileZilla elérhető frissítéseit ellenőrizheti."
+
+#: resources.h:10
+msgid "Valid from:"
+msgstr "Érvényesség kezdete:"
+
+#: resources.h:11
+msgid "Valid to:"
+msgstr "Érvényesség vége:"
+
+#: ../../locales/../src/engine/tlssocket.cpp:922
+msgid "Verifying certificate..."
+msgstr "Bizonyítvány ellenőrzése..."
+
+#: resources.h:43
+msgid "Very high"
+msgstr "Nagyon magas"
+
+#: resources.h:399
+msgid "View &hidden files"
+msgstr "Rejtett fájlok megjelenítése"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:554
+msgid "View hidden files"
+msgstr "Rejtett fájlok megjelenítése"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:917
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1002
+msgid "View hidden option set, but unsupported by server"
+msgstr ""
+
+#: resources.h:203
+msgid "W&rite"
+msgstr "Írás"
+
+#: ../../locales/../src/interface/QueueView.cpp:1512
+msgid "Waiting"
+msgstr ""
+
+#: ../../locales/../src/interface/QueueView.cpp:1170
+msgid "Waiting for browsing connection"
+msgstr ""
+
+#: ../../locales/../src/interface/QueueView.cpp:1191
+msgid "Waiting for password"
+msgstr ""
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:153
+msgid "Waiting for transfer to be canceled"
+msgstr ""
+
+#: ../../locales/../src/engine/engineprivate.cpp:234
+msgid "Waiting to retry..."
+msgstr "Várakozás az újracsatlakozásra..."
+
+#: ../../locales/../src/interface/FileZilla.cpp:200
+msgid ""
+"Warning!\n"
+"\n"
+"A bug in Windows causes problems with FileZilla\n"
+"\n"
+"The bug occurs if you have\n"
+"- Windows Server 2003 or XP 64\n"
+"- Windows Firewall enabled\n"
+"- Application Layer Gateway service enabled\n"
+"See http://support.microsoft.com/kb/931130 for background information.\n"
+"\n"
+"Unless you either disable Windows Firewall or the Application Layer Gateway "
+"service,\n"
+"FileZilla will timeout on big transfers."
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:944
+msgid "Warning, ignoring data connection from wrong IP."
+msgstr ""
+
+#: ../../locales/../src/interface/updatewizard.cpp:145
+msgid ""
+"Warning, use nightly builds at your own risk.\n"
+"No support is given for nightly builds.\n"
+"Nightly builds may not work as expected and might even damage your system.\n"
+"\n"
+"Do you really want to check for nightly builds?"
+msgstr ""
+"Figyelem, a napi programváltozatokat csak saját felelősségére használja.\n"
+"A napi változatokhoz nincsen támogatás.\n"
+"Ezek nem biztos hogy úgy működnek, ahogy elvárt, és esetleg még a rendszert "
+"is sérültté tehetik.\n"
+"\n"
+"Biztosan szeretne frissítést keresni a napi programváltozatok között is?"
+
+#: resources.h:240
+msgid "Warning: Potential security breach!"
+msgstr "Vigyázat: Lehetséges, hogy a biztonság sérül!"
+
+#: resources.h:141
+msgid "Widescreen"
+msgstr "Szélesképernyős"
+
+#: resources.h:207
+msgid "Wr&ite"
+msgstr "Írás"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:425
+#: ../../locales/../src/interface/netconfwizard.cpp:432
+msgid "Wrong external IP address"
+msgstr "Rosszul megadott külső IP cím"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:787
+msgid "Wrong lineendings"
+msgstr ""
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:736
+msgid "Yes"
+msgstr "Igen"
+
+#: resources.h:313
+msgid ""
+"You are already using the most recent version of FileZilla. Please check "
+"again in future."
+msgstr ""
+"Jelenleg már a FileZilla legfrissebb verzióját használja. A későbbiekben "
+"ismét ellenőrizheti."
+
+#: resources.h:210
+msgid ""
+"You can use an x at any position to keep the permission the original files "
+"have."
+msgstr ""
+"Az 'x'-et bármely pozícióban használhatja a fájlok eredeti engedélyeinek "
+"megtartására."
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:226
+msgid "You did not enter a new name for the file. Overwrite the file instead?"
+msgstr ""
+
+#: ../../locales/../src/interface/sitemanager.cpp:509
+msgid "You have to enter a hostname."
+msgstr "Meg kell adnia egy címet."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:144
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:106
+msgid "You have to enter a valid IP address."
+msgstr "Kérem adjon meg egy érvényes IP címet."
+
+#: ../../locales/../src/interface/sitemanager.cpp:570
+msgid "You have to enter an account name"
+msgstr "Adjon meg egy fiók nevet."
+
+#: ../../locales/../src/interface/sitemanager.cpp:561
+msgid "You have to specify a user name"
+msgstr "Meg kell adnia egy felhasználónevet."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:610
+msgid ""
+"You likely have a router or firewall which errorneously modified the "
+"transferred data."
+msgstr ""
+
+#: ../../locales/../src/interface/netconfwizard.cpp:557
+msgid ""
+"You should have no problems connecting to other servers, file transfers "
+"should work properly."
+msgstr ""
+"Tudnia kell csatlakoznia más kiszolgálókhoz, és a fájl átvitelnek "
+"megfelelően kell működnie."
+
+#: ../../locales/../src/interface/filteredit.cpp:57
+msgid "begins with"
+msgstr "kezdete"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:57
+#: ../../locales/../src/interface/fileexistsdlg.cpp:81
+#: ../../locales/../src/interface/fileexistsdlg.cpp:113
+#: ../../locales/../src/interface/fileexistsdlg.cpp:137
+msgid "bytes"
+msgstr ""
+
+#: ../../locales/../src/interface/filteredit.cpp:55
+msgid "contains"
+msgstr "tartalmazza"
+
+#: ../../locales/../src/interface/filteredit.cpp:58
+msgid "ends with"
+msgstr "vége"
+
+#: ../../locales/../src/interface/filteredit.cpp:62
+msgid "equals"
+msgstr "egyenlő"
+
+#: ../../locales/../src/interface/LocalListView.cpp:719
+#: ../../locales/../src/interface/LocalListView.cpp:737
+#: ../../locales/../src/interface/RemoteListView.cpp:1166
+#: ../../locales/../src/interface/RemoteListView.cpp:1184
+msgid "file"
+msgstr ""
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1269
+msgid "fzsftp could not be started"
+msgstr ""
+
+#: ../../locales/../src/interface/filteredit.cpp:61
+msgid "greater than"
+msgstr "nagyobb, mint"
+
+#: ../../locales/../src/interface/filteredit.cpp:56
+msgid "is equal to"
+msgstr "egyenlő"
+
+#: ../../locales/../src/interface/filteredit.cpp:63
+msgid "less than"
+msgstr "kisebb, mint"
+
+#: ../../locales/../src/interface/filteredit.cpp:59
+msgid "matches regex"
+msgstr "regex megfelel"
+
+#: ../../locales/../src/interface/themeprovider.cpp:57
+msgid "themes.xml missing, can not get theme data"
+msgstr ""
+
+#: resources.h:49
+msgid "with the following file?"
+msgstr "az alábbi fájllal?"

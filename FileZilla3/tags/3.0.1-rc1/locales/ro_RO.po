@@ -1,0 +1,4195 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Filezilla\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-08-09 16:39+0200\n"
+"PO-Revision-Date: 2007-07-31 18:33+0200\n"
+"Last-Translator: \n"
+"Language-Team: Laurentiu Anisie\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Romanian\n"
+"X-Poedit-Country: ROMANIA\n"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:49
+#: ../../locales/../src/interface/statuslinectrl.cpp:98
+msgid "%H:%M:%S elapsed"
+msgstr "%H:%M:%S estimate"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:53
+#: ../../locales/../src/interface/statuslinectrl.cpp:122
+msgid "%H:%M:%S left"
+msgstr "%H:%M:%S ramase"
+
+#: ../../locales/../src/interface/QueueView.cpp:1912
+#, c-format
+msgid "%d files added to queue"
+msgstr "%d fisiere adaugate in sir transfer"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:47
+#, c-format
+msgid "%s - Certificate expired!"
+msgstr "%s - Certificat expirat!"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:31
+#, c-format
+msgid "%s - Not yet valid!"
+msgstr "%s - Nu este inca valid!"
+
+#: ../../locales/../src/interface/updatewizard.cpp:667
+#, c-format
+msgid "%s bytes"
+msgstr "%s biti"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:114
+#: ../../locales/../src/interface/updatewizard.cpp:651
+#, c-format
+msgid "%s bytes (%d B/s)"
+msgstr "%s biti (%d B/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:112
+#: ../../locales/../src/interface/updatewizard.cpp:649
+#, c-format
+msgid "%s bytes (%d.%d KB/s)"
+msgstr "%s biti (%d.%d KB/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:110
+#: ../../locales/../src/interface/updatewizard.cpp:647
+#, c-format
+msgid "%s bytes (%d.%d MB/s)"
+msgstr "%s biti (%d.%d MB/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:132
+#, c-format
+msgid "%s bytes (? B/s)"
+msgstr "%s biti (? B/s)"
+
+#: ../../locales/../src/interface/FileZilla.cpp:713
+#, c-format
+msgid ""
+"%s could not be found. Without this component of FileZilla, SFTP will not "
+"work.\n"
+"\n"
+"Possible solutions:\n"
+"- Make sure %s is in a directory listed in your PATH environment variable.\n"
+"- Set the full path to %s in the FZ_FZSFTP environment variable."
+msgstr ""
+"%s nu poate fi gasit. Fara aceasta componenta a FileZilla, SFTP nu "
+"functioneaza.\n"
+"\n"
+"Solutii posibile:\n"
+"- Asigurati-va ca %s este in directoarele listate in variabila de sistem "
+"PATH.\n"
+"- Stabiliti calea completa pt. %s in variabila de sistem FZ_FZSFTP."
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:64
+#, c-format
+msgid "%s with %d bits"
+msgstr "%s cu %d biti"
+
+#: resources.h:402
+msgid "&About..."
+msgstr "&Despre..."
+
+#: resources.h:83
+msgid "&Account:"
+msgstr "&Cont:"
+
+#: resources.h:97 resources.h:154 resources.h:470
+msgid "&Active"
+msgstr "&Activ"
+
+#: resources.h:406 resources.h:416 resources.h:451
+msgid "&Add files to queue"
+msgstr "&Adaugare fisiere in sir transfer"
+
+#: resources.h:21
+msgid "&Always trust certificate in future sessions."
+msgstr "Pastreaza certific&are si in sesiunile urmatoare."
+
+#: resources.h:236
+msgid "&Always trust this host, add this key to the cache"
+msgstr "&Ai incredere in server, adauga cheia in cache"
+
+#: resources.h:59
+msgid "&Always use this action"
+msgstr "&Utilizeaza aceasta actiune totdeauna"
+
+#: resources.h:320 resources.h:339
+msgid "&Ask for action"
+msgstr "&Solicita actiune"
+
+#: resources.h:127
+msgid "&Auto"
+msgstr "&Auto"
+
+#: resources.h:103
+msgid "&Autodetect"
+msgstr "&Autodetectare"
+
+#: resources.h:448
+msgid "&Automatically remove successful transfers"
+msgstr "Elimina &automat transferurile fara erori"
+
+#: resources.h:129
+msgid "&Binary"
+msgstr "&Binar"
+
+#: resources.h:89
+msgid "&Browse..."
+msgstr "&Afisare..."
+
+#: resources.h:40
+msgid "&Burst tolerance:"
+msgstr "To&leranta accelerare"
+
+#: resources.h:63 resources.h:121 resources.h:125 resources.h:194
+#: resources.h:238 resources.h:250
+msgid "&Cancel"
+msgstr "&Abandon"
+
+#: resources.h:302
+msgid "&Check for beta versions of FileZilla"
+msgstr "&Verificare versiuni beta FileZilla"
+
+#: resources.h:390
+msgid "&Clear private data..."
+msgstr "Ster&gere date private..."
+
+#: resources.h:109
+msgid "&Connect"
+msgstr "&Conectare"
+
+#: resources.h:271
+msgid "&Copy"
+msgstr "&Copiere"
+
+#: resources.h:437
+msgid "&Copy to clipboard"
+msgstr "&Copiere in clipboard"
+
+#: resources.h:440
+msgid "&Crash"
+msgstr "&Eroare"
+
+#: resources.h:408 resources.h:418 resources.h:453
+msgid "&Create directory"
+msgstr "&Creare director"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:421
+msgid "&Debug"
+msgstr "&Depanare"
+
+#: resources.h:183
+msgid "&Debug information in message log:"
+msgstr "&Depanare informatii in log mesaje:"
+
+#: resources.h:392 resources.h:429
+msgid "&Default file exists action..."
+msgstr "&Actiune predefinia pt. fisierele existente..."
+
+#: resources.h:69 resources.h:253 resources.h:269
+msgid "&Delete"
+msgstr "&Stergere"
+
+#: resources.h:395
+msgid "&Disconnect"
+msgstr "&Deconectare"
+
+#: ../../locales/../src/interface/conditionaldialog.cpp:22
+msgid "&Don't show this dialog again."
+msgstr "&Nu afisa acest dialog urmatoarea data."
+
+#: resources.h:414 resources.h:449
+msgid "&Download"
+msgstr "&Descarcare"
+
+#: resources.h:384
+msgid "&Edit"
+msgstr "&Editare"
+
+#: resources.h:255
+msgid "&Edit filters..."
+msgstr "&Editare filtre..."
+
+#: resources.h:177
+msgid "&Enable automatic update check"
+msgstr "&Activare actualizare automata"
+
+#: resources.h:107
+msgid "&Encoding:"
+msgstr "&Codare:"
+
+#: resources.h:436
+msgid "&Enter custom command..."
+msgstr "&Introducere comanda personalizata...."
+
+#: resources.h:200
+msgid "&Execute"
+msgstr "&Executa"
+
+#: resources.h:366
+msgid "&Export Site Manager entries"
+msgstr "&Exportare inregistrari din Managerul de Site-uri"
+
+#: resources.h:388
+msgid "&Export..."
+msgstr "&Exporta..."
+
+#: resources.h:4
+msgid "&Fall back to active mode"
+msgstr "&Revenire la mod activ"
+
+#: resources.h:379
+msgid "&File"
+msgstr "&Fisier"
+
+#: resources.h:424 resources.h:459
+msgid "&File Attributes..."
+msgstr "&Atribute Fisier..."
+
+#: resources.h:252
+msgid "&Filter sets:"
+msgstr "&Set filtre:"
+
+#: resources.h:267
+msgid "&Filters:"
+msgstr "&Filtre:"
+
+#: resources.h:399
+msgid "&Help"
+msgstr "&Ajutor"
+
+#: resources.h:431
+msgid "&Highest"
+msgstr "&Maxim"
+
+#: resources.h:289
+msgid "&Highest available port:"
+msgstr "&Port maxim disponibil:"
+
+#: resources.h:72 resources.h:508
+msgid "&Host:"
+msgstr "&Server:"
+
+#: resources.h:389
+msgid "&Import..."
+msgstr "&Importa..."
+
+#: resources.h:286
+msgid "&Limit local ports used by FileZilla"
+msgstr "&Limitare porturi locale utilizate de FileZilla"
+
+#: resources.h:99
+msgid "&Limit number of simultaneous connections"
+msgstr "&Limitare numar conexiuni simultane"
+
+#: resources.h:75
+msgid "&Logontype:"
+msgstr "&Tip logare:"
+
+#: resources.h:434
+msgid "&Low"
+msgstr "&Inferior"
+
+#: resources.h:100
+msgid "&Maximum number of connections:"
+msgstr "&Numar maxim de conexiuni:"
+
+#: resources.h:387
+msgid "&Network configuration wizard..."
+msgstr "&Asistent configurare retea..."
+
+#: resources.h:268
+msgid "&New"
+msgstr "&Nou"
+
+#: resources.h:66
+msgid "&New Site"
+msgstr "&Site nou"
+
+#: ../../locales/../src/interface/updatewizard.cpp:800
+msgid "&New version available!"
+msgstr "&O noua versiune este disponibila!"
+
+#: resources.h:433
+msgid "&Normal"
+msgstr "&Normal"
+
+#: resources.h:209
+msgid "&Numeric value:"
+msgstr "&Valoare numerica:"
+
+#: resources.h:110 resources.h:120 resources.h:124
+msgid "&OK"
+msgstr "&Ok"
+
+#: resources.h:54 resources.h:321 resources.h:340
+msgid "&Overwrite"
+msgstr "&Suprascrie"
+
+#: resources.h:98
+msgid "&Passive"
+msgstr "&Pasiv"
+
+#: resources.h:118
+msgid "&Password:"
+msgstr "&Parola:"
+
+#: resources.h:73 resources.h:512
+msgid "&Port:"
+msgstr "&Port:"
+
+#: resources.h:375
+msgid "&Queue"
+msgstr "S&ir descarcare"
+
+#: resources.h:514
+msgid "&Quickconnect"
+msgstr "&Conectare rapida"
+
+#: resources.h:198
+msgid "&Read"
+msgstr "&Citire"
+
+#: resources.h:394
+msgid "&Reconnect"
+msgstr "&Reconectare"
+
+#: resources.h:119
+msgid "&Remember password for this session"
+msgstr "&Tine minte parola pt. aceasta sesiune"
+
+#: resources.h:133
+msgid "&Remove"
+msgstr "&Eliminare"
+
+#: resources.h:428
+msgid "&Remove selected"
+msgstr "&Elimina cele selectate"
+
+#: resources.h:68 resources.h:270 resources.h:412 resources.h:422
+#: resources.h:457
+msgid "&Rename"
+msgstr "&Redenumire"
+
+#: resources.h:507
+msgid "&Restart Wizard"
+msgstr "&Reporneste Asistentul"
+
+#: resources.h:56 resources.h:323 resources.h:342
+msgid "&Resume"
+msgstr "&Lipire"
+
+#: resources.h:151
+msgid "&Run configuration wizard now..."
+msgstr "&Ruleaza asistentul de configurare acum..."
+
+#: resources.h:180
+msgid "&Run update check now..."
+msgstr "&Verifica actualizarile acum..."
+
+#: resources.h:254
+msgid "&Save as..."
+msgstr "&Salveaza ca..."
+
+#: resources.h:174
+msgid "&Select language:"
+msgstr "&Selectare limba:"
+
+#: resources.h:393
+msgid "&Server"
+msgstr "&Server"
+
+#: resources.h:374
+msgid "&Settings"
+msgstr "&Setari"
+
+#: resources.h:385
+msgid "&Settings..."
+msgstr "&Setari..."
+
+#: resources.h:182
+msgid "&Show debug menu"
+msgstr "&Afisare meniu depanare"
+
+#: resources.h:380
+msgid "&Site Manager..."
+msgstr "&Manager Site-uri..."
+
+#: resources.h:58
+msgid "&Skip"
+msgstr "&Sar"
+
+#: resources.h:143
+msgid "&Swap local and remote panes"
+msgstr "Comutare panourilor local si cel la distanta"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:223
+msgid "&Test"
+msgstr "&Test"
+
+#: resources.h:164
+msgid "&Theme:"
+msgstr "&Teme:"
+
+#: resources.h:391
+msgid "&Transfer"
+msgstr "&Transfer"
+
+#: resources.h:95
+msgid "&Transfer mode:"
+msgstr "&Mod transfer:"
+
+#: resources.h:136
+msgid "&Treat dotfiles (filenames starting with a dot) as Ascii files"
+msgstr "&Trateaza fisierele ce incep cu punct(.) ca si fisiere Ascii"
+
+#: resources.h:248
+msgid "&Update cached key for this host"
+msgstr "&Actualizeaza cheie existenta pt. aceast server"
+
+#: resources.h:404
+msgid "&Upload"
+msgstr "&Incarcare"
+
+#: resources.h:3
+msgid "&Use the server's external IP address instead"
+msgstr "&Utilizeaza adresa externa IP a server-ului"
+
+#: resources.h:81
+msgid "&User:"
+msgstr "&Utilizator:"
+
+#: resources.h:510
+msgid "&Username:"
+msgstr "&Nume utilizator:"
+
+#: ../../locales/../src/interface/updatewizard.cpp:798
+#, c-format
+msgid "&Version %s"
+msgstr "&Versiune %s"
+
+#: resources.h:199
+msgid "&Write"
+msgstr "&Scriere"
+
+#: ../../locales/../src/interface/state.cpp:103
+#, c-format
+msgid "'%s' does not exist or cannot be accessed."
+msgstr "'%s' nu exista sau nu poate fi accesat."
+
+#: ../../locales/../src/interface/sitemanager.cpp:519
+msgid "'Account' logontype not supported by selected protocol"
+msgstr "Tipul de logare 'Cont' nu este suportat de protocolul selectat"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:474
+msgid ""
+"'quote' is usually a local command used by commandline clients to send the "
+"arguments following 'quote' to the server. You might want to enter the raw "
+"command without the leading 'quote'."
+msgstr ""
+"'ghilimelele' formeaza o comanda locala utilizata de clientii ftp tip "
+"consola pt. a trimite argumente urmate de ghilimele la serverul destinatie. "
+"Va rog sa introduceti comanda proprie fara ghilimele."
+
+#: resources.h:28 resources.h:30
+msgid "(0 for no limit)"
+msgstr "(0 pt. nelimitat)"
+
+#: resources.h:159
+msgid "(0-99)"
+msgstr "(0-99)"
+
+#: resources.h:161
+msgid "(0-999 seconds)"
+msgstr "(0-999 secunde)"
+
+#: resources.h:26
+msgid "(1-10)"
+msgstr "(1-10)"
+
+#: resources.h:33
+msgid "(5-9999, 0 to disable)"
+msgstr "(5-9999, 0 dezactivare)"
+
+#: resources.h:179
+msgid "(At least 7 days)"
+msgstr "(Cel putin 7 zile)"
+
+#: resources.h:37 resources.h:39
+msgid "(in KB/s)"
+msgstr "(in KB/s)"
+
+#: ../../locales/../src/interface/updatewizard.cpp:659
+msgid ", %H:%M:%S left"
+msgstr ", %H:%M:%S ramase"
+
+#: ../../locales/../src/interface/updatewizard.cpp:663
+msgid ", --:--:-- left"
+msgstr ", --:--:-- ramase"
+
+#: resources.h:495
+msgid "-"
+msgstr "-"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:126
+#: ../../locales/../src/interface/statuslinectrl.cpp:131
+msgid "--:--:-- left"
+msgstr "--:--:-- ramase"
+
+#: resources.h:184
+msgid "0 - None"
+msgstr "0 - Nimic"
+
+#: resources.h:185
+msgid "1 - Warning"
+msgstr "1 - Atentionari"
+
+#: resources.h:186
+msgid "2 - Info"
+msgstr "2 - Informatii"
+
+#: resources.h:187
+msgid "3 - Verbose"
+msgstr "3 - Detaliat"
+
+#: resources.h:188
+msgid "4 - Debug"
+msgstr "4 - Depanare"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:139
+#: ../../locales/../src/interface/RemoteTreeView.cpp:106
+msgid "A directory cannot be dragged into one if its subdirectories."
+msgstr "Un director nu poate fi mutat intr-un subdirector al lui."
+
+#: resources.h:467
+msgid ""
+"A few servers don't allow passive mode or are misconfigured. In such cases "
+"you would have to use active mode. In active mode, FileZilla opens a port "
+"and asks the server to connect to it."
+msgstr ""
+"Cateva servere nu permit modul pasiv sau nu sunt configurate corect. In "
+"aceste cazuri trebuie sa utilizati modul activ. In modul activ, FileZilla "
+"deschide un port si solicita server-ului conectarea."
+
+#: ../../locales/../src/interface/FileZilla.cpp:605
+msgid ""
+"A local filename could not be decoded.\n"
+"Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
+"correctly.\n"
+"Unless you fix this problem, files might be missing in the file listings.\n"
+"No further warning will be displayed this session."
+msgstr ""
+"Fisierul local nu poate fi decodat.\n"
+"Asigurati-va ca variabila de sistem LC_CTYPE (sau LC_ALL) este stabilita "
+"corect.\n"
+"Daca nu rezolvati problema, vor ramane fisiere nelistate.\n"
+"Nu vor mai fi afisate atentionari in aceasta sesiune."
+
+#: resources.h:304
+msgid "A newer version of FileZilla is available:"
+msgstr "O versiune mai noua FileZilla este disponibila:"
+
+#: resources.h:132
+msgid "A&dd"
+msgstr "A&dauga"
+
+#: resources.h:353
+msgid "A&llow resume of ascii files"
+msgstr "Permite &lipirea fisierelor ascii"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:99
+msgid "A&pply only to downloads"
+msgstr "A&plica numai la descarcari"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:155
+msgid "A&pply only to uploads"
+msgstr "A&plica numai la incarcari"
+
+#: resources.h:212
+msgid "A&pply to all files and directories"
+msgstr "A&plica pt. toate fisierele si folderele"
+
+#: resources.h:128
+msgid "A&scii"
+msgstr "A&scii"
+
+#: resources.h:328 resources.h:346
+msgid "A&sk for action"
+msgstr "&Solicita actiune"
+
+#: resources.h:217
+msgid "About FileZilla"
+msgstr "Despre FileZilla"
+
+#: resources.h:80 ../../locales/../src/interface/sitemanager.cpp:516
+#: ../../locales/../src/interface/sitemanager.cpp:566
+#: ../../locales/../src/interface/sitemanager.cpp:759
+#: ../../locales/../src/interface/sitemanager.cpp:760
+#: ../../locales/../src/interface/sitemanager.cpp:798
+#: ../../locales/../src/interface/sitemanager.cpp:1014
+msgid "Account"
+msgstr "Cont"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:97
+msgid "Active mode"
+msgstr "Mod activ"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:593
+msgid ""
+"Active mode FTP test failed. FileZilla does not know the correct external IP "
+"address."
+msgstr ""
+"Testul FTP in mod activ a esuat. FileZilla nu cunoaste adresa IP externa "
+"corecta."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:580
+msgid ""
+"Active mode FTP test failed. FileZilla does not know the correct external IP "
+"address. In addition to that, your router has modified the sent address."
+msgstr ""
+"Testul FTP in mod activ a esuat. FileZilla nu cunoaste adresa IP externa "
+"corecta. Aditional, router-ul dvs. a modificat adresa de trimitere."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:568
+msgid ""
+"Active mode FTP test failed. FileZilla knows the correct external IP "
+"address, but your router has misleadingly modified the sent address."
+msgstr ""
+"Testul FTP in mod activ a esuat. FileZilla cunoaste adresa IP externa "
+"corecta, dar router-ul dvs. a modificat intentionat adresa de trimitere"
+
+#: resources.h:297
+msgid "Active mode IP"
+msgstr "IP mod activ"
+
+#: resources.h:277
+msgid "Add &more"
+msgstr "Adauga &mai multe"
+
+#: resources.h:452
+msgid "Add selected directory to the transfer queue"
+msgstr "Adauga folderul selectat la sirul de transfer"
+
+#: resources.h:407 resources.h:417
+msgid "Add selected files and folders to the transfer queue"
+msgstr "Adauga fisierele si folderele selectate la sirul de transfer"
+
+#: resources.h:91
+msgid "Adjust server timezone offset:"
+msgstr "Ajustare ora server:"
+
+#: resources.h:85
+msgid "Advanced"
+msgstr "Avansat"
+
+#: resources.h:301
+msgid "Advanced options:"
+msgstr "Optiuni avansate:"
+
+#: resources.h:496
+msgid "All ports in the given range have to be between 1024 and 65535."
+msgstr "Toate porturile din interval trebuie sa fie intre 1024 si 65535."
+
+#: resources.h:155
+msgid "Allow fall back to other transfer mode on failure"
+msgstr "Permite comutarea pe alte moduri de transfer la eroare"
+
+#: resources.h:471
+msgid "Allow fallback to other transfer mode on failure"
+msgstr "Permite comutarea pe alte moduri de transfer la eroare"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:530
+msgid ""
+"Also, not all servers support this feature and may return incorrect listings "
+"if 'View hidden files' is enabled. Although FileZilla performs some tests to "
+"see if the server supports this feature, the test may fail."
+msgstr ""
+"Nu toate serverele suporta aceasta setare si pot returna o lista incorecta "
+"daca este activata optiunea 'Vizualizare fisiere ascunse'. Totusi, FileZilla "
+"verifica sa vada daca serverul suporta sau nu aceasta optiune."
+
+#: ../../locales/../src/interface/updatewizard.cpp:836
+msgid ""
+"Alternatively, visit http://filezilla-project.org to download the most "
+"recent version."
+msgstr ""
+"Alternativ, vizitati http://filezilla-project.org pt. a descarca cea mai "
+"recenta versiune."
+
+#: resources.h:76 ../../locales/../src/interface/sitemanager.cpp:557
+#: ../../locales/../src/interface/sitemanager.cpp:758
+#: ../../locales/../src/interface/sitemanager.cpp:951
+#: ../../locales/../src/interface/sitemanager.cpp:1017
+msgid "Anonymous"
+msgstr "Anonim"
+
+#: resources.h:275
+msgid "Any of the following"
+msgstr "Oricare din urmatoarele"
+
+#: resources.h:214
+msgid "App&ly to directories only"
+msgstr "Ap&lica numai la foldere"
+
+#: resources.h:265
+msgid "Apply"
+msgstr "Aplica"
+
+#: resources.h:60
+msgid "Apply to &current queue only"
+msgstr "Aplica numai la sirul &curent"
+
+#: resources.h:213
+msgid "Apply to &files only"
+msgstr "Aplica numai la &fisiere"
+
+#: ../../locales/../src/interface/updatewizard.cpp:195
+msgid "Archive"
+msgstr "Arhiva"
+
+#: resources.h:78 ../../locales/../src/interface/sitemanager.cpp:794
+#: ../../locales/../src/interface/sitemanager.cpp:1008
+msgid "Ask for password"
+msgstr "Solicitare parola"
+
+#: resources.h:492
+msgid "Ask operating system for a port."
+msgstr "Solicita sistemului de operare un port."
+
+#: resources.h:291 resources.h:482
+msgid "Ask your operating system for the external IP address"
+msgstr "Solicita sistemului de operare o adresa IP externa"
+
+#: ../../locales/../src/interface/filteredit.cpp:547
+msgid "At least one filter condition is incomplete"
+msgstr "Cel putin o conditie din filtru este incompleta"
+
+#: resources.h:501
+msgid "At this point, all required information has been gathered."
+msgstr "In acest punct, toate informatiile solicitate au fost culese."
+
+#: resources.h:165
+msgid "Author:"
+msgstr "Autor:"
+
+#: resources.h:130
+msgid "Automatic file type classification"
+msgstr "Clasificare automata tipuri de fisiere"
+
+#: resources.h:176
+msgid "Automatic update check"
+msgstr "Verificare automata actualizari"
+
+#: resources.h:142
+msgid "Blackboard"
+msgstr "Tabla"
+
+#: ../../locales/../src/interface/state.cpp:257
+msgid "Break current connection?"
+msgstr "Intrerupeti conexiunea curenta?"
+
+#: resources.h:224
+msgid "Build date:"
+msgstr "Data build:"
+
+#: resources.h:222
+msgid "Build information"
+msgstr "Informatii build"
+
+#: resources.h:287
+msgid ""
+"By default uses any available local port to establish transfers in active "
+"mode. If you want to limit FileZilla to use only a small range of ports, "
+"please enter the port range below."
+msgstr ""
+"Initial se utilizeaza orice port disponibil pt. a stabili transferuri in mod "
+"activ. Daca doriti sa limitati intervalul de porturi utilizat de FileZilla, "
+"va rog sa introduceti acest interval mai jos."
+
+#: resources.h:303
+msgid "C&heck for nightly builds of FileZilla"
+msgstr "&Verificare existenta nightly builds FileZilla"
+
+#: resources.h:438
+msgid "C&lear all"
+msgstr "C&urata tot"
+
+#: ../../locales/../src/engine/transfersocket.cpp:567
+msgid "Can't read from file"
+msgstr "Nu pot citi fisierul"
+
+#: ../../locales/../src/engine/transfersocket.cpp:541
+msgid "Can't write data to file, disk is full."
+msgstr "Nu pot scrie datele. Discul este plin."
+
+#: ../../locales/../src/engine/transfersocket.cpp:543
+#: ../../locales/../src/engine/transfersocket.cpp:546
+#: ../../locales/../src/engine/transfersocket.cpp:611
+msgid "Can't write data to file."
+msgstr "Nu pot scrie datele in fisier."
+
+#: resources.h:23 resources.h:216 resources.h:264 resources.h:284
+#: resources.h:336 resources.h:363 resources.h:370 resources.h:378
+msgid "Cancel"
+msgstr "Abandon"
+
+#: resources.h:529
+msgid "Cancel current operation"
+msgstr "Abandoneaza operatiunea curenta"
+
+#: resources.h:530
+msgid "Cancels the current operation"
+msgstr "Abandoneaza operatiunea curenta"
+
+#: ../../locales/../src/interface/state.cpp:115
+#, c-format
+msgid "Cannot access '%s', no media inserted or drive not ready."
+msgstr ""
+"Nu pot accesa '%s'. Nu este inserat nici un mediu sau unitatea nu este gata."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:251
+msgid ""
+"Cannot establish FTP connection to an SFTP server. Please select proper "
+"protocol."
+msgstr ""
+"Nu pot stabili o conexiune FTP la un server SFTP. Va rog sa alegeti "
+"protocolul corect."
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:30
+msgid "Cannot load Quickconnect bar from resource file"
+msgstr "Nu pot incarca bara de conectare rapida din fisierul de resurse"
+
+#: ../../locales/../src/interface/import.cpp:25
+msgid "Cannot load file, not a valid XML file."
+msgstr "Nu pot incarca fisierul. Nu este format XML."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:407
+msgid "Cannot load main menu from resource file"
+msgstr "Nu pot incarca meniu principal din fisierul de resurse"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:651
+msgid "Cannot load toolbar from resource file"
+msgstr "Nu pot incarca bara de butoane din fisierul de resurse"
+
+#: ../../locales/../src/interface/sitemanager.cpp:643
+msgid "Cannot rename entry"
+msgstr "Nu pot redenumi intrarea"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1680
+msgid "Cannot rename file"
+msgstr "Nu pot redenumi fisierul"
+
+#: resources.h:357
+msgid "Categories"
+msgstr "Categorii"
+
+#: resources.h:18
+msgid "Certificate issuer"
+msgstr "Solicitant certificare"
+
+#: resources.h:117
+msgid "Challenge:"
+msgstr "Solicitare:"
+
+#: resources.h:195
+msgid "Change file attributes"
+msgstr "Modificare atribute fisier"
+
+#: resources.h:425 resources.h:460
+msgid "Change the file permissions."
+msgstr "Modificare permisiuni fisier."
+
+#: ../../locales/../src/interface/FileZilla.cpp:605
+msgid "Character encoding issue"
+msgstr "Tip codare caractere"
+
+#: resources.h:101
+msgid "Charset"
+msgstr "Set caractere"
+
+#: resources.h:400
+msgid "Check for &updates..."
+msgstr "&Verificare actualizari..."
+
+#: resources.h:401
+msgid "Check for newer versions of FileZilla"
+msgstr "Verificare versiune noua FileZilla"
+
+#: ../../locales/../src/interface/updatewizard.cpp:59
+msgid "Check for updates"
+msgstr "Verificare actualizari"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:748
+msgid "Checking for correct external IP address"
+msgstr "Verificare adresa IP externa corecta"
+
+#: resources.h:299
+msgid "Checking for updates"
+msgstr "Verificare actualizari"
+
+#: ../../locales/../src/interface/sitemanager.cpp:891
+msgid "Choose the default local directory"
+msgstr "Alegere folder local predefinit"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:814
+msgid "Chunk data improperly terminated"
+msgstr "Parti de date terminate cu erori"
+
+#: resources.h:139
+msgid "Classic"
+msgstr "Clasic"
+
+#: resources.h:360
+msgid "Clear &Site Manager entries"
+msgstr "Stergere inregistrari &Manager Site-uri"
+
+#: resources.h:439
+msgid "Clear &layout cache"
+msgstr "Curata &lista cu erori"
+
+#: resources.h:358
+msgid "Clear &quickconnect history"
+msgstr "Golire istoric conectare rapida"
+
+#: resources.h:359
+msgid "Clear &reconnect information"
+msgstr "Stergere informatii &reconectate"
+
+#: resources.h:361
+msgid "Clear &transfer queue"
+msgstr "Stergere coada de descarcare"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:123
+msgid "Clear history"
+msgstr "Golire istoric"
+
+#: resources.h:355 ../../locales/../src/interface/clearprivatedata.cpp:34
+#: ../../locales/../src/interface/clearprivatedata.cpp:40
+#: ../../locales/../src/interface/clearprivatedata.cpp:46
+#: ../../locales/../src/interface/clearprivatedata.cpp:68
+#: ../../locales/../src/interface/clearprivatedata.cpp:90
+msgid "Clear private data"
+msgstr "Stergere date private"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:122
+msgid "Clear quickconnect bar"
+msgstr "Golire bara conectare rapida"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:560
+msgid "Click on Finish to save your configuration."
+msgstr "Apasati pe Terminare pt. a salva configuratia."
+
+#: ../../locales/../src/interface/updatewizard.cpp:835
+msgid "Click on next to download the new version."
+msgstr "Apasati pe Urmatorul pt a descarca noua versiune."
+
+#: resources.h:383
+msgid "Close FileZilla"
+msgstr "Inchidere FileZilla"
+
+#: resources.h:84
+msgid "Co&mments:"
+msgstr "Co&mentarii:"
+
+#: ../../locales/../src/engine/engineprivate.cpp:217
+msgid "Command not supported by this protocol"
+msgstr "Comanda nesuportata de acest protocol"
+
+#: ../../locales/../src/interface/StatusView.cpp:184
+#: ../../locales/../src/interface/StatusView.cpp:219
+msgid "Command:"
+msgstr "Comanda:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:119
+msgid "Common name:"
+msgstr "Nume comun:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:418
+#: ../../locales/../src/interface/netconfwizard.cpp:433
+msgid "Communication tainted by router"
+msgstr "Comunicatie modificata de router"
+
+#: resources.h:225
+msgid "Compiled with:"
+msgstr "Compilat cu:"
+
+#: resources.h:226
+msgid "Compiler flags:"
+msgstr "Flags compilator:"
+
+#: resources.h:24
+msgid "Concurrent transfers"
+msgstr "Transferuri concurente"
+
+#: resources.h:279
+msgid "Conditions are c&ase sensitive"
+msgstr "Conditiile sunt sensibile la dimensiune &caractere (mM)"
+
+#: resources.h:500
+msgid "Configuration test"
+msgstr "Test configurare"
+
+#: resources.h:474
+msgid "Configure passive mode"
+msgstr "Configurare mod pasiv"
+
+#: resources.h:490
+msgid "Configure port range"
+msgstr "Configurare interval porturi"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1394
+#: ../../locales/../src/interface/RemoteListView.cpp:1417
+msgid "Confirmation needed"
+msgstr "Solicitare confirmare"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:556
+msgid "Congratulations, your configuration seems to be working."
+msgstr "Felicitari, configuratia pare sa fie corecta."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:604
+msgid "Connected"
+msgstr "Conectat"
+
+#: ../../locales/../src/interface/QueueView.cpp:1081
+msgid "Connecting"
+msgstr "Conectare"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:202
+#: ../../locales/../src/interface/statuslinectrl.cpp:156
+#, c-format
+msgid "Connecting to %s"
+msgstr "Conectare la %s"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:963
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:492
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:324
+#, c-format
+msgid "Connecting to %s:%d..."
+msgstr "Conectare la %s:%d..."
+
+#: ../../locales/../src/interface/updatewizard.cpp:232
+#: ../../locales/../src/interface/updatewizard.cpp:754
+msgid "Connecting to server"
+msgstr "Conectare la server"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:96
+msgid "Connection"
+msgstr "Conexiune"
+
+#: ../../locales/../src/interface/QueueView.cpp:814
+msgid "Connection attempt failed"
+msgstr "Conexiunea a esuat"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:122
+#: ../../locales/../src/engine/engineprivate.cpp:366
+msgid "Connection attempt interrupted by user"
+msgstr "Conexiunea in curs a fost intrerupta de utilizator"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:535
+msgid "Connection closed"
+msgstr "Conexiune inchisa"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:297
+msgid "Connection established, initializing TLS..."
+msgstr "Conexiune stabilita, initializez TLS..."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:319
+msgid "Connection established, sending HTTP request"
+msgstr "Conexiune stabilita, trimit solicitarea HTTP"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:326
+msgid "Connection established, waiting for welcome message..."
+msgstr "Conexiune stabilita, astept mesajul de intampinare..."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:333
+msgid "Connection lost"
+msgstr "Conexiune pierduta"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:596
+msgid "Connection timed out"
+msgstr "Conectare in asteptare"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:552
+msgid "Connection with server got closed prematurely."
+msgstr "Conexiunea cu server-ul s-a incheiat prematur."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:544
+msgid "Connection with the test server failed."
+msgstr "Conexiunea cu server-ul de test a esuat."
+
+#: resources.h:70
+msgid "Cop&y"
+msgstr "Cop&iere"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1165
+#, c-format
+msgid "Copy (%d) of %s"
+msgstr "Copiere (%d) din %s"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1142
+#, c-format
+msgid "Copy of %s"
+msgstr "Copiere a %s"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:124
+msgid "Could not connect to server"
+msgstr "Nu ma pot conecta la server"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2196
+#: ../../locales/../src/interface/RemoteTreeView.cpp:829
+msgid ""
+"Could not determine the target of the Drag&Drop operation.\n"
+"Either the shell extension is not installed properly or you didn't drop the "
+"files into an Explorer window."
+msgstr ""
+"Nu pot determina destinatia la operatia de  Drag&Drop.\n"
+"Este posibil ca extensia sa nu fie instalata corect sau destinatia nu este o "
+"fereastra Explorer."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3418
+msgid "Could not establish connection to server"
+msgstr "N pot stabili o conexiune cu server-ul"
+
+#: ../../locales/../src/interface/FileZilla.cpp:361
+msgid ""
+"Could not find the resource files for FileZilla, closing FileZilla.\n"
+"You can set the data directory of FileZilla using the '--datadir "
+"<custompath>' commandline option or by setting the FZ_DATADIR environment "
+"variable."
+msgstr ""
+"Nu gasesc fisierele cu resurse FileZilla, inchid FileZilla.\n"
+"Puteti seta directorul cu date al FileZilla utilizand optiunea in linia de "
+"comanda '--datadir <custompath>' sau stabilind variabila de sistem "
+"FZ_DATADIR."
+
+#: ../../locales/../src/interface/Options.cpp:96
+#, c-format
+msgid ""
+"Could not load \"%s\", make sure the file is valid.\n"
+"For this session, default settings will be used and any changes to the "
+"settings are not persistent."
+msgstr ""
+"Nu pot incarca \"%s\", asigurati-va ca fisierul este valid.\n"
+"Pt. aceasta sesiune, setarile initiale vor fi utilizate iar orice modificare "
+"a acestor setari nu va fi persistenta."
+
+#: ../../locales/../src/interface/wrapengine.cpp:820
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed."
+msgstr ""
+"Nu pot incarca \"%s\", asigurati-va ca fisierul este valid si poate fi "
+"accesat."
+
+#: ../../locales/../src/interface/filter.cpp:167
+#: ../../locales/../src/interface/filter.cpp:252
+#: ../../locales/../src/interface/sitemanager.cpp:353
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"Any changes made in the Site Manager could not be saved."
+msgstr ""
+"Nu pot incarca \"%s\", asigurati-va ca fisierul este valid si poate fi "
+"accesat.\n"
+"Orice modificare facuta in Manager-ul de Site-uri nu va putea fi salvata."
+
+#: ../../locales/../src/interface/import.cpp:99
+#: ../../locales/../src/interface/import.cpp:278
+#: ../../locales/../src/interface/sitemanager.cpp:252
+#: ../../locales/../src/interface/sitemanager.cpp:1297
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"Any changes made in the Site Manager will not be saved."
+msgstr ""
+"Nu pot incarca \"%s\", asigurati-va ca fisierul este valid si poate fi "
+"accesat.\n"
+"Orice modificare facuta in Manager-ul de Site-uri nu va fi salvata."
+
+#: ../../locales/../src/interface/QueueView.cpp:1474
+#: ../../locales/../src/interface/QueueView.cpp:1501
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"The queue will not be saved."
+msgstr ""
+"Nu pot incarca \"%s\", asigurati-va ca fisierul este valid si poate fi "
+"accesat.\n"
+"Sirul de transfer nu va fi salvat."
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:70
+msgid "Could not parse server address:"
+msgstr "Nu pot obtine adresa server-ului:"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2027
+#, c-format
+msgid "Could not seek to offset %s within file"
+msgstr "Nu pot sari la pozitia %s in fisier"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1958
+msgid "Could not seek to the end of the file"
+msgstr "Nu pot sari al sfarsitul fisierului"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2047
+msgid "Could not spawn IO thread"
+msgstr "Eroare. Could not spawn IO thread"
+
+#: ../../locales/../src/interface/QueueView.cpp:840
+#: ../../locales/../src/interface/QueueView.cpp:845
+msgid "Could not start transfer"
+msgstr "Nu pot porni transferul"
+
+#: ../../locales/../src/interface/sitemanager.cpp:379
+#, c-format
+msgid ""
+"Could not write \"%s\", any changes to the Site Manager could not be saved: %"
+"s"
+msgstr ""
+"Nu pot scrie \"%s\", orice modificare in Manager-ul de Site-uri nu poate fi "
+"salvata: %s"
+
+#: ../../locales/../src/interface/QueueView.cpp:1484
+#: ../../locales/../src/interface/QueueView.cpp:1520
+#, c-format
+msgid "Could not write \"%s\", the queue could not be saved."
+msgstr "Nu pot scrie \"%s\", sirul de transfer nu poate fi salvat."
+
+#: ../../locales/../src/interface/wrapengine.cpp:988
+#, c-format
+msgid "Could not write \"%s\": %s"
+msgstr "Nu pot scrie \"%s\": %s"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:123
+msgid "Country:"
+msgstr "Tara:"
+
+#: resources.h:441
+msgid "Crashes FileZilla instantly. Only used to debug the exception handler"
+msgstr ""
+"FileZilla a crapat instantaneu. Poate fi utilizata numai la depanarea "
+"erorilor"
+
+#: resources.h:409 resources.h:419 resources.h:454
+msgid "Create a new subdirectory in the current directory"
+msgstr "Creare subfolder nou in folderul curent"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1293
+#: ../../locales/../src/interface/RemoteListView.cpp:1362
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1192
+msgid "Create directory"
+msgstr "Creare folder"
+
+#: ../../locales/../src/interface/QueueView.cpp:1148
+msgid "Creating directory"
+msgstr "Creare folder"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2586
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1609
+#, c-format
+msgid "Creating directory '%s'..."
+msgstr "Creare folder '%s'..."
+
+#: ../../locales/../src/engine/ControlSocket.cpp:111
+msgid "Critical error"
+msgstr "Eroare critica"
+
+#: ../../locales/../src/interface/filter.cpp:116
+msgid "Custom filter set"
+msgstr "Set personal de filtre"
+
+#: resources.h:96
+msgid "D&efault"
+msgstr "Initia&l"
+
+#: resources.h:410 resources.h:420 resources.h:455
+msgid "D&elete"
+msgstr "St&erge"
+
+#: resources.h:258
+msgid "D&isable all"
+msgstr "Dezact&iveaza tot"
+
+#: resources.h:111
+msgid "D&iscard"
+msgstr "A&bandon"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:963
+#: ../../locales/../src/interface/netconfwizard.cpp:1029
+msgid "Data socket closed too early."
+msgstr "Canalul de date s-a inchis prematur."
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:68
+#: ../../locales/../src/interface/fileexistsdlg.cpp:92
+#: ../../locales/../src/interface/fileexistsdlg.cpp:124
+#: ../../locales/../src/interface/fileexistsdlg.cpp:148
+msgid "Date/time unknown"
+msgstr "Data/ora necunoscute"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:108
+msgid "Debug"
+msgstr "Depanare"
+
+#: resources.h:181
+msgid "Debugging settings"
+msgstr "Setari depanare"
+
+#: resources.h:87 ../../locales/../src/interface/sitemanager.cpp:957
+#: ../../locales/../src/interface/sitemanager.cpp:1046
+msgid "Default"
+msgstr "Initial"
+
+#: resources.h:88
+msgid "Default &local directory:"
+msgstr "Fo&lder local initial:"
+
+#: resources.h:316
+msgid "Default file exists action"
+msgstr "Actiune predef. pt. fisier existent"
+
+#: resources.h:90
+msgid "Default r&emote directory:"
+msgstr "Folder initial s&erver:"
+
+#: resources.h:468
+msgid "Default transfer mode:"
+msgstr "Mod transfer initial:"
+
+#: resources.h:126
+msgid "Default transfer type:"
+msgstr "Tip transfer initial:"
+
+#: resources.h:295 resources.h:487
+msgid "Default: http://ip.filezilla-project.org/ip.php"
+msgstr "Initial: http://ip.filezilla-project.org/ip.php"
+
+#: ../../locales/../src/interface/optionspage_connection.cpp:57
+msgid ""
+"Delay between failed connection attempts has to be between 1 and 999 seconds."
+msgstr ""
+"Pauzele intre conexiunile esuate trebuie sa fie intre 1 si 999 secunde."
+
+#: resources.h:160
+msgid "Delay between failed login attempts:"
+msgstr "Pauza intre incercarile esuate de logare:"
+
+#: ../../locales/../src/engine/engineprivate.cpp:660
+msgid "Delaying connection due to previously failed connection attempt..."
+msgstr ""
+"Aman conectarea din cauza erorilor aparute ultima data cand am incercat..."
+
+#: resources.h:456
+msgid "Delete selected directory"
+msgstr "Stergere folder selectat"
+
+#: resources.h:411 resources.h:421
+msgid "Delete selected files and folders"
+msgstr "Sterge fisierele si folderele selectate"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:907
+msgid "Desktop"
+msgstr "Desktop"
+
+#: resources.h:7 resources.h:230
+msgid "Details"
+msgstr "Detalii"
+
+#: resources.h:242
+msgid "Details for new key:"
+msgstr "Detalii pt. noua cheie:"
+
+#: resources.h:282
+msgid "Dire&ctories"
+msgstr "Dire&ctoare"
+
+#: ../../locales/../src/interface/queue.cpp:1175
+msgid "Direction"
+msgstr "Directie"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:128
+msgid "Directory listing aborted by user"
+msgstr "Listarea folderului abandonata de utilizator"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:643
+msgid "Directory listing failed"
+msgstr "Listarea folderului a esuat"
+
+#: resources.h:251
+msgid "Directory listing filters"
+msgstr "Filtre listare folder"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:132
+msgid "Directory listing successful"
+msgstr "Listarea folderului incheiata cu succes"
+
+#: resources.h:261
+msgid "Disa&ble all"
+msgstr "De&zactiveaza tot"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:531
+msgid "Disable this option if you cannot see your files anymore."
+msgstr "Dezactivati aceasta optiune daca nu mai puteti vedea fisierele."
+
+#: resources.h:531
+msgid "Disconnect from server"
+msgstr "Deconectare de la server"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:66
+#: ../../locales/../src/engine/ControlSocket.cpp:911
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:156
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:894
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:896
+#: ../../locales/../src/interface/QueueView.cpp:812
+#: ../../locales/../src/interface/QueueView.cpp:837
+msgid "Disconnected from server"
+msgstr "Deconectat de la server"
+
+#: ../../locales/../src/interface/QueueView.cpp:1056
+#: ../../locales/../src/interface/statuslinectrl.cpp:150
+msgid "Disconnecting from previous server"
+msgstr "Deconectare de la server-ul precedent"
+
+#: resources.h:532
+msgid "Disconnects from the currently visible server"
+msgstr "Deconectare de la serverul vizibil curent"
+
+#: resources.h:403
+msgid "Display about dialog"
+msgstr "Afisare fereastra info"
+
+#: ../../locales/../src/interface/updatewizard.cpp:137
+msgid ""
+"Do you really want to check for beta versions?\n"
+"Unless you want to test new features, keep using stable versions."
+msgstr ""
+"Doriti sa verificati existenta unei versiuni beta?\n"
+"Va sfatuim sa o folositi numai daca doriti sa testati noi optiuni."
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:34
+msgid ""
+"Do you really want to delete all Site Manager entries and the transfer queue?"
+msgstr ""
+"Sigur doriti sa stergeti toate inregistrarile din Managerul de Site-uri si "
+"coada de descarcare?"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:46
+msgid "Do you really want to delete all Site Manager entries?"
+msgstr ""
+"Sigur doriti sa stergeti toate inregistrarile din Managerul de Site-uri?"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:40
+msgid "Do you really want to delete the transfer queue?"
+msgstr "Sigur doriti sa stergeti coada de descarcare?"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:475
+#, c-format
+msgid "Do you really want to send '%s' to the server?"
+msgstr "Sigur doriti sa trimiteti '%s' la server?"
+
+#: resources.h:296 resources.h:489
+msgid "Don't use external IP address on &local connections."
+msgstr "Nu utiliza adrese IP externe la conexiunile &locale."
+
+#: resources.h:36
+msgid "Download &limit:"
+msgstr "&Limitare descarcare:"
+
+#: resources.h:450
+msgid "Download selected directory"
+msgstr "Descarcare folder selectat"
+
+#: resources.h:415
+msgid "Download selected files and folders"
+msgstr "Descarcare fisiere si foldere selectate"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:336
+#: ../../locales/../src/interface/updatewizard.cpp:224
+#, c-format
+msgid "Downloading %s"
+msgstr "Descarcare %s"
+
+#: resources.h:318 resources.h:338
+msgid "Downloads"
+msgstr "Descarcari"
+
+#: ../../locales/../src/interface/LocalListView.cpp:88
+#: ../../locales/../src/interface/LocalTreeView.cpp:88
+#: ../../locales/../src/interface/QueueView.cpp:66
+#: ../../locales/../src/interface/RemoteListView.cpp:86
+#: ../../locales/../src/interface/RemoteTreeView.cpp:79
+msgid ""
+"Drag&drop between different instances of FileZilla has not been implemented "
+"yet."
+msgstr ""
+"Operatia de Drag&drop intre instante diferite FileZilla nu a fost inca "
+"implementata."
+
+#: ../../locales/../src/interface/LocalListView.cpp:94
+#: ../../locales/../src/interface/LocalTreeView.cpp:94
+#: ../../locales/../src/interface/QueueView.cpp:77
+#: ../../locales/../src/interface/RemoteListView.cpp:92
+#: ../../locales/../src/interface/RemoteTreeView.cpp:85
+msgid "Drag&drop between different servers has not been implemented yet."
+msgstr ""
+"Operatia de Drag&drop intre servere diferite nu a fost inca implementata."
+
+#: ../../locales/../src/interface/filteredit.cpp:334
+#: ../../locales/../src/interface/filteredit.cpp:397
+#: ../../locales/../src/interface/filteredit.cpp:437
+msgid "Duplicate filter name"
+msgstr "Nume filtru duplicat"
+
+#: resources.h:257
+msgid "E&nable all"
+msgstr "Ac&tiveaza tot"
+
+#: resources.h:204
+msgid "E&xecute"
+msgstr "E&xecuta"
+
+#: resources.h:382
+msgid "E&xit"
+msgstr "Iesi&re"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:127
+msgid "E-Mail:"
+msgstr "E-Mail:"
+
+#: ../../locales/../src/interface/filteredit.cpp:536
+msgid "Each filter needs at least one condition."
+msgstr "Fiecare filtru necesita cel putin o conditie."
+
+#: resources.h:266
+msgid "Edit filters"
+msgstr "Editare filtre"
+
+#: resources.h:167
+msgid "Email:"
+msgstr "Email:"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:645
+msgid "Empty directory listing"
+msgstr "Listare foldere goale"
+
+#: ../../locales/../src/interface/filteredit.cpp:388
+#: ../../locales/../src/interface/filteredit.cpp:431
+msgid "Empty filter names are not allowed."
+msgstr "Filtrele fara nume nu sunt permise."
+
+#: ../../locales/../src/interface/filteredit.cpp:388
+#: ../../locales/../src/interface/filteredit.cpp:431
+msgid "Empty name"
+msgstr "Fara nume"
+
+#: resources.h:260
+msgid "En&able all"
+msgstr "&Activeaza tot"
+
+#: resources.h:396
+msgid "Enter &custom command..."
+msgstr "Introducere &comanda personala..."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:463
+msgid "Enter custom command"
+msgstr "Introducere comanda personala"
+
+#: ../../locales/../src/interface/filteredit.cpp:327
+#: ../../locales/../src/interface/filteredit.cpp:380
+#: ../../locales/../src/interface/filteredit.cpp:424
+msgid "Enter filter name"
+msgstr "Introducere nume filtru"
+
+#: ../../locales/../src/interface/filter.cpp:601
+msgid "Enter name for filterset"
+msgstr "Introducere nume pt. setul de filtre"
+
+#: resources.h:112
+msgid "Enter password"
+msgstr "Introducere parola"
+
+#: resources.h:509
+msgid ""
+"Enter the address of the server.\n"
+"To specify the server protocol, prepend the host with the protocol "
+"identifier. If no protocol is specified, the default protocol (ftp://) will "
+"be used.\n"
+"You can also enter complete URLS in the form protocol://user:pass@host:port "
+"here, the values in the other fields will be overwritten then."
+msgstr ""
+"Introduceti adresa server-ului.\n"
+"Pt. a specifica protocolul server-ului, asignati la acesta protocolul de "
+"identificare. Daca nu este specificat, cel initial (ftp://) va fi utilizat.\n"
+"Puteti de asemenea puteti sa introduceti aici adresa completa a server-ului "
+"in urmatoarea forma (protocol://utiliz:parola@server:port), valorile din "
+"celelalte campuri fiind apoi suprascrise."
+
+#: resources.h:513
+msgid ""
+"Enter the port on which the server listens.\n"
+"The default for FTP is 21, the default for SFTP is 22."
+msgstr ""
+"Introduceti portul utilizat de server.\n"
+"Initial, pt. FTP este 21, iar pentru SFTP este 22."
+
+#: ../../locales/../src/engine/transfersocket.cpp:312
+#, c-format
+msgid "Error %d writing to socket"
+msgstr "Eroarea %d  aparuta la scrierea in socket"
+
+#: ../../locales/../src/interface/export.cpp:26
+msgid "Error exporting settings"
+msgstr "Eroare la exportul setarilor"
+
+#: ../../locales/../src/interface/import.cpp:25
+#: ../../locales/../src/interface/import.cpp:88
+msgid "Error importing"
+msgstr "Eroare la import"
+
+#: ../../locales/../src/interface/filter.cpp:168
+#: ../../locales/../src/interface/filter.cpp:253
+#: ../../locales/../src/interface/import.cpp:100
+#: ../../locales/../src/interface/import.cpp:279
+#: ../../locales/../src/interface/Options.cpp:97
+#: ../../locales/../src/interface/QueueView.cpp:1475
+#: ../../locales/../src/interface/QueueView.cpp:1502
+#: ../../locales/../src/interface/sitemanager.cpp:253
+#: ../../locales/../src/interface/sitemanager.cpp:354
+#: ../../locales/../src/interface/sitemanager.cpp:1298
+#: ../../locales/../src/interface/wrapengine.cpp:821
+msgid "Error loading xml file"
+msgstr "Eroare la incarcarea fisierului xml"
+
+#: ../../locales/../src/interface/QueueView.cpp:1485
+#: ../../locales/../src/interface/QueueView.cpp:1521
+#: ../../locales/../src/interface/sitemanager.cpp:380
+#: ../../locales/../src/interface/wrapengine.cpp:989
+msgid "Error writing xml file"
+msgstr "Eroare la scrierea fisierului xml"
+
+#: ../../locales/../src/interface/StatusView.cpp:182
+#: ../../locales/../src/interface/StatusView.cpp:215
+msgid "Error:"
+msgstr "Eroare:"
+
+#: resources.h:208
+msgid "Exe&cute"
+msgstr "Exe&cuta"
+
+#: ../../locales/../src/interface/updatewizard.cpp:193
+msgid "Executable"
+msgstr "Executabil"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1184
+msgid "Executable contains no version info, cannot check for updates."
+msgstr ""
+"Executabilul nu contine informatiile versiunii. Nu pot verifica "
+"actualizarile."
+
+#: resources.h:140
+msgid "Explorer"
+msgstr "Explorator"
+
+#: resources.h:368
+msgid "Export &Queue"
+msgstr "Exporta Sir Trans&fer"
+
+#: resources.h:367
+msgid "Export &Settings"
+msgstr "Exporta &Setari"
+
+#: resources.h:364
+msgid "Export settings"
+msgstr "Exporta setari"
+
+#: resources.h:272
+msgid "F&ilter name:"
+msgstr "Nume f&iltru:"
+
+#: ../../locales/../src/interface/sitemanager.cpp:950
+msgid "FTP"
+msgstr "FTP"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:50
+msgid "FTP Engine not initialized, can't connect"
+msgstr "Motorul FTP nu poate fi initializat. Nu ma pot conecta."
+
+#: resources.h:465
+msgid ""
+"FTP uses secondary connections for data transfers. These additional "
+"connections can be established in two ways."
+msgstr ""
+"FTP utilizeaza conexiunile secundare pt. transferul de date. Aceste "
+"conexiuni aditionale pot fi stabilite in doua moduri."
+
+#: ../../locales/../src/engine/server.cpp:17
+msgid "FTPES - FTP over explicit TLS/SSL"
+msgstr "FTPES - FTP peste TLS/SSL explicit"
+
+#: ../../locales/../src/engine/server.cpp:16
+msgid "FTPS - FTP over implicit TLS/SSL"
+msgstr "FTPS - FTP peste TLS/SSL implicit"
+
+#: ../../locales/../src/interface/LocalListView.cpp:530
+#: ../../locales/../src/interface/LocalTreeView.cpp:784
+#: ../../locales/../src/interface/viewheader.cpp:479
+msgid "Failed to change directory"
+msgstr "Nu pot schimba folderul"
+
+#: ../../locales/../src/interface/FileZilla.cpp:157
+#: ../../locales/../src/interface/optionspage_language.cpp:65
+msgid "Failed to change language"
+msgstr "Nu am putut schimba limba"
+
+#: ../../locales/../src/interface/updatewizard.cpp:262
+msgid "Failed to check for newer version of FileZilla."
+msgstr "Nu am putut verifica versiunile noi FileZilla."
+
+#: ../../locales/../src/interface/xmlfunctions.cpp:374
+msgid "Failed to create backup copy of xml file"
+msgstr "Nu am putut crea backup-ul fisierului xml"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:774
+msgid "Failed to create listen socket, aborting"
+msgstr "Nu pot crea socket-ul, abandonez"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3397
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3401
+msgid "Failed to create listening socket for active mode transfer"
+msgstr "Nu pot crea socket-ul pt. modul de transfer activ"
+
+#: ../../locales/../src/interface/updatewizard.cpp:264
+msgid "Failed to download the latest version of FileZilla."
+msgstr "Nu pot descarca ultima versiune FileZilla."
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:562
+msgid "Failed to get 'My Documents' path"
+msgstr "Nu pot obtine calea catre 'My Documents'"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:936
+msgid "Failed to get data peer address, connection closed."
+msgstr "Nu am putut obtine adresa, conexiune inchisa."
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:549
+msgid "Failed to get desktop path"
+msgstr "Eroare la obtinerea caii folderului Desktop"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:928
+msgid "Failed to get peer address, connection closed."
+msgstr "Nu am putut obtine adresa, conexiune inchisa."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:169
+msgid "Failed to initialize FTP engine"
+msgstr "Nu pot initializa motorul FTP"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:306
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:473
+msgid "Failed to initialize TLS."
+msgstr "Nu pot initializa TLS."
+
+#: ../../locales/../src/interface/settingsdialog.cpp:133
+msgid "Failed to load panels, invalid resource files?"
+msgstr "Nu pot incarca panourile. Fisiere resurse invalide?"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1947
+#, c-format
+msgid "Failed to open \"%s\" for appending / writing"
+msgstr "Nu pot deschide \"%s\" pt. adaugare / scriere"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2011
+#, c-format
+msgid "Failed to open \"%s\" for reading"
+msgstr "Nu pot deschide \"%s\" pt. citire"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1990
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:376
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:421
+#, c-format
+msgid "Failed to open \"%s\" for writing"
+msgstr "Nu pot deschide \"%s\" pt. scriere"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:992
+msgid "Failed to receive data"
+msgstr "Nu pot receptiona datele"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:130
+msgid "Failed to retrieve directory listing"
+msgstr "Nu pot obtine lista folderelor"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:702
+msgid "Failed to retrieve external ip address, aborting"
+msgstr "Nu pot obtine adresa IP externa. Abandonez."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3124
+msgid "Failed to retrieve external ip address, using local address"
+msgstr "Nu pot obtine adresa IP externa. Utilizez adresa locala"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3145
+msgid "Failed to retrieve local ip address."
+msgstr "Nu pot obtine adresa IP locala."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:671
+msgid "Failed to retrieve local ip address. Aborting"
+msgstr "Nu pot obtine adresa IP locala. Abandonez."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:604
+msgid "Failed to retrieve the external IP address."
+msgstr "Nu pot obtine adresa IP externa."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:302
+msgid "Failed to send command."
+msgstr "Nu pot trimite comanda."
+
+#: ../../locales/../src/interface/FileZilla.cpp:157
+#: ../../locales/../src/interface/optionspage_language.cpp:65
+#, c-format
+msgid "Failed to set language to %s, using default system language"
+msgstr "Nu pot schimba pe limba %s. Utilizez limba initiala."
+
+#: ../../locales/../src/interface/optionspage.cpp:6
+msgid "Failed to validate settings"
+msgstr "Nu pot valida setarile"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:549
+#, c-format
+msgid "Failed to write to file %s"
+msgstr "Nu pot scrie in fisierul %s"
+
+#: ../../locales/../src/interface/xmlfunctions.cpp:388
+msgid "Failed to write xml file"
+msgstr "Nu pot scrie fisierul xml"
+
+#: ../../locales/../src/interface/queueview_failed.cpp:13
+msgid "Failed transfers"
+msgstr "Transferuri esuate"
+
+#: resources.h:480
+msgid "Fall back to active mode"
+msgstr "Revin la modul activ"
+
+#: resources.h:281
+msgid "Fil&es"
+msgstr "Fisi&ere"
+
+#: ../../locales/../src/interface/LocalListView.cpp:701
+#: ../../locales/../src/interface/LocalListView.cpp:719
+#: ../../locales/../src/interface/LocalListView.cpp:723
+#: ../../locales/../src/interface/RemoteListView.cpp:1150
+#: ../../locales/../src/interface/RemoteListView.cpp:1168
+#: ../../locales/../src/interface/RemoteListView.cpp:1172
+msgid "File"
+msgstr "Fisier"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:100
+msgid "File Types"
+msgstr "Tipuri de fisier"
+
+#: ../../locales/../src/interface/import.cpp:88
+msgid "File does not contain any importable data."
+msgstr "Fisierul nu include nici o data importabila."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1695
+msgid "File exists"
+msgstr "Fisierul exista"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:101
+msgid "File exists action"
+msgstr "Actiune pt. fisierul existent"
+
+#: ../../locales/../src/interface/FileZilla.cpp:714
+msgid "File not found"
+msgstr "Fisier negasit"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:153
+msgid "File transfer successful"
+msgstr "Transferul fisierului incheiat cu succes"
+
+#: ../../locales/../src/interface/FileZilla.cpp:362
+#: ../../locales/../src/interface/quickconnectbar.cpp:50
+msgid "FileZilla Error"
+msgstr "Eroare FileZilla"
+
+#: resources.h:502
+msgid ""
+"FileZilla can now test your configuration to ensure everything is configured "
+"properly."
+msgstr ""
+"FileZilla poate acum sa va testeze configuratia pt. a se asigura ca totul "
+"este stabilit corect."
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:107
+msgid "FileZilla does not support the HTTP protocol"
+msgstr "FileZilla nu suporta protocolul HTTP"
+
+#: resources.h:144
+msgid "Filelists"
+msgstr "Lista fisiere"
+
+#: ../../locales/../src/interface/filteredit.cpp:52
+#: ../../locales/../src/interface/LocalListView.cpp:224
+#: ../../locales/../src/interface/RemoteListView.cpp:300
+msgid "Filename"
+msgstr "Nume fisier"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1680
+msgid "Filename invalid"
+msgstr "Nume fisier invalid"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:226
+msgid "Filename unchanged"
+msgstr "Nume fisier neschimbat"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1682
+msgid "Filenames may not contain any of the following characters: / * ? < > |"
+msgstr ""
+"Numele fisierului nu poate contine niciunul din urmatoarele caractere: / * ? "
+"< > |"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1647
+msgid ""
+"Filenames may not contain any of the following characters: / \\ : * ? \" < > "
+"|"
+msgstr ""
+"Numele fisierului nu poate contine niciunul din urmatoarele caractere: / "
+"\\ : * ? \" < > |"
+
+#: ../../locales/../src/interface/filteredit.cpp:53
+#: ../../locales/../src/interface/LocalListView.cpp:225
+#: ../../locales/../src/interface/RemoteListView.cpp:301
+msgid "Filesize"
+msgstr "Dimens. fisier"
+
+#: ../../locales/../src/interface/LocalListView.cpp:226
+#: ../../locales/../src/interface/RemoteListView.cpp:302
+msgid "Filetype"
+msgstr "Tip fisier"
+
+#: resources.h:273
+msgid "Filter &out all files that:"
+msgstr "Filtreaza t&oate fisierele care:"
+
+#: resources.h:280
+msgid "Filter applies to:"
+msgstr "Filtru aplicat pt.:"
+
+#: ../../locales/../src/interface/filteredit.cpp:578
+msgid "Filter name already exists"
+msgstr "Numele filtrului exista deja"
+
+#: ../../locales/../src/interface/filter.cpp:610
+msgid "Filter set already exists"
+msgstr "Setul filtrului exista deja"
+
+#: resources.h:535 resources.h:536
+msgid "Filter the directory listings"
+msgstr "Filtrare lista foldere"
+
+#: ../../locales/../src/interface/filteredit.cpp:536
+#: ../../locales/../src/interface/filteredit.cpp:547
+#: ../../locales/../src/interface/filteredit.cpp:558
+#: ../../locales/../src/interface/filteredit.cpp:569
+#: ../../locales/../src/interface/filteredit.cpp:578
+msgid "Filter validation failed"
+msgstr "Validarea filtrului a esuat"
+
+#: resources.h:14
+msgid "Fingerprint (MD5):"
+msgstr "Amprenta (MD5):"
+
+#: resources.h:15
+msgid "Fingerprint (SHA-1):"
+msgstr "Amprenta (SHA-1):"
+
+#: resources.h:233 resources.h:245
+msgid "Fingerprint:"
+msgstr "Amprenta:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:39
+msgid "Firewall and router configuration wizard"
+msgstr "Asistent de configurare firewall si router"
+
+#: ../../locales/../src/interface/LocalListView.cpp:723
+#: ../../locales/../src/interface/RemoteListView.cpp:1172
+msgid "Folder"
+msgstr "Folder"
+
+#: resources.h:150
+msgid ""
+"For more detailed information about what these options do, please run the "
+"network configuration wizard."
+msgstr ""
+"Pt. informatii detaliate despre ce fac aceste optiuni, va rog sa rulati "
+"asistentul de configurare retea."
+
+#: resources.h:497
+msgid "For reliability you should specify a range of at least 10 ports."
+msgstr ""
+"Pentru eficienta, ar trebui sa specificati un interval de cel putin 10 "
+"porturi."
+
+#: resources.h:105
+msgid "Force &UTF-8"
+msgstr "Forteaza &UTF-8"
+
+#: resources.h:71
+msgid "General"
+msgstr "General"
+
+#: resources.h:294 resources.h:486
+msgid "Get external IP address from the following URL:"
+msgstr "Obtine adresa IP externa de la urmatoarea adresa:"
+
+#: ../../locales/../src/interface/filter.cpp:610
+msgid "Given filterset name already exists, overwrite filter set?"
+msgstr "Numele setului de filtre exista. Suprascriu cel existent?"
+
+#: resources.h:201
+msgid "Group permissions"
+msgstr "Permisiuni grup"
+
+#: resources.h:432
+msgid "H&igh"
+msgstr "Super&ior"
+
+#: resources.h:42 ../../locales/../src/interface/queue.cpp:869
+#: ../../locales/../src/interface/queue.cpp:950
+msgid "High"
+msgstr "Superior"
+
+#: ../../locales/../src/interface/queue.cpp:871
+#: ../../locales/../src/interface/queue.cpp:952
+msgid "Highest"
+msgstr "Maxim"
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:82
+msgid "Highest available port has to be a number between 1024 and 65535."
+msgstr "Portul maxim disponibil trebuie sa fie un numar intre 1024 si 65535."
+
+#: resources.h:262
+msgid ""
+"Hold the shift key to toggle the filter state on both sides simultanously."
+msgstr ""
+"Tineti tasta Shift apasata pt. a comuta starea filtrului in amandoua partile "
+"simultan."
+
+#: resources.h:220
+msgid "Homepage:"
+msgstr "Pagina program:"
+
+#: resources.h:239
+msgid "Host key mismatch"
+msgstr "Cheia server-ului nu se potriveste"
+
+#: resources.h:8 resources.h:115 resources.h:223 resources.h:231
+#: resources.h:243
+msgid "Host:"
+msgstr "Server:"
+
+#: resources.h:92
+msgid "Hours,"
+msgstr "Ore,"
+
+#: resources.h:34
+msgid ""
+"If no data can be sent or received during this time, the connection will be "
+"closed and FileZilla will try to reconnect."
+msgstr ""
+"Daca nici o data un va fi transmisa sau receptionata in acest timp, "
+"FileZilla va inchide conexiunea si va incerca sa se reconecteze."
+
+#: resources.h:190
+msgid "If reporting bugs, please provide logs with \"Verbose\" logging level."
+msgstr ""
+"Daca raportati erori, va rog sa furnizati log-ul cu nivelul de logare "
+"\"Detaliat\"."
+
+#: resources.h:477
+msgid ""
+"If the automatic test at the end of this wizard succeeds, but you cannot "
+"transfer files to a particular server, the server might be misconfigured and "
+"you should try active mode. You can set the transfer mode on a per-server "
+"basis in the Site Manager."
+msgstr ""
+"Daca testul automat de la sfarsitul acestui asistent reuseste, dar totusi nu "
+"puteti sa transferati fisiere cu un server anume, acesta poate fi configurat "
+"gresit si ar trebui sa utilizati modul activ de transfer. Puteti stabili "
+"acest mod pt. fiecare server in parte in Manager-ul de Site-uri."
+
+#: resources.h:472
+msgid ""
+"If the fallback option is enabled, you will be able to connect to "
+"misconfigured servers which reject the selected transfer mode."
+msgstr ""
+"Daca optiunea de retragere este activata, va veti putea conecta la serverele "
+"incorect configurate care resping modul de transfer selectat."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:612
+msgid ""
+"If this problem persists, please contact your router or firewall "
+"manufacturer for a solution."
+msgstr ""
+"Daca problema persista, va rog sa contactati furnizorul router-ului sau "
+"firewall-ului pt. o solutie."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:570
+msgid "If this problem stays, please contact your router manufacturer."
+msgstr ""
+"Daca problema nu se rezolva, va rog sa contactati furnizorul router-ului."
+
+#: resources.h:334 resources.h:352
+msgid ""
+"If using 'overwrite if newer', your system time has to be synchronized with "
+"the server. If the time differs (e.g. different timezone), specify a "
+"timezone offset in the site manager."
+msgstr ""
+"Daca utilizez 'Suprascrie daca e mai nou', ora sistemului trebuie sa fie "
+"sincronizata cu cea a server-ului. Daca orele difera (ex. diferite zone "
+"orare), ajustati aceasta ora in manager-ul de site-uri."
+
+#: resources.h:175
+msgid "If you change the language, you should restart FileZilla."
+msgstr "Daca schimbati limba, trebuie sa reporniti FileZilla."
+
+#: resources.h:503
+msgid ""
+"If you click on test, FileZilla will connect to probe.filezilla-project.org "
+"and will perform some simple tests."
+msgstr ""
+"Daca apasati pe test, FileZilla se va conecta la probe.filezilla-project.org "
+"si va efectua cateva teste simple."
+
+#: resources.h:134
+msgid ""
+"If you enter the wrong filetypes, those files may get corrupted when "
+"transferred."
+msgstr ""
+"Daca introduceti gresit tipuri de fisiere, acestea pot fi corupte la "
+"transfer."
+
+#: resources.h:504
+msgid "If you get any errors, your configuration is not correct."
+msgstr "Daca obtineti vreo eroare, configuratia nu este corecta."
+
+#: resources.h:156
+msgid ""
+"If you have problems to retrieve directory listings or to transfer files, "
+"try to change the default transfer mode."
+msgstr ""
+"Daca aveti probleme la obtinerea listei cu foldere sau la transferul "
+"fisierelor, incercati sa schimbati modul de transfer."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:558
+msgid ""
+"If you keep having problems with a specific server, the server itself or a "
+"remote router might be misconfigured. In this case try to toggle passive "
+"mode and contact the server administrator for help."
+msgstr ""
+"Daca aveti in continuare probleme cu un server anume, acesta sau router-ul "
+"pot fi configurate gresit. In acest caz, incercati sa schimbati modul pasiv "
+"si sa contactati administratorul server-ului pt. ajutor."
+
+#: resources.h:463
+msgid ""
+"If you sucessfully complete the wizard and the final test succeeds, any "
+"firewalls and routers you have should be configured properly."
+msgstr ""
+"Daca incheiati cu succes asistentul si testul final reuseste, firewall-ul "
+"sau router-ul pe care-l aveti este configurat corect."
+
+#: resources.h:499
+msgid ""
+"If you use a firewall, make sure FileZilla is allowed to accept connection "
+"on all given ports."
+msgstr ""
+"Daca utilizati un firewall, asigurati-va ca FileZilla accepta conexiuni la "
+"toate porturile stabilite."
+
+#: resources.h:498
+msgid ""
+"If you use a router, make sure all these ports are forwarded to the machine "
+"you're running FileZilla on."
+msgstr ""
+"Daca utilizati un router, asigurati-va ca aveti permisiune sa utilizati "
+"toate porturile."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:583
+msgid ""
+"If your router keeps changing the IP address, please contact your router "
+"manufacturer."
+msgstr ""
+"Daca router-ul schimba continuu adresa de IP, va rog sa contactati "
+"fabricatul acestui echipament."
+
+#: ../../locales/../src/interface/import.cpp:79
+msgid "Import data from older version"
+msgstr "Importa datele dintr-o versiune mai veche"
+
+#: resources.h:371
+msgid "Import settings"
+msgstr "Importa setari"
+
+#: ../../locales/../src/interface/import.cpp:65
+#: ../../locales/../src/interface/import.cpp:68
+msgid "Import successful"
+msgstr "Import reusit"
+
+#: resources.h:491
+msgid ""
+"In active mode, FileZilla has to listen on a port for data transfers. You "
+"have to specify which ports FileZilla will use."
+msgstr ""
+"In modul activ, FileZilla trebuie sa utilizeze un port pt. transferul de "
+"date. Trebuie sa specificati ce porturi va utiliza programul."
+
+#: resources.h:493
+msgid ""
+"In case you have a router, you will have to forward all available ports, as "
+"FileZilla has no influence on the ports your system chooses."
+msgstr ""
+"In caz ca aveti un router, trebuie sa activati toate porturile disponibile, "
+"deoarece FileZilla nu are nici o influenta asupra celor alese de sistem."
+
+#: resources.h:315
+msgid ""
+"In case you prefer automatic updates, you can enable automatic update checks "
+"in the settings dialog."
+msgstr ""
+"In caz ca preferati actualizarea automata, puteti activa aceasta optiune in "
+"fereastra de setari."
+
+#: resources.h:290 resources.h:481
+msgid ""
+"In order to use active mode, FileZilla needs to know your external IP "
+"address."
+msgstr ""
+"Pt. a utiliza modul activ, FileZilla trebuie sa stie adresa IP externa "
+"proprie."
+
+#: resources.h:466
+msgid ""
+"In passive mode, which is recommended for most users, FileZilla asks the "
+"server for a port and connects to the given port. Not much configuration has "
+"to be done for this."
+msgstr ""
+"In mod pasiv, care este recomandat pt. toti utilizatorii, FileZilla solicita "
+"server-ului un port si se conecteaza la acesta. Nu este necesara vreo "
+"configurare suplimentara."
+
+#: ../../locales/../src/interface/QueueView.cpp:808
+msgid "Incorrect password"
+msgstr "Parola incorecta"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:463
+msgid "Initializing TLS..."
+msgstr "Initializez TLS..."
+
+#: resources.h:79 ../../locales/../src/interface/sitemanager.cpp:796
+#: ../../locales/../src/interface/sitemanager.cpp:1011
+msgid "Interactive"
+msgstr "Interactiv"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:102
+msgid "Interface"
+msgstr "Interfata"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:158
+msgid "Interrupted by user"
+msgstr "Intrerupt de utilizator"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:732
+msgid "Invalid Content-Length"
+msgstr "Lungime Continut Invalida"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:606
+msgid "Invalid HTTP Response"
+msgstr "Raspuns HTTP invalid"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:462
+#: ../../locales/../src/engine/ControlSocket.cpp:522
+msgid ""
+"Invalid character sequence received, disabling UTF-8. Select UTF-8 option in "
+"site manager to force UTF-8."
+msgstr ""
+"Am receptionat o secventa de caractere invalide, dezactivez UTF-8. Selectati "
+"optiunea UTF-8 in Manager-ul de Site-uri pt. a forta UTF-8."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:856
+msgid "Invalid chunk size"
+msgstr "Dimensiune date invalida"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:348
+#: ../../locales/../src/interface/netconfwizard.cpp:358
+#: ../../locales/../src/interface/netconfwizard.cpp:367
+msgid "Invalid data received"
+msgstr "Receptionare date invalide"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:40
+#: ../../locales/../src/interface/verifycertdialog.cpp:56
+msgid "Invalid date"
+msgstr "Date invalide"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1647
+#: ../../locales/../src/interface/LocalListView.cpp:1682
+msgid "Invalid filename"
+msgstr "Nume fisier invalid"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:958
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:147
+msgid "Invalid hostname or host not found"
+msgstr "Server invalid sau negasit"
+
+#: ../../locales/../src/engine/server.cpp:120
+#: ../../locales/../src/engine/server.cpp:133
+msgid "Invalid port given. The port has to be a value from 1 to 65535."
+msgstr "Port invalid. Portul trebuie sa fie un numar de la 1 la 65535."
+
+#: ../../locales/../src/engine/server.cpp:47
+msgid ""
+"Invalid protocol specified. Valid protocols are:\n"
+"ftp:// for normal FTP,\n"
+"sftp:// for SSH file transfer protocol,\n"
+"ftps:// for FTP over SSL (implicit) and\n"
+"ftpes:// for FTP over SSL (explicit)."
+msgstr ""
+"Protocolul specificat este invalid. Protocoalele valide sunt:\n"
+"ftp:// pt. FTP normal,\n"
+"sftp:// pt. protocolul de tranfer SSH,\n"
+"ftps:// pt. FTP prin SSL (implicit) si\n"
+"ftpes:// pt. FTP prin SSL (explicit)."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:616
+msgid "Invalid response code"
+msgstr "Cod de raspuns invalid"
+
+#: ../../locales/../src/interface/filteredit.cpp:558
+msgid "Invalid size in condition"
+msgstr "Dimensiune invalida in conditie"
+
+#: ../../locales/../src/engine/server.cpp:88
+msgid "Invalid username given."
+msgstr "Nume utilizator invalid."
+
+#: resources.h:147
+msgid "Keep directories on top"
+msgstr "Directoarele primele"
+
+#: resources.h:435
+msgid "L&owest"
+msgstr "Minim"
+
+#: resources.h:288
+msgid "L&owest available port:"
+msgstr "Portul minim disponibil:"
+
+#: resources.h:173 ../../locales/../src/interface/settingsdialog.cpp:104
+msgid "Language"
+msgstr "Limba"
+
+#: resources.h:172
+msgid "Large icons"
+msgstr "Iconuri mari"
+
+#: ../../locales/../src/interface/LocalListView.cpp:227
+#: ../../locales/../src/interface/RemoteListView.cpp:303
+msgid "Last modified"
+msgstr "Ultimul modificat"
+
+#: resources.h:137
+msgid "Layout"
+msgstr "Asezare"
+
+#: resources.h:138
+msgid "Layout of file and directory panes:"
+msgstr "Asezarea fisierelor si a panourilor cu directoare:"
+
+#: resources.h:27
+msgid "Limit for concurrent &downloads:"
+msgstr "Limitare &descarcari concurente:"
+
+#: resources.h:29
+msgid "Limit for concurrent &uploads:"
+msgstr "Limitare &incarcari concurente:"
+
+#: resources.h:285
+msgid "Limit local ports"
+msgstr "Limitare porturi locale"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:799
+msgid "Line length exceeded"
+msgstr "Lungime linie depasita"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:262
+msgid "Listen socket closed"
+msgstr "Socket-ul s-a inchis"
+
+#: ../../locales/../src/interface/StatusView.cpp:193
+#: ../../locales/../src/interface/StatusView.cpp:234
+msgid "Listing:"
+msgstr "Ascult:"
+
+#: resources.h:256
+msgid "Local filters:"
+msgstr "Filtre locale:"
+
+#: ../../locales/../src/interface/viewheader.cpp:316
+msgid "Local site:"
+msgstr "Site local:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:125
+msgid "Locality:"
+msgstr "Site local:"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:505
+msgid ""
+"Login data contains non-ascii characters and server might not be UTF-8 "
+"aware. Trying local charset."
+msgstr ""
+"Datele de logare contin caractere non-ascii, posibil nesuportate de server. "
+"Incerc cu setul de caractere local."
+
+#: ../../locales/../src/interface/queue.cpp:864
+#: ../../locales/../src/interface/queue.cpp:945
+msgid "Low"
+msgstr "Inferior"
+
+#: ../../locales/../src/interface/queue.cpp:862
+#: ../../locales/../src/interface/queue.cpp:943
+msgid "Lowest"
+msgstr "Minim"
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:71
+msgid "Lowest available port has to be a number between 1024 and 65535."
+msgstr "Portul minim disponibil trebuie sa fie un numar intre 1024 si 65535."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:787
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:799
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:814
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:856
+#, c-format
+msgid "Malformed chunk data: %s"
+msgstr "Parti de date eronate: %s"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:732
+#, c-format
+msgid "Malformed header: %s"
+msgstr "Antet eronat: %s"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:576
+msgid "Malformed reply, server not sending proper lineendings"
+msgstr "Raspuns eronat, server-ul nu a trimis un raspuns valid"
+
+#: resources.h:274
+msgid "Match all of the following"
+msgstr "Potriveste toate din urmatoarele"
+
+#: resources.h:158
+msgid "Maximum number of retries:"
+msgstr "Numar maxim de reincercari:"
+
+#: resources.h:25
+msgid "Maximum simultaneous &transfers:"
+msgstr "Numar maxim &transferuri concurente:"
+
+#: resources.h:171
+msgid "Medium icons"
+msgstr "Iconuri medii"
+
+#: resources.h:93
+msgid "Minutes"
+msgstr "Minute"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:926
+msgid "My Computer"
+msgstr "My Computer"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:916
+msgid "My Documents"
+msgstr "My Documents"
+
+#: ../../locales/../src/interface/sitemanager.cpp:239
+#: ../../locales/../src/interface/sitemanager.cpp:241
+#: ../../locales/../src/interface/sitemanager.cpp:1338
+msgid "My Sites"
+msgstr "Site-urile mele"
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:58
+#: ../../locales/../src/interface/optionspage_themes.cpp:60
+#: ../../locales/../src/interface/optionspage_themes.cpp:201
+#: ../../locales/../src/interface/optionspage_themes.cpp:203
+msgid "N/a"
+msgstr "N/a"
+
+#: ../../locales/../src/interface/sitemanager.cpp:643
+msgid "Name already exists"
+msgstr "Numele exista deja"
+
+#: resources.h:114
+msgid "Name:"
+msgstr "Nume:"
+
+#: ../../locales/../src/interface/filteredit.cpp:569
+msgid "Need to enter filter name"
+msgstr "Trebuie sa introduceti numele filtrului"
+
+#: ../../locales/../src/interface/sitemanager.cpp:551
+msgid "Need to specify a character encoding"
+msgstr "Trebuie sa specificati un set de codare caractere"
+
+#: resources.h:67
+msgid "New &Folder"
+msgstr "&Folder Nou"
+
+#: ../../locales/../src/interface/filteredit.cpp:322
+msgid "New filter"
+msgstr "Filtru nou"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1376
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1206
+#: ../../locales/../src/interface/sitemanager.cpp:455
+#: ../../locales/../src/interface/sitemanager.cpp:478
+msgid "New folder"
+msgstr "Folder nou"
+
+#: ../../locales/../src/interface/sitemanager.cpp:711
+#: ../../locales/../src/interface/sitemanager.cpp:734
+msgid "New site"
+msgstr "Site nou"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:728
+msgid "No"
+msgstr "Nu"
+
+#: ../../locales/../src/interface/export.cpp:26
+msgid "No category to export selected"
+msgstr "Nu a fost selectata nici o categorie de export"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3091
+msgid "No external IP address set, trying default."
+msgstr "Nici o adresa IP externa specificata, incerc cea predefinita."
+
+#: ../../locales/../src/engine/server.cpp:32
+#: ../../locales/../src/engine/server.cpp:113
+#: ../../locales/../src/engine/server.cpp:143
+msgid "No host given, please enter a host."
+msgstr "Nu s-a specificat nici un server. Va rog sa specificati unul."
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:166
+msgid "No images available"
+msgstr "Nici o imagine disponibila"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1304
+#: ../../locales/../src/interface/sitemanager.cpp:1316
+#: ../../locales/../src/interface/sitemanager.cpp:1347
+msgid "No sites available"
+msgstr "Nici un site disponibil"
+
+#: ../../locales/../src/interface/themeprovider.cpp:76
+msgid "No themes in themes.xml"
+msgstr "Nici o tema in themes.xml"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:62
+msgid "None"
+msgstr "Nimic"
+
+#: resources.h:276
+msgid "None of the following"
+msgstr "Nimic din urmatoarele"
+
+#: resources.h:41 resources.h:77 ../../locales/../src/interface/queue.cpp:867
+#: ../../locales/../src/interface/queue.cpp:948
+#: ../../locales/../src/interface/sitemanager.cpp:759
+#: ../../locales/../src/interface/sitemanager.cpp:792
+#: ../../locales/../src/interface/sitemanager.cpp:1005
+msgid "Normal"
+msgstr "Normal"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:670
+msgid "Not connected to any server"
+msgstr "Neconectat la nici un server"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:529
+msgid "Note that this feature is only supported using the FTP protocol."
+msgstr "Aceasta setare este suportata numai daca utilizati protocolul FTP."
+
+#: resources.h:178
+msgid "Number of days between update checks:"
+msgstr "Numarul de zile intre verificarile actualizarilor:"
+
+#: ../../locales/../src/interface/optionspage_connection.cpp:46
+msgid "Number of retries has to be between 0 and 99."
+msgstr "Numarul de reincercari trebuie sa fie intre 0 si 99."
+
+#: resources.h:329 resources.h:347
+msgid "O&verwrite"
+msgstr "S&uprascrie"
+
+#: resources.h:22 resources.h:62 resources.h:193 resources.h:215
+#: resources.h:227 resources.h:237 resources.h:249 resources.h:263
+#: resources.h:283 resources.h:362 resources.h:369 resources.h:377
+msgid "OK"
+msgstr "Ok"
+
+#: resources.h:335
+msgid "Ok"
+msgstr "Ok"
+
+#: resources.h:473
+msgid ""
+"On the following pages, the selected transfer mode will be configured, as "
+"well as the fallback mode if enabled."
+msgstr ""
+"In paginile urmatoare, va fi configurat modul de transfer selectat si va fi "
+"activat modul de retragere."
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:738
+msgid "Once"
+msgstr "O data"
+
+#: resources.h:515 resources.h:516
+msgid "Open the Site Manager"
+msgstr "Deschidere Manager Site-uri"
+
+#: resources.h:386
+msgid "Open the settings dialog of FileZilla"
+msgstr "Deschidere setari FileZilla"
+
+#: resources.h:381
+msgid "Opens the Site Manager"
+msgstr "Deschide manager Site-uri"
+
+#: ../../locales/../src/interface/FileZilla.cpp:208
+msgid "Operating system problem detected"
+msgstr "Detectare probleme cu sistemul de operare"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:120
+msgid "Organization:"
+msgstr "Organizatie:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:135
+msgid "Other:"
+msgstr "Altul:"
+
+#: resources.h:322 resources.h:341
+msgid "Ov&erwrite if newer"
+msgstr "Suprascri&e daca e mai nou"
+
+#: resources.h:330 resources.h:348
+msgid "Over&write if newer"
+msgstr "S&uprascrie daca e mai nou"
+
+#: resources.h:149
+msgid "Overview"
+msgstr "Consultare"
+
+#: resources.h:55
+msgid "Overwrite &if newer"
+msgstr "Suprascr&ie daca e mai nou"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:305
+msgid "Owner / Group"
+msgstr "Proprietar / Grup"
+
+#: resources.h:197
+msgid "Owner permissions"
+msgstr "Permisiuni proprietar"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:452
+msgid "PORT command tainted by router."
+msgstr "Comanda PORT modificata de router."
+
+#: resources.h:153
+msgid "Pa&ssive (recommended)"
+msgstr "Pa&siv (recomandat)"
+
+#: ../../locales/../src/interface/updatewizard.cpp:197
+msgid "Package"
+msgstr "Pachet"
+
+#: resources.h:82 resources.h:511
+msgid "Pass&word:"
+msgstr "Pa&rola:"
+
+#: resources.h:469
+msgid "Passive (recommended)"
+msgstr "Pasiv (recomandat)"
+
+#: resources.h:1 ../../locales/../src/interface/settingsdialog.cpp:98
+msgid "Passive mode"
+msgstr "Mod pasiv"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:576
+#: ../../locales/../src/interface/netconfwizard.cpp:589
+#: ../../locales/../src/interface/netconfwizard.cpp:600
+msgid "Passive mode has been set as default transfer mode."
+msgstr "Modul pasiv a fost stabilit ca mod de transfer predefinit."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:304
+msgid "Permissions"
+msgstr "Permisiuni"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:605
+msgid ""
+"Pleae make sure FileZilla is allowed to establish outgoing connections and "
+"make sure you typed the address of the address resolver correctly."
+msgstr ""
+"Asigurati-va ca programului FileZilla ii este permis sa efectueze conexiuni "
+"externe si asigurati-va ca adresa este valida si a fost introdusa corect."
+
+#: resources.h:312
+msgid ""
+"Please check http://filezilla-project.org for the most recent version of "
+"FileZilla."
+msgstr ""
+"Va rog sa verificati http://filezilla-project.org pt. cele mai noi versiuni "
+"FileZilla."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:545
+msgid ""
+"Please check on http://filezilla-project.org/probe.php that the server is "
+"running and carefully check your settings again."
+msgstr ""
+"Va rog sa verificati  la http://filezilla-project.org/probe.php daca server-"
+"ul ruleaza si apoi verificati si setarile programului."
+
+#: ../../locales/../src/interface/updatewizard.cpp:819
+msgid ""
+"Please check the package manager of your system for an updated package or "
+"visit http://filezilla-project.org to download the source code of FileZilla."
+msgstr ""
+"Va rog sa actualizati manager-ul de pachete sau vizitati http://filezilla-"
+"project.org pt. a descarca codurile sursa."
+
+#: resources.h:475
+msgid ""
+"Please configure any firewalls and routers so that FileZilla can establish "
+"outgoing connection to arbitrary ports."
+msgstr ""
+"Va rog sa configurati firewall-ul sau router-ul daca aveti pt. a permite "
+"FileZilla sa efectueze conexiuni la porturi arbitrare."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:611
+msgid "Please disable settings like 'DMZ mode' or 'Game mode' on your router."
+msgstr ""
+"Va rog sa dezactivati setarile din router cum ar fi ' DMZ mode' sau 'Game "
+"mode'."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:553
+msgid ""
+"Please ensure you have a stable internet connection and check on http://"
+"filezilla-project.org/probe.php that the server is running."
+msgstr ""
+"Va rog sa va asigurati ca aveti o conexiune internet stabila si verificati "
+"http://filezilla-project.org/probe.php daca server-ul functioneaza."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:75
+msgid "Please enter a download speedlimit greater or equal to 0 KB/s."
+msgstr ""
+"Viteza limita de descarcare trebuie sa fie egala sau mai mare decat 0 KB/s."
+
+#: ../../locales/../src/interface/filteredit.cpp:327
+msgid "Please enter a name for the new filter."
+msgstr "Va rog sa introduceti un nume pt. noul filtru."
+
+#: ../../locales/../src/interface/filteredit.cpp:424
+msgid "Please enter a new name for the copied filter."
+msgstr "Va rog sa introduceti un nume pt. filtrul copiat."
+
+#: ../../locales/../src/interface/filteredit.cpp:380
+msgid "Please enter a new name for the filter."
+msgstr "Va rog sa introduceti un nou nume pt. filtru."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:51
+msgid ""
+"Please enter a number between 0 and 10 for the number of concurrent "
+"downloads."
+msgstr ""
+"Va rog sa introduceti o valoare intre 0 si 10 pt. numarul de descarcari "
+"concurente."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:59
+msgid ""
+"Please enter a number between 0 and 10 for the number of concurrent uploads."
+msgstr ""
+"Va rog sa introduceti o valoare intre 0 si 10 pt. numarul de incarcari "
+"concurente."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:43
+msgid ""
+"Please enter a number between 1 and 10 for the number of concurrent "
+"transfers."
+msgstr ""
+"Va rog sa introduceti o valoare intre 0 si 10 pt. numarul de transferuri "
+"concurente."
+
+#: resources.h:113
+msgid "Please enter a password for this server:"
+msgstr "Va rog sa introduceti o parola pt. acest server:"
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:67
+msgid ""
+"Please enter a timeout between 5 and 9999 seconds or 0 to disable timeouts."
+msgstr ""
+"Va rog sa introduceti nr de secunde de asteptare intre 5 si 9999 sau 0 pt a "
+"dezactiva asteptarea."
+
+#: ../../locales/../src/interface/filter.cpp:601
+msgid "Please enter a unique name for this filter set"
+msgstr "Va rog sa introduceti un nume unic pt acest set de filtre"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:177
+msgid "Please enter a valid portrange."
+msgstr "Va rog sa introduceti un interval de porturi valid"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:156
+msgid "Please enter an URL where to get your external address from"
+msgstr "Va rog sa introduceti URL-ul de unde voi obtine adresa dvs. externa"
+
+#: ../../locales/../src/interface/optionspage_updatecheck.cpp:38
+msgid "Please enter an update interval of at least 7 days"
+msgstr "Va rog sa introduceti un interval de actualizare de cel putin 7 zile"
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:83
+msgid "Please enter an upload speedlimit greater or equal to 0 KB/s."
+msgstr ""
+"Viteza limita de incarcare trebuie sa fie egala sau mai mare decat 0 KB/s."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:463
+msgid ""
+"Please enter raw FTP command.\n"
+"Using raw ftp commands will clear the directory cache."
+msgstr ""
+"Va rog sa introduceti comanda personala FTP.\n"
+"Utilizarea comenzilor personale va goli mesajele din istoric."
+
+#: ../../locales/../src/interface/LocalListView.cpp:1293
+#: ../../locales/../src/interface/RemoteListView.cpp:1362
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1192
+msgid "Please enter the name of the directory which should be created:"
+msgstr "Va rog sa introduceti numele folderului de creat:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:137
+msgid "Please enter your external IP address"
+msgstr "Va rog sa introduceti adresa IP externa proprie"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:581
+#: ../../locales/../src/interface/netconfwizard.cpp:594
+msgid ""
+"Please enter your external IP address on the active mode page of this "
+"wizard. In case you have a dynamic address or don't know your external "
+"address, use the external resolver option."
+msgstr ""
+"Va rog sa introduceti adresa proprie IP externa in pagina modului activ a "
+"acestui asistent. In caz ca aveti o adresa dinamica sau nu o cunoasteti, "
+"utilizati optiunea de rezolvare externa."
+
+#: resources.h:462
+msgid ""
+"Please follow the instructions carefully, as wrong configuration will "
+"prevent successful FTP connections."
+msgstr ""
+"Va rog sa urmati instructiunile cu atentie, deoarece o configurare gresita "
+"va va impiedica sa efectuati conexiuni cu succes."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:564
+msgid ""
+"Please make sure you are running the latest version of FileZilla. Visit "
+"http://filezilla-project.org for details."
+msgstr ""
+"Va rog sa va asigurari ca rulati ultima versiune FileZilla. Vizitati http://"
+"filezilla-project.org pt. detalii."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:582
+msgid ""
+"Please make sure your router is using the latest available firmware. "
+"Furthermore, your router has to be configured properly. You will have to "
+"manual port forwarding. Don't run your router in the so called 'DMZ mode' or "
+"'game mode'."
+msgstr ""
+"Va rog sa va asigurati ca router-ul dvs. utilizeaza ultima versiune de "
+"firmware. In completare, router-ul trebuie sa fie configurat corect. Trebuie "
+"sa configurati porturile manual. Nu rulati router-ul in asa numitele moduri "
+"'DMZ' sau 'mod game'."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:569
+msgid ""
+"Please make sure your router is using the latest available firmware. "
+"Furthermore, your router has to be configured properly. You will have to use "
+"manual port forwarding. Don't run your router in the so called 'DMZ mode' or "
+"'game mode'."
+msgstr ""
+"Va rog sa va asigurati ca router-ul dvs. utilizeaza ultima versiune de "
+"firmware. In completare, router-ul trebuie sa fie configurat corect. Trebuie "
+"sa utilizati manual port forwarding. Nu rulati router-ul in asa numitele "
+"moduri 'DMZ' sau 'mod game'."
+
+#: resources.h:476
+msgid ""
+"Please note that FileZilla has no influence on the port the server chooses. "
+"So the server might choose a port which your firewall thinks is only used by "
+"trojans or other malware. This might raise a false alarm you can safely "
+"discard."
+msgstr ""
+"Va rog sa retineti ca FileZilla nu are nici o influenta in stabilirea "
+"porturilor alese de server. Server-ul poate alege un port pe care firewall-"
+"ul sa-l interpreteze ca fiind utilizat de un troian sau alt program nociv. "
+"Acest lucu poate duce la o alarma falsa pe care o puteti rezolva."
+
+#: resources.h:162
+msgid ""
+"Please note that some servers might ban you if you try to reconnect too "
+"often or in too short intervals."
+msgstr ""
+"Este posibil ca unele server-e sa va blocheze accesul daca incercati sa va "
+"conectati la ele foarte des intr-un timp foarte scurt."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:559
+msgid ""
+"Please run this wizard again should you change your network environment or "
+"in case you suddenly encounter problems with servers that did work "
+"previously."
+msgstr ""
+"Va rog sa rulati asistentul inca o data daca v-ati modificat setarile la "
+"retea sau daca intampinati probleme cu servere care inainte au rulat corect."
+
+#: resources.h:53
+msgid "Please select an action:"
+msgstr "Va rog sa selectati o actiune:"
+
+#: resources.h:376
+msgid "Please select the categories you would like to import."
+msgstr "Va rog sa alegeti categoriile de importat."
+
+#: resources.h:464
+msgid "Please select the default transfer mode you would like to use."
+msgstr ""
+"Va rog sa alegeti modul predefinit de transfer pe care doriti sa-l utilizati."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:38
+#, c-format
+msgid "Please select the new attributes for the directory \"%s\"."
+msgstr "Va rog sa stabiliti noile atribute pt. folderul \"%s\"."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:27
+#, c-format
+msgid "Please select the new attributes for the file \"%s\"."
+msgstr "Va rog sa stabiliti noile atribute pt. fisierul \"%s\"."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:41
+msgid "Please select the new attributes for the selected directories."
+msgstr "Va rog sa stabiliti noile atribute pt. folderele selectate."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:44
+msgid ""
+"Please select the new attributes for the selected files and directories."
+msgstr ""
+"Va rog sa stabiliti noile atribute pt. fisierele si folderele selectate."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:30
+msgid "Please select the new attributes for the selected files."
+msgstr "Va rog sa stabiliti noile atribute pt. fisierele selectate."
+
+#: resources.h:314
+msgid ""
+"Please visit http://filezilla-project.org for more information about "
+"FileZilla."
+msgstr ""
+"Va rog sa vizitati http://filezilla-project.org pt. mai multe informatii "
+"despre FileZilla."
+
+#: ../../locales/../src/interface/updatewizard.cpp:817
+#: ../../locales/../src/interface/updatewizard.cpp:829
+msgid ""
+"Please visit http://filezilla-project.org to download the most recent "
+"version."
+msgstr ""
+"Va rog sa vizitati http://filezilla-project.org pt. a descarca cea mai "
+"recenta versiune."
+
+#: ../../locales/../src/interface/sitemanager.cpp:1202
+#: ../../locales/../src/interface/sitemanager.cpp:1337
+msgid "Predefined Sites"
+msgstr "Site-uri Predefinite"
+
+#: resources.h:169
+msgid "Preview"
+msgstr "Previzualizare"
+
+#: ../../locales/../src/engine/tlssocket.cpp:766
+msgid "Primary connection and data connection certificates don't match."
+msgstr "Conexiunea primara si certificatul acesteia nu se potrivesc."
+
+#: resources.h:146
+msgid "Prioritize directories (default)"
+msgstr "Directoare cu prioritate (predefinit)"
+
+#: ../../locales/../src/interface/queue.cpp:1178
+msgid "Priority"
+msgstr "Prioritate"
+
+#: resources.h:426
+msgid "Process &Queue"
+msgstr "Procesare si&r transfer"
+
+#: resources.h:13
+msgid "Public key algorithm:"
+msgstr "Algoritm cheie publica:"
+
+#: resources.h:205
+msgid "Public permissions"
+msgstr "Permisiuni publice"
+
+#: ../../locales/../src/interface/QueueView.cpp:1343
+#, c-format
+msgid "Queue: %s%d KB"
+msgstr "Sir transfer: %s%d KB"
+
+#: ../../locales/../src/interface/QueueView.cpp:1338
+#, c-format
+msgid "Queue: %s%d MB"
+msgstr "Sir transfer: %s%d MB"
+
+#: ../../locales/../src/interface/QueueView.cpp:1346
+#, c-format
+msgid "Queue: %s%d bytes"
+msgstr "Sir transfer: %s%d biti"
+
+#: ../../locales/../src/interface/QueueView.cpp:1334
+msgid "Queue: empty"
+msgstr "Sir transfer: gol"
+
+#: ../../locales/../src/interface/QueueView.cpp:393
+msgid "Queued files"
+msgstr "Fisiere in sirul de transfer"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:472
+msgid "Raw FTP command"
+msgstr "Comanda FTP proprie"
+
+#: resources.h:202
+msgid "Re&ad"
+msgstr "Citir&e"
+
+#: resources.h:57 resources.h:324 resources.h:343
+msgid "Re&name"
+msgstr "Rede&numire"
+
+#: resources.h:206
+msgid "Rea&d"
+msgstr "C&itire"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:706
+msgid "Really cancel current operation?"
+msgstr "Sigur doriti sa abandonati operatiunea curenta?"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1394
+#: ../../locales/../src/interface/RemoteListView.cpp:1417
+msgid "Really delete all selected files and/or directories?"
+msgstr "Sigur doriti sa stergeti fisierele si/sau folderele selectate?"
+
+#: ../../locales/../src/interface/queueview_failed.cpp:15
+msgid "Reason"
+msgstr "Motiv"
+
+#: resources.h:211
+msgid "Rec&urse into subdirectories"
+msgstr "Incl&usiv si subdirectoarele"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:976
+#: ../../locales/../src/interface/netconfwizard.cpp:985
+#: ../../locales/../src/interface/netconfwizard.cpp:1009
+msgid "Received data tainted"
+msgstr "Datele primite sunt modificate"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:68
+msgid ""
+"Reconnect information cannot be cleared while connected to a server.\n"
+"If you continue, your connection will be disconnected."
+msgstr ""
+"Informatiile de reconectare nu au putut fi sterse in timp ce sunteti "
+"conectat.\n"
+"Daca doriti sa continuati, conexiunea va fi intrerupta."
+
+#: resources.h:157
+msgid "Reconnection settings"
+msgstr "Setari reconectare"
+
+#: resources.h:533 resources.h:534
+msgid "Reconnects to the last used server"
+msgstr "Reconectare la ultimul server utilizat"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:681
+msgid "Redirection to invalid address"
+msgstr "Redirectare la o adresa invalida"
+
+#: resources.h:525 resources.h:526
+msgid "Refresh the file and folder lists"
+msgstr "Reimprospatare lista fisiere si fodlere"
+
+#: ../../locales/../src/engine/tlssocket.cpp:718
+msgid "Remote certificate not trusted."
+msgstr "Certificatul nu este de incredere."
+
+#: ../../locales/../src/interface/queue.cpp:1176
+msgid "Remote file"
+msgstr "Fisier pe server"
+
+#: resources.h:259
+msgid "Remote filters:"
+msgstr "Filtre server:"
+
+#: ../../locales/../src/interface/viewheader.cpp:508
+msgid "Remote site:"
+msgstr "Server:"
+
+#: resources.h:442 resources.h:445
+msgid "Remove &all"
+msgstr "Elimin&a tot"
+
+#: resources.h:278 resources.h:443 resources.h:446
+msgid "Remove &selected"
+msgstr "Elimina cele &selectate"
+
+#: resources.h:332 resources.h:350
+msgid "Rena&me"
+msgstr "Redenu&mire"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:214
+msgid "Rename file"
+msgstr "Redenumeste fisierul"
+
+#: resources.h:458
+msgid "Rename selected directory"
+msgstr "Redenumeste folderul selectat"
+
+#: resources.h:413 resources.h:423
+msgid "Rename selected files and folders"
+msgstr "Redenumeste fisierele si folderele selectate"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2796
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2052
+#, c-format
+msgid "Renaming '%s' to '%s'"
+msgstr "Redenumesc '%s' in '%s'"
+
+#: resources.h:331 resources.h:349
+msgid "Res&ume"
+msgstr "&Lipire"
+
+#: resources.h:444 resources.h:447
+msgid "Reset and requeue selected files"
+msgstr "Resetare si reintegrare in sir a fisierelor selectate"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:929
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:467
+#, c-format
+msgid "Resolving IP-Address for %s"
+msgstr "Rezolv adresa IP pt. %s"
+
+#: ../../locales/../src/interface/updatewizard.cpp:172
+msgid "Resolving hostname"
+msgstr "Rezolv server-ul"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:387
+#: ../../locales/../src/interface/StatusView.cpp:187
+#: ../../locales/../src/interface/StatusView.cpp:223
+msgid "Response:"
+msgstr "Raspuns:"
+
+#: resources.h:354
+msgid ""
+"Resuming ascii files can cause problems if server uses a different line "
+"ending format than the client."
+msgstr ""
+"Lipirea fisierelor ascii poate cauza probleme daca server-ul utilizeaza un "
+"alt format de sfarsit de linie fata de client."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:845
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:799
+msgid "Retrieving directory listing..."
+msgstr "Receptionez lista folderelor..."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3109
+#: ../../locales/../src/interface/netconfwizard.cpp:690
+#, c-format
+msgid "Retrieving external IP address from %s"
+msgstr "Receptionez adresa externa IP de la %s"
+
+#: resources.h:325 resources.h:344
+msgid "S&kip"
+msgstr "Sa&r"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:826
+msgid "Save settings?"
+msgstr "Salvez setarile?"
+
+#: ../../locales/../src/interface/QueueView.cpp:1398
+msgid "Scanning for files to add to queue"
+msgstr "Scanez fisierele de adaugat pt. transfer"
+
+#: ../../locales/../src/interface/QueueView.cpp:1400
+msgid "Scanning for files to upload"
+msgstr "Scanez fisierele de adaugat pt. incarcare"
+
+#: resources.h:123
+msgid "Select &page:"
+msgstr "Selectare &pagina:"
+
+#: resources.h:65
+msgid "Select Entry:"
+msgstr "Selectare Intrare:"
+
+#: resources.h:163
+msgid "Select Theme"
+msgstr "Selectare Tema"
+
+#: resources.h:337
+msgid ""
+"Select default action to perform if target file of a transfer already exists."
+msgstr ""
+"Selectare actiune predefinita pt. fisierele de transferat existente deja."
+
+#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:18
+msgid ""
+"Select default file exists action if the target file already exists. This "
+"selection is valid only for the current session."
+msgstr ""
+"Selectare actiune predefinita pt. fisierele de transferat existente deja. "
+"Selectia este valida numai pt. sesiunea curenta."
+
+#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:16
+msgid ""
+"Select default file exists action only for the currently selected files in "
+"the queue."
+msgstr ""
+"Selectare actiune predefinita pt. fisierele existente deja in sirul de "
+"transfer."
+
+#: ../../locales/../src/interface/updatewizard.cpp:201
+msgid "Select download location for package"
+msgstr "Selectare locatie descarcare pachete"
+
+#: ../../locales/../src/interface/export.cpp:30
+msgid "Select file for exported settings"
+msgstr "Selectare fisier pentru setarile exportate"
+
+#: ../../locales/../src/interface/import.cpp:15
+msgid "Select file to import settings from"
+msgstr "Selectare fisier pentru importarea setarilor"
+
+#: resources.h:365
+msgid "Select the categories to export:"
+msgstr "Selecatre categorii pentru export:"
+
+#: resources.h:356
+msgid "Select the private data you would like to delete."
+msgstr "Selectati datele personale pe care doriti sa le stergeti."
+
+#: resources.h:397
+msgid "Send custom command to the server otherwise not available"
+msgstr "Trimitere comanda personala la server, altfel este indisponibil"
+
+#: resources.h:12
+msgid "Serial number:"
+msgstr "Numar serial:"
+
+#: ../../locales/../src/interface/queue.cpp:1174
+msgid "Server / Local file"
+msgstr "Server / Fisier local"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3476
+#, c-format
+msgid "Server does not support resume of files > %d GB."
+msgstr "Server-ul nu suporta lipirea fisierelor > %d GB."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3472
+#, c-format
+msgid ""
+"Server does not support resume of files > %d GB. End transfer since "
+"filesizes match."
+msgstr ""
+"Server-ul nu suporta lipirea fisierelor > %d GB. Termin transferul la "
+"potrivirea dimensiunilor."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1892
+msgid "Server does not support resume of files > 2GB."
+msgstr "Server-ul nu suporta lipirea fisierelor > 2GB."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1887
+msgid "Server does not support resume of files > 4GB."
+msgstr "Server-ul nu suporta lipirea fisierelor > 4GB."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3487
+#, c-format
+msgid ""
+"Server may not support resume of files > %d GB. End transfer since filesizes "
+"match."
+msgstr ""
+"Server-ul ar putea sa nu suporte lipirea fisierelor > %d GB. Terminati "
+"transferul pana la potrivirea dimensiunii."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:711
+msgid ""
+"Server requires an account. Please specify an account using the Site Manager"
+msgstr ""
+"Serverul solicita autentificarea. Va rog sa specificati un cont utilizand "
+"Manager-ul de Site-uri"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:395
+#: ../../locales/../src/interface/netconfwizard.cpp:402
+#: ../../locales/../src/interface/netconfwizard.cpp:441
+#: ../../locales/../src/interface/netconfwizard.cpp:460
+#: ../../locales/../src/interface/netconfwizard.cpp:467
+#: ../../locales/../src/interface/netconfwizard.cpp:479
+#: ../../locales/../src/interface/netconfwizard.cpp:493
+#: ../../locales/../src/interface/netconfwizard.cpp:502
+#: ../../locales/../src/interface/netconfwizard.cpp:513
+msgid "Server sent invalid reply."
+msgstr "Server-ul a trimis un raspuns invalid."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3060
+msgid ""
+"Server sent passive reply with unroutable address. Using server address "
+"instead."
+msgstr ""
+"Server-ul a transmis un raspuns pasiv cu o adresa nerutabila. Utilizez "
+"adresa server-ului in loc."
+
+#: resources.h:74 resources.h:86
+msgid "Server&type:"
+msgstr "&Tip server:"
+
+#: resources.h:430
+msgid "Set &Priority"
+msgstr "Setare &prioritate"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2937
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1947
+#, c-format
+msgid "Set permissions of '%s' to '%s'"
+msgstr "Setare permisiuni pt. '%s' la '%s'"
+
+#: resources.h:122
+msgid "Settings"
+msgstr "Setari"
+
+#: resources.h:191
+msgid "Show &raw directory listing"
+msgstr "Afisare lista foldere"
+
+#: resources.h:373
+msgid "Site &Manager entries"
+msgstr "Inregistrari &Manager Site-uri"
+
+#: resources.h:64
+msgid "Site Manager"
+msgstr "Manager Site-uri"
+
+#: ../../locales/../src/interface/sitemanager.cpp:51
+msgid "Site Manager already open"
+msgstr "Manger-ul de Site-uri este deja deschis"
+
+#: ../../locales/../src/interface/queue.cpp:1177
+msgid "Size"
+msgstr "Dimensiune"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:59
+#: ../../locales/../src/interface/fileexistsdlg.cpp:83
+#: ../../locales/../src/interface/fileexistsdlg.cpp:115
+#: ../../locales/../src/interface/fileexistsdlg.cpp:139
+msgid "Size unknown"
+msgstr "Dimensiune necunoscuta"
+
+#: resources.h:333 resources.h:351
+msgid "Sk&ip"
+msgstr "Sar"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2162
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2247
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:206
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:246
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:622
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:695
+#, c-format
+msgid "Skipping download of %s"
+msgstr "Sar descarcarea a %s"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2166
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2251
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:210
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:250
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:626
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:699
+#, c-format
+msgid "Skipping upload of %s"
+msgstr "Sar incarcarea a %s"
+
+#: resources.h:170
+msgid "Small icons"
+msgstr "Iconuri mici"
+
+#: resources.h:2 resources.h:478
+msgid ""
+"Some misconfigured remote servers which are behind a router, may reply with "
+"their local ip address."
+msgstr ""
+"Cateva servere la distanta gresit configurate si aflate dupa un router pot "
+"raspunde cu adresa lor locala de IP."
+
+#: resources.h:148
+msgid "Sort directories inline"
+msgstr "Sortare directoare"
+
+#: resources.h:145
+msgid "Sorting mode:"
+msgstr "Mod sortare:"
+
+#: ../../locales/../src/interface/RemoteTreeView.cpp:92
+msgid "Source and path of the drop operation are identical"
+msgstr "Sursa si destinatia acestei operatiuni sunt identice."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:125
+msgid "Source and target of the drop operation are identical"
+msgstr "Sursa si destinatia acestei operatiuni sunt identice."
+
+#: resources.h:35
+msgid "Speed limits"
+msgstr "Limite de viteza"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1584
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1321
+#, c-format
+msgid "Starting download of %s"
+msgstr "Pornesc descarcarea a %s"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1588
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1325
+#, c-format
+msgid "Starting upload of %s"
+msgstr "Pornesc incarcarea a %s"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:124
+msgid "State:"
+msgstr "Stare:"
+
+#: ../../locales/../src/interface/QueueView.cpp:412
+msgid "Status"
+msgstr "Stare"
+
+#: ../../locales/../src/interface/StatusView.cpp:196
+#: ../../locales/../src/interface/StatusView.cpp:238
+msgid "Status:"
+msgstr "Stare:"
+
+#: resources.h:427
+msgid "Stop and remove &all"
+msgstr "Opreste si elimin&a tot"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:126
+msgid "Street:"
+msgstr "Strada:"
+
+#: resources.h:16
+msgid "Subject of certificate"
+msgstr "Subiectul certificatului"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:565
+msgid ""
+"Submit a bug report if this problem persists even with the latest version of "
+"FileZilla."
+msgstr ""
+"Trimiteti un raport cu erori daca problema persista si chiar daca aveti "
+"ultima versiune FileZilla."
+
+#: ../../locales/../src/interface/queueview_successful.cpp:11
+msgid "Successful transfers"
+msgstr "Transferuri reusite"
+
+#: resources.h:506
+msgid "Summary of test results:"
+msgstr "Sumar al rezultatelor testului:"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:73
+#: ../../locales/../src/interface/quickconnectbar.cpp:107
+msgid "Syntax error"
+msgstr "Eroare sintaxa"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:318
+msgid "TLS/SSL connection established, waiting for welcome message..."
+msgstr "Conexiunea TLS/SSL stabilita. Astept mesajul de intampinare..."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:322
+msgid "TLS/SSL connection established."
+msgstr "Conexiunea TLS/SSL este stabilita."
+
+#: resources.h:44
+msgid "Target file already exists"
+msgstr "Fisierul destinatie exista deja"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1695
+msgid "Target filename already exists, really continue?"
+msgstr "Numele fisierului destinatie exista deja. Sigur continuati?"
+
+#: resources.h:505
+msgid "Test results"
+msgstr "Rezultate test"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3493
+msgid "Testing resume capabilities of server"
+msgstr "Testez capacitatea server-ului de a lipi fisiere"
+
+#: ../../locales/../src/interface/sitemanager.cpp:50
+msgid ""
+"The Site Manager is opened in another instance of FileZilla 3.\n"
+"Do you want to continue? Any changes made in the Site Manager won't be saved "
+"then."
+msgstr ""
+"Manager-ul de Site-uri este deschis de o alta instanta FileZilla 3.\n"
+"Doriti sa continuati? Orice modificare efectuala in Manager nu va fi salvata."
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:90
+msgid ""
+"The Site Manager is opened in another instance of FileZilla 3.\n"
+"Please close it or the data cannot be deleted."
+msgstr ""
+"Manager-ul de Site-uri este deschis de o alta instanta FileZilla 3.\n"
+"Va rog sa o inchideti sau datele nu vor fi sterse."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:606
+#, c-format
+msgid "The address you entered was: %s"
+msgstr "Adresa introdusa de dvs. a fost: %s"
+
+#: ../../locales/../src/interface/filteredit.cpp:334
+#: ../../locales/../src/interface/filteredit.cpp:397
+#: ../../locales/../src/interface/filteredit.cpp:437
+msgid "The entered filter name already exists."
+msgstr "Numele introdus al filtrului exista deja."
+
+#: ../../locales/../src/interface/optionspage_filetype.cpp:160
+#, c-format
+msgid "The extension '%s' does already exist in the list"
+msgstr "Extensia '%s' exista deja in lista"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:204
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:211
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"Please enter a new name:"
+msgstr ""
+"Fisierul %s exista deja.\n"
+"Va rog sa introduceti un nume nou:"
+
+#: ../../locales/../src/interface/import.cpp:78
+msgid ""
+"The file you have selected contains site manager data from a previous "
+"version of FileZilla.\n"
+"Due to differences in the storage format, only host, port, username and "
+"password will be imported.\n"
+"Continue with the import?"
+msgstr ""
+"Fisierul selectat contine date despre managerul de site-uri dintr-o versiune "
+"anterioara FileZilla.\n"
+"Din cauza diferentelor de formate, numai serverul, portul, numele si parola "
+"vor fi importate.\n"
+"Continuati importul?"
+
+#: resources.h:189
+msgid ""
+"The higher the debug level, the more information will be displayed in the "
+"message log. Displaying debug information has a negative impact on "
+"performance."
+msgstr ""
+"Cu cat este mai mare nivelul de depanare, cu atat de multe informatii vor fi "
+"oferite. Afisarea informatiilor pt. depanare va avea un impact negativ "
+"asupra performantei."
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:89
+msgid ""
+"The lowest available port has to be less or equal than the highest available "
+"port."
+msgstr ""
+"Portul disponibil minim trebuie sa fie mai mic sau egal cu cel maxim "
+"disponibil."
+
+#: ../../locales/../src/interface/updatewizard.cpp:385
+msgid ""
+"The most recent version has been downloaded. Click on Finish to close "
+"FileZilla and to start the installation."
+msgstr ""
+"Cea mai noua versiune a fost descarcata. Apasati pe Terminare pt. a inchide "
+"FileZilla si a porni instalarea."
+
+#: ../../locales/../src/interface/updatewizard.cpp:387
+msgid ""
+"The most recent version has been downloaded. Please install like you did "
+"install this version."
+msgstr ""
+"Cea mai noua versiune a fost descarcata. Va rog sa o instalati asa cum ati "
+"instalat versiunea curenta."
+
+#: ../../locales/../src/interface/import.cpp:68
+msgid "The selected categories have been imported."
+msgstr "Categoriile selectate au fost importate."
+
+#: resources.h:372
+msgid ""
+"The selected file contains importable data for the following categories:"
+msgstr ""
+"Fisierul selectat contine date importabile despre urmatoarele categorii:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:563
+msgid "The server sent an unrecognized reply."
+msgstr "Server-ul a trimis un raspuns necunoscut."
+
+#: resources.h:102
+msgid "The server uses following charset encoding for filenames:"
+msgstr ""
+"Server-ul foloseste urmatorul set de caractere pt. a coda numele fisierelor:"
+
+#: resources.h:6
+msgid ""
+"The server's certificate is unknown. Please carefully examine the "
+"certificate to make sure the server can be trusted."
+msgstr ""
+"Ceritificatul server-ului este necunoscut. Va rog sa examinati cu atentie "
+"certificatul pt. a va asigura daca server-ul este de incredere."
+
+#: resources.h:241
+msgid ""
+"The server's host key does not match the key that has been cached. This "
+"means that either the administrator has changed the host key, or you are "
+"actually trying to connect to another computer pretending to be the server.\n"
+"If the host key change was not expected, please contact the server "
+"administrator."
+msgstr ""
+"Cheia server-ului nu se potriveste cu cea stocata. Asta inseamna ca ori "
+"administratorul a schimbat cheia, ori incercati sa va conectati la un alt "
+"computer care pretinde ca este cel pt. care aveti cheia.\n"
+"Daca nu stiati de schimbarea cheii, va sfatuim sa contactati administratorul "
+"server-ului."
+
+#: resources.h:229
+msgid ""
+"The server's host key is not cached in the registry. You have no guarantee "
+"that the server is the computer you think it is."
+msgstr ""
+"Cheia server-ului nu este stocata in registri. Nu aveti nici o garantie ca "
+"acest server este cel care se pretinde a fi."
+
+#: ../../locales/../src/interface/import.cpp:65
+msgid ""
+"The settings have been imported. You have to restart FileZilla for all "
+"settings to have effect."
+msgstr ""
+"Setarile au fost importate. Trebuie sa reporniti FileZilla pt. ca "
+"modificarile sa aiba efect."
+
+#: resources.h:45
+msgid ""
+"The target file already exists.\n"
+"Would you like to replace the file"
+msgstr ""
+"Fisierul destinatie exista deja.\n"
+"Doriti sa inlocuiti fisierul"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:826
+msgid "The test did not succeed. Do you really want to save the settings?"
+msgstr "Testul nu a reusit. Sigur doriti sa salvati setarile?"
+
+#: ../../locales/../src/interface/themeprovider.cpp:57
+#: ../../locales/../src/interface/themeprovider.cpp:76
+msgid "Theme error"
+msgstr "Eroare tema"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:103
+msgid "Themes"
+msgstr "Teme"
+
+#: ../../locales/../src/interface/filter.cpp:638
+msgid "This filter set cannot be removed"
+msgstr "Acest filtru nu poate fi eliminat"
+
+#: resources.h:483
+msgid ""
+"This only works if you are not behind a router, else your system would just "
+"return your internal address."
+msgstr ""
+"Acest lucru functioneaza numai daca nu sunteti in spatele unui router, "
+"altfel, sistemul va returna adresa dvs. interna."
+
+#: resources.h:461
+msgid ""
+"This wizard will help you to properly configure any routers and firewalls "
+"you have and tests your configuration."
+msgstr ""
+"Asistentul va va ajuta sa configurati corect orice router sau firewall de "
+"care dispuneti si sa testati aceasta configuratie."
+
+#: resources.h:32
+msgid "Time&out in seconds:"
+msgstr "Asteptare in sec&unde:"
+
+#: resources.h:31 ../../locales/../src/interface/QueueView.cpp:810
+#: ../../locales/../src/interface/QueueView.cpp:835
+msgid "Timeout"
+msgstr "Asteptare"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:122
+msgid "Title:"
+msgstr "Titlu:"
+
+#: resources.h:527 resources.h:528
+msgid "Toggles processing of the transfer queue"
+msgstr "Comuta afisarea ferestrei sirului de transfer"
+
+#: resources.h:519 resources.h:520
+msgid "Toggles the display of the local directory tree"
+msgstr "Comuta afisarea arborelui folderelor locale"
+
+#: resources.h:517 resources.h:518
+msgid "Toggles the display of the message log"
+msgstr "Comuta afisarea ferestrei cu mesajele log"
+
+#: resources.h:521 resources.h:522
+msgid "Toggles the display of the remote directory tree"
+msgstr "Comuta afisarea arborelui folderelor de pe server"
+
+#: resources.h:523 resources.h:524
+msgid "Toggles the display of the transfer queue"
+msgstr "Comuta afisarea ferestrei sirului de transfer"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:588
+msgid "Too long header line"
+msgstr "Linie antet prea lunga"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:649
+msgid "Too many redirects"
+msgstr "Prea multe redirectionari"
+
+#: ../../locales/../src/interface/StatusView.cpp:190
+#: ../../locales/../src/interface/StatusView.cpp:230
+msgid "Trace:"
+msgstr "Urmareste:"
+
+#: resources.h:152
+msgid "Transfer Mode"
+msgstr "Mod Transfer"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:151
+msgid "Transfer aborted by user"
+msgstr "Transfer intrerupt de utilizator"
+
+#: resources.h:94
+msgid "Transfer settings"
+msgstr "Setari transfer"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:609
+msgid "Transferred data got tainted."
+msgstr "Datele transferate au fost modificate."
+
+#: ../../locales/../src/interface/QueueView.cpp:1118
+#: ../../locales/../src/interface/statuslinectrl.cpp:159
+msgid "Transferring"
+msgstr "Transfer in curs"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:99
+msgid "Transfers"
+msgstr "Transferuri"
+
+#: resources.h:135
+msgid "Treat files &without extention as Ascii file"
+msgstr "Trateaza fisierele fara e&xtensie ca fisiere Ascii"
+
+#: resources.h:131
+msgid "Treat the &following filetypes as Ascii files:"
+msgstr "Trateaza ur&matoarele tipuri de fisier ca fisiere Ascii:"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:725
+msgid "Trust changed Hostkey: "
+msgstr "Autentifica cheia host modificata:"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:723
+msgid "Trust new Hostkey: "
+msgstr "Autentifica cheia host noua:"
+
+#: resources.h:247
+msgid "Trust the new key and carry on connecting?"
+msgstr "Ai incredere in cheia noua si continua cu conectarea?"
+
+#: resources.h:20
+msgid "Trust this certificate and carry on connecting"
+msgstr "Ai incredere in certificat si continua conectarea"
+
+#: resources.h:235
+msgid "Trust this host and carry on connecting?"
+msgstr "Ai incredere in server si continua conectarea?"
+
+#: resources.h:38
+msgid "U&pload limit:"
+msgstr "Limitare inca&rcare:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:121
+msgid "Unit:"
+msgstr "Unitate:"
+
+#: resources.h:5
+msgid "Unknown certificate"
+msgstr "Certificat necunoscut"
+
+#: resources.h:228
+msgid "Unknown host key"
+msgstr "Cheie server necunoscuta"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:584
+#: ../../locales/../src/interface/netconfwizard.cpp:595
+msgid ""
+"Unless these problems get fixed, active mode FTP will not work and passive "
+"mode has to be used."
+msgstr ""
+"Daca problemele nu se rezolva si modul FTP activ nu functioneaza, este "
+"necesara comutarea pe modul pasiv."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:571
+msgid ""
+"Unless this problem gets fixed, active mode FTP will not work and passive "
+"mode has to be used."
+msgstr ""
+"Daca problema nu se rezolva si modul FTP activ nu functioneaza, este "
+"necesara comutarea pe modul pasiv."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:633
+msgid "Unsuppored redirect"
+msgstr "Redirectare nesuportata"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:106
+msgid "Update Check"
+msgstr "Verificare Actualizare"
+
+#: ../../locales/../src/interface/updatewizard.cpp:137
+#: ../../locales/../src/interface/updatewizard.cpp:145
+msgid "Update wizard"
+msgstr "Asistent actualizare"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1184
+msgid "Updatecheck failed"
+msgstr "Verificarea actualizarii a esuat"
+
+#: resources.h:405
+msgid "Upload selected files and folders"
+msgstr "Incarca fisierele si folderele selectate"
+
+#: resources.h:326 resources.h:345
+msgid "Uploads"
+msgstr "Incarcari"
+
+#: resources.h:106
+msgid "Use &custom charset"
+msgstr "Utilizare set caractere &customizat"
+
+#: resources.h:319
+msgid "Use &default"
+msgstr "Utilizare &initial"
+
+#: resources.h:327
+msgid "Use d&efault"
+msgstr "Utili&zare initial"
+
+#: resources.h:292 resources.h:484
+msgid "Use the following IP address:"
+msgstr "Utilizeaza urmatoarea adresa IP:"
+
+#: resources.h:494
+msgid "Use the following port range:"
+msgstr "Utilizeaza urmatorul interval de porturi:"
+
+#: resources.h:479
+msgid "Use the server's external IP address instead"
+msgstr "Utilizeaza adresa IP externa a serverului in loc"
+
+#: resources.h:293 resources.h:485
+msgid ""
+"Use this if you're behind a router and have a static external IP address."
+msgstr ""
+"Utilizati asta daca sunteti in spatele unui router si aveti o adresa IP "
+"externa statica."
+
+#: resources.h:488
+msgid ""
+"Use this option if you have a dynamic IP address. FileZilla will contact the "
+"above server once each session as soon as you use active mode for the first "
+"time. Only the version of FileZilla you're using is submitted to the server."
+msgstr ""
+"Utilizati asta daca aveti o adresa IP dinamica. FileZilla va contacta "
+"serverul superior o singura data per sesiune in momentul in care veti "
+"utiliza modul activ pt. prima data. Numai versiunea FileZilla va fi emisa "
+"server-ului."
+
+#: resources.h:116
+msgid "User:"
+msgstr "Utilizator:"
+
+#: resources.h:104
+msgid "Uses UTF-8 if the server supports it, else use local charset."
+msgstr ""
+"Utilizati UTF-8 daca suporta serverul, altfel, utilizati setul de caractere "
+"local."
+
+#: resources.h:108
+msgid ""
+"Using the wrong charset can result in filenames not displaying properly."
+msgstr ""
+"Utilizarea unui set de caractere gresit poate duce la afisarea cu erori a "
+"numelui fisierelor."
+
+#: resources.h:298
+msgid "Using this wizard you can check for available updates to FileZilla."
+msgstr ""
+"Utilizand acest asistent, puteti verifica existenta actualizarilor FileZilla."
+
+#: resources.h:10
+msgid "Valid from:"
+msgstr "Valid din:"
+
+#: resources.h:11
+msgid "Valid to:"
+msgstr "Valid pana la:"
+
+#: ../../locales/../src/engine/tlssocket.cpp:896
+msgid "Verifying certificate..."
+msgstr "Verific certificatul..."
+
+#: resources.h:43
+msgid "Very high"
+msgstr "Maxim"
+
+#: resources.h:398
+msgid "View &hidden files"
+msgstr "Vizualizare fisiere asc&unse"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:527
+msgid "View hidden files"
+msgstr "Vizualizare fisiere ascunse"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:914
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:999
+msgid "View hidden option set, but unsupported by server"
+msgstr ""
+"Optiunea de vizualizare a fisierelor ascunse nu este suportata de server"
+
+#: resources.h:203
+msgid "W&rite"
+msgstr "Sc&riere"
+
+#: ../../locales/../src/interface/QueueView.cpp:1357
+msgid "Waiting"
+msgstr "Astept"
+
+#: ../../locales/../src/interface/QueueView.cpp:1068
+msgid "Waiting for password"
+msgstr "Astept parola"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:153
+msgid "Waiting for transfer to be canceled"
+msgstr "Astept sa se abandoneze transferul"
+
+#: ../../locales/../src/engine/engineprivate.cpp:234
+msgid "Waiting to retry..."
+msgstr "Astept sa reincerc..."
+
+#: ../../locales/../src/interface/FileZilla.cpp:199
+msgid ""
+"Warning!\n"
+"\n"
+"A bug in Windows causes problems with FileZilla\n"
+"\n"
+"The bug occurs if you have\n"
+"- Windows Server 2003 or XP 64\n"
+"- Windows Firewall enabled\n"
+"- Application Layer Gateway service enabled\n"
+"See http://support.microsoft.com/kb/931130 for background information.\n"
+"\n"
+"Unless you either disable Windows Firewall or the Application Layer Gateway "
+"service,\n"
+"FileZilla will timeout on big transfers."
+msgstr ""
+"Atentie!\n"
+"\n"
+"O eroare in Windows a cauzat o problema cu FileZilla\n"
+"\n"
+"Eroarea a aparut daca aveti\n"
+"- Windows Server 2003 sau XP 64\n"
+"- Windows Firewall activat\n"
+"- Serviciul Application Layer Gateway activat\n"
+"Consultati http://support.microsoft.com/kb/931130 pt. mai multe informatii.\n"
+"\n"
+"Doar daca nu ati dezactivat Windows Firewall sau serviciul Application Layer "
+"Gateway,\n"
+"FileZilla va opri descarcarea fisierelor mari."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:944
+msgid "Warning, ignoring data connection from wrong IP."
+msgstr "Atentie, ignor datele conexiunii de la un IP gresit."
+
+#: ../../locales/../src/interface/updatewizard.cpp:145
+msgid ""
+"Warning, use nightly builds at your own risk.\n"
+"No support is given for nightly builds.\n"
+"Nightly builds may not work as expected and might even damage your system.\n"
+"\n"
+"Do you really want to check for nightly builds?"
+msgstr ""
+"Atentie, utilizati aceste build-uri pe riscul propriu.\n"
+"Nu exista suport pt. aceste build-uri.\n"
+"Este posibil ca aceste buid-uri sa nu lucreze dupa cum v-ati asteptat sau "
+"pot sa va strice sistemul.\n"
+"\n"
+"Sigur doriti sa verificati existenta acestor build-uri?"
+
+#: resources.h:240
+msgid "Warning: Potential security breach!"
+msgstr "Atentie: Potentiala bresa de securitate!"
+
+#: ../../locales/../src/engine/engineprivate.cpp:328
+msgid "Warning: Selected port usually in use by a different protocol."
+msgstr ""
+"Atentie: Portul selectat este de obicei folosit de un protocol diferit."
+
+#: resources.h:141
+msgid "Widescreen"
+msgstr "Ecran Larg"
+
+#: resources.h:207
+msgid "Wr&ite"
+msgstr "Scr&iere"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:425
+#: ../../locales/../src/interface/netconfwizard.cpp:432
+msgid "Wrong external IP address"
+msgstr "Adresa IP externa gresita"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:787
+msgid "Wrong lineendings"
+msgstr "Sfarsit de linie incorect"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:736
+msgid "Yes"
+msgstr "Da"
+
+#: resources.h:313
+msgid ""
+"You are already using the most recent version of FileZilla. Please check "
+"again in future."
+msgstr ""
+"Folositi deja cea mai recenta versiune FileZilla. Va rog sa verificati in "
+"viitor existenta altor versiuni."
+
+#: resources.h:210
+msgid ""
+"You can use an x at any position to keep the permission the original files "
+"have."
+msgstr ""
+"Puteti utiliza un 'x' la orice pozitie, pt. a pastra permisiunea originala a "
+"fisierului."
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:226
+msgid "You did not enter a new name for the file. Overwrite the file instead?"
+msgstr ""
+"Nu ati introdus nici un nume nou pt. acest fisier. Suprascrieti fisierul "
+"totusi?"
+
+#: ../../locales/../src/interface/sitemanager.cpp:509
+msgid "You have to enter a hostname."
+msgstr "Trebuie sa introduceti o adresa de server valida."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:144
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:106
+msgid "You have to enter a valid IP address."
+msgstr "Trebuie sa introduceti o adresa IP valida."
+
+#: ../../locales/../src/interface/sitemanager.cpp:570
+msgid "You have to enter an account name"
+msgstr "Trebuie sa introduceti un nume de cont."
+
+#: ../../locales/../src/interface/sitemanager.cpp:561
+msgid "You have to specify a user name"
+msgstr "Trebuie sa specificati un utilizator."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:610
+msgid ""
+"You likely have a router or firewall which errorneously modified the "
+"transferred data."
+msgstr ""
+"Este posibil sa aveti un router sau un firewall care eronat v-a modifica "
+"datele transferate."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:557
+msgid ""
+"You should have no problems connecting to other servers, file transfers "
+"should work properly."
+msgstr ""
+"Ar trebui sa nu mai existe probleme cu conectarea la alte servere. "
+"Transferul fisierelor ar trebui sa functioneze corect."
+
+#: ../../locales/../src/interface/filteredit.cpp:57
+msgid "begins with"
+msgstr "incepe cu"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:57
+#: ../../locales/../src/interface/fileexistsdlg.cpp:81
+#: ../../locales/../src/interface/fileexistsdlg.cpp:113
+#: ../../locales/../src/interface/fileexistsdlg.cpp:137
+msgid "bytes"
+msgstr "biti"
+
+#: ../../locales/../src/interface/filteredit.cpp:55
+msgid "contains"
+msgstr "contine"
+
+#: ../../locales/../src/interface/filteredit.cpp:58
+msgid "ends with"
+msgstr "se termina cu"
+
+#: ../../locales/../src/interface/filteredit.cpp:62
+msgid "equals"
+msgstr "egal"
+
+#: ../../locales/../src/interface/LocalListView.cpp:698
+#: ../../locales/../src/interface/LocalListView.cpp:716
+#: ../../locales/../src/interface/RemoteListView.cpp:1147
+#: ../../locales/../src/interface/RemoteListView.cpp:1165
+msgid "file"
+msgstr "fisier"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1260
+msgid "fzsftp could not be started"
+msgstr "fzsftp nu a putut fi pornit"
+
+#: ../../locales/../src/interface/filteredit.cpp:61
+msgid "greater than"
+msgstr "mai mare ca"
+
+#: ../../locales/../src/interface/filteredit.cpp:56
+msgid "is equal to"
+msgstr "este egal cu"
+
+#: ../../locales/../src/interface/filteredit.cpp:63
+msgid "less than"
+msgstr "mai mic ca"
+
+#: ../../locales/../src/interface/filteredit.cpp:59
+msgid "matches regex"
+msgstr "potrivire expresie"
+
+#: ../../locales/../src/interface/themeprovider.cpp:57
+msgid "themes.xml missing, can not get theme data"
+msgstr "themes.xml lipseste, nu pot citi datele despre teme"
+
+#: resources.h:49
+msgid "with the following file?"
+msgstr "cu urmatorul fisier?"

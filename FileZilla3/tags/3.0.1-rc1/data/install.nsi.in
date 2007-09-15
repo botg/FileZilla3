@@ -1,0 +1,787 @@
+;FileZilla 3 installation script
+;Written by Tim Kosse <mailto:tim.kosse@filezilla-project.org>
+;
+;Requires NSIS >= 2.29
+
+;--------------------------------
+; Build environment
+
+  !define top_srcdir @top_srcdir@
+  !define srcdir @srcdir@
+  !define VERSION @PACKAGE_VERSION@
+
+;--------------------------------
+;General
+
+  ;Name and file
+  Name "FileZilla Client ${VERSION}"
+  OutFile "FileZilla_3_setup.exe"
+
+  SetCompressor /SOLID LZMA
+
+  ;Default installation folder
+  InstallDir "$PROGRAMFILES\FileZilla Client"
+  
+  ;Get installation folder from registry if available
+  InstallDirRegKey HKLM "Software\FileZilla Client" ""
+
+  RequestExecutionLevel highest
+
+;--------------------------------
+;Include Modern UI
+
+  !include "MUI.nsh"
+  !include "WordFunc.nsh"
+  !include Library.nsh
+  !include "WinVer.nsh"
+  !include "nsDialogs.nsh"
+
+;--------------------------------
+;Variables
+
+  Var MUI_TEMP
+  Var STARTMENU_FOLDER
+  Var PREVIOUS_INSTALLDIR
+  Var PREVIOUS_VERSION
+  Var REINSTALL_UNINSTALL
+  Var REINSTALL_UNINSTALLBUTTON
+  Var ALL_USERS
+  Var ALL_USERS_FIXED
+  Var ALL_USERS_BUTTON
+  Var IS_ADMIN
+  Var USERNAME
+
+;--------------------------------
+;Interface Settings
+
+  !define MUI_ICON "${top_srcdir}/src/interface/resources/FileZilla.ico"
+  !define MUI_UNICON "${srcdir}/uninstall.ico"
+
+  !define MUI_ABORTWARNING
+
+;--------------------------------
+;Pages
+
+  !insertmacro MUI_PAGE_LICENSE "${top_srcdir}\COPYING"
+  Page custom PageReinstall PageLeaveReinstall
+  Page custom PageAllUsers PageLeaveAllUsers
+  !insertmacro MUI_PAGE_COMPONENTS
+  !insertmacro MUI_PAGE_DIRECTORY
+
+  ;Start Menu Folder Page Configuration
+  !define MUI_STARTMENUPAGE_REGISTRY_ROOT "SHCTX"
+  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\FileZilla Client"
+  !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Startmenu"
+  !define MUI_STARTMENUPAGE_DEFAULTFOLDER "FileZilla Client"
+  
+  !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER
+
+  !define MUI_PAGE_CUSTOMFUNCTION_LEAVE PostInstPage
+  !insertmacro MUI_PAGE_INSTFILES
+  !insertmacro MUI_PAGE_FINISH
+  
+  !insertmacro MUI_UNPAGE_CONFIRM
+  !insertmacro MUI_UNPAGE_INSTFILES
+  !insertmacro MUI_UNPAGE_FINISH
+
+Function GetUserInfo
+  ClearErrors
+  UserInfo::GetName
+  ${If} ${Errors}
+    StrCpy $IS_ADMIN 1
+    Return
+  ${EndIf}
+
+  Pop $USERNAME
+  UserInfo::GetAccountType
+  Pop $R0
+  ${Switch} $R0
+    ${Case} "Admin"
+    ${Case} "Power"
+      StrCpy $IS_ADMIN 1
+      ${Break}
+    ${Default}
+      StrCpy $IS_ADMIN 0
+      ${Break}
+  ${EndSwitch}
+
+FunctionEnd
+
+Function ReadPreviousVersion
+
+  ReadRegStr $PREVIOUS_INSTALLDIR HKLM "Software\FileZilla Client" ""
+
+  ${If} $PREVIOUS_INSTALLDIR != ""
+    ;Detect version
+    ReadRegStr $PREVIOUS_VERSION HKLM "Software\FileZilla Client" "Version"
+    ${If} $PREVIOUS_VERSION != ""
+      StrCpy $ALL_USERS 1
+      StrCpy $ALL_USERS_FIXED 1
+      SetShellVarContext all
+      return
+    ${EndIf}
+  ${EndIf}
+  
+  ReadRegStr $PREVIOUS_INSTALLDIR HKCU "Software\FileZilla Client" ""
+
+  ${If} $PREVIOUS_INSTALLDIR != ""
+    ;Detect version
+    ReadRegStr $PREVIOUS_VERSION HKCU "Software\FileZilla Client" "Version"
+    ${If} $PREVIOUS_VERSION != ""
+      StrCpy $ALL_USERS 0
+      StrCpy $ALL_USERS_FIXED 1
+      SetShellVarContext current
+      return
+    ${EndIf}
+  ${EndIf}
+
+  StrCpy $ALL_USERS 1
+
+FunctionEnd
+
+Function .onInit
+
+  ${If} ${AtLeastWin2000}
+  ${Else}
+    MessageBox MB_YESNO|MB_ICONSTOP "Unsupported operating system.$\nFileZilla ${VERSION} requires at least Windows 2000 and may not work correctly on your system.$\nDo you really want to continue with the installation?" IDYES installonoldwindows
+    Abort
+installonoldwindows:
+  ${EndIf}
+  
+  Call GetUserInfo
+  Call ReadPreviousVersion
+
+  ${If} $ALL_USERS == 1
+    ${If} $IS_ADMIN == 0
+
+      ${If} $ALL_USERS_FIXED == 1
+        MessageBox MB_ICONSTOP "FileZilla has been previously installed for all users.$\nPlease restart the installer with Administrator privileges."
+        Abort
+      ${Else}
+        StrCpy $All_USERS 0
+      ${EndIf}
+    ${EndIf}
+  ${EndIf}
+        
+  ${If} $PREVIOUS_INSTALLDIR != ""
+    StrCpy $INSTDIR $PREVIOUS_INSTALLDIR
+  ${EndIf}
+
+FunctionEnd
+
+Function FZVersionCompare
+
+  Exch $1
+  Exch
+  Exch $0
+
+  Push $2
+  Push $3
+  Push $4
+
+versioncomparebegin:
+  ${If} $0 == ""
+  ${AndIf} $1 == ""
+    Push 0
+    goto versioncomparedone
+  ${EndIf}
+
+  StrCpy $2 0
+  StrCpy $3 0
+
+  ; Parse rc / beta suffixes for segments
+  StrCpy $4 $0 2
+  ${If} $4 == "rc"
+    StrCpy $2 100
+    StrCpy $0 $0 "" 2
+  ${Else}
+    StrCpy $4 $0 4
+    ${If} $4 == "beta"
+      StrCpy $0 $0 "" 4
+    ${Else}
+      StrCpy $2 10000
+    ${EndIf}
+  ${EndIf}
+
+  StrCpy $4 $1 2
+  ${If} $4 == "rc"
+    StrCpy $3 100
+    StrCpy $1 $1 "" 2
+  ${Else}
+    StrCpy $4 $1 4
+    ${If} $4 == "beta"
+      StrCpy $1 $1 "" 4
+    ${Else}
+      StrCpy $3 10000
+    ${EndIf}
+  ${EndIf}
+
+split1loop:
+
+  StrCmp $0 "" split1loopdone
+  StrCpy $4 $0 1
+  StrCpy $0 $0 "" 1
+  StrCmp $4 "." split1loopdone
+  StrCmp $4 "-" split1loopdone
+  StrCpy $2 $2$4
+  goto split1loop
+split1loopdone:
+
+split2loop:
+
+  StrCmp $1 "" split2loopdone
+  StrCpy $4 $1 1
+  StrCpy $1 $1 "" 1
+  StrCmp $4 "." split2loopdone
+  StrCmp $4 "-" split2loopdone
+  StrCpy $3 $3$4
+  goto split2loop
+split2loopdone:
+
+  ${If} $2 > $3
+    Push 1
+  ${ElseIf} $3 > $2
+    Push -1
+  ${Else}
+    goto versioncomparebegin
+  ${EndIf}
+
+
+versioncomparedone:
+
+  Exch
+  Pop $4
+  Exch
+  Pop $3
+  Exch
+  Pop $2
+  Exch
+  Pop $1
+  Exch
+  Pop $0
+
+FunctionEnd
+
+Function PageReinstall
+
+  ${If} $PREVIOUS_VERSION == ""
+    Abort
+  ${EndIf}
+
+  nsDialogs::Create /NOUNLOAD 1018
+  Pop $0
+
+  Push "${VERSION}"
+  Push $PREVIOUS_VERSION
+  Call FZVersionCompare
+  Pop $R0
+  IntCmp $R0 0 same_version older_version new_version
+
+ new_version:
+
+  !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose how you want to install FileZilla."
+  nsDialogs::CreateItem /NOUNLOAD STATIC ${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 0 0 100% 40 "An older version of FileZilla is installed on your system. It's recommended that you uninstall the current version before installing. Select the operation you want to perform and click Next to continue."
+  Pop $R0
+  nsDialogs::CreateItem /NOUNLOAD BUTTON ${BS_AUTORADIOBUTTON}|${BS_VCENTER}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS}|${WS_GROUP}|${WS_TABSTOP} 0 10 55 100% 30 "Uninstall before installing"
+  Pop $REINSTALL_UNINSTALLBUTTON
+  nsDialogs::CreateItem /NOUNLOAD BUTTON ${BS_AUTORADIOBUTTON}|${BS_TOP}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 10 85 100% 50 "Do not uninstall"
+  Pop $R0
+  ${If} $REINSTALL_UNINSTALL == ""
+    StrCpy $REINSTALL_UNINSTALL 1
+  ${EndIf}
+  Goto reinst_start
+
+ older_version:
+
+  !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose how you want to install FileZilla."
+  nsDialogs::CreateItem /NOUNLOAD STATIC ${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 0 0 100% 40 "A newer version of FileZilla is already installed! It is not recommended that you install an older version. If you really want to install this older version, it's better to uninstall the current version first. Select the operation you want to perform and click Next to continue."
+  Pop $R0
+  nsDialogs::CreateItem /NOUNLOAD BUTTON ${BS_AUTORADIOBUTTON}|${BS_VCENTER}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS}|${WS_GROUP}|${WS_TABSTOP} 0 10 55 100% 30 "Uninstall before installing"
+  Pop $REINSTALL_UNINSTALLBUTTON
+  nsDialogs::CreateItem /NOUNLOAD BUTTON ${BS_AUTORADIOBUTTON}|${BS_TOP}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 10 85 100% 50 "Do not uninstall"
+  Pop $R0
+  ${If} $REINSTALL_UNINSTALL == ""
+    StrCpy $REINSTALL_UNINSTALL 1
+  ${EndIf}
+  Goto reinst_start
+
+ same_version:
+
+  !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose the maintenance option to perform."
+  nsDialogs::CreateItem /NOUNLOAD STATIC ${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 0 0 100% 40 "FileZilla ${VERSION} is already installed. Select the operation you want to perform and click Next to continue."
+  Pop $R0
+  nsDialogs::CreateItem /NOUNLOAD BUTTON ${BS_AUTORADIOBUTTON}|${BS_VCENTER}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS}|${WS_GROUP}|${WS_TABSTOP} 0 10 55 100% 30 "Add/Reinstall components"
+  Pop $R0
+  nsDialogs::CreateItem /NOUNLOAD BUTTON ${BS_AUTORADIOBUTTON}|${BS_TOP}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 10 85 100% 50 "Uninstall FileZilla"
+  Pop $REINSTALL_UNINSTALLBUTTON
+  ${If} $REINSTALL_UNINSTALL == ""
+    StrCpy $REINSTALL_UNINSTALL 2
+  ${EndIf}
+
+ reinst_start:
+
+  ${If} $REINSTALL_UNINSTALL == "1"
+    SendMessage $REINSTALL_UNINSTALLBUTTON ${BM_SETCHECK} 1 0
+  ${Else}
+    SendMessage $R0 ${BM_SETCHECK} 1 0
+  ${EndIf}
+  
+  nsDialogs::Show
+
+FunctionEnd
+
+Function PageLeaveReinstall
+
+  SendMessage $REINSTALL_UNINSTALLBUTTON ${BM_GETCHECK} 0 0 $R0
+  ${If} $R0 == 1
+    StrCpy $REINSTALL_UNINSTALL 1
+  ${Else}
+    StrCpy $REINSTALL_UNINSTALL 2
+  ${EndIf}
+
+  ${If} $REINSTALL_UNINSTALL == 1
+    ReadRegStr $R1 SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "UninstallString"
+
+    ${If} $R1 == ""
+      Return
+    ${EndIf}
+
+    ;Run uninstaller
+    HideWindow
+
+    ClearErrors
+    ExecWait '$R1 _?=$INSTDIR'
+
+    IfErrors no_remove_uninstaller
+
+    IfFileExists "$INSTDIR\uninstall.exe" 0 no_remove_uninstaller
+
+      Delete "$R1"
+      RMDir $INSTDIR
+
+    no_remove_uninstaller:
+
+    Push "${Version}"
+    Push $PREVIOUS_VERSION
+    Call FZVersionCompare
+    Pop $R0
+    IntCmp $R0 0 0 +2 +2
+    Quit
+
+    BringToFront
+  ${EndIf}
+
+FunctionEnd
+
+Function PageAllUsers
+
+  !insertmacro MUI_HEADER_TEXT "Choose Installation Options" "Who should this application be installed for?"
+
+  nsDialogs::Create /NOUNLOAD 1018
+  Pop $0
+
+  nsDialogs::CreateItem /NOUNLOAD STATIC ${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 0 0 100% 30 "Please select whether you wish to make this software available to all users or just yourself."
+  Pop $R0
+  
+  ${If} $IS_ADMIN == 1
+    ${If} $ALL_USERS_FIXED == 1
+    ${AndIf} $ALL_USERS == 0
+      StrCpy $R2 ${BS_AUTORADIOBUTTON}|${BS_VCENTER}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS}|${WS_GROUP}|${WS_TABSTOP}|${WS_DISABLED}
+    ${Else}
+      StrCpy $R2 ${BS_AUTORADIOBUTTON}|${BS_VCENTER}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS}|${WS_GROUP}|${WS_TABSTOP}
+    ${EndIf}
+  ${Else}
+    StrCpy $R2 ${BS_AUTORADIOBUTTON}|${BS_VCENTER}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS}|${WS_GROUP}|${WS_TABSTOP}|${WS_DISABLED}
+  ${EndIf}
+  nsDialogs::CreateItem /NOUNLOAD BUTTON $R2 0 10 55 100% 30 "&Anyone who uses this computer (all users)"
+  Pop $ALL_USERS_BUTTON
+  
+  ${If} $ALL_USERS_FIXED == 1
+  ${AndIf} $ALL_USERS == 1
+    StrCpy $R2 ${BS_AUTORADIOBUTTON}|${BS_TOP}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS}|${WS_DISABLED}
+  ${Else}
+    StrCpy $R2 ${BS_AUTORADIOBUTTON}|${BS_TOP}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS}
+  ${EndIf}
+  
+  ${If} $USERNAME != ""
+    nsDialogs::CreateItem /NOUNLOAD BUTTON $R2 0 10 85 100% 50 "&Only for me ($USERNAME)"
+  ${Else}
+    nsDialogs::CreateItem /NOUNLOAD BUTTON $R2 0 10 85 100% 50 "&Only for me"
+  ${EndIf}
+  Pop $R0
+  
+  ${If} $ALL_USERS_FIXED == 1
+    ${If} $ALL_USERS == 1
+      nsDialogs::CreateItem /NOUNLOAD STATIC ${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 0 -30 100% 30 "FileZilla has been previously installed for all users. Please uninstall first before changing setup type."
+    ${Else}
+      nsDialogs::CreateItem /NOUNLOAD STATIC ${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 0 -30 100% 30 "FileZilla has been previously installed for this user only. Please uninstall first before changing setup type."
+    ${EndIf}
+  ${Else}
+    nsDialogs::CreateItem /NOUNLOAD STATIC ${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 0 -30 100% 30 "Installation for all users requires Administrator privileges."
+  ${EndIf}
+  Pop $R1
+
+  ${If} $ALL_USERS == "1"
+    SendMessage $ALL_USERS_BUTTON ${BM_SETCHECK} 1 0
+  ${Else}
+    SendMessage $R0 ${BM_SETCHECK} 1 0
+  ${EndIf}
+  
+  nsDialogs::Show
+
+FunctionEnd
+
+Function PageLeaveAllUsers
+
+  SendMessage $ALL_USERS_BUTTON ${BM_GETCHECK} 0 0 $R0
+  ${If} $R0 == 0
+    StrCpy $ALL_USERS "0"
+    SetShellVarContext current
+  ${Else}
+    StrCpy $ALL_USERS "1"
+    SetShellVarContext all
+  ${EndIf}
+
+FunctionEnd
+
+;--------------------------------
+;Languages
+ 
+  !insertmacro MUI_LANGUAGE "English"
+
+;--------------------------------
+;Installer Sections
+
+Section "FileZilla Client" SecMain
+
+  SetOutPath "$INSTDIR"
+  
+  File "..\src\interface\FileZilla.exe"
+  File "..\src\putty\fzsftp.exe"
+  File "${srcdir}\mingwm10.dll"
+  File "${top_srcdir}\GPL.html"
+  File "${top_srcdir}\NEWS"
+  File "${top_srcdir}\AUTHORS"
+
+  SetOutPath "$INSTDIR\resources"
+  File "${top_srcdir}/src\interface\resources\*.xrc"
+  File "${top_srcdir}/src\interface\resources\*.png"
+  File "${top_srcdir}/src\interface\resources\finished.wav"
+  File "${top_srcdir}/src\interface\resources\themes.xml"
+
+  SetOutPath "$INSTDIR\resources\16x16"
+  File "${top_srcdir}/src\interface\resources\16x16\*.png"
+
+  SetOutPath "$INSTDIR\resources\32x32"
+  File "${top_srcdir}/src\interface\resources\32x32\*.png"
+  
+  SetOutPath "$INSTDIR\resources\48x48"
+  File "${top_srcdir}/src\interface\resources\48x48\*.png"
+  
+  SetOutPath "$INSTDIR\resources\cyril\16x16"
+  File "${top_srcdir}/src\interface\resources\cyril\16x16\*.png"
+
+  SetOutPath "$INSTDIR\resources\blukis\16x16"
+  File "${top_srcdir}/src\interface\resources\blukis\16x16\*.png"
+
+  SetOutPath "$INSTDIR\resources\blukis\32x32"
+  File "${top_srcdir}/src\interface\resources\blukis\32x32\*.png"
+
+  SetOutPath "$INSTDIR\resources\blukis\48x48"
+  File "${top_srcdir}/src\interface\resources\blukis\48x48\*.png"
+
+  ;Create uninstaller
+  WriteUninstaller "$INSTDIR\uninstall.exe"
+
+  WriteRegStr SHCTX "Software\FileZilla Client" "" $INSTDIR
+  WriteRegStr SHCTX "Software\FileZilla Client" "Version" "${VERSION}"
+
+  WriteRegExpandStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "UninstallString" "$INSTDIR\uninstall.exe"
+  WriteRegExpandStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "InstallLocation" "$INSTDIR"
+  WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "DisplayName" "FileZilla Client ${VERSION}"
+  WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "DisplayIcon" "$INSTDIR\FileZilla.exe"
+  WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "DisplayVersion" "${VERSION}"
+  WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "URLInfoAbout" "http://filezilla-project.org/"
+  WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "HelpLink" "http://filezilla-project.org"
+  WriteRegDWORD SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "NoModify" "1"
+  WriteRegDWORD SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "NoRepair" "1"
+
+  SetOutPath "$INSTDIR\docs"
+  File "${top_srcdir}\docs\fzdefaults.xml.example"
+
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+    
+  ;Create shortcuts
+  SetOutPath "$INSTDIR"
+  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\FileZilla.lnk" "$INSTDIR\filezilla.exe"
+  
+  !insertmacro MUI_STARTMENU_WRITE_END
+
+SectionEnd
+
+!macro INSTALLLANGFILE LANG
+
+  SetOutPath "$INSTDIR\locales\${LANG}"
+  File /oname=filezilla.mo "..\locales\${LANG}.mo"
+  
+!macroend
+
+Section "Language files" SecLang
+
+  ; installlangfiles.nsh is generated by configure and just contains a series of
+  ; !insertmacro INSTALLLANGFILE <lang>
+  !include installlangfiles.nsh
+
+SectionEnd
+
+Section "Shell Extension" SecShellExt
+
+SetOutPath "$INSTDIR"
+  !define LIBRARY_SHELL_EXTENSION
+  !define LIBRARY_COM
+  !define LIBRARY_IGNORE_VERSION
+  !insertmacro InstallLib REGDLL NOTSHARED REBOOT_PROTECTED ../src/fzshellext/.libs\libfzshellext-0.dll $INSTDIR\fzshellext.dll "$INSTDIR"
+
+  !define LIBRARY_X64
+  ${If} ${RunningX64}
+    !insertmacro InstallLib REGDLL NOTSHARED REBOOT_PROTECTED "${top_srcdir}/src/fzshellext\fzshellext_64.dll" $INSTDIR\fzshellext_64.dll "$INSTDIR"
+  ${Else}
+    !insertmacro InstallLib DLL NOTSHARED REBOOT_PROTECTED "${top_srcdir}/src/fzshellext\fzshellext_64.dll" $INSTDIR\fzshellext_64.dll "$INSTDIR"
+  ${Endif}
+  !undef LIBRARY_X64
+
+SectionEnd
+
+Section /o "Desktop Icon" SecDesktop
+
+  CreateShortCut "$DESKTOP\FileZilla Client.lnk" "$INSTDIR\filezilla.exe" "" "$INSTDIR\filezilla.exe" 0
+
+SectionEnd
+
+;--------------------------------
+;Functions
+
+Function PostInstPage
+
+    FindWindow $MUI_TEMP1 "#32770" "" $HWNDPARENT
+    GetDlgItem $MUI_TEMP1 $MUI_TEMP1 1016
+    System::Call user32::IsWindowVisible(i$MUI_TEMP1)i.s
+    Pop $MUI_TEMP1
+
+    StrCmp $MUI_TEMP1 0 +2
+    SetAutoClose false
+
+FunctionEnd
+
+;--------------------------------
+;Descriptions
+
+  ;Language strings
+  LangString DESC_SecMain ${LANG_ENGLISH} "Required program files."
+  LangString DESC_SecLang ${LANG_ENGLISH} "Language files files."
+  LangString DESC_SecShellExt ${LANG_ENGLISH} "Shell extension for advanced drag && drop support. Required for drag && drop from FileZilla into Explorer."
+  LangString DESC_SecDesktop ${LANG_ENGLISH} "Create desktop icon for FileZilla"
+
+  ;Assign language strings to sections
+  !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecMain} $(DESC_SecMain)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecLang} $(DESC_SecLang)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecShellExt} $(DESC_SecShellExt)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} $(DESC_SecDesktop)
+  !insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+;--------------------------------
+;Uninstaller Variables
+
+Var un.REMOVE_ALL_USERS
+Var un.REMOVE_CURRENT_USER
+
+;--------------------------------
+;Uninstaller Functions
+
+Function un.GetUserInfo
+  ClearErrors
+  UserInfo::GetName
+  ${If} ${Errors}
+    StrCpy $IS_ADMIN 1
+    Return
+  ${EndIf}
+
+  Pop $USERNAME
+  UserInfo::GetAccountType
+  Pop $R0
+  ${Switch} $R0
+    ${Case} "Admin"
+    ${Case} "Power"
+      StrCpy $IS_ADMIN 1
+      ${Break}
+    ${Default}
+      StrCpy $IS_ADMIN 0
+      ${Break}
+  ${EndSwitch}
+
+FunctionEnd
+
+Function un.ReadPreviousVersion
+
+  ReadRegStr $R0 HKLM "Software\FileZilla Client" ""
+
+  ${If} $R0 != ""
+    ;Detect version
+    ReadRegStr $R2 HKLM "Software\FileZilla Client" "Version"
+    ${If} $R2 == ""
+      StrCpy $R0 ""
+    ${EndIf}
+  ${EndIf}
+
+  ReadRegStr $R1 HKCU "Software\FileZilla Client" ""
+  
+  ${If} $R1 != ""
+    ;Detect version
+    ReadRegStr $R2 HKCU "Software\FileZilla Client" "Version"
+    ${If} $R2 == ""
+      StrCpy $R1 ""
+    ${EndIf}
+  ${EndIf}
+
+  ${If} $R1 == $INSTDIR
+    Strcpy $un.REMOVE_CURRENT_USER 1
+  ${EndIf}
+  ${If} $R0 == $INSTDIR
+    Strcpy $un.REMOVE_ALL_USERS 1
+  ${EndIf}
+  ${If} $un.REMOVE_CURRENT_USER != 1
+  ${AndIf} $un.REMOVE_ALL_USERS != 1
+    ${If} $R1 != ""
+      Strcpy $un.REMOVE_CURRENT_USER 1
+      ${If} $R0 == $R1
+        Strcpy $un.REMOVE_ALL_USERS 1
+      ${EndIf}
+    ${Else}
+      StrCpy $un.REMOVE_ALL_USERS = 1
+    ${EndIf}
+  ${EndIf}
+
+FunctionEnd
+
+Function un.onInit
+
+  Call un.GetUserInfo
+  Call un.ReadPreviousVersion
+
+  ${If} $un.REMOVE_ALL_USERS == 1
+  ${AndIf} $IS_ADMIN == 0
+    MessageBox MB_ICONSTOP "FileZilla has been installed for all users.$\nPlease restart the uninstaller with Administrator privileges to remove it."
+    Abort
+  ${EndIf}
+  
+FunctionEnd
+
+Function un.RemoveStartmenu
+
+  !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
+  
+  Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\FileZilla.lnk"
+  
+  ;Delete empty start menu parent diretories
+  StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
+ 
+  startMenuDeleteLoop:
+    RMDir $MUI_TEMP
+    GetFullPathName $MUI_TEMP "$MUI_TEMP\.."
+    
+    IfErrors startMenuDeleteLoopDone
+  
+    StrCmp $MUI_TEMP $SMPROGRAMS startMenuDeleteLoopDone startMenuDeleteLoop
+  startMenuDeleteLoopDone:
+
+FunctionEnd
+
+;--------------------------------
+;Uninstaller Section
+
+!macro UNINSTALLLANGFILE LANG
+
+  Delete "$INSTDIR\locales\${LANG}\filezilla.mo"
+  RMDir "$INSTDIR\locales\${LANG}"
+
+!macroend
+
+Section "Uninstall"
+
+  !insertmacro UnInstallLib REGDLL NOTSHARED REBOOT_PROTECTED "$INSTDIR\fzshellext.dll"
+
+  !define LIBRARY_X64
+  ${If} ${RunningX64}
+    !insertmacro UnInstallLib REGDLL NOTSHARED REBOOT_PROTECTED "$INSTDIR\fzshellext_64.dll"
+  ${Else}
+    !insertmacro UnInstallLib DLL NOTSHARED REBOOT_PROTECTED "$INSTDIR\fzshellext_64.dll"
+  ${Endif}
+  !undef LIBRARY_X64
+
+  Delete "$INSTDIR\filezilla.exe"
+  Delete "$INSTDIR\fzsftp.exe"
+  Delete "$INSTDIR\mingwm10.dll"
+  Delete "mingwm10.dll"
+  Delete "$INSTDIR\GPL.html"
+  Delete "$INSTDIR\NEWS"
+  Delete "$INSTDIR\AUTHORS"
+  Delete "$INSTDIR\resources\*.xrc"
+  Delete "$INSTDIR\resources\*.png"
+  Delete "$INSTDIR\resources\finished.wav"
+  Delete "$INSTDIR\resources\themes.xml"
+  Delete "$INSTDIR\resources\16x16\*.png"
+  Delete "$INSTDIR\resources\32x32\*.png"
+  Delete "$INSTDIR\resources\48x48\*.png"
+  Delete "$INSTDIR\resources\cyril\16x16\*.png"
+  Delete "$INSTDIR\resources\cyril\32x32\*.png"
+  Delete "$INSTDIR\resources\blukis\16x16\*.png"
+  Delete "$INSTDIR\resources\blukis\32x32\*.png"
+  Delete "$INSTDIR\resources\blukis\48x48\*.png"
+
+  ; uninstalllangfiles.nsh is generated by configure and just contains a series of
+  ; !insertmacro UNINSTALLLANGFILE <lang>
+  !include uninstalllangfiles.nsh
+
+  Delete "$INSTDIR\uninstall.exe"
+
+  Delete "$INSTDIR\docs\fzdefaults.xml.example"
+
+  RMDir "$INSTDIR\locales"
+  RMDir "$INSTDIR\resources\48x48"
+  RMDir "$INSTDIR\resources\32x32"
+  RMDir "$INSTDIR\resources\16x16"
+  RMDir "$INSTDIR\resources\cyril\32x32"
+  RMDir "$INSTDIR\resources\cyril\16x16"
+  RMDir "$INSTDIR\resources\cyril"
+  RMDir "$INSTDIR\resources\blukis\48x48"
+  RMDir "$INSTDIR\resources\blukis\32x32"
+  RMDir "$INSTDIR\resources\blukis\16x16"
+  RMDir "$INSTDIR\resources\blukis"
+  RMDir "$INSTDIR\resources"
+  RMDir "$INSTDIR\docs"
+  RMDir /REBOOTOK "$INSTDIR"
+
+  ${If} $un.REMOVE_ALL_USERS == 1
+    SetShellVarContext all
+    Call un.RemoveStartmenu
+
+    DeleteRegKey /ifempty HKLM "Software\FileZilla Client"
+    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client"
+
+    Delete "$DESKTOP\FileZilla Client.lnk"
+  ${EndIf}
+  ${If} $un.REMOVE_CURRENT_USER == 1
+    SetShellVarContext current
+    Call un.RemoveStartmenu
+
+    DeleteRegKey /ifempty HKCU "Software\FileZilla Client"
+    DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client"
+
+    Delete "$DESKTOP\FileZilla Client.lnk"
+  ${EndIf}
+
+SectionEnd

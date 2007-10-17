@@ -1,0 +1,4619 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FileZilla 3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-10-14 14:24+0200\n"
+"PO-Revision-Date: 2007-10-14 17:43+0100\n"
+"Last-Translator: Michal Molhanec <michal@molhanec.net>\n"
+"Language-Team: Michal Molhanec <michal@molhanec.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Czech\n"
+"X-Poedit-Country: CZECH REPUBLIC\n"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:53
+#: ../../locales/../src/interface/statuslinectrl.cpp:136
+msgid "%H:%M:%S elapsed"
+msgstr "%H.%M:%S uběhlo"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:57
+#: ../../locales/../src/interface/statuslinectrl.cpp:161
+msgid "%H:%M:%S left"
+msgstr "%H.%M:%S zbývá"
+
+#: ../../locales/../src/interface/QueueView.cpp:2206
+#, c-format
+msgid "%d files added to queue"
+msgstr "%d souborů přidáno do fronty"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:47
+#, c-format
+msgid "%s - Certificate expired!"
+msgstr "%s - Certifikát vypršel!"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:31
+#, c-format
+msgid "%s - Not yet valid!"
+msgstr "%s - Ještě neplatná!"
+
+#: ../../locales/../src/interface/updatewizard.cpp:667
+#, c-format
+msgid "%s bytes"
+msgstr "%s bajtů"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:153
+#: ../../locales/../src/interface/updatewizard.cpp:651
+#, c-format
+msgid "%s bytes (%d B/s)"
+msgstr "%s bajtů (%d B/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:151
+#: ../../locales/../src/interface/updatewizard.cpp:649
+#, c-format
+msgid "%s bytes (%d.%d KB/s)"
+msgstr "%s bajtů (%d,%d KiB/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:149
+#: ../../locales/../src/interface/updatewizard.cpp:647
+#, c-format
+msgid "%s bytes (%d.%d MB/s)"
+msgstr "%s bajtů (%d,%d MiB/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:171
+#, c-format
+msgid "%s bytes (? B/s)"
+msgstr "%s bajtů (? B/s)"
+
+#: ../../locales/../src/interface/FileZilla.cpp:731
+#, c-format
+msgid ""
+"%s could not be found. Without this component of FileZilla, SFTP will not "
+"work.\n"
+"\n"
+"Possible solutions:\n"
+"- Make sure %s is in a directory listed in your PATH environment variable.\n"
+"- Set the full path to %s in the FZ_FZSFTP environment variable."
+msgstr ""
+"%s nenalezen. Bez tohoto souboru nemůže fungovat SFTP.\n"
+"\n"
+"Možná řešení:\n"
+"- Zajistěte, aby se soubor %s nacházel ve složce, která je uvedena v "
+"proměnné prostředí PATH.\n"
+"- Nastavte proměnnou prostředí FZ_FZSFTP na plnou cestu k souboru %s."
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:64
+#, c-format
+msgid "%s with %d bits"
+msgstr "%s s %d bity"
+
+#: resources.h:448
+msgid "&About..."
+msgstr "&O programu Filezilla"
+
+#: resources.h:83
+msgid "&Account:"
+msgstr "Kon&to:"
+
+#: resources.h:97 resources.h:154 resources.h:526
+msgid "&Active"
+msgstr "&Aktivní"
+
+#: resources.h:452 resources.h:462 resources.h:507
+msgid "&Add files to queue"
+msgstr "Přidat soubory do &fronty"
+
+#: resources.h:21
+msgid "&Always trust certificate in future sessions."
+msgstr "Pro budoucí sezení vždy důvěřovat certifikátu."
+
+#: resources.h:265
+msgid "&Always trust this host, add this key to the cache"
+msgstr "&Vždy věřit tomuto hostiteli, přidat tento klíč do cache"
+
+#: resources.h:214
+msgid "&Always use default editor"
+msgstr "Vž&dy použít výchozí editor."
+
+#: resources.h:59
+msgid "&Always use this action"
+msgstr "&Vždy provést tuto akci"
+
+#: resources.h:349 resources.h:368
+msgid "&Ask for action"
+msgstr "&Zeptat se"
+
+#: resources.h:127
+msgid "&Auto"
+msgstr "&Automatická detekce"
+
+#: resources.h:103
+msgid "&Autodetect"
+msgstr "&Automatická detekce"
+
+#: resources.h:504
+msgid "&Automatically remove successful transfers"
+msgstr "Automaticky odstraňovat úspěšné přenosy"
+
+#: resources.h:129
+msgid "&Binary"
+msgstr "&Binární"
+
+#: resources.h:196
+msgid "&Binary prefixes using SI symbols. (e.g. 1 KB = 1024 bytes.)"
+msgstr "&Binární předpony s použitím značek SI (např. 1 kB = 1024 bajtů)."
+
+#: resources.h:89 resources.h:211
+msgid "&Browse..."
+msgstr "P&rocházet..."
+
+#: resources.h:40
+msgid "&Burst tolerance:"
+msgstr "Tolerance k vý&kyvům:"
+
+#: resources.h:63 resources.h:121 resources.h:125 resources.h:223
+#: resources.h:267 resources.h:279
+msgid "&Cancel"
+msgstr "&Storno"
+
+#: resources.h:331
+msgid "&Check for beta versions of FileZilla"
+msgstr "Zjišťovat i &betaverze FileZilly."
+
+#: resources.h:436
+msgid "&Clear private data..."
+msgstr "&Vymazat důvěrné údaje..."
+
+#: resources.h:484
+msgid "&Close FileZilla"
+msgstr "&Ukončit FileZillu"
+
+#: resources.h:109
+msgid "&Connect"
+msgstr "Spo&jit"
+
+#: resources.h:300
+msgid "&Copy"
+msgstr "&Kopírovat"
+
+#: resources.h:493
+msgid "&Copy to clipboard"
+msgstr "Zkopírovat do &schránky"
+
+#: resources.h:496
+msgid "&Crash"
+msgstr "&Spadnout"
+
+#: resources.h:454 resources.h:465 resources.h:509
+msgid "&Create directory"
+msgstr "Nová slož&ka"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:516
+msgid "&Debug"
+msgstr "&Ladění"
+
+#: resources.h:201
+msgid "&Debug information in message log:"
+msgstr "&Ladicí informace v okně zpráv:"
+
+#: resources.h:197
+msgid "&Decimal prefixes using SI symbols (e.g. 1 KB = 1000 bytes)"
+msgstr "&Desítkové předpony s použitím značek SI (např. 1 kB = 1000 bajtů)."
+
+#: resources.h:210
+msgid "&Default editor:"
+msgstr "Výchozí &editor:"
+
+#: resources.h:438 resources.h:476
+msgid "&Default file exists action..."
+msgstr "Nastavit &výchozí chování, pokud soubor již existuje"
+
+#: resources.h:69 resources.h:282 resources.h:298
+msgid "&Delete"
+msgstr "O&dstranit"
+
+#: resources.h:441
+msgid "&Disconnect"
+msgstr "&Odpojit"
+
+#: resources.h:485
+msgid "&Disconnect from server"
+msgstr "&Odpojit od serveru"
+
+#: resources.h:194
+msgid "&Display size in bytes"
+msgstr "&Zobrazovat velikost v bajtech."
+
+#: ../../locales/../src/interface/conditionaldialog.cpp:25
+msgid "&Don't show this dialog again."
+msgstr "&Příště už nezobrazovat toto okno."
+
+#: resources.h:460 resources.h:505
+msgid "&Download"
+msgstr "&Stáhnout"
+
+#: resources.h:429
+msgid "&Edit"
+msgstr "Úpr&avy"
+
+#: resources.h:284
+msgid "&Edit filters..."
+msgstr "Up&ravit filtry"
+
+#: resources.h:177
+msgid "&Enable automatic update check"
+msgstr "&Povolit automatické zjišťování, zda existují novější verze"
+
+#: resources.h:107
+msgid "&Encoding:"
+msgstr "&Kódování:"
+
+#: resources.h:492
+msgid "&Enter custom command..."
+msgstr "&Zadat vlastní příkaz..."
+
+#: resources.h:229
+msgid "&Execute"
+msgstr "&Spouštění"
+
+#: resources.h:395
+msgid "&Export Site Manager entries"
+msgstr "&Exportovat položky ze správce míst"
+
+#: resources.h:434
+msgid "&Export..."
+msgstr "&Exportovat..."
+
+#: resources.h:4
+msgid "&Fall back to active mode"
+msgstr "V&rátit se k aktivnímu režimu"
+
+#: resources.h:423
+msgid "&File"
+msgstr "&Soubor"
+
+#: resources.h:471 resources.h:515
+msgid "&File Attributes..."
+msgstr "Změnit &atributy souboru..."
+
+#: resources.h:281
+msgid "&Filter sets:"
+msgstr "&Sady filtrů:"
+
+#: resources.h:296
+msgid "&Filters:"
+msgstr "&Filtry:"
+
+#: resources.h:412
+msgid "&Finish editing and delete local file"
+msgstr "&Ukonči editování a odstraň místní soubor"
+
+#: resources.h:445
+msgid "&Help"
+msgstr "Nápo&věda"
+
+#: resources.h:478
+msgid "&Highest"
+msgstr "&Nejvyšší"
+
+#: resources.h:318
+msgid "&Highest available port:"
+msgstr "N&ejvyšší využitelný port:"
+
+#: resources.h:72 resources.h:564
+msgid "&Host:"
+msgstr "&Hostitel:"
+
+#: resources.h:195
+msgid "&IEC binary prefixes (e.g. 1 KiB = 1024 bytes)"
+msgstr "Binární předpony &IEC (např. 1 KiB = 1024 bajtů)."
+
+#: resources.h:183
+msgid "&ISO 8601 (example: 2007-09-15)"
+msgstr "&ISO 8601 (příklad: 2007-09-15)"
+
+#: resources.h:435
+msgid "&Import..."
+msgstr "&Importovat..."
+
+#: resources.h:216
+msgid "&Inherit system's filetype associations"
+msgstr "Používat nastavení s&ystému"
+
+#: resources.h:315
+msgid "&Limit local ports used by FileZilla"
+msgstr "&Omezit lokální porty, které může FileZilla používat"
+
+#: resources.h:99
+msgid "&Limit number of simultaneous connections"
+msgstr "Ome&zit počet současných spojení"
+
+#: resources.h:75
+msgid "&Logontype:"
+msgstr "Způso&b přihlašování:"
+
+#: resources.h:481
+msgid "&Low"
+msgstr "Ní&zká"
+
+#: resources.h:100
+msgid "&Maximum number of connections:"
+msgstr "Ma&ximální počet spojení:"
+
+#: resources.h:432
+msgid "&Network configuration wizard..."
+msgstr "&Průvodce nastavením sítě..."
+
+#: resources.h:297
+msgid "&New"
+msgstr "&Nový"
+
+#: resources.h:66
+msgid "&New Site"
+msgstr "Nové &místo"
+
+#: ../../locales/../src/interface/updatewizard.cpp:800
+msgid "&New version available!"
+msgstr "&Nová verze je k dispozici!"
+
+#: resources.h:414
+msgid "&No"
+msgstr "&Ne"
+
+#: resources.h:480
+msgid "&Normal"
+msgstr "No&rmální"
+
+#: resources.h:238
+msgid "&Numeric value:"
+msgstr "Číselná &hodnota:"
+
+#: resources.h:110 resources.h:120 resources.h:124
+msgid "&OK"
+msgstr "&OK"
+
+#: resources.h:54 resources.h:350 resources.h:369
+msgid "&Overwrite"
+msgstr "&Přepsat"
+
+#: resources.h:98
+msgid "&Passive"
+msgstr "Pasi&vní"
+
+#: resources.h:118
+msgid "&Password:"
+msgstr "&Heslo:"
+
+#: resources.h:488
+msgid "&Play sound"
+msgstr "&Přehrát zvuk"
+
+#: resources.h:73 resources.h:568
+msgid "&Port:"
+msgstr "Po&rt:"
+
+#: resources.h:404
+msgid "&Queue"
+msgstr "&Fronta"
+
+#: resources.h:570
+msgid "&Quickconnect"
+msgstr "&Rychlé spojení"
+
+#: resources.h:227
+msgid "&Read"
+msgstr "Č&tení"
+
+#: resources.h:440
+msgid "&Reconnect"
+msgstr "Opakovat &spojení"
+
+#: resources.h:119
+msgid "&Remember password for this session"
+msgstr "&Zapamatovar si heslo pro toto sezení"
+
+#: resources.h:133
+msgid "&Remove"
+msgstr "&Odebrat"
+
+#: resources.h:475
+msgid "&Remove selected"
+msgstr "&Odebrat vybrané"
+
+#: resources.h:68 resources.h:299 resources.h:458 resources.h:469
+#: resources.h:513
+msgid "&Rename"
+msgstr "&Přejmenovat"
+
+#: resources.h:563
+msgid "&Restart Wizard"
+msgstr "&Restartovat průvodce"
+
+#: resources.h:56 resources.h:352 resources.h:371
+msgid "&Resume"
+msgstr "&Obnovit stahování"
+
+#: resources.h:486
+msgid "&Run command..."
+msgstr "&Spustit příkaz..."
+
+#: resources.h:151
+msgid "&Run configuration wizard now..."
+msgstr "Spusť průvodce &nastavením sítě..."
+
+#: resources.h:180
+msgid "&Run update check now..."
+msgstr "Spustit &kontrolu nových verzí nyní..."
+
+#: resources.h:283
+msgid "&Save as..."
+msgstr "&Uložit jako..."
+
+#: resources.h:174
+msgid "&Select language:"
+msgstr "&Vyber jazyk:"
+
+#: resources.h:439
+msgid "&Server"
+msgstr "S&erver"
+
+#: resources.h:403
+msgid "&Settings"
+msgstr "&Nastavení"
+
+#: resources.h:430
+msgid "&Settings..."
+msgstr "&Nastavení..."
+
+#: resources.h:200
+msgid "&Show debug menu"
+msgstr "&Zobrazovat položku Ladění v hlavní nabídce"
+
+#: resources.h:487
+msgid "&Show message"
+msgstr "&Zobrazit zprávu"
+
+#: resources.h:424
+msgid "&Site Manager..."
+msgstr "&Správce míst..."
+
+#: resources.h:58
+msgid "&Skip"
+msgstr "Přes&kočit"
+
+#: resources.h:143
+msgid "&Swap local and remote panes"
+msgstr "&Prohodit místní a vzdálené panely"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:223
+msgid "&Test"
+msgstr "&Test"
+
+#: resources.h:164
+msgid "&Theme:"
+msgstr "&Téma:"
+
+#: resources.h:437
+msgid "&Transfer"
+msgstr "&Přenos"
+
+#: resources.h:95
+msgid "&Transfer mode:"
+msgstr "&Režim přenosu:"
+
+#: resources.h:136
+msgid "&Treat dotfiles (filenames starting with a dot) as Ascii files"
+msgstr "Rozpoznávat soubory &začínající tečkou jako ASCII soubory"
+
+#: resources.h:418
+msgid "&Unedit"
+msgstr "&Vrátit úpravy"
+
+#: resources.h:277
+msgid "&Update cached key for this host"
+msgstr "&Aktualizovat klíč uložený v cache pro tohoto hostitele"
+
+#: resources.h:450
+msgid "&Upload"
+msgstr "&Nahrát na server"
+
+#: resources.h:3
+msgid "&Use the server's external IP address instead"
+msgstr "Po&užít místo toho externí IP adresu serveru"
+
+#: resources.h:198
+msgid "&Use thousands separator"
+msgstr "Oddělo&vat řády"
+
+#: resources.h:81
+msgid "&User:"
+msgstr "&Uživatelské jméno:"
+
+#: resources.h:566
+msgid "&Username:"
+msgstr "&Uživatelské jméno:"
+
+#: ../../locales/../src/interface/updatewizard.cpp:798
+#, c-format
+msgid "&Version %s"
+msgstr "&Verze %s"
+
+#: resources.h:464
+msgid "&View / Edit"
+msgstr "Prohlížet/&Upravovat"
+
+#: resources.h:228
+msgid "&Write"
+msgstr "&Zápis"
+
+#: resources.h:413
+msgid "&Yes"
+msgstr "&Ano"
+
+#: ../../locales/../src/interface/state.cpp:103
+#, c-format
+msgid "'%s' does not exist or cannot be accessed."
+msgstr "'%s' neexistuje nebo je nepřístupné."
+
+#: ../../locales/../src/interface/sitemanager.cpp:530
+msgid "'Account' logontype not supported by selected protocol"
+msgstr "Vybraný protokol nepodporuje způsob přihlašování 'Konto'"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:569
+msgid ""
+"'quote' is usually a local command used by commandline clients to send the "
+"arguments following 'quote' to the server. You might want to enter the raw "
+"command without the leading 'quote'."
+msgstr ""
+"Obvykle je 'quote' místní příkaz klientů pracujících v příkazovém řádku, "
+"který umožňuje poslat příkaz následující za 'quote' přímo serveru. Možná "
+"nechcete poslat 'quote' serveru, ale zadat přímo příkaz bez úvodního 'quote'."
+
+#: resources.h:28 resources.h:30
+msgid "(0 for no limit)"
+msgstr "(0 ... bez omezení)"
+
+#: resources.h:159
+msgid "(0-99)"
+msgstr "(0-99)"
+
+#: resources.h:161
+msgid "(0-999 seconds)"
+msgstr "(0-999 sekund)"
+
+#: resources.h:26
+msgid "(1-10)"
+msgstr "(1-10)"
+
+#: resources.h:33
+msgid "(5-9999, 0 to disable)"
+msgstr "(5-9999, 0 pro vypnutí)"
+
+#: resources.h:179
+msgid "(At least 7 days)"
+msgstr "(Alespoň 7 dní)"
+
+#: resources.h:191
+msgid "(example: %H:%M)"
+msgstr "(příklad: %H:%M)"
+
+#: resources.h:185
+msgid "(example: %Y-%m-%d)"
+msgstr "(příklad: %Y-%m-%d)"
+
+#: resources.h:37 resources.h:39
+msgid "(in KB/s)"
+msgstr "(v KiB/s)"
+
+#: ../../locales/../src/interface/updatewizard.cpp:659
+msgid ", %H:%M:%S left"
+msgstr ", %H:%M:%S zbývá"
+
+#: ../../locales/../src/interface/updatewizard.cpp:663
+msgid ", --:--:-- left"
+msgstr ", --:--:-- zbývá"
+
+#: resources.h:551
+msgid "-"
+msgstr "-"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:165
+#: ../../locales/../src/interface/statuslinectrl.cpp:170
+msgid "--:--:-- left"
+msgstr "--:--:-- zbývá"
+
+#: resources.h:202
+msgid "0 - None"
+msgstr "0 - Žádné"
+
+#: resources.h:203
+msgid "1 - Warning"
+msgstr "1 - Varování"
+
+#: resources.h:204
+msgid "2 - Info"
+msgstr "2 - Informativní"
+
+#: resources.h:205
+msgid "3 - Verbose"
+msgstr "3 - Podrobné"
+
+#: resources.h:206
+msgid "4 - Debug"
+msgstr "4 - Ladicí"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:109
+msgid "A default editor needs to be set."
+msgstr "Je nutné nastavit výchozí editor."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:140
+#: ../../locales/../src/interface/RemoteTreeView.cpp:106
+msgid "A directory cannot be dragged into one if its subdirectories."
+msgstr "Složku nelze přetáhnout do složky, která je v ní vnořena."
+
+#: resources.h:523
+msgid ""
+"A few servers don't allow passive mode or are misconfigured. In such cases "
+"you would have to use active mode. In active mode, FileZilla opens a port "
+"and asks the server to connect to it."
+msgstr ""
+"Pár serverů nepovoluje pasivní režim nebo jsou špatně nastaveny. V takových "
+"případech je nutné použít aktivní režim. V aktivním režimu FileZilla otevře "
+"port a požádá server, aby se na něj připojil."
+
+#: resources.h:409
+msgid "A file previously opened has been changed:"
+msgstr "Dříve otevřený soubor byl změněn:"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2429
+msgid ""
+"A file with that name is already being edited. Discard old file and download "
+"the new file?"
+msgstr ""
+"Soubor s tímto jménem je již upravován. Zahodit starý soubor a stáhnout nový?"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2418
+msgid "A file with that name is already being transferred."
+msgstr "Soubor s tímto jménem je již přenášen."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2423
+msgid ""
+"A file with that name is still being edited. Please close it and try again."
+msgstr ""
+"Soubor s tímto jménem je stále ještě upravován. Zavřete ho a zkuste to znovu."
+
+#: ../../locales/../src/interface/FileZilla.cpp:623
+msgid ""
+"A local filename could not be decoded.\n"
+"Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
+"correctly.\n"
+"Unless you fix this problem, files might be missing in the file listings.\n"
+"No further warning will be displayed this session."
+msgstr ""
+"Název místního souboru nemůže být dekódován.\n"
+"Ubezpečte se prosím, že proměnná prostředí LC_CTYPE (nebo LC_ALL) je "
+"nastavena správně.\n"
+"Dokud tento problém nevyřešíte, ve výpisu souborů mohou chybět soubory.\n"
+"Žádná další varování nebudou již během tohoto sezení zobrazena."
+
+#: resources.h:333
+msgid "A newer version of FileZilla is available:"
+msgstr "Novější verze FileZilly je k dispozici:"
+
+#: resources.h:132
+msgid "A&dd"
+msgstr "&Přidat"
+
+#: resources.h:382
+msgid "A&llow resume of ascii files"
+msgstr "Povo&lit navazování ASCII souborů"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:99
+msgid "A&pply only to downloads"
+msgstr "Platí jen při &stahování"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:155
+msgid "A&pply only to uploads"
+msgstr "Platí jen při nahrávání na &server"
+
+#: resources.h:241
+msgid "A&pply to all files and directories"
+msgstr "Použít pro &všechny soubory a složky"
+
+#: resources.h:128
+msgid "A&scii"
+msgstr "AS&CII"
+
+#: resources.h:357 resources.h:375
+msgid "A&sk for action"
+msgstr "Z&eptat se"
+
+#: resources.h:246
+msgid "About FileZilla"
+msgstr "O programu Filezilla"
+
+#: resources.h:80 ../../locales/../src/interface/sitemanager.cpp:527
+#: ../../locales/../src/interface/sitemanager.cpp:577
+#: ../../locales/../src/interface/sitemanager.cpp:778
+#: ../../locales/../src/interface/sitemanager.cpp:779
+#: ../../locales/../src/interface/sitemanager.cpp:817
+#: ../../locales/../src/interface/sitemanager.cpp:1049
+msgid "Account"
+msgstr "Konto"
+
+#: resources.h:483
+msgid "Action after queue &completion"
+msgstr "Či&nnost po zpracování fronty"
+
+#: resources.h:417
+msgid "Action on selected file:"
+msgstr "Akce s vybraným souborem:"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:103
+msgid "Active mode"
+msgstr "Aktivní režim"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:593
+msgid ""
+"Active mode FTP test failed. FileZilla does not know the correct external IP "
+"address."
+msgstr ""
+"Test aktivního režimu FTP selhal. FileZilla nezná správnou externí IP adresu."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:580
+msgid ""
+"Active mode FTP test failed. FileZilla does not know the correct external IP "
+"address. In addition to that, your router has modified the sent address."
+msgstr ""
+"Test aktivního režimu FTP selhal. FileZilla nezná správnou externí IP "
+"adresu. Navíc váš router změnil zaslanou adresu."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:568
+msgid ""
+"Active mode FTP test failed. FileZilla knows the correct external IP "
+"address, but your router has misleadingly modified the sent address."
+msgstr ""
+"Test aktivního režimu FTP selhal. FileZilla zná správnou externí IP adresu, "
+"ale váš router nesprávně změnil zaslanou adresu."
+
+#: resources.h:326
+msgid "Active mode IP"
+msgstr "IP adresa pro aktivní režim"
+
+#: resources.h:306
+msgid "Add &more"
+msgstr "Přida&t další"
+
+#: resources.h:508
+msgid "Add selected directory to the transfer queue"
+msgstr "Přidat vybranou složku do fronty přenosů"
+
+#: resources.h:453 resources.h:463
+msgid "Add selected files and folders to the transfer queue"
+msgstr "Přidat vybrané soubory a složky do fronty přenosů"
+
+#: resources.h:91
+msgid "Adjust server timezone offset:"
+msgstr "Nastav posun časové zóny serveru:"
+
+#: resources.h:85
+msgid "Advanced"
+msgstr "Pokročilá"
+
+#: resources.h:330
+msgid "Advanced options:"
+msgstr "Pokročilé možnosti:"
+
+#: resources.h:552
+msgid "All ports in the given range have to be between 1024 and 65535."
+msgstr "Všechny zadané porty musí být mezi 1024 a 65535."
+
+#: resources.h:155
+msgid "Allow fall back to other transfer mode on failure"
+msgstr "Povolit návrat k druhému režimu přenosu při chybě"
+
+#: resources.h:527
+msgid "Allow fallback to other transfer mode on failure"
+msgstr "Povolit návrat k druhému režimu přenosu při chybě"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:625
+msgid ""
+"Also, not all servers support this feature and may return incorrect listings "
+"if 'View hidden files' is enabled. Although FileZilla performs some tests to "
+"see if the server supports this feature, the test may fail."
+msgstr ""
+"Některé servery nemusí tuto vlastnost podporovat a mohou vracet špatné "
+"seznamy souborů, pokud je toto nastavení aktivní. FileZilla se sice snaží "
+"server otestovat, zda tuto vlastnost podporuje, ale tyto testy mohou selhat."
+
+#: ../../locales/../src/interface/updatewizard.cpp:836
+msgid ""
+"Alternatively, visit http://filezilla-project.org to download the most "
+"recent version."
+msgstr ""
+"Nebo navštivte http://filezilla-project.org pro získání nejnovější verze "
+"FileZilly."
+
+#: resources.h:76 ../../locales/../src/interface/sitemanager.cpp:568
+#: ../../locales/../src/interface/sitemanager.cpp:777
+#: ../../locales/../src/interface/sitemanager.cpp:986
+#: ../../locales/../src/interface/sitemanager.cpp:1052
+msgid "Anonymous"
+msgstr "Anonymní"
+
+#: resources.h:304
+msgid "Any of the following"
+msgstr "Splňují některou z následujících podmínek"
+
+#: resources.h:243
+msgid "App&ly to directories only"
+msgstr "Použít &jen pro složky"
+
+#: resources.h:294
+msgid "Apply"
+msgstr "Použít"
+
+#: resources.h:60
+msgid "Apply to &current queue only"
+msgstr "Platí jen na &aktuální frontu"
+
+#: resources.h:242
+msgid "Apply to &files only"
+msgstr "Použít jen pro sou&bory"
+
+#: ../../locales/../src/interface/updatewizard.cpp:195
+msgid "Archive"
+msgstr "Archiv"
+
+#: resources.h:78 ../../locales/../src/interface/sitemanager.cpp:813
+#: ../../locales/../src/interface/sitemanager.cpp:1043
+msgid "Ask for password"
+msgstr "Zeptat se na heslo"
+
+#: resources.h:548
+msgid "Ask operating system for a port."
+msgstr "Zeptat se operačního systému na port."
+
+#: resources.h:320 resources.h:538
+msgid "Ask your operating system for the external IP address"
+msgstr "Zeptat se operačního systému na externí IP adresu"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:138
+msgid "Associated program not found:"
+msgstr "Přidružený program nebyl nalezen:"
+
+#: ../../locales/../src/interface/filteredit.cpp:547
+msgid "At least one filter condition is incomplete"
+msgstr "Nejméně jedna podmínka filtru není kompletní"
+
+#: resources.h:557
+msgid "At this point, all required information has been gathered."
+msgstr "Všechny informace jsou již získány."
+
+#: resources.h:165
+msgid "Author:"
+msgstr "Autor:"
+
+#: resources.h:130
+msgid "Automatic file type classification"
+msgstr "Automatické rozpoznávání typů souborů"
+
+#: resources.h:176
+msgid "Automatic update check"
+msgstr "Automatická kontrola nových verzí"
+
+#: ../../locales/../src/interface/edithandler.cpp:672
+msgid "Being edited"
+msgstr "Editován"
+
+#: resources.h:142
+msgid "Blackboard"
+msgstr "Tabule"
+
+#: ../../locales/../src/interface/state.cpp:273
+msgid "Break current connection?"
+msgstr "Přerušit současné spojení?"
+
+#: resources.h:253
+msgid "Build date:"
+msgstr "Datum sestavení:"
+
+#: resources.h:251
+msgid "Build information"
+msgstr "Informace o sestavení"
+
+#: resources.h:316
+msgid ""
+"By default uses any available local port to establish transfers in active "
+"mode. If you want to limit FileZilla to use only a small range of ports, "
+"please enter the port range below."
+msgstr ""
+"Standardně FileZilla používá kterýkoli dostupný lokální port k navázání "
+"spojení v aktivním režimu. Jestliže chcete omezit FileZillu, aby používala "
+"pouze omezený rozsah portů, zadejte prosím níže rozsah portů, který se má "
+"používat:"
+
+#: resources.h:332
+msgid "C&heck for nightly builds of FileZilla"
+msgstr ""
+"Zjišťovat i vývojové verze FileZilly, které se automaticky sestavují každou "
+"&noc."
+
+#: resources.h:494
+msgid "C&lear all"
+msgstr "&Vymazat vše"
+
+#: resources.h:184
+msgid "C&ustom"
+msgstr "&Vlastní"
+
+#: resources.h:217
+msgid "C&ustom filetype associations:"
+msgstr "Vlas&tní typy souborů:"
+
+#: ../../locales/../src/engine/transfersocket.cpp:603
+msgid "Can't read from file"
+msgstr "Nemohu číst ze souboru"
+
+#: ../../locales/../src/engine/transfersocket.cpp:577
+msgid "Can't write data to file, disk is full."
+msgstr "Nemohu zapsat data do souboru, disk je plný."
+
+#: ../../locales/../src/engine/transfersocket.cpp:579
+#: ../../locales/../src/engine/transfersocket.cpp:582
+#: ../../locales/../src/engine/transfersocket.cpp:647
+msgid "Can't write data to file."
+msgstr "Nemohu zapsat data do souboru."
+
+#: resources.h:23 resources.h:245 resources.h:293 resources.h:313
+#: resources.h:365 resources.h:392 resources.h:399 resources.h:407
+msgid "Cancel"
+msgstr "Storno"
+
+#: resources.h:585
+msgid "Cancel current operation"
+msgstr "Stornuje aktuální operaci"
+
+#: resources.h:586
+msgid "Cancels the current operation"
+msgstr "Stornuje aktuální operaci"
+
+#: ../../locales/../src/interface/state.cpp:115
+#, c-format
+msgid "Cannot access '%s', no media inserted or drive not ready."
+msgstr ""
+"Nemohu přistoupit k '%s', nevložili jste médium nebo jednotka není "
+"připravena."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2392
+#: ../../locales/../src/interface/RemoteListView.cpp:2399
+msgid "Cannot edit file"
+msgstr "Nemohu editovat soubor"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:251
+msgid ""
+"Cannot establish FTP connection to an SFTP server. Please select proper "
+"protocol."
+msgstr ""
+"Nemohu navázat FTP spojení s SFTP serverem. Vyberte prosím správný protokol."
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:30
+msgid "Cannot load Quickconnect bar from resource file"
+msgstr "Nemohu načíst lištu rychlého spojení ze souboru prostředků"
+
+#: ../../locales/../src/interface/import.cpp:26
+msgid "Cannot load file, not a valid XML file."
+msgstr "Soubor neobsahuje platné XML, nemohu ho načíst. "
+
+#: ../../locales/../src/interface/Mainfrm.cpp:502
+msgid "Cannot load main menu from resource file"
+msgstr "Nemohu načíst hlavní menu ze souboru prostředků"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:758
+msgid "Cannot load toolbar from resource file"
+msgstr "Nemohu načíst nástrojovou lištu ze souboru prostředků"
+
+#: ../../locales/../src/interface/sitemanager.cpp:654
+msgid "Cannot rename entry"
+msgstr "Nemohu přejmenovat položku"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1770
+msgid "Cannot rename file"
+msgstr "Nemohu přejmenovat soubor"
+
+#: ../../locales/../src/interface/edithandler.cpp:638
+msgid "Cannot show dialog"
+msgstr "Nemohu zobrazit dialog"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2418
+msgid "Cannot view / edit selected file"
+msgstr "Nemohu prohlížet/upravovat vybraný soubor"
+
+#: resources.h:386
+msgid "Categories"
+msgstr "Oblasti"
+
+#: resources.h:18
+msgid "Certificate issuer"
+msgstr "Vydavatel certifikátu"
+
+#: resources.h:117
+msgid "Challenge:"
+msgstr "Výzva:"
+
+#: resources.h:224
+msgid "Change file attributes"
+msgstr "Změnit atributy souboru"
+
+#: resources.h:472 resources.h:516
+msgid "Change the file permissions."
+msgstr "Změnit oprávnění souboru."
+
+#: ../../locales/../src/interface/FileZilla.cpp:623
+msgid "Character encoding issue"
+msgstr "Problém s kódováním znaku"
+
+#: resources.h:101
+msgid "Charset"
+msgstr "Znaková sada"
+
+#: resources.h:446
+msgid "Check for &updates..."
+msgstr "&Zjistit, zda existují novější verze..."
+
+#: resources.h:447
+msgid "Check for newer versions of FileZilla"
+msgstr "Zjistit novější verze FileZilly"
+
+#: ../../locales/../src/interface/updatewizard.cpp:59
+msgid "Check for updates"
+msgstr "Zjistit, zda existují novější verze"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:748
+msgid "Checking for correct external IP address"
+msgstr "Zjišťuji správnou externí IP adresu"
+
+#: resources.h:328
+msgid "Checking for updates"
+msgstr "Zjišťuji, zda existují novější verze"
+
+#: ../../locales/../src/interface/sitemanager.cpp:926
+msgid "Choose the default local directory"
+msgstr "Vyberte výchozí místní složku"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:814
+msgid "Chunk data improperly terminated"
+msgstr "Části dat chybně ukončeny"
+
+#: resources.h:139
+msgid "Classic"
+msgstr "Klasické"
+
+#: resources.h:389
+msgid "Clear &Site Manager entries"
+msgstr "Vymazat položky ve &správci míst"
+
+#: resources.h:495
+msgid "Clear &layout cache"
+msgstr "&Vymazat vyrovnávací paměť rozvržení dialogů"
+
+#: resources.h:387
+msgid "Clear &quickconnect history"
+msgstr "Vymazat historii &rychlých spojení"
+
+#: resources.h:388
+msgid "Clear &reconnect information"
+msgstr "Vymazat informace pro &znovuspojení"
+
+#: resources.h:390
+msgid "Clear &transfer queue"
+msgstr "Vymazat &frontu přenosů"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:123
+msgid "Clear history"
+msgstr "Odstranit historii"
+
+#: resources.h:384 ../../locales/../src/interface/clearprivatedata.cpp:34
+#: ../../locales/../src/interface/clearprivatedata.cpp:40
+#: ../../locales/../src/interface/clearprivatedata.cpp:46
+#: ../../locales/../src/interface/clearprivatedata.cpp:68
+#: ../../locales/../src/interface/clearprivatedata.cpp:90
+msgid "Clear private data"
+msgstr "Vymaž důvěrné údaje"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:122
+msgid "Clear quickconnect bar"
+msgstr "Odstranit lištu rychlého spojení"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:560
+msgid "Click on Finish to save your configuration."
+msgstr "Klikněte na tlačítko Finish pro uložení vašeho nastavení."
+
+#: ../../locales/../src/interface/updatewizard.cpp:835
+msgid "Click on next to download the new version."
+msgstr "Pro stáhnutí nové verze klikněte na další."
+
+#: resources.h:428 ../../locales/../src/interface/Mainfrm.cpp:872
+#: ../../locales/../src/interface/Mainfrm.cpp:891
+msgid "Close FileZilla"
+msgstr "Ukončí program FileZilla"
+
+#: resources.h:84
+msgid "Co&mments:"
+msgstr "Po&známky:"
+
+#: resources.h:212
+msgid "Command and its arguments should be properly quoted."
+msgstr "Příkaz a jeho parametry musí být správně uzavřeny v uvozovkách."
+
+#: ../../locales/../src/engine/engineprivate.cpp:217
+msgid "Command not supported by this protocol"
+msgstr "Tento protokol nepodporuje daný příkaz"
+
+#: ../../locales/../src/interface/StatusView.cpp:184
+#: ../../locales/../src/interface/StatusView.cpp:219
+msgid "Command:"
+msgstr "Příkaz:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:120
+msgid "Common name:"
+msgstr "Společné jméno:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:418
+#: ../../locales/../src/interface/netconfwizard.cpp:433
+msgid "Communication tainted by router"
+msgstr "Komunikace zkažená routerem"
+
+#: resources.h:254
+msgid "Compiled with:"
+msgstr "Překladač:"
+
+#: resources.h:255
+msgid "Compiler flags:"
+msgstr "Parametry překladače:"
+
+#: resources.h:24
+msgid "Concurrent transfers"
+msgstr "Souběžné přenosy"
+
+#: resources.h:308
+msgid "Conditions are c&ase sensitive"
+msgstr "&Rozlišovat v podmínkách velikost písmen"
+
+#: resources.h:556
+msgid "Configuration test"
+msgstr "Test nastavení"
+
+#: resources.h:530
+msgid "Configure passive mode"
+msgstr "Nastavení pasivního režimu"
+
+#: resources.h:546
+msgid "Configure port range"
+msgstr "Nastavení rozsahu portů"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1533
+#: ../../locales/../src/interface/RemoteListView.cpp:1490
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1040
+msgid "Confirmation needed"
+msgstr "Vyžadováno potvrzení"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:556
+msgid "Congratulations, your configuration seems to be working."
+msgstr "Gratuluji, zdá se, že vaše nastavení funguje."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:617
+msgid "Connected"
+msgstr "Připojen"
+
+#: ../../locales/../src/interface/QueueView.cpp:1235
+msgid "Connecting"
+msgstr "Připojuji se"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:202
+#: ../../locales/../src/interface/statuslinectrl.cpp:195
+#, c-format
+msgid "Connecting to %s"
+msgstr "Připojuji se k %s"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:963
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:492
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:319
+#, c-format
+msgid "Connecting to %s:%d..."
+msgstr "Připojuji se k %s:%d..."
+
+#: ../../locales/../src/interface/updatewizard.cpp:232
+#: ../../locales/../src/interface/updatewizard.cpp:754
+msgid "Connecting to server"
+msgstr "Připojuji se k serveru"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:102
+msgid "Connection"
+msgstr "Spojení"
+
+#: ../../locales/../src/interface/QueueView.cpp:929
+msgid "Connection attempt failed"
+msgstr "Pokus o spojení selhal"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:122
+#: ../../locales/../src/engine/engineprivate.cpp:363
+msgid "Connection attempt interrupted by user"
+msgstr "Pokus o připojení přerušen uživatelem"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:535
+msgid "Connection closed"
+msgstr "Spojení uzavřeno"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:301
+msgid "Connection established, initializing TLS..."
+msgstr "Spojení navázáno, inicializuji TLS..."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:319
+msgid "Connection established, sending HTTP request"
+msgstr "Spojení navázáno, posílám HTTP požadavek"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:330
+msgid "Connection established, waiting for welcome message..."
+msgstr "Spojení navázáno, čekám na uvítací zprávu..."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:333
+msgid "Connection lost"
+msgstr "Spojení ztraceno"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:596
+msgid "Connection timed out"
+msgstr "Spojení překročilo časový limit"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:552
+msgid "Connection with server got closed prematurely."
+msgstr "Spojení se serverem bylo předčasně ukončeno."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:544
+msgid "Connection with the test server failed."
+msgstr "Spojení s testovacím serverem selhalo."
+
+#: resources.h:70
+msgid "Cop&y"
+msgstr "&Kopírovat"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1205
+#, c-format
+msgid "Copy (%d) of %s"
+msgstr "Kopie (%d) %s"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1182
+#, c-format
+msgid "Copy of %s"
+msgstr "Kopie %s"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:124
+msgid "Could not connect to server"
+msgstr "Nemohu se spojit se serverem"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2289
+#: ../../locales/../src/interface/RemoteTreeView.cpp:829
+msgid ""
+"Could not determine the target of the Drag&Drop operation.\n"
+"Either the shell extension is not installed properly or you didn't drop the "
+"files into an Explorer window."
+msgstr ""
+"Nepodařilo se určit cíl přetahování.\n"
+"Buď není správně nainstalováno rozšíření shellu nebo jste soubory nepřetáhl "
+"do okna Průzkumníka."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3436
+msgid "Could not establish connection to server"
+msgstr "Nemohu navázat spojení se serverem"
+
+#: ../../locales/../src/interface/FileZilla.cpp:358
+msgid ""
+"Could not find the resource files for FileZilla, closing FileZilla.\n"
+"You can set the data directory of FileZilla using the '--datadir "
+"<custompath>' commandline option or by setting the FZ_DATADIR environment "
+"variable."
+msgstr ""
+"Nemohu nalézt soubory prostředků FileZilly, ukončuji FileZillu.\n"
+"Můžete nastavit složku s daty FileZilly pomocí parametru '--datadir "
+"<custompath>' z příkazového řádku nebo nastavením proměnné prostředí "
+"FZ_DATADIR."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2392
+msgid "Could not get temporary directory to download file into."
+msgstr ""
+"Nemohu získat složku pro dočasné soubory, do které měl být soubor stažen."
+
+#: ../../locales/../src/interface/Options.cpp:113
+#, c-format
+msgid ""
+"Could not load \"%s\", make sure the file is valid.\n"
+"For this session, default settings will be used and any changes to the "
+"settings are not persistent."
+msgstr ""
+"Nemohu načíst \"%s\", ubezpečte se, že je soubor platný.\n"
+"Pro toto sezení budou použita výchozí nastavení a změny nastavení nebudou "
+"uloženy."
+
+#: ../../locales/../src/interface/wrapengine.cpp:820
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed."
+msgstr ""
+"Nemohu načíst \"%s\", ubezpečte se prosím, že je soubor platný a že je k "
+"němu přístup."
+
+#: ../../locales/../src/interface/filter.cpp:167
+#: ../../locales/../src/interface/filter.cpp:252
+#: ../../locales/../src/interface/sitemanager.cpp:364
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"Any changes made in the Site Manager could not be saved."
+msgstr ""
+"Nemohu načíst \"%s\", ubezpečte se prosím, že je soubor platný a že je k "
+"němu přístup.\n"
+"Změny provedené ve správci míst nemohou být uloženy."
+
+#: ../../locales/../src/interface/import.cpp:100
+#: ../../locales/../src/interface/import.cpp:283
+#: ../../locales/../src/interface/sitemanager.cpp:261
+#: ../../locales/../src/interface/sitemanager.cpp:1337
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"Any changes made in the Site Manager will not be saved."
+msgstr ""
+"Nemohu načíst \"%s\", ubezpečte se prosím, že je soubor platný a že je k "
+"němu přístup.\n"
+"Změny provedené ve správci míst nebudou uloženy."
+
+#: ../../locales/../src/interface/QueueView.cpp:1675
+#: ../../locales/../src/interface/QueueView.cpp:1702
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"The queue will not be saved."
+msgstr ""
+"Nemohu načíst \"%s\", ubezpečte se prosím, že je soubor platný a že je k "
+"němu přístup.\n"
+"Fronta nebude uložena."
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:70
+msgid "Could not parse server address:"
+msgstr "Nemohu přečíst adresu serveru:"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2045
+#, c-format
+msgid "Could not seek to offset %s within file"
+msgstr "Nemohu se přesunou na ofset %s uvnitř souboru"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1976
+msgid "Could not seek to the end of the file"
+msgstr "Nemohu se přesunout na konec souboru"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2065
+msgid "Could not spawn IO thread"
+msgstr "Nemohu spustit vlákno pro vstup a výstup"
+
+#: ../../locales/../src/interface/QueueView.cpp:955
+#: ../../locales/../src/interface/QueueView.cpp:960
+msgid "Could not start transfer"
+msgstr "Nelze spustit přenos"
+
+#: ../../locales/../src/interface/sitemanager.cpp:390
+#, c-format
+msgid ""
+"Could not write \"%s\", any changes to the Site Manager could not be saved: %"
+"s"
+msgstr "Nemohu zapsat \"%s\", změny ve správci míst nemohou být uloženy: %s."
+
+#: ../../locales/../src/interface/QueueView.cpp:1685
+#: ../../locales/../src/interface/QueueView.cpp:1721
+#, c-format
+msgid "Could not write \"%s\", the queue could not be saved."
+msgstr "Nemohu zapsat \"%s\", fronta nemůže být uložena."
+
+#: ../../locales/../src/interface/wrapengine.cpp:988
+#, c-format
+msgid "Could not write \"%s\": %s"
+msgstr "Nemohu zapsat \"%s\": %s"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:124
+msgid "Country:"
+msgstr "Země:"
+
+#: resources.h:497
+msgid "Crashes FileZilla instantly. Only used to debug the exception handler"
+msgstr "Nechá FileZillu spadnout. Používá se k ladění obsluhy výjimek"
+
+#: resources.h:455 resources.h:466 resources.h:510
+msgid "Create a new subdirectory in the current directory"
+msgstr "Vytvořit novou vnořenou složku v aktuální složce"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1432
+#: ../../locales/../src/interface/RemoteListView.cpp:1435
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1195
+msgid "Create directory"
+msgstr "Nová složka"
+
+#: ../../locales/../src/interface/QueueView.cpp:1308
+msgid "Creating directory"
+msgstr "Vytvářím složku"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2604
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1641
+#, c-format
+msgid "Creating directory '%s'..."
+msgstr "Vytvářím složku '%s'..."
+
+#: ../../locales/../src/engine/ControlSocket.cpp:111
+msgid "Critical error"
+msgstr "Kritická chyba"
+
+#: resources.h:190
+msgid "Cus&tom"
+msgstr "V&lastní"
+
+#: ../../locales/../src/interface/filter.cpp:116
+msgid "Custom filter set"
+msgstr "Vlastní sada filtrů"
+
+#: resources.h:96
+msgid "D&efault"
+msgstr "Vý&chozí"
+
+#: resources.h:456 resources.h:467 resources.h:511
+msgid "D&elete"
+msgstr "&Odstranit"
+
+#: resources.h:287
+msgid "D&isable all"
+msgstr "&Zakázat všechny"
+
+#: resources.h:111
+msgid "D&iscard"
+msgstr "Stor&no"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2404
+msgid "Dangerous filetype"
+msgstr "Nebezpečný typ souboru"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:963
+#: ../../locales/../src/interface/netconfwizard.cpp:1029
+msgid "Data socket closed too early."
+msgstr "Datový soket se uzavřel příliš brzy."
+
+#: resources.h:181
+msgid "Date formatting"
+msgstr "Formátování data"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:110
+msgid "Date/time format"
+msgstr "Formátování času a data"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:68
+#: ../../locales/../src/interface/fileexistsdlg.cpp:92
+#: ../../locales/../src/interface/fileexistsdlg.cpp:124
+#: ../../locales/../src/interface/fileexistsdlg.cpp:148
+msgid "Date/time unknown"
+msgstr "Neznámé datum a čas"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:117
+msgid "Debug"
+msgstr "Ladění"
+
+#: resources.h:199
+msgid "Debugging settings"
+msgstr "Nastavení ladění"
+
+#: resources.h:87 ../../locales/../src/interface/sitemanager.cpp:992
+#: ../../locales/../src/interface/sitemanager.cpp:1081
+msgid "Default"
+msgstr "Výchozí"
+
+#: resources.h:88
+msgid "Default &local directory:"
+msgstr "Výchozí &místní složka:"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:99
+msgid "Default editor not properly quoted."
+msgstr "Výchozí editor nemá správně zadány uvozovky."
+
+#: resources.h:345
+msgid "Default file exists action"
+msgstr "Výchozí chování, pokud soubor již existuje"
+
+#: resources.h:90
+msgid "Default r&emote directory:"
+msgstr "Výchozí &vzdálená složka:"
+
+#: resources.h:524
+msgid "Default transfer mode:"
+msgstr "Výchozí režim přenosu:"
+
+#: resources.h:126
+msgid "Default transfer type:"
+msgstr "Výchozí typ spojení:"
+
+#: resources.h:324 resources.h:543
+msgid "Default: http://ip.filezilla-project.org/ip.php"
+msgstr "Výchozí: http://ip.filezilla-project.org/ip.php"
+
+#: ../../locales/../src/interface/optionspage_connection.cpp:49
+msgid ""
+"Delay between failed connection attempts has to be between 1 and 999 seconds."
+msgstr ""
+"Interval mezi neúspěšnými pokusy o spojení musí být mezi 1 a 999 sekundami."
+
+#: resources.h:160
+msgid "Delay between failed login attempts:"
+msgstr "Interval mezi neúspěšnými pokusy o přihlášení:"
+
+#: ../../locales/../src/engine/engineprivate.cpp:657
+msgid "Delaying connection due to previously failed connection attempt..."
+msgstr "Protože předchozí pokus o spojení selhal, vyčkávám s dalším spojením"
+
+#: ../../locales/../src/interface/sitemanager.cpp:687
+msgid "Delete Site Manager entry"
+msgstr "Vymazat položku ve správci míst"
+
+#: resources.h:512
+msgid "Delete selected directory"
+msgstr "Odstranit vybranou složku"
+
+#: resources.h:457 resources.h:468
+msgid "Delete selected files and folders"
+msgstr "Odstranit vybrané soubory a složky"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:913
+msgid "Desktop"
+msgstr "Plocha"
+
+#: resources.h:7 resources.h:259
+msgid "Details"
+msgstr "Detaily"
+
+#: resources.h:271
+msgid "Details for new key:"
+msgstr "Detaily pro nový klíč:"
+
+#: resources.h:311
+msgid "Dire&ctories"
+msgstr "&Složky"
+
+#: ../../locales/../src/interface/queue.cpp:1133
+msgid "Direction"
+msgstr "Směr"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:128
+msgid "Directory listing aborted by user"
+msgstr "Výpis složky přerušen uživatelem"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:670
+msgid "Directory listing failed"
+msgstr "Výpis složky selhal"
+
+#: resources.h:280
+msgid "Directory listing filters"
+msgstr "Filtry výpisu složky"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:132
+msgid "Directory listing successful"
+msgstr "Výpis složky proběhl úspěšně"
+
+#: resources.h:290
+msgid "Disa&ble all"
+msgstr "Z&akázat všechny"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:626
+msgid "Disable this option if you cannot see your files anymore."
+msgstr "Pokud se vám přestanou zobrazovat soubory, vypněte toto nastavení."
+
+#: resources.h:587
+msgid "Disconnect from server"
+msgstr "Odpojení od serveru"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:66
+#: ../../locales/../src/engine/ControlSocket.cpp:911
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:156
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:894
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:896
+#: ../../locales/../src/interface/QueueView.cpp:927
+#: ../../locales/../src/interface/QueueView.cpp:952
+msgid "Disconnected from server"
+msgstr "Odpojen od serveru"
+
+#: ../../locales/../src/interface/QueueView.cpp:1210
+#: ../../locales/../src/interface/statuslinectrl.cpp:189
+msgid "Disconnecting from previous server"
+msgstr "Odpojuji od předchozího serveru"
+
+#: resources.h:588
+msgid "Disconnects from the currently visible server"
+msgstr "Odpojení od momentálně zobrazeného serveru"
+
+#: resources.h:449
+msgid "Display about dialog"
+msgstr "Zobrazí dialog s informacemi o programu"
+
+#: resources.h:491
+msgid "Do &nothing"
+msgstr "&Nedělat nic"
+
+#: ../../locales/../src/interface/updatewizard.cpp:137
+msgid ""
+"Do you really want to check for beta versions?\n"
+"Unless you want to test new features, keep using stable versions."
+msgstr ""
+"Opravdu chcete zjišťovat i betaverze?\n"
+"Pokud nechcete testovat nové funkce, měli byste zůstat u stabilních verzí."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:875
+#: ../../locales/../src/interface/Mainfrm.cpp:895
+msgid "Do you really want to close FileZilla?"
+msgstr "Chcete opravdu ukončit FileZillu?"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:34
+msgid ""
+"Do you really want to delete all Site Manager entries and the transfer queue?"
+msgstr ""
+"Chcete opravdu odstranit všechny položky ve správci míst a vymazat frontu "
+"přenosů?"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:46
+msgid "Do you really want to delete all Site Manager entries?"
+msgstr "Chcete opravdu odstranit všechny položky ve správci míst?"
+
+#: ../../locales/../src/interface/sitemanager.cpp:689
+msgid "Do you really want to delete selected entry?"
+msgstr "Chcete opravdu odstranit vybranou položku?"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:40
+msgid "Do you really want to delete the transfer queue?"
+msgstr "Chcete opravdu vymazat frontu přenosů?"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:570
+#, c-format
+msgid "Do you really want to send '%s' to the server?"
+msgstr "Chcete opravdu poslat '%s' serveru?"
+
+#: resources.h:325 resources.h:545
+msgid "Don't use external IP address on &local connections."
+msgstr "Nepoužívat externí IP adresu pro &lokální spojení."
+
+#: resources.h:36
+msgid "Download &limit:"
+msgstr "Limit pro s&tahování"
+
+#: resources.h:506
+msgid "Download selected directory"
+msgstr "Stáhnout vybranou složku"
+
+#: resources.h:461
+msgid "Download selected files and folders"
+msgstr "Stáhnout vybrané soubory a složky"
+
+#: ../../locales/../src/interface/edithandler.cpp:660
+msgid "Downloading"
+msgstr "Stahuji"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:336
+#: ../../locales/../src/interface/updatewizard.cpp:224
+#, c-format
+msgid "Downloading %s"
+msgstr "Stahuji %s"
+
+#: resources.h:347 resources.h:367
+msgid "Downloads"
+msgstr "Stahování"
+
+#: ../../locales/../src/interface/LocalListView.cpp:90
+#: ../../locales/../src/interface/LocalTreeView.cpp:88
+#: ../../locales/../src/interface/QueueView.cpp:71
+#: ../../locales/../src/interface/RemoteListView.cpp:87
+#: ../../locales/../src/interface/RemoteTreeView.cpp:79
+msgid ""
+"Drag&drop between different instances of FileZilla has not been implemented "
+"yet."
+msgstr ""
+"Přetahování mezi různými instancemi FileZilly zatím nebylo implementováno."
+
+#: ../../locales/../src/interface/LocalListView.cpp:96
+#: ../../locales/../src/interface/LocalTreeView.cpp:94
+#: ../../locales/../src/interface/QueueView.cpp:82
+#: ../../locales/../src/interface/RemoteListView.cpp:93
+#: ../../locales/../src/interface/RemoteTreeView.cpp:85
+msgid "Drag&drop between different servers has not been implemented yet."
+msgstr "Přetahování mezi různými servery zatím nebylo implementováno."
+
+#: ../../locales/../src/interface/filteredit.cpp:334
+#: ../../locales/../src/interface/filteredit.cpp:397
+#: ../../locales/../src/interface/filteredit.cpp:437
+msgid "Duplicate filter name"
+msgstr "Již použité jméno filtru"
+
+#: resources.h:286
+msgid "E&nable all"
+msgstr "&Povolit všechny"
+
+#: resources.h:233
+msgid "E&xecute"
+msgstr "Sp&ouštění"
+
+#: resources.h:427
+msgid "E&xit"
+msgstr "&Konec"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:128
+msgid "E-Mail:"
+msgstr "Email:"
+
+#: ../../locales/../src/interface/filteredit.cpp:536
+msgid "Each filter needs at least one condition."
+msgstr "Každý filtr musí mít alespoň jednu podmínku."
+
+#: resources.h:295
+msgid "Edit filters"
+msgstr "Upravit filtry"
+
+#: resources.h:167
+msgid "Email:"
+msgstr "Email:"
+
+#: ../../locales/../src/interface/QueueView.cpp:1996
+msgid "Empty command"
+msgstr "Prázdný příkaz"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:134
+msgid "Empty command."
+msgstr "Prázdný příkaz"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:672
+msgid "Empty directory listing"
+msgstr "Prázdný výpis složky"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:127
+msgid "Empty file extension."
+msgstr "Prázdná přípona."
+
+#: ../../locales/../src/interface/filteredit.cpp:388
+#: ../../locales/../src/interface/filteredit.cpp:431
+msgid "Empty filter names are not allowed."
+msgstr "Filtr musí mít jméno."
+
+#: ../../locales/../src/interface/filteredit.cpp:388
+#: ../../locales/../src/interface/filteredit.cpp:431
+msgid "Empty name"
+msgstr "Chybí jméno"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:102
+msgid "Empty quoted string."
+msgstr "Prázdný text v uvozovkách."
+
+#: resources.h:289
+msgid "En&able all"
+msgstr "P&ovolit všechny"
+
+#: resources.h:442
+msgid "Enter &custom command..."
+msgstr "&Zadat vlastní příkaz..."
+
+#: ../../locales/../src/interface/QueueView.cpp:1985
+msgid "Enter command"
+msgstr "Zadejte příkaz"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:558
+msgid "Enter custom command"
+msgstr "Zadat vlastní příkaz"
+
+#: ../../locales/../src/interface/filteredit.cpp:327
+#: ../../locales/../src/interface/filteredit.cpp:380
+#: ../../locales/../src/interface/filteredit.cpp:424
+msgid "Enter filter name"
+msgstr "Zadejte jméno filtru"
+
+#: ../../locales/../src/interface/filter.cpp:601
+msgid "Enter name for filterset"
+msgstr "Zadejte jméno sady filtrů"
+
+#: resources.h:112
+msgid "Enter password"
+msgstr "Zadejte heslo"
+
+#: resources.h:565
+msgid ""
+"Enter the address of the server.\n"
+"To specify the server protocol, prepend the host with the protocol "
+"identifier. If no protocol is specified, the default protocol (ftp://) will "
+"be used.\n"
+"You can also enter complete URLS in the form protocol://user:pass@host:port "
+"here, the values in the other fields will be overwritten then."
+msgstr ""
+"Zadejte adresu serveru.\n"
+"Pokud chcete zadat protokol, připojte jeho označení před jméno hostitele. "
+"Pokud žádný nezadáte použije se výchozí hodnota (ftp://).\n"
+"Do tohoto políčka můžete též zadat kompletní URL ve formátu protokol://jméno:"
+"heslo@hostitel:port, hodnoty v ostatních polích pak budou přepsány."
+
+#: resources.h:569
+msgid ""
+"Enter the port on which the server listens.\n"
+"The default for FTP is 21, the default for SFTP is 22."
+msgstr ""
+"Zadejte port, na kterém server naslouchá.\n"
+"Výchozím portem pro FTP je 21, pro SFTP 22."
+
+#: ../../locales/../src/engine/transfersocket.cpp:349
+#, c-format
+msgid "Error %d writing to socket"
+msgstr "Chyba %d zápisu do soketu"
+
+#: ../../locales/../src/interface/export.cpp:26
+msgid "Error exporting settings"
+msgstr "Během exportování nastavení nastala chyba"
+
+#: ../../locales/../src/interface/import.cpp:26
+#: ../../locales/../src/interface/import.cpp:89
+msgid "Error importing"
+msgstr "Během importování nastala chyba"
+
+#: ../../locales/../src/interface/filter.cpp:168
+#: ../../locales/../src/interface/filter.cpp:253
+#: ../../locales/../src/interface/import.cpp:101
+#: ../../locales/../src/interface/import.cpp:284
+#: ../../locales/../src/interface/Options.cpp:114
+#: ../../locales/../src/interface/QueueView.cpp:1676
+#: ../../locales/../src/interface/QueueView.cpp:1703
+#: ../../locales/../src/interface/sitemanager.cpp:262
+#: ../../locales/../src/interface/sitemanager.cpp:365
+#: ../../locales/../src/interface/sitemanager.cpp:1338
+#: ../../locales/../src/interface/wrapengine.cpp:821
+msgid "Error loading xml file"
+msgstr "Chyba při načítání XML souboru"
+
+#: ../../locales/../src/interface/QueueView.cpp:1686
+#: ../../locales/../src/interface/QueueView.cpp:1722
+#: ../../locales/../src/interface/sitemanager.cpp:391
+#: ../../locales/../src/interface/wrapengine.cpp:989
+msgid "Error writing xml file"
+msgstr "Chyba při zápisu XML souboru"
+
+#: ../../locales/../src/interface/StatusView.cpp:182
+#: ../../locales/../src/interface/StatusView.cpp:215
+msgid "Error:"
+msgstr "Chyba:"
+
+#: resources.h:219
+msgid "Example:"
+msgstr "Příklad:"
+
+#: resources.h:237
+msgid "Exe&cute"
+msgstr "Spo&uštění"
+
+#: ../../locales/../src/interface/updatewizard.cpp:193
+msgid "Executable"
+msgstr "Spustitelný soubor"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1359
+msgid "Executable contains no version info, cannot check for updates."
+msgstr ""
+"Spustitelný soubor neobsahuje informaci o verzi, nemohu zkontrolovat "
+"aktualizace."
+
+#: resources.h:140
+msgid "Explorer"
+msgstr "Průzkumník"
+
+#: resources.h:397
+msgid "Export &Queue"
+msgstr "Exportovat &frontu"
+
+#: resources.h:396
+msgid "Export &Settings"
+msgstr "Exportovat &nastavení"
+
+#: resources.h:393
+msgid "Export settings"
+msgstr "Nastavení exportu"
+
+#: resources.h:301
+msgid "F&ilter name:"
+msgstr "&Jméno filtru:"
+
+#: ../../locales/../src/interface/sitemanager.cpp:985
+msgid "FTP"
+msgstr "FTP"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:50
+msgid "FTP Engine not initialized, can't connect"
+msgstr "FTP jádro není inicializováno, nemohu se spojit"
+
+#: resources.h:521
+msgid ""
+"FTP uses secondary connections for data transfers. These additional "
+"connections can be established in two ways."
+msgstr ""
+"FTP používá sekundární spojení pro přenos dat. Tato další spojení mohou být "
+"navázána dvěma způsoby."
+
+#: ../../locales/../src/engine/server.cpp:17
+msgid "FTPES - FTP over explicit TLS/SSL"
+msgstr "FTPES - FTP přes explicitní TLS/SSL"
+
+#: ../../locales/../src/engine/server.cpp:16
+msgid "FTPS - FTP over implicit TLS/SSL"
+msgstr "FTPS - FTP přes implicitní TLS/SSL"
+
+#: ../../locales/../src/interface/LocalListView.cpp:636
+#: ../../locales/../src/interface/LocalListView.cpp:1653
+#: ../../locales/../src/interface/LocalTreeView.cpp:790
+#: ../../locales/../src/interface/viewheader.cpp:484
+msgid "Failed to change directory"
+msgstr "Nepodařilo se změnit složku"
+
+#: ../../locales/../src/interface/FileZilla.cpp:158
+#: ../../locales/../src/interface/optionspage_language.cpp:65
+msgid "Failed to change language"
+msgstr "Nepodařilo se změnit jazyk"
+
+#: ../../locales/../src/interface/updatewizard.cpp:262
+msgid "Failed to check for newer version of FileZilla."
+msgstr "Nepodařilo se zjistit, zda existuje novější verze FileZilly."
+
+#: ../../locales/../src/interface/xmlfunctions.cpp:377
+msgid "Failed to create backup copy of xml file"
+msgstr "Nemohu vytvořit záložní kopii XML souboru"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:774
+msgid "Failed to create listen socket, aborting"
+msgstr "Nepodařilo se vytvořit naslouchající soket, končím."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3415
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3419
+msgid "Failed to create listening socket for active mode transfer"
+msgstr "Nepodařilo se vytvořit naslouchající soket pro aktivní režim přenosu"
+
+#: ../../locales/../src/interface/updatewizard.cpp:264
+msgid "Failed to download the latest version of FileZilla."
+msgstr "Nepodařilo se stáhnout novější verzi FileZilly."
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:568
+msgid "Failed to get 'My Documents' path"
+msgstr "Nepodařilo se získat cestu ke složce 'Dokumenty'"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:936
+msgid "Failed to get data peer address, connection closed."
+msgstr "Nepodařilo se získat datovou adresu kolegy, spojení ukončeno."
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:554
+msgid "Failed to get desktop path"
+msgstr "Nepodařilo se získat cestu k ploše"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:928
+msgid "Failed to get peer address, connection closed."
+msgstr "Nepodařilo se získat adresu kolegy, spojení ukončeno."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:187
+msgid "Failed to initialize FTP engine"
+msgstr "Nemohu inicializovat FTP"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:310
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:477
+msgid "Failed to initialize TLS."
+msgstr "Nemohu inicializovat TLS."
+
+#: ../../locales/../src/interface/settingsdialog.cpp:142
+msgid "Failed to load panels, invalid resource files?"
+msgstr "Nemohu načíst panely, poškozené soubory prostředků?"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1965
+#, c-format
+msgid "Failed to open \"%s\" for appending / writing"
+msgstr "Nemohu otevřít \"%s\" pro přidavání / zapisování"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2029
+#, c-format
+msgid "Failed to open \"%s\" for reading"
+msgstr "Nemohu otevřít \"%s\" pro čtení"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2008
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:376
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:421
+#, c-format
+msgid "Failed to open \"%s\" for writing"
+msgstr "Nemohu otevřít \"%s\" pro zapisování"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:992
+msgid "Failed to receive data"
+msgstr "Nepodařilo se přijmout data."
+
+#: ../../locales/../src/engine/ControlSocket.cpp:130
+msgid "Failed to retrieve directory listing"
+msgstr "Nemohu získat výpis složky"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:702
+msgid "Failed to retrieve external ip address, aborting"
+msgstr "Nepodařilo se získat externí IP adresu, končím"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3142
+msgid "Failed to retrieve external ip address, using local address"
+msgstr "Nepodařilo se získat externí IP adresu, použiji lokální"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3163
+msgid "Failed to retrieve local ip address."
+msgstr "Nepodařilo se získat lokální IP adresu."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:671
+msgid "Failed to retrieve local ip address. Aborting"
+msgstr "Nepodařilo se získat lokální IP adresu. Končím"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:604
+msgid "Failed to retrieve the external IP address."
+msgstr "Nepodařilo se získat externí IP adresu."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:302
+msgid "Failed to send command."
+msgstr "Nepodařilo se poslat příkaz."
+
+#: ../../locales/../src/interface/FileZilla.cpp:158
+#: ../../locales/../src/interface/optionspage_language.cpp:65
+#, c-format
+msgid "Failed to set language to %s, using default system language"
+msgstr "Nepodařilo se nastavit jazyk na %s, používám výchozí jazyk systému"
+
+#: ../../locales/../src/interface/optionspage.cpp:6
+msgid "Failed to validate settings"
+msgstr "Chyba v nastavení"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:549
+#, c-format
+msgid "Failed to write to file %s"
+msgstr "Chyba při zápisu do souboru %s"
+
+#: ../../locales/../src/interface/xmlfunctions.cpp:391
+msgid "Failed to write xml file"
+msgstr "Chyba při zápisu XML souboru"
+
+#: ../../locales/../src/interface/queueview_failed.cpp:14
+msgid "Failed transfers"
+msgstr "Neúspěšné přenosy"
+
+#: resources.h:536
+msgid "Fall back to active mode"
+msgstr "Vrátit se k aktivnímu režimu"
+
+#: resources.h:310
+msgid "Fil&es"
+msgstr "Sou&bory"
+
+#: ../../locales/../src/interface/LocalListView.cpp:808
+#: ../../locales/../src/interface/LocalListView.cpp:826
+#: ../../locales/../src/interface/LocalListView.cpp:836
+#: ../../locales/../src/interface/LocalListView.cpp:858
+#: ../../locales/../src/interface/RemoteListView.cpp:1178
+#: ../../locales/../src/interface/RemoteListView.cpp:1196
+#: ../../locales/../src/interface/RemoteListView.cpp:1207
+#: ../../locales/../src/interface/RemoteListView.cpp:1229
+msgid "File"
+msgstr "Soubor"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:106
+msgid "File Types"
+msgstr "Typy souborů"
+
+#: ../../locales/../src/interface/import.cpp:89
+msgid "File does not contain any importable data."
+msgstr "Soubor neobsahuje žádné údaje, které by bylo možné načíst."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1785
+msgid "File exists"
+msgstr "Soubor existuje"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:107
+msgid "File exists action"
+msgstr "Soubor již existuje"
+
+#: resources.h:408
+msgid "File has changed"
+msgstr "Soubor byl změněn"
+
+#: ../../locales/../src/interface/FileZilla.cpp:732
+#: ../../locales/../src/interface/optionspage_edit.cpp:168
+msgid "File not found"
+msgstr "Soubor nenalezen"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:153
+msgid "File transfer successful"
+msgstr "Přenos souboru úspěšný"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:874
+msgid "File transfers still in progress."
+msgstr "Stále probíhá přenos souboru."
+
+#: ../../locales/../src/interface/FileZilla.cpp:359
+#: ../../locales/../src/interface/quickconnectbar.cpp:50
+msgid "FileZilla Error"
+msgstr "FileZilla hlásí chybu"
+
+#: resources.h:558
+msgid ""
+"FileZilla can now test your configuration to ensure everything is configured "
+"properly."
+msgstr ""
+"FileZilla nyní může otestovat vaši konfiguraci, aby se ujistila, že vše je "
+"nastaveno správně."
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:107
+msgid "FileZilla does not support the HTTP protocol"
+msgstr "FileZilla nepodporuje HTTP protokol"
+
+#: resources.h:144
+msgid "Filelists"
+msgstr "Výpis souborů a složek"
+
+#: ../../locales/../src/interface/edithandler.cpp:649
+#: ../../locales/../src/interface/filteredit.cpp:52
+#: ../../locales/../src/interface/LocalListView.cpp:231
+#: ../../locales/../src/interface/RemoteListView.cpp:307
+msgid "Filename"
+msgstr "Jméno souboru"
+
+#: resources.h:433
+msgid "Filename &filters..."
+msgstr "&Filtry jmen souborů..."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1770
+msgid "Filename invalid"
+msgstr "Neplatné jméno souboru"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:226
+msgid "Filename unchanged"
+msgstr "Jméno souboru nezměněno"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1837
+msgid "Filenames may not contain any of the following characters: / * ? < > |"
+msgstr "Jména souborů nesmí obsahovat žádný z těchto znaků: / * ? < > |"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1802
+msgid ""
+"Filenames may not contain any of the following characters: / \\ : * ? \" < > "
+"|"
+msgstr ""
+"Jména souborů nesmí obsahovat žádný z těchto znaků: / \\ : * ? \" < > |"
+
+#: resources.h:415
+msgid "Files currently being edited"
+msgstr "Právě editované soubory"
+
+#: ../../locales/../src/interface/filteredit.cpp:53
+#: ../../locales/../src/interface/LocalListView.cpp:232
+#: ../../locales/../src/interface/RemoteListView.cpp:308
+msgid "Filesize"
+msgstr "Velikost souboru"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:111
+msgid "Filesize format"
+msgstr "Formátování velikostí"
+
+#: ../../locales/../src/interface/LocalListView.cpp:233
+#: ../../locales/../src/interface/RemoteListView.cpp:309
+msgid "Filetype"
+msgstr "Typ souboru"
+
+#: resources.h:215
+msgid "Filetype asociations"
+msgstr "Přidružení podle typu souboru"
+
+#: resources.h:302
+msgid "Filter &out all files that:"
+msgstr "&Odfiltrovat všechny soubory, které:"
+
+#: resources.h:309
+msgid "Filter applies to:"
+msgstr "Filtr platí pro:"
+
+#: ../../locales/../src/interface/filteredit.cpp:578
+msgid "Filter name already exists"
+msgstr "Filtr s tímto jménem již existuje"
+
+#: ../../locales/../src/interface/filter.cpp:610
+msgid "Filter set already exists"
+msgstr "Sada filtrů s tímto jménem již existuje"
+
+#: resources.h:591 resources.h:592
+msgid "Filter the directory listings"
+msgstr "Filtrovat výpisy složek"
+
+#: ../../locales/../src/interface/filteredit.cpp:536
+#: ../../locales/../src/interface/filteredit.cpp:547
+#: ../../locales/../src/interface/filteredit.cpp:558
+#: ../../locales/../src/interface/filteredit.cpp:569
+#: ../../locales/../src/interface/filteredit.cpp:578
+msgid "Filter validation failed"
+msgstr "Selhalo ověření filtru"
+
+#: resources.h:14
+msgid "Fingerprint (MD5):"
+msgstr "Fingerprint (MD5):"
+
+#: resources.h:15
+msgid "Fingerprint (SHA-1):"
+msgstr "Fingerprint (SHA-1):"
+
+#: resources.h:262 resources.h:274
+msgid "Fingerprint:"
+msgstr "Fingerprint:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:39
+msgid "Firewall and router configuration wizard"
+msgstr "Průvodce nastavením firewallu a routeru"
+
+#: ../../locales/../src/interface/LocalListView.cpp:831
+#: ../../locales/../src/interface/RemoteListView.cpp:1202
+msgid "Folder"
+msgstr "Složka"
+
+#: resources.h:150
+msgid ""
+"For more detailed information about what these options do, please run the "
+"network configuration wizard."
+msgstr ""
+"Pro podrobnější informace o tom, co tato nastavení znamenají, spusťte prosím "
+"průvodce nastavením sítě."
+
+#: resources.h:553
+msgid "For reliability you should specify a range of at least 10 ports."
+msgstr "Pro zajištění spolehlivosti byste měli zadat rozsah alespoň 10 portů."
+
+#: resources.h:105
+msgid "Force &UTF-8"
+msgstr "Vynutit &UTF-8"
+
+#: resources.h:218
+msgid "Format: Extension followed by properly quoted command and arguments."
+msgstr ""
+"Formát: přípona, následovaná správně uvozenými příkazem a jeho parametry."
+
+#: resources.h:71
+msgid "General"
+msgstr "Základní"
+
+#: resources.h:323 resources.h:542
+msgid "Get external IP address from the following URL:"
+msgstr "Získat externí IP adresu z následujícího URL:"
+
+#: ../../locales/../src/interface/filter.cpp:610
+msgid "Given filterset name already exists, overwrite filter set?"
+msgstr "Zadané jméno sady filtrů již existuje, přepsat?"
+
+#: resources.h:230
+msgid "Group permissions"
+msgstr "Oprávnění skupiny"
+
+#: resources.h:479
+msgid "H&igh"
+msgstr "&Vysoká"
+
+#: resources.h:42 ../../locales/../src/interface/queue.cpp:851
+#: ../../locales/../src/interface/queue.cpp:932
+msgid "High"
+msgstr "Vysoká"
+
+#: ../../locales/../src/interface/queue.cpp:853
+#: ../../locales/../src/interface/queue.cpp:934
+msgid "Highest"
+msgstr "Nejvyšší"
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:74
+msgid "Highest available port has to be a number between 1024 and 65535."
+msgstr "Nejvyšší využitelný port musí být číslo mezi 1024 a 65535."
+
+#: resources.h:291
+msgid ""
+"Hold the shift key to toggle the filter state on both sides simultanously."
+msgstr ""
+"Stiskněte klávesu shift, aby se stav filtrů na obou stranách přepínal "
+"současně."
+
+#: resources.h:249
+msgid "Homepage:"
+msgstr "Domácí stránka:"
+
+#: resources.h:268
+msgid "Host key mismatch"
+msgstr "Nesouhlasí hostitelský klíč"
+
+#: resources.h:8 resources.h:115 resources.h:252 resources.h:260
+#: resources.h:272
+msgid "Host:"
+msgstr "Platforma:"
+
+#: resources.h:92
+msgid "Hours,"
+msgstr "hodin,"
+
+#: resources.h:189
+msgid "I&SO 8601 (example: 15:47)"
+msgstr "ISO &8601 (příklad: 15:47)"
+
+#: resources.h:34
+msgid ""
+"If no data can be sent or received during this time, the connection will be "
+"closed and FileZilla will try to reconnect."
+msgstr ""
+"Pokud během této doby nebudou žádná data přijata nebo odeslána, spojení bude "
+"ukončeno a FileZilla se pokusí navázat nové."
+
+#: resources.h:208
+msgid "If reporting bugs, please provide logs with \"Verbose\" logging level."
+msgstr ""
+"Při hlášení chyb uveďte prosím výpisy s nastavenou úrovní \"Podrobné\"."
+
+#: resources.h:533
+msgid ""
+"If the automatic test at the end of this wizard succeeds, but you cannot "
+"transfer files to a particular server, the server might be misconfigured and "
+"you should try active mode. You can set the transfer mode on a per-server "
+"basis in the Site Manager."
+msgstr ""
+"Pokud automatický test na konci tohoto průvodce uspěje, ale přesto nepůjde "
+"přenášet soubory s nějakým serverem, je možné, že je daný server špatně "
+"nastaven a měli byste vyzkoušet aktivní režim. Režim přenosu lze pro "
+"jednotlivé servery nastavit ve správci míst."
+
+#: resources.h:528
+msgid ""
+"If the fallback option is enabled, you will be able to connect to "
+"misconfigured servers which reject the selected transfer mode."
+msgstr ""
+"Pokud je povolen návrat k druhému režimu, budete se schopni spojit se špatně "
+"nastavenými servery, které odmítnou vybraný režim přenosu."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:612
+msgid ""
+"If this problem persists, please contact your router or firewall "
+"manufacturer for a solution."
+msgstr ""
+"Pokud problém setrvává, kontaktujte prosím výrobce vašeho routeru nebo "
+"firewallu pro řešení."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:570
+msgid "If this problem stays, please contact your router manufacturer."
+msgstr "Pokud problém setrvává, kontaktujte prosím výrobce vašeho routeru."
+
+#: resources.h:363 resources.h:381
+msgid ""
+"If using 'overwrite if newer', your system time has to be synchronized with "
+"the server. If the time differs (e.g. different timezone), specify a "
+"timezone offset in the site manager."
+msgstr ""
+"Pokud jste nastavili \"Přepsat, pokud je novější\", musí být váš systémový "
+"čas synchronizován se serverem. Pokud se čas liší (např. jiná časová zóna), "
+"nastavte posun časové zóny ve správci míst."
+
+#: resources.h:175
+msgid "If you change the language, you should restart FileZilla."
+msgstr "Po změně jazyka byste měli FileZillu ukončit a znovu spustit."
+
+#: resources.h:559
+msgid ""
+"If you click on test, FileZilla will connect to probe.filezilla-project.org "
+"and will perform some simple tests."
+msgstr ""
+"Pokud kliknete na test, FileZilla se spojí s probe.filezilla-project.org a "
+"provede několik jednoduchých testů."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:894
+msgid "If you close FileZilla, your changes will be lost."
+msgstr "Pokud ukončíte FileZillu, vaše změny budou ztraceny."
+
+#: resources.h:134
+msgid ""
+"If you enter the wrong filetypes, those files may get corrupted when "
+"transferred."
+msgstr "Pokud špatně zadáte typy souborů, mohou se pak při přenosu poškodit."
+
+#: resources.h:560
+msgid "If you get any errors, your configuration is not correct."
+msgstr "Pokud budou výsledkem nějaké chyby, není vaše nastavení v pořádku."
+
+#: resources.h:156
+msgid ""
+"If you have problems to retrieve directory listings or to transfer files, "
+"try to change the default transfer mode."
+msgstr ""
+"Máte-li problém získat výpis složky nebo přenést soubory, zkuste změnit "
+"výchozí režim přenosu."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:558
+msgid ""
+"If you keep having problems with a specific server, the server itself or a "
+"remote router might be misconfigured. In this case try to toggle passive "
+"mode and contact the server administrator for help."
+msgstr ""
+"Pokud potíže s daným serverem setrvávají, pak tento server nebo vzdálený "
+"router může být špatně nastaven. Zkuste nastavit pasivní režim a kontaktujte "
+"administrátora serveru pro pomoc."
+
+#: resources.h:519
+msgid ""
+"If you sucessfully complete the wizard and the final test succeeds, any "
+"firewalls and routers you have should be configured properly."
+msgstr ""
+"Pokud dokončíte tohoto průvodce a závěrečný test uspěje, vaše firewally a "
+"routery by měli být správně nastaveny."
+
+#: resources.h:555
+msgid ""
+"If you use a firewall, make sure FileZilla is allowed to accept connection "
+"on all given ports."
+msgstr ""
+"Pokud používáte firewall, ubezpečte se, že FileZilla má povoleno přijmout "
+"spojení na všech zadaných portech."
+
+#: resources.h:554
+msgid ""
+"If you use a router, make sure all these ports are forwarded to the machine "
+"you're running FileZilla on."
+msgstr ""
+"Pokud používáte router, ubezpečte se, že všechny tyto porty jsou "
+"forwardovány k počítači, na kterém FileZilla beží."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:583
+msgid ""
+"If your router keeps changing the IP address, please contact your router "
+"manufacturer."
+msgstr ""
+"Pokud váš router pořád mění IP adresu, kontaktujte prosím výrobce vašeho "
+"routeru."
+
+#: ../../locales/../src/interface/import.cpp:80
+msgid "Import data from older version"
+msgstr "Importovat data ze starší verze"
+
+#: resources.h:400
+msgid "Import settings"
+msgstr "Nastavení importu"
+
+#: ../../locales/../src/interface/import.cpp:66
+#: ../../locales/../src/interface/import.cpp:69
+msgid "Import successful"
+msgstr "Úspěšný import"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:124
+#: ../../locales/../src/interface/optionspage_edit.cpp:131
+msgid "Improperly quoted association."
+msgstr "Špatně použity uvozovky u nastavení typu souboru."
+
+#: resources.h:547
+msgid ""
+"In active mode, FileZilla has to listen on a port for data transfers. You "
+"have to specify which ports FileZilla will use."
+msgstr ""
+"V aktivním režimu musí FileZilla poslouchat na portu pro datové přenosy. "
+"Musíte zadat, které porty bude FileZilla používat."
+
+#: resources.h:549
+msgid ""
+"In case you have a router, you will have to forward all available ports, as "
+"FileZilla has no influence on the ports your system chooses."
+msgstr ""
+"V případě, že máte router, musíte forwardovat všechny dostupné porty, neboť "
+"FileZilla nemá vliv na to, jaký port operační systém vybere."
+
+#: resources.h:344
+msgid ""
+"In case you prefer automatic updates, you can enable automatic update checks "
+"in the settings dialog."
+msgstr ""
+"Pokud máte raději automatické aktualizace, můžete povolit kontrolu nových "
+"verzí v dialogu nastavení."
+
+#: resources.h:319 resources.h:537
+msgid ""
+"In order to use active mode, FileZilla needs to know your external IP "
+"address."
+msgstr ""
+"Abyste mohli použít aktivní režim, musí FileZilla znát vaši externí IP "
+"adresu."
+
+#: resources.h:522
+msgid ""
+"In passive mode, which is recommended for most users, FileZilla asks the "
+"server for a port and connects to the given port. Not much configuration has "
+"to be done for this."
+msgstr ""
+"V pasivním režimu, který je doporučen pro většinu uživatelů, se FileZilla "
+"zeptá serveru na port a pak se na něj připojí. K tomuto není potřeba mnoho "
+"nastavovat."
+
+#: ../../locales/../src/interface/QueueView.cpp:923
+msgid "Incorrect password"
+msgstr "Neplatné heslo"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:467
+msgid "Initializing TLS..."
+msgstr "Inicializuji TLS..."
+
+#: resources.h:79 ../../locales/../src/interface/sitemanager.cpp:815
+#: ../../locales/../src/interface/sitemanager.cpp:1046
+msgid "Interactive"
+msgstr "Interaktivní"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:108
+msgid "Interface"
+msgstr "Uživatelské rozhraní"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:158
+#: ../../locales/../src/interface/QueueView.cpp:888
+#: ../../locales/../src/interface/QueueView.cpp:1363
+msgid "Interrupted by user"
+msgstr "Přerušeno uživatelem"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:732
+msgid "Invalid Content-Length"
+msgstr "Neplatný Content-Length"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:606
+msgid "Invalid HTTP Response"
+msgstr "Neplatná HTTP odpověď"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:462
+#: ../../locales/../src/engine/ControlSocket.cpp:522
+msgid ""
+"Invalid character sequence received, disabling UTF-8. Select UTF-8 option in "
+"site manager to force UTF-8."
+msgstr ""
+"Přijata neplatná posloupnost znaků, vypínám UTF-8. Pokud si chcete vynutit "
+"používání UTF-8, nastavte UTF-8 ve správci míst."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:856
+msgid "Invalid chunk size"
+msgstr "Neplatná velikost části"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:348
+#: ../../locales/../src/interface/netconfwizard.cpp:358
+#: ../../locales/../src/interface/netconfwizard.cpp:367
+msgid "Invalid data received"
+msgstr "Přijata neplatná data"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:40
+#: ../../locales/../src/interface/verifycertdialog.cpp:56
+msgid "Invalid date"
+msgstr "Neplatné datum"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1802
+#: ../../locales/../src/interface/LocalListView.cpp:1837
+msgid "Invalid filename"
+msgstr "Neplatné jméno souboru"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:958
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:147
+msgid "Invalid hostname or host not found"
+msgstr "Neplatné jméno hostitele nebo hostitel nenalezen"
+
+#: ../../locales/../src/engine/server.cpp:128
+#: ../../locales/../src/engine/server.cpp:141
+msgid "Invalid port given. The port has to be a value from 1 to 65535."
+msgstr "Zadán neplatný port. Port musí mít hodnotu mezi 1 a 65535."
+
+#: ../../locales/../src/engine/server.cpp:47
+msgid ""
+"Invalid protocol specified. Valid protocols are:\n"
+"ftp:// for normal FTP,\n"
+"sftp:// for SSH file transfer protocol,\n"
+"ftps:// for FTP over SSL (implicit) and\n"
+"ftpes:// for FTP over SSL (explicit)."
+msgstr ""
+"Specifikován neplatný protokol. Platné protokoly jsou:\n"
+"ftp:// pro běžné FTP,\n"
+"sftp:// pro protokol přenosu souborů přes SSH,\n"
+"ftps:// pro FTP přes SSL (implicitní) a\n"
+"ftpes:// pro FTP přes SSL (explicitní)."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:616
+msgid "Invalid response code"
+msgstr "Neplatný kód odpovědi"
+
+#: ../../locales/../src/interface/filteredit.cpp:558
+msgid "Invalid size in condition"
+msgstr "Neplatná velikost v podmínce"
+
+#: ../../locales/../src/engine/server.cpp:92
+msgid "Invalid username given."
+msgstr "Neplatné uživatelské jméno."
+
+#: resources.h:147
+msgid "Keep directories on top"
+msgstr "Složky vždy na začátku výpisu"
+
+#: resources.h:482
+msgid "L&owest"
+msgstr "Ne&jnižší"
+
+#: resources.h:317
+msgid "L&owest available port:"
+msgstr "&Nejnižší využitelný port:"
+
+#: resources.h:173 ../../locales/../src/interface/settingsdialog.cpp:112
+msgid "Language"
+msgstr "Jazyk"
+
+#: resources.h:172
+msgid "Large icons"
+msgstr "Velké ikony"
+
+#: ../../locales/../src/interface/LocalListView.cpp:234
+#: ../../locales/../src/interface/RemoteListView.cpp:310
+msgid "Last modified"
+msgstr "Poslední změna"
+
+#: resources.h:137
+msgid "Layout"
+msgstr "Rozložení"
+
+#: resources.h:138
+msgid "Layout of file and directory panes:"
+msgstr "Rozložení panelů souborů a složek:"
+
+#: resources.h:27
+msgid "Limit for concurrent &downloads:"
+msgstr "Maximální &počet současných stahování:"
+
+#: resources.h:29
+msgid "Limit for concurrent &uploads:"
+msgstr "Maximální počet současných &nahrávání na server:"
+
+#: resources.h:314
+msgid "Limit local ports"
+msgstr "Omezit lokální porty"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:799
+msgid "Line length exceeded"
+msgstr "Překročena délka řádku"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:262
+msgid "Listen socket closed"
+msgstr "Naslouchající soket uzavřen."
+
+#: ../../locales/../src/interface/StatusView.cpp:193
+#: ../../locales/../src/interface/StatusView.cpp:234
+msgid "Listing:"
+msgstr "Výpis:"
+
+#: resources.h:285
+msgid "Local filters:"
+msgstr "Místní filtry:"
+
+#: ../../locales/../src/interface/viewheader.cpp:321
+msgid "Local site:"
+msgstr "Místní složka:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:126
+msgid "Locality:"
+msgstr "Lokalita:"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:512
+msgid ""
+"Login data contains non-ascii characters and server might not be UTF-8 "
+"aware. Trying local charset."
+msgstr ""
+"Údaje pro přihlášení obsahují i jiné než ASCII znaky a server by nemusel "
+"podporovat UTF-8. Zkouším místní znakovou sadu."
+
+#: ../../locales/../src/interface/queue.cpp:846
+#: ../../locales/../src/interface/queue.cpp:927
+msgid "Low"
+msgstr "Nízká"
+
+#: ../../locales/../src/interface/queue.cpp:844
+#: ../../locales/../src/interface/queue.cpp:925
+msgid "Lowest"
+msgstr "Nejnižší"
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:68
+msgid "Lowest available port has to be a number between 1024 and 65535."
+msgstr "Nejnižší využitelný port musí být číslo mezi 1024 a 65535."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:787
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:799
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:814
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:856
+#, c-format
+msgid "Malformed chunk data: %s"
+msgstr "Špatně utvořená část dat: %s"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:732
+#, c-format
+msgid "Malformed header: %s"
+msgstr "Špatně utvořená hlavička: %s"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:576
+msgid "Malformed reply, server not sending proper lineendings"
+msgstr "Špatně utvořená odpověď, server neposílá správné konce řádků"
+
+#: resources.h:303
+msgid "Match all of the following"
+msgstr "Splňují všechny následující podmínky"
+
+#: resources.h:158
+msgid "Maximum number of retries:"
+msgstr "Maximální počet pokusů:"
+
+#: resources.h:25
+msgid "Maximum simultaneous &transfers:"
+msgstr "&Maximální počet souběžných přenosů:"
+
+#: resources.h:171
+msgid "Medium icons"
+msgstr "Středně velké ikony"
+
+#: resources.h:93
+msgid "Minutes"
+msgstr "minut"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:932
+msgid "My Computer"
+msgstr "Tento počítač"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:922
+msgid "My Documents"
+msgstr "Dokumenty"
+
+#: ../../locales/../src/interface/sitemanager.cpp:248
+#: ../../locales/../src/interface/sitemanager.cpp:250
+#: ../../locales/../src/interface/sitemanager.cpp:1378
+msgid "My Sites"
+msgstr "Moje místa"
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:58
+#: ../../locales/../src/interface/optionspage_themes.cpp:60
+#: ../../locales/../src/interface/optionspage_themes.cpp:201
+#: ../../locales/../src/interface/optionspage_themes.cpp:203
+msgid "N/a"
+msgstr "Neznámý"
+
+#: ../../locales/../src/interface/sitemanager.cpp:654
+msgid "Name already exists"
+msgstr "Jméno je již použito"
+
+#: resources.h:114
+msgid "Name:"
+msgstr "Název:"
+
+#: ../../locales/../src/interface/filteredit.cpp:569
+msgid "Need to enter filter name"
+msgstr "Musíte zadat jméno filtru"
+
+#: ../../locales/../src/interface/sitemanager.cpp:562
+msgid "Need to specify a character encoding"
+msgstr "Musíte uvést znakovou sadu"
+
+#: resources.h:67
+msgid "New &Folder"
+msgstr "Nová &složka"
+
+#: ../../locales/../src/interface/filteredit.cpp:322
+msgid "New filter"
+msgstr "Nový filtr"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1449
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1209
+#: ../../locales/../src/interface/sitemanager.cpp:466
+#: ../../locales/../src/interface/sitemanager.cpp:489
+msgid "New folder"
+msgstr "Nová složka"
+
+#: ../../locales/../src/interface/sitemanager.cpp:730
+#: ../../locales/../src/interface/sitemanager.cpp:753
+msgid "New site"
+msgstr "Nové místo"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:751
+msgid "No"
+msgstr "ne"
+
+#: ../../locales/../src/interface/export.cpp:26
+msgid "No category to export selected"
+msgstr "Nebyla vybrána žádná skupina pro export"
+
+#: ../../locales/../src/interface/QueueView.cpp:1996
+msgid "No command given, aborting."
+msgstr "Nebyl zadán žádný příkaz, stornuji operaci."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3109
+msgid "No external IP address set, trying default."
+msgstr "Nezadána žádná externí IP adresa, zkouším výchozí."
+
+#: ../../locales/../src/engine/server.cpp:32
+#: ../../locales/../src/engine/server.cpp:121
+#: ../../locales/../src/engine/server.cpp:151
+msgid "No host given, please enter a host."
+msgstr "Nezadán hostitel, zadejte ho prosím."
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:166
+msgid "No images available"
+msgstr "Žádné ikony nejsou dostupné"
+
+#: ../../locales/../src/interface/edithandler.cpp:638
+msgid "No remote files are currently being edited"
+msgstr "Žádné soubor nejsou právě editovány"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1344
+#: ../../locales/../src/interface/sitemanager.cpp:1356
+#: ../../locales/../src/interface/sitemanager.cpp:1387
+msgid "No sites available"
+msgstr "Žádná místa nejsou dostupná"
+
+#: ../../locales/../src/interface/themeprovider.cpp:77
+msgid "No themes in themes.xml"
+msgstr "V themes.xml nejsou žádná témata"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:62
+msgid "None"
+msgstr "Nic"
+
+#: resources.h:305
+msgid "None of the following"
+msgstr "Nesplňují žádnou"
+
+#: resources.h:41 resources.h:77 ../../locales/../src/interface/queue.cpp:849
+#: ../../locales/../src/interface/queue.cpp:930
+#: ../../locales/../src/interface/sitemanager.cpp:778
+#: ../../locales/../src/interface/sitemanager.cpp:811
+#: ../../locales/../src/interface/sitemanager.cpp:1040
+msgid "Normal"
+msgstr "Normální"
+
+#: ../../locales/../src/interface/queueview_failed.cpp:241
+msgid "Not all items could be requeued for viewing / editing."
+msgstr ""
+"Některé položky nelze znovu zařadit do fronty pro pro prohlížení/úpravu."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:697
+msgid "Not connected to any server"
+msgstr "Nepřipojen k žádnému serveru"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:624
+msgid "Note that this feature is only supported using the FTP protocol."
+msgstr ""
+"Upozornění: zobrazování skrytých souborů je podporováno pouze u FTP "
+"protokolu."
+
+#: resources.h:178
+msgid "Number of days between update checks:"
+msgstr "Počet dní mezi kontrolami:"
+
+#: ../../locales/../src/interface/optionspage_connection.cpp:43
+msgid "Number of retries has to be between 0 and 99."
+msgstr "Počet pokusů musí být mezi 0 a 99."
+
+#: resources.h:421
+msgid "O&pen file"
+msgstr "&Otevřít soubor"
+
+#: resources.h:358 resources.h:376
+msgid "O&verwrite"
+msgstr "Přeps&at"
+
+#: resources.h:22 resources.h:62 resources.h:222 resources.h:244
+#: resources.h:256 resources.h:266 resources.h:278 resources.h:292
+#: resources.h:312 resources.h:391 resources.h:398 resources.h:406
+#: resources.h:422
+msgid "OK"
+msgstr "OK"
+
+#: resources.h:364
+msgid "Ok"
+msgstr "OK"
+
+#: resources.h:529
+msgid ""
+"On the following pages, the selected transfer mode will be configured, as "
+"well as the fallback mode if enabled."
+msgstr ""
+"Na následujících stránkách bude nastaven vybraný režim přenosu a pokud jste "
+"povolili návrat k druhému režimu přenosu, pak i ten."
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:761
+msgid "Once"
+msgstr "jedenkrát"
+
+#: resources.h:571 resources.h:572
+msgid "Open the Site Manager"
+msgstr "Otevřít správce míst"
+
+#: resources.h:431
+msgid "Open the settings dialog of FileZilla"
+msgstr "Otevře dialog s nastavením FileZilly"
+
+#: resources.h:425
+msgid "Opens the Site Manager"
+msgstr "Otevře správce míst"
+
+#: ../../locales/../src/interface/FileZilla.cpp:206
+msgid "Operating system problem detected"
+msgstr "Zjištěn problém operačního systému"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:121
+msgid "Organization:"
+msgstr "Organizace:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:136
+msgid "Other:"
+msgstr "Jiné:"
+
+#: resources.h:351 resources.h:370
+msgid "Ov&erwrite if newer"
+msgstr "Přepsat, pokud je &novější"
+
+#: resources.h:359 resources.h:377
+msgid "Over&write if newer"
+msgstr "Přepsat, po&kud je novější"
+
+#: resources.h:149
+msgid "Overview"
+msgstr "Přehled"
+
+#: resources.h:55
+msgid "Overwrite &if newer"
+msgstr "Přepsat, pokud je &novější"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:312
+msgid "Owner / Group"
+msgstr "Vlastník / skupina"
+
+#: resources.h:226
+msgid "Owner permissions"
+msgstr "Oprávnění vlastníka"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:452
+msgid "PORT command tainted by router."
+msgstr "Příkaz PORT poškozen routerem."
+
+#: resources.h:153
+msgid "Pa&ssive (recommended)"
+msgstr "&Pasivní (doporučený)"
+
+#: ../../locales/../src/interface/updatewizard.cpp:197
+msgid "Package"
+msgstr "Balík"
+
+#: resources.h:82 resources.h:567
+msgid "Pass&word:"
+msgstr "Hesl&o:"
+
+#: resources.h:525
+msgid "Passive (recommended)"
+msgstr "Pasivní (doporučený)"
+
+#: resources.h:1 ../../locales/../src/interface/settingsdialog.cpp:104
+msgid "Passive mode"
+msgstr "Pasivní režim"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:576
+#: ../../locales/../src/interface/netconfwizard.cpp:589
+#: ../../locales/../src/interface/netconfwizard.cpp:600
+msgid "Passive mode has been set as default transfer mode."
+msgstr "Pasivní režim byl nastaven jako výchozí přenosový režim."
+
+#: ../../locales/../src/interface/edithandler.cpp:669
+#: ../../locales/../src/interface/edithandler.cpp:753
+#: ../../locales/../src/interface/edithandler.cpp:859
+msgid "Pending removal"
+msgstr "Čekým na odstranění"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:311
+msgid "Permissions"
+msgstr "Oprávnění"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:605
+msgid ""
+"Pleae make sure FileZilla is allowed to establish outgoing connections and "
+"make sure you typed the address of the address resolver correctly."
+msgstr ""
+"Zajistěte prosím, aby FileZilla byla oprávněna navázat odcházející spojení a "
+"ubezpečte se, že jste zadali adresu pro rozpoznání adresy správně."
+
+#: resources.h:341
+msgid ""
+"Please check http://filezilla-project.org for the most recent version of "
+"FileZilla."
+msgstr ""
+"Podívejte se prosím na http://filezilla-project.org pro získání nejnovější "
+"verze FileZilly."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:545
+msgid ""
+"Please check on http://filezilla-project.org/probe.php that the server is "
+"running and carefully check your settings again."
+msgstr ""
+"Prosím ověřte na stránce http://filezilla-project.org/probe.php, že server "
+"běží a znovu pečlivě zkontrolujte svá nastavení."
+
+#: ../../locales/../src/interface/updatewizard.cpp:819
+msgid ""
+"Please check the package manager of your system for an updated package or "
+"visit http://filezilla-project.org to download the source code of FileZilla."
+msgstr ""
+"Zkontrolujte prosím správce balíčků vašeho systému zda neobsahuje novější "
+"balíček nebo navštivte http://filezilla-project.org a stáhněte si zdrojový "
+"kód FileZilly."
+
+#: resources.h:531
+msgid ""
+"Please configure any firewalls and routers so that FileZilla can establish "
+"outgoing connection to arbitrary ports."
+msgstr ""
+"Nastavte prosím vaše firewally a routery tak, aby FileZilla mohla navázat "
+"odcházející spojení na libovolný port."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:611
+msgid "Please disable settings like 'DMZ mode' or 'Game mode' on your router."
+msgstr ""
+"Vypněte prosím na routeru nastavení jako je 'režim DMZ' nebo 'herní režim'."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:553
+msgid ""
+"Please ensure you have a stable internet connection and check on http://"
+"filezilla-project.org/probe.php that the server is running."
+msgstr ""
+"Ubezpečte se prosím, že vaše připojení na Internet je stabilní a "
+"zkontrolujte na stránce http://filezilla-project.org/probe.php, že tento "
+"server běží."
+
+#: ../../locales/../src/interface/optionspage_dateformatting.cpp:70
+msgid "Please enter a custom date format."
+msgstr "Zadejte vlastní formát data."
+
+#: ../../locales/../src/interface/optionspage_dateformatting.cpp:73
+msgid "Please enter a custom time format."
+msgstr "Zadejte vlastní formát času."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:57
+msgid "Please enter a download speedlimit greater or equal to 0 KB/s."
+msgstr "Limit pro stahování zadejte prosím větší nebo roven 0 KiB/s."
+
+#: ../../locales/../src/interface/filteredit.cpp:327
+msgid "Please enter a name for the new filter."
+msgstr "Zadejte prosím jméno nového filtru."
+
+#: ../../locales/../src/interface/filteredit.cpp:424
+msgid "Please enter a new name for the copied filter."
+msgstr "Zadejte jméno pro kopii filtru."
+
+#: ../../locales/../src/interface/filteredit.cpp:380
+msgid "Please enter a new name for the filter."
+msgstr "Zadejte prosím nové jméno pro filtr."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:45
+msgid ""
+"Please enter a number between 0 and 10 for the number of concurrent "
+"downloads."
+msgstr "Jako počet souběžných stahování zadejte prosím číslo mezi 0 a 10."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:49
+msgid ""
+"Please enter a number between 0 and 10 for the number of concurrent uploads."
+msgstr "Jako počet souběžných nahrávání zadejte prosím číslo mezi 0 a 10."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:41
+msgid ""
+"Please enter a number between 1 and 10 for the number of concurrent "
+"transfers."
+msgstr "Jako počet souběžných přenosů zadejte prosím číslo mezi 1 a 10."
+
+#: resources.h:113
+msgid "Please enter a password for this server:"
+msgstr "Zadejte heslo pro tento server:"
+
+#: ../../locales/../src/interface/QueueView.cpp:1985
+msgid ""
+"Please enter a path and executable to run.\n"
+"E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
+"You can also optionally specify program arguments."
+msgstr ""
+"Zadejte cestu a jméno spustitelného souboru, který se má spustit.\n"
+"Např. c:\\nějakáCesta\\soubor.exe v MS Windows nebo /nějakáCesta/soubor v "
+"Unixu.\n"
+"Můžete také zadat parametry programu."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:53
+msgid ""
+"Please enter a timeout between 5 and 9999 seconds or 0 to disable timeouts."
+msgstr ""
+"Zadejte prosím časový limit mezi 5 a 9999 sekundami nebo 0 pokud nechcete "
+"časový limit používat."
+
+#: ../../locales/../src/interface/filter.cpp:601
+msgid "Please enter a unique name for this filter set"
+msgstr "Zadejte jedinečné jméno pro tuto sadu filtrů"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:177
+msgid "Please enter a valid portrange."
+msgstr "Zadejte prosím platný rozsah portů."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:156
+msgid "Please enter an URL where to get your external address from"
+msgstr "Zadejte prosím URL, kde lze získat vaši externí adresu"
+
+#: ../../locales/../src/interface/optionspage_updatecheck.cpp:38
+msgid "Please enter an update interval of at least 7 days"
+msgstr "Zadejte počet dní mezi kontrolami alespoň 7 dní."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:61
+msgid "Please enter an upload speedlimit greater or equal to 0 KB/s."
+msgstr "Limit pro nahrávání na server zadejte prosím větší nebo roven 0 KiB/s."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:558
+msgid ""
+"Please enter raw FTP command.\n"
+"Using raw ftp commands will clear the directory cache."
+msgstr ""
+"Zadejte přímý FTP příkaz.\n"
+"Použití přímého FTP příkazu vymaže cache složek."
+
+#: ../../locales/../src/interface/LocalListView.cpp:1432
+#: ../../locales/../src/interface/RemoteListView.cpp:1435
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1195
+msgid "Please enter the name of the directory which should be created:"
+msgstr "Zadejte prosím jméno složky, která má být vytvořena:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:137
+msgid "Please enter your external IP address"
+msgstr "Zadejte prosím svou externí IP adresu."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:581
+#: ../../locales/../src/interface/netconfwizard.cpp:594
+msgid ""
+"Please enter your external IP address on the active mode page of this "
+"wizard. In case you have a dynamic address or don't know your external "
+"address, use the external resolver option."
+msgstr ""
+"Zadejte prosím svou externí IP adresu na stránce tohoto průvodce týkající se "
+"aktivního režimu. Pokud máte adresu dynamickou nebo svou externí adresu "
+"neznáte, využijte možnost externího rozpoznání."
+
+#: resources.h:518
+msgid ""
+"Please follow the instructions carefully, as wrong configuration will "
+"prevent successful FTP connections."
+msgstr ""
+"Dodržujte prosím pečlivě pokyny, neboť špatné nastavení znemožní úspěšně "
+"navazovat FTP spojení."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:564
+msgid ""
+"Please make sure you are running the latest version of FileZilla. Visit "
+"http://filezilla-project.org for details."
+msgstr ""
+"Ubezpečte se prosím, že používáte poslední verzi FileZilly. Pro podrobnosti "
+"navštivte http://filezilla-project.org."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:582
+msgid ""
+"Please make sure your router is using the latest available firmware. "
+"Furthermore, your router has to be configured properly. You will have to "
+"manual port forwarding. Don't run your router in the so called 'DMZ mode' or "
+"'game mode'."
+msgstr ""
+"Ubezpečte se prosím, že váš server používá poslední dostupnou verzi "
+"firmware. Kromě toho musí být váš server správně nastaven. Musí být povoleno "
+"manuální forwardování portů. Nespouštějte router v tzv. 'DMZ režimu' nebo "
+"'herním režimu'."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:569
+msgid ""
+"Please make sure your router is using the latest available firmware. "
+"Furthermore, your router has to be configured properly. You will have to use "
+"manual port forwarding. Don't run your router in the so called 'DMZ mode' or "
+"'game mode'."
+msgstr ""
+"Ubezpečte se prosím, že váš server používá poslední dostupnou verzi "
+"firmware. Kromě toho musí být váš server správně nastaven. Musí být povoleno "
+"manuální forwardování portů. Nespouštějte router v tzv. 'DMZ režimu' nebo "
+"'herním režimu'."
+
+#: resources.h:532
+msgid ""
+"Please note that FileZilla has no influence on the port the server chooses. "
+"So the server might choose a port which your firewall thinks is only used by "
+"trojans or other malware. This might raise a false alarm you can safely "
+"discard."
+msgstr ""
+"Uvědomte si, že FileZilla nemá vliv na port, který si server vybere. To "
+"znamená, že si server může vybrat port, o kterém se váš firewall domnívá, že "
+"ho používají pouze trojské koně nebo jiný nebezpečný software. To může "
+"vyvolat falešný poplach, který můžete bezpečně ignorovat."
+
+#: resources.h:162
+msgid ""
+"Please note that some servers might ban you if you try to reconnect too "
+"often or in too short intervals."
+msgstr ""
+"Některé servery vám mohou zakázat přístup pokud se budete snažit\n"
+"o znovuspojení příliš často nebo v příliš krátkých intervalech."
+
+#: resources.h:186 resources.h:192
+msgid ""
+"Please read http://filezilla-project.org/wiki/index.php/"
+"Date_and_Time_formatting for details"
+msgstr ""
+"Pro získání více informací navštivte http://filezilla-project.org/wiki/index."
+"php/Date_and_Time_formatting"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:559
+msgid ""
+"Please run this wizard again should you change your network environment or "
+"in case you suddenly encounter problems with servers that did work "
+"previously."
+msgstr ""
+"Spustťe prosím tohoto průvodce znovu, pokud se změní vaše síťové prostředí "
+"nebo v případě, že náhle zaznamenáte problémy se servery, které před tím "
+"fungovaly správně."
+
+#: resources.h:53
+msgid "Please select an action:"
+msgstr "Prosím vyberte akci:"
+
+#: resources.h:405
+msgid "Please select the categories you would like to import."
+msgstr "Vyberte, co se má importovat."
+
+#: resources.h:520
+msgid "Please select the default transfer mode you would like to use."
+msgstr "Prosím vyberte výchozí režim přenosu, který chcete použít."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:38
+#, c-format
+msgid "Please select the new attributes for the directory \"%s\"."
+msgstr "Prosím vyberte nové atributy složky \"%s\"."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:27
+#, c-format
+msgid "Please select the new attributes for the file \"%s\"."
+msgstr "Prosím vyberte nové atributy souboru \"%s\"."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:41
+msgid "Please select the new attributes for the selected directories."
+msgstr "Prosím vyberte nové atributy pro vybrané složky."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:44
+msgid ""
+"Please select the new attributes for the selected files and directories."
+msgstr "Prosím vyberte nové atributy pro vybrané soubory a složky."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:30
+msgid "Please select the new attributes for the selected files."
+msgstr "Prosím vyberte nové atributy pro vybrané soubory."
+
+#: resources.h:343
+msgid ""
+"Please visit http://filezilla-project.org for more information about "
+"FileZilla."
+msgstr ""
+"Pro získání více informací o FileZille, navštivte prosím http://filezilla-"
+"project.org ."
+
+#: ../../locales/../src/interface/updatewizard.cpp:817
+#: ../../locales/../src/interface/updatewizard.cpp:829
+msgid ""
+"Please visit http://filezilla-project.org to download the most recent "
+"version."
+msgstr ""
+"Podívejte se prosím na http://filezilla-project.org pro získání nejnovější "
+"verze FileZilly."
+
+#: ../../locales/../src/interface/sitemanager.cpp:1242
+#: ../../locales/../src/interface/sitemanager.cpp:1377
+msgid "Predefined Sites"
+msgstr "Předdefinovaná místa"
+
+#: resources.h:169
+msgid "Preview"
+msgstr "Náhled"
+
+#: ../../locales/../src/engine/tlssocket.cpp:792
+msgid "Primary connection and data connection certificates don't match."
+msgstr "Certifikáty primárního a datového spojení si neodpovídají."
+
+#: resources.h:146
+msgid "Prioritize directories (default)"
+msgstr "Složky na začátku nebo na konci výpisu dle řazení (výchozí)"
+
+#: ../../locales/../src/interface/queue.cpp:1136
+msgid "Priority"
+msgstr "Priorita"
+
+#: resources.h:473
+msgid "Process &Queue"
+msgstr "&Fronta procesů"
+
+#: resources.h:13
+msgid "Public key algorithm:"
+msgstr "Algoritmus veřejného klíče:"
+
+#: resources.h:234
+msgid "Public permissions"
+msgstr "Oprávnění ostatních"
+
+#: ../../locales/../src/interface/QueueView.cpp:1544
+#, c-format
+msgid "Queue: %s%d KB"
+msgstr "Fronta: %s%d KiB"
+
+#: ../../locales/../src/interface/QueueView.cpp:1539
+#, c-format
+msgid "Queue: %s%d MB"
+msgstr "Fronta: %s%d MiB"
+
+#: ../../locales/../src/interface/QueueView.cpp:1547
+#, c-format
+msgid "Queue: %s%d bytes"
+msgstr "Fronta: %s%d bajtů"
+
+#: ../../locales/../src/interface/QueueView.cpp:1535
+msgid "Queue: empty"
+msgstr "Fronta: prázdná"
+
+#: ../../locales/../src/interface/QueueView.cpp:408
+msgid "Queued files"
+msgstr "Soubory ve frontě"
+
+#: resources.h:489
+msgid "R&eboot system"
+msgstr "&Restartovat systém"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:567
+msgid "Raw FTP command"
+msgstr "Přímý FTP příkaz"
+
+#: resources.h:231
+msgid "Re&ad"
+msgstr "Čt&ení"
+
+#: resources.h:57 resources.h:353 resources.h:372
+msgid "Re&name"
+msgstr "Pře&jmenovat"
+
+#: resources.h:235
+msgid "Rea&d"
+msgstr "Čte&ní"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:820
+msgid "Really cancel current operation?"
+msgstr "Opravdu si přejete přerušit aktuální operaci?"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1533
+#: ../../locales/../src/interface/RemoteListView.cpp:1490
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1040
+msgid "Really delete all selected files and/or directories?"
+msgstr "Chcete opravdu odstranit všechny vybrané soubory a/nebo složky?"
+
+#: ../../locales/../src/interface/queueview_failed.cpp:16
+msgid "Reason"
+msgstr "Důvod"
+
+#: resources.h:240
+msgid "Rec&urse into subdirectories"
+msgstr "&Rekurzivně použít pro vnořené složky"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:976
+#: ../../locales/../src/interface/netconfwizard.cpp:985
+#: ../../locales/../src/interface/netconfwizard.cpp:1009
+msgid "Received data tainted"
+msgstr "Přijatá data poškozená."
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:68
+msgid ""
+"Reconnect information cannot be cleared while connected to a server.\n"
+"If you continue, your connection will be disconnected."
+msgstr ""
+"Informaci pro znovuspojení nelze vymazat dokud jste připojeni na server.\n"
+"Pokud budete pokračovat, spojení se serverem bude odpojeno."
+
+#: resources.h:157
+msgid "Reconnection settings"
+msgstr "Nastavení znovuspojení"
+
+#: resources.h:589 resources.h:590
+msgid "Reconnects to the last used server"
+msgstr "Znovu se připojí k naposledy použitému serveru"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:681
+msgid "Redirection to invalid address"
+msgstr "Přesměrování na neplatnou adresu"
+
+#: resources.h:581 resources.h:582
+msgid "Refresh the file and folder lists"
+msgstr "Znovu načíst seznam souborů a složek"
+
+#: ../../locales/../src/engine/tlssocket.cpp:744
+msgid "Remote certificate not trusted."
+msgstr "Nedůvěryhodný vzdálený certifikát."
+
+#: ../../locales/../src/interface/queue.cpp:1134
+msgid "Remote file"
+msgstr "Vzdálený soubor"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:113
+msgid "Remote file editing"
+msgstr "Editace vzdálených souborů"
+
+#: resources.h:288
+msgid "Remote filters:"
+msgstr "Vzdálené filtry:"
+
+#: ../../locales/../src/interface/viewheader.cpp:512
+msgid "Remote site:"
+msgstr "Vzdálená složka:"
+
+#: resources.h:498 resources.h:501
+msgid "Remove &all"
+msgstr "Odeber &všechny"
+
+#: resources.h:307 resources.h:499 resources.h:502
+msgid "Remove &selected"
+msgstr "Odebrat &vybrané"
+
+#: resources.h:361 resources.h:379
+msgid "Rena&me"
+msgstr "Přej&menovat"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:214
+msgid "Rename file"
+msgstr "Přejmenovat soubor"
+
+#: resources.h:514
+msgid "Rename selected directory"
+msgstr "Přejmenovat vybranou složku"
+
+#: resources.h:459 resources.h:470
+msgid "Rename selected files and folders"
+msgstr "Přejmenovat vybrané soubory a složky"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2814
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2084
+#, c-format
+msgid "Renaming '%s' to '%s'"
+msgstr "Přejmenovávám '%s' na '%s'"
+
+#: resources.h:360 resources.h:378
+msgid "Res&ume"
+msgstr "O&bnovit stahování"
+
+#: resources.h:500 resources.h:503
+msgid "Reset and requeue selected files"
+msgstr "Zařaď vybrané soubory znovu do fronty"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:929
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:467
+#, c-format
+msgid "Resolving IP-Address for %s"
+msgstr "Zjišťuji IP adresu %s"
+
+#: ../../locales/../src/interface/updatewizard.cpp:172
+msgid "Resolving hostname"
+msgstr "Zjišťuji jméno hostitele"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:387
+#: ../../locales/../src/interface/StatusView.cpp:187
+#: ../../locales/../src/interface/StatusView.cpp:223
+msgid "Response:"
+msgstr "Odpověď:"
+
+#: resources.h:383
+msgid ""
+"Resuming ascii files can cause problems if server uses a different line "
+"ending format than the client."
+msgstr ""
+"Navazování ASCII souborů může způsobit problémy, pokud server používá jiný "
+"formát konce řádků než klient."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:863
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:822
+msgid "Retrieving directory listing..."
+msgstr "Přijímám výpis složky..."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3127
+#: ../../locales/../src/interface/netconfwizard.cpp:690
+#, c-format
+msgid "Retrieving external IP address from %s"
+msgstr "Získávám externí IP adresu z %s"
+
+#: resources.h:426
+msgid "S&how files currently being edited..."
+msgstr "&Ukázat právě editované soubory..."
+
+#: resources.h:490
+msgid "S&hutdown system"
+msgstr "&Vypnout počítač"
+
+#: resources.h:354 resources.h:373
+msgid "S&kip"
+msgstr "Přeskoč&it"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:826
+msgid "Save settings?"
+msgstr "Uložit nastavení?"
+
+#: ../../locales/../src/interface/QueueView.cpp:1599
+msgid "Scanning for files to add to queue"
+msgstr "Hledám soubory pro přidání do fronty"
+
+#: ../../locales/../src/interface/QueueView.cpp:1601
+msgid "Scanning for files to upload"
+msgstr "Hledám soubory pro nahrátí na server"
+
+#: resources.h:123
+msgid "Select &page:"
+msgstr "&Vyber stránku:"
+
+#: resources.h:65
+msgid "Select Entry:"
+msgstr "Vyber položku:"
+
+#: resources.h:163
+msgid "Select Theme"
+msgstr "Vyber téma"
+
+#: resources.h:366
+msgid ""
+"Select default action to perform if target file of a transfer already exists."
+msgstr "Co dělat, pokud již cílový soubor nebo přenos existuje."
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:150
+msgid "Select default editor"
+msgstr "Vyber výchozí editor"
+
+#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:18
+msgid ""
+"Select default file exists action if the target file already exists. This "
+"selection is valid only for the current session."
+msgstr ""
+"Vyberte prosím výchozí chování pro případ, že cílový soubor již existuje. "
+"Tato volba je platná pouze pro aktuální sezení."
+
+#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:16
+msgid ""
+"Select default file exists action only for the currently selected files in "
+"the queue."
+msgstr ""
+"Vyberte prosím výchozí chování pro případ, že cílový soubor již existuje. "
+"Bude platit pouze pro momentálně vybrané soubory ve frontě."
+
+#: ../../locales/../src/interface/updatewizard.cpp:201
+msgid "Select download location for package"
+msgstr "Vyberte místo, kam se má balíček stáhnout"
+
+#: ../../locales/../src/interface/export.cpp:30
+msgid "Select file for exported settings"
+msgstr "Vyber soubor pro exportovaná nastavení"
+
+#: ../../locales/../src/interface/import.cpp:15
+msgid "Select file to import settings from"
+msgstr "Vyber soubor pro import nastavení"
+
+#: resources.h:394
+msgid "Select the categories to export:"
+msgstr "Vyberte, co se má exportovat:"
+
+#: resources.h:385
+msgid "Select the private data you would like to delete."
+msgstr "Vyberte důvěrné údaje, které chcete smazat."
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:168
+msgid "Selected editor does not exist"
+msgstr "Vybraný editor neexistuje"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2429
+msgid "Selected file already being edited"
+msgstr "Vybraný soubor je již upravován."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2423
+msgid "Selected file already still opened."
+msgstr "Vybraný soubor je stále ještě otevřen."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2399
+msgid ""
+"Selected file cannot be opened.\n"
+"No default editor has been set or filetype association is missing or "
+"incorrect."
+msgstr ""
+"Vybraný soubor nemůže být otevřen.\n"
+"Nebyl nastaven výchozí editor nebo přidružení typu souboru chybí nebo není "
+"platné."
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:105
+msgid "Selected file does not exist."
+msgstr "Vybraný soubor neexistuje."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2437
+msgid "Selected file still being edited"
+msgstr "Vybraný soubor je stále ještě editován"
+
+#: ../../locales/../src/engine/engineprivate.cpp:324
+msgid "Selected port usually in use by a different protocol."
+msgstr "Jiný protokol běžně používá vybraný port."
+
+#: resources.h:443
+msgid "Send custom command to the server otherwise not available"
+msgstr "Pošle uživatelem zadaný, jinými způsoby nedostupný, příkaz serveru"
+
+#: resources.h:12
+msgid "Serial number:"
+msgstr "Sériové číslo:"
+
+#: ../../locales/../src/interface/queue.cpp:1132
+msgid "Server / Local file"
+msgstr "Server / místní soubor"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3494
+#, c-format
+msgid "Server does not support resume of files > %d GB."
+msgstr "Server nepodporuje navazování souborů větších než %d GiB."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3490
+#, c-format
+msgid ""
+"Server does not support resume of files > %d GB. End transfer since "
+"filesizes match."
+msgstr ""
+"Server nepodporuje navazování souborů větších než %d GiB. Konec přenosu, "
+"protože velikosti souborů si odpovídají."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1910
+msgid "Server does not support resume of files > 2GB."
+msgstr "Server nepodporuje navazování souborů větších než 2 GiB."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1905
+msgid "Server does not support resume of files > 4GB."
+msgstr "Server nepodporuje navazování souborů větších než 4 GiB."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3505
+#, c-format
+msgid ""
+"Server may not support resume of files > %d GB. End transfer since filesizes "
+"match."
+msgstr ""
+"Server možná nepodporuje navazování souborů větších než %d GiB. Konec "
+"přenosu, protože velikosti souborů si odpovídají."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:729
+msgid ""
+"Server requires an account. Please specify an account using the Site Manager"
+msgstr "Server vyžaduje konto. Určete ho pomocí správce míst."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:395
+#: ../../locales/../src/interface/netconfwizard.cpp:402
+#: ../../locales/../src/interface/netconfwizard.cpp:441
+#: ../../locales/../src/interface/netconfwizard.cpp:460
+#: ../../locales/../src/interface/netconfwizard.cpp:467
+#: ../../locales/../src/interface/netconfwizard.cpp:479
+#: ../../locales/../src/interface/netconfwizard.cpp:493
+#: ../../locales/../src/interface/netconfwizard.cpp:502
+#: ../../locales/../src/interface/netconfwizard.cpp:513
+msgid "Server sent invalid reply."
+msgstr "Server poslal chybnou odpověď."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3078
+msgid ""
+"Server sent passive reply with unroutable address. Using server address "
+"instead."
+msgstr ""
+"Server poslal pasivní odpověď s nedostupnou adresou. Místo toho používám "
+"adresu serveru."
+
+#: resources.h:74 resources.h:86
+msgid "Server&type:"
+msgstr "T&yp serveru:"
+
+#: resources.h:477
+msgid "Set &Priority"
+msgstr "Nastav priorit&u"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2955
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1979
+#, c-format
+msgid "Set permissions of '%s' to '%s'"
+msgstr "Nastav oprávnění '%s' na '%s'"
+
+#: resources.h:122
+msgid "Settings"
+msgstr "Nastavení"
+
+#: resources.h:209
+msgid "Show &raw directory listing"
+msgstr "Zobrazovat nezpracované výpisy složek"
+
+#: resources.h:402
+msgid "Site &Manager entries"
+msgstr "Položky &správci míst"
+
+#: resources.h:64
+msgid "Site Manager"
+msgstr "Správce míst"
+
+#: ../../locales/../src/interface/sitemanager.cpp:60
+msgid "Site Manager already open"
+msgstr "Správce míst již otevřen"
+
+#: ../../locales/../src/interface/queue.cpp:1135
+msgid "Size"
+msgstr "Velikost"
+
+#: resources.h:193
+msgid "Size formatting"
+msgstr "Formátování velikostí"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:59
+#: ../../locales/../src/interface/fileexistsdlg.cpp:83
+#: ../../locales/../src/interface/fileexistsdlg.cpp:115
+#: ../../locales/../src/interface/fileexistsdlg.cpp:139
+msgid "Size unknown"
+msgstr "Neznámá velikost"
+
+#: resources.h:362 resources.h:380
+msgid "Sk&ip"
+msgstr "Přeskoči&t"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2180
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2265
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:206
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:246
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:645
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:718
+#, c-format
+msgid "Skipping download of %s"
+msgstr "Přeskakuji stahování %s"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2184
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2269
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:210
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:250
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:649
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:722
+#, c-format
+msgid "Skipping upload of %s"
+msgstr "Přeskakuji nahrávání %s na server"
+
+#: resources.h:170
+msgid "Small icons"
+msgstr "Malé ikony"
+
+#: resources.h:2 resources.h:534
+msgid ""
+"Some misconfigured remote servers which are behind a router, may reply with "
+"their local ip address."
+msgstr ""
+"Některé špatně nastavené vzdálené servery, které jsou za routerem, mohou "
+"odpovědět svojí lokální IP adresou."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:893
+msgid "Some remote files are still being edited or need to be uploaded."
+msgstr ""
+"Některé vzdálené soubory jsou stále editovány nebo musí být nahrány na "
+"server."
+
+#: resources.h:148
+msgid "Sort directories inline"
+msgstr "Řadit složky mezi soubory"
+
+#: resources.h:145
+msgid "Sorting mode:"
+msgstr "Způsob řazení:"
+
+#: ../../locales/../src/interface/RemoteTreeView.cpp:92
+msgid "Source and path of the drop operation are identical"
+msgstr "Zdroj a cíl přetahování se shodují"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:126
+msgid "Source and target of the drop operation are identical"
+msgstr "Zdroj a cíl přetahování se shodují"
+
+#: resources.h:35
+msgid "Speed limits"
+msgstr "Rychlostní limity"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1602
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1353
+#, c-format
+msgid "Starting download of %s"
+msgstr "Začínám stahovat %s"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1606
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1357
+#, c-format
+msgid "Starting upload of %s"
+msgstr "Začínám %s nahrávat na server"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:125
+msgid "State:"
+msgstr "Stát:"
+
+#: ../../locales/../src/interface/edithandler.cpp:650
+#: ../../locales/../src/interface/QueueView.cpp:434
+msgid "Status"
+msgstr "Stav"
+
+#: ../../locales/../src/interface/StatusView.cpp:196
+#: ../../locales/../src/interface/StatusView.cpp:238
+msgid "Status:"
+msgstr "Stav:"
+
+#: resources.h:474
+msgid "Stop and remove &all"
+msgstr "Všechny &zastav a odeber"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:127
+msgid "Street:"
+msgstr "Ulice:"
+
+#: resources.h:16
+msgid "Subject of certificate"
+msgstr "Předmět certifikátu:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:565
+msgid ""
+"Submit a bug report if this problem persists even with the latest version of "
+"FileZilla."
+msgstr ""
+"Pošlete hlášení o chybě pokud tento problém setrvává i v poslední verzi "
+"FileZilly."
+
+#: ../../locales/../src/interface/queueview_successful.cpp:11
+msgid "Successful transfers"
+msgstr "Úspěšné přenosy"
+
+#: resources.h:562
+msgid "Summary of test results:"
+msgstr "Souhrn výsledků testu:"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:73
+#: ../../locales/../src/interface/quickconnectbar.cpp:107
+msgid "Syntax error"
+msgstr "Syntaktická chyba"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:322
+msgid "TLS/SSL connection established, waiting for welcome message..."
+msgstr "TLS/SSL spojení navázáno, čekám na uvítací zprávu..."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:326
+msgid "TLS/SSL connection established."
+msgstr "TLS/SSL spojení navázáno."
+
+#: resources.h:44
+msgid "Target file already exists"
+msgstr "Cílový soubor už existuje"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1785
+msgid "Target filename already exists, really continue?"
+msgstr "Cílové jméno souboru už existuje, chcete opravdu pokračovat?"
+
+#: resources.h:561
+msgid "Test results"
+msgstr "Výsledky testu"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3511
+msgid "Testing resume capabilities of server"
+msgstr "Testuji schopnost serveru navazovat soubory."
+
+#: ../../locales/../src/interface/sitemanager.cpp:59
+msgid ""
+"The Site Manager is opened in another instance of FileZilla 3.\n"
+"Do you want to continue? Any changes made in the Site Manager won't be saved "
+"then."
+msgstr ""
+"Správce míst je otevřen v jiné instanci FileZilly 3.\n"
+"Chcete pokračovat? Změny, které provedete ve správci míst nebudou uloženy."
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:90
+msgid ""
+"The Site Manager is opened in another instance of FileZilla 3.\n"
+"Please close it or the data cannot be deleted."
+msgstr ""
+"Správce míst je otevřen v jiné instanci FileZilly 3.\n"
+"Pokud ho nezavřete, data nelze odstranit."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:606
+#, c-format
+msgid "The address you entered was: %s"
+msgstr "Zadal jste adresu: %s"
+
+#: ../../locales/../src/interface/filteredit.cpp:334
+#: ../../locales/../src/interface/filteredit.cpp:397
+#: ../../locales/../src/interface/filteredit.cpp:437
+msgid "The entered filter name already exists."
+msgstr "Filtr s tímto jménem již existuje."
+
+#: ../../locales/../src/interface/optionspage_filetype.cpp:160
+#, c-format
+msgid "The extension '%s' does already exist in the list"
+msgstr "Přípona '%s' již v seznamu existuje"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:204
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:211
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"Please enter a new name:"
+msgstr ""
+"Soubor %s už existuje.\n"
+"Prosím zadejte nové jméno:"
+
+#: ../../locales/../src/interface/import.cpp:79
+msgid ""
+"The file you have selected contains site manager data from a previous "
+"version of FileZilla.\n"
+"Due to differences in the storage format, only host, port, username and "
+"password will be imported.\n"
+"Continue with the import?"
+msgstr ""
+"Vybraný soubor obsahuje data správce míst z předchozí verze FileZilly.\n"
+"Vzhledem k rozdílům ve formátu ukládání se načte pouze hostitel, port, "
+"uživatelské jméno a heslo.\n"
+"Pokračovat v importování?"
+
+#: resources.h:416
+msgid "The following files are currently being edited:"
+msgstr "Následující soubory jsou právě editovány:"
+
+#: resources.h:207
+msgid ""
+"The higher the debug level, the more information will be displayed in the "
+"message log. Displaying debug information has a negative impact on "
+"performance."
+msgstr ""
+"Čím vyšší úroveň ladicích informací, tím více informací bude zobrazeno v "
+"okně se zprávami. Zobrazování ladicích informací snižuje výkon aplikace."
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:77
+msgid ""
+"The lowest available port has to be less or equal than the highest available "
+"port."
+msgstr ""
+"Nejnižší využitelný port musí být nižší nebo roven nejvyššímu využitelnému "
+"portu."
+
+#: ../../locales/../src/interface/updatewizard.cpp:385
+msgid ""
+"The most recent version has been downloaded. Click on Finish to close "
+"FileZilla and to start the installation."
+msgstr ""
+"Nejnovější verze byla stažena. Klikněte na Finish pro ukončení FileZilly a "
+"spuštění instalace."
+
+#: ../../locales/../src/interface/updatewizard.cpp:387
+msgid ""
+"The most recent version has been downloaded. Please install like you did "
+"install this version."
+msgstr ""
+"Nejnovější verze byla stažena. Nainstalujte ji prosím tak, jako jste "
+"nainstalovali tuto verzi."
+
+#: ../../locales/../src/interface/import.cpp:69
+msgid "The selected categories have been imported."
+msgstr "Vybrané prvky byly importovány."
+
+#: resources.h:401
+msgid ""
+"The selected file contains importable data for the following categories:"
+msgstr "Z vybraného souboru je možné importovat tyto údaje:"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2437
+msgid ""
+"The selected file is still opened in some other program, please close it."
+msgstr ""
+"Vybraný soubor je stále ještě otevřen v nějakém jiném programu, zavřete ho "
+"prosím."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2404
+msgid ""
+"The selected file would be executed directly.\n"
+"This can be dangerous and damage your system.\n"
+"Do you really want to continue?"
+msgstr ""
+"Vybraný soubor bude přímo spuštěn.\n"
+"To může být nebezpečné a ohrozit váš systém.\n"
+"Chcete opravdu pokračovat?"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:563
+msgid "The server sent an unrecognized reply."
+msgstr "Server poslal nerozpoznanou odpověď."
+
+#: resources.h:102
+msgid "The server uses following charset encoding for filenames:"
+msgstr "Server používá následující kódování znakové sady pro jména souborů:"
+
+#: resources.h:6
+msgid ""
+"The server's certificate is unknown. Please carefully examine the "
+"certificate to make sure the server can be trusted."
+msgstr ""
+"Certifikát serveru je neznámý. Podrobně ho prozkoumejte, abyste se ujistili, "
+"že je server důvěryhodný."
+
+#: resources.h:270
+msgid ""
+"The server's host key does not match the key that has been cached. This "
+"means that either the administrator has changed the host key, or you are "
+"actually trying to connect to another computer pretending to be the server.\n"
+"If the host key change was not expected, please contact the server "
+"administrator."
+msgstr ""
+"Hostitelský klíč serveru se neshoduje s klíčem, který je uložen v cache. To "
+"znamená, že buď administrátor hostitelský klíč změnil nebo že se ve "
+"skutečnosti pokoušíte připojit k jinému počítači, který předstírá, že je "
+"daným serverem.\n"
+"Pokud změna hostitelského klíče není očekávána, kontaktujte prosím "
+"administrátora serveru."
+
+#: resources.h:258
+msgid ""
+"The server's host key is not cached in the registry. You have no guarantee "
+"that the server is the computer you think it is."
+msgstr ""
+"Hostitelský klíč serveru není uložen v cache v registru. Nemáte žádnou "
+"záruku, že daný server je tím počítačem, kterým si myslíte, že je."
+
+#: ../../locales/../src/interface/import.cpp:66
+msgid ""
+"The settings have been imported. You have to restart FileZilla for all "
+"settings to have effect."
+msgstr ""
+"Nastavení bylo importováno. Aby se všechna nastavení uplatnila, musíte "
+"restartovat FileZillu."
+
+#: resources.h:45
+msgid ""
+"The target file already exists.\n"
+"Would you like to replace the file"
+msgstr ""
+"Cílový soubor už existuje.\n"
+"Chcete nahradit soubor"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:826
+msgid "The test did not succeed. Do you really want to save the settings?"
+msgstr "Test neuspěl. Chcete opravdu nastavení uložit?"
+
+#: ../../locales/../src/interface/themeprovider.cpp:58
+#: ../../locales/../src/interface/themeprovider.cpp:77
+msgid "Theme error"
+msgstr "Chyba témat"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:109
+msgid "Themes"
+msgstr "Témata"
+
+#: ../../locales/../src/interface/filter.cpp:638
+msgid "This filter set cannot be removed"
+msgstr "Tato sada filtrů nemůže být odstraněna"
+
+#: resources.h:539
+msgid ""
+"This only works if you are not behind a router, else your system would just "
+"return your internal address."
+msgstr ""
+"Toto funguje jen pokud nejste za routerem, jinak operační systém pouze vrátí "
+"vaši interní adresu."
+
+#: resources.h:517
+msgid ""
+"This wizard will help you to properly configure any routers and firewalls "
+"you have and tests your configuration."
+msgstr ""
+"Tento průvodce vám pomůže správně nastavit vaše routery a firewally a "
+"otestovat vaše nastavení."
+
+#: resources.h:187
+msgid "Time formatting"
+msgstr "Formátování času"
+
+#: resources.h:32
+msgid "Time&out in seconds:"
+msgstr "Časový &limit v sekundách:"
+
+#: resources.h:31 ../../locales/../src/interface/QueueView.cpp:925
+#: ../../locales/../src/interface/QueueView.cpp:950
+msgid "Timeout"
+msgstr "Časový limit"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:123
+msgid "Title:"
+msgstr "Titul:"
+
+#: resources.h:583 resources.h:584
+msgid "Toggles processing of the transfer queue"
+msgstr "Přepíná zpracování fronty přenosů"
+
+#: resources.h:575 resources.h:576
+msgid "Toggles the display of the local directory tree"
+msgstr "Přepíná zobrazení stromu místních složek"
+
+#: resources.h:573 resources.h:574
+msgid "Toggles the display of the message log"
+msgstr "Přepíná zobrazení logu zpráv"
+
+#: resources.h:577 resources.h:578
+msgid "Toggles the display of the remote directory tree"
+msgstr "Přepíná zobrazení vzdáleného stromu složek"
+
+#: resources.h:579 resources.h:580
+msgid "Toggles the display of the transfer queue"
+msgstr "Přepíná zobrazení fronty přenosů"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:588
+msgid "Too long header line"
+msgstr "Řádek hlavičky je příliš dlouhý"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:649
+msgid "Too many redirects"
+msgstr "Příliš mnoho přesměrování"
+
+#: ../../locales/../src/interface/StatusView.cpp:190
+#: ../../locales/../src/interface/StatusView.cpp:230
+msgid "Trace:"
+msgstr "Trace:"
+
+#: resources.h:152
+msgid "Transfer Mode"
+msgstr "Režim přenosu"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:151
+msgid "Transfer aborted by user"
+msgstr "Přenos byl zrušen uživatelem"
+
+#: resources.h:94
+msgid "Transfer settings"
+msgstr "Nastavení přenosu"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:609
+msgid "Transferred data got tainted."
+msgstr "Přenesená data se poškodila."
+
+#: ../../locales/../src/interface/QueueView.cpp:1272
+#: ../../locales/../src/interface/statuslinectrl.cpp:198
+msgid "Transferring"
+msgstr "Přenáším"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:105
+msgid "Transfers"
+msgstr "Přenosy"
+
+#: resources.h:135
+msgid "Treat files &without extention as Ascii file"
+msgstr "Rozpoznávat soubory bez přípony jako ASCII soubory"
+
+#: resources.h:131
+msgid "Treat the &following filetypes as Ascii files:"
+msgstr "&Rozpoznávat následující typy souborů jako ASCII soubory:"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:748
+msgid "Trust changed Hostkey: "
+msgstr "Veřit změněnému hostitelskému klíči:"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:746
+msgid "Trust new Hostkey: "
+msgstr "Veřit novému hostitelskému klíči:"
+
+#: resources.h:276
+msgid "Trust the new key and carry on connecting?"
+msgstr "Věřit novému klíči a pokračovat ve spojování?"
+
+#: resources.h:20
+msgid "Trust this certificate and carry on connecting"
+msgstr "Důvěřovat tomuto certifikátu a pokračovat v připojování"
+
+#: resources.h:264
+msgid "Trust this host and carry on connecting?"
+msgstr "Věřit tomuto hostiteli a pokračovat ve spojování?"
+
+#: resources.h:419
+msgid "U&pload"
+msgstr "&Nahrát na server"
+
+#: resources.h:38
+msgid "U&pload limit:"
+msgstr "Limit pro na&hrávání na server:"
+
+#: resources.h:213
+msgid "U&se filetype associations if available"
+msgstr "Používat &aplikace přidružené k typu souboru."
+
+#: resources.h:188
+msgid "U&se system defaults"
+msgstr "Použít nastavení sys&tému"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:122
+msgid "Unit:"
+msgstr "Jednotka:"
+
+#: ../../locales/../src/interface/edithandler.cpp:675
+msgid "Unknown"
+msgstr "Neznámý"
+
+#: resources.h:5
+msgid "Unknown certificate"
+msgstr "Neznámý certifikát"
+
+#: resources.h:257
+msgid "Unknown host key"
+msgstr "Neznámý hostitelský klíč"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:584
+#: ../../locales/../src/interface/netconfwizard.cpp:595
+msgid ""
+"Unless these problems get fixed, active mode FTP will not work and passive "
+"mode has to be used."
+msgstr ""
+"Dokud se tyto problémy nevyřeší, aktivní FTP režim nebude pracovat a musí se "
+"použít pasivní."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:571
+msgid ""
+"Unless this problem gets fixed, active mode FTP will not work and passive "
+"mode has to be used."
+msgstr ""
+"Dokud se tento problém nevyřeší, aktivní FTP režim nebude pracovat a musí se "
+"použít pasivní."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:633
+msgid "Unsuppored redirect"
+msgstr "Nepodporované přesměrování"
+
+#: resources.h:420
+msgid "Up&load and unedit"
+msgstr "Na&hrát na server a vrátit úpravy"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:115
+msgid "Update Check"
+msgstr "Kontrola novější verze"
+
+#: ../../locales/../src/interface/updatewizard.cpp:137
+#: ../../locales/../src/interface/updatewizard.cpp:145
+msgid "Update wizard"
+msgstr "Průvodce aktualizací"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1359
+msgid "Updatecheck failed"
+msgstr "Kontrola novější verze selhala"
+
+#: resources.h:451
+msgid "Upload selected files and folders"
+msgstr "Nahrát na server vybrané soubory a složky"
+
+#: resources.h:411
+msgid "Upload this file back to the server?"
+msgstr "Nahrát tento soubor zpátky na server?"
+
+#: ../../locales/../src/interface/edithandler.cpp:663
+#: ../../locales/../src/interface/edithandler.cpp:787
+msgid "Uploading"
+msgstr "Nahrávám na server"
+
+#: ../../locales/../src/interface/edithandler.cpp:666
+#: ../../locales/../src/interface/edithandler.cpp:821
+msgid "Uploading and pending removal"
+msgstr "Nahrávám na server a čekám na odstranění"
+
+#: resources.h:355 resources.h:374
+msgid "Uploads"
+msgstr "Nahrávání na server"
+
+#: resources.h:106
+msgid "Use &custom charset"
+msgstr "Použít &vlastní znakovou sadu"
+
+#: resources.h:348
+msgid "Use &default"
+msgstr "Použít &výchozí"
+
+#: resources.h:356
+msgid "Use d&efault"
+msgstr "Použít vý&chozí"
+
+#: resources.h:182
+msgid "Use system &defaults"
+msgstr "Použít nastavení s&ystému"
+
+#: resources.h:321 resources.h:540
+msgid "Use the following IP address:"
+msgstr "Použít tuto IP adresu:"
+
+#: resources.h:550
+msgid "Use the following port range:"
+msgstr "Použít následující rozsah portů:"
+
+#: resources.h:535
+msgid "Use the server's external IP address instead"
+msgstr "Použít místo toho externí IP adresu serveru"
+
+#: resources.h:322 resources.h:541
+msgid ""
+"Use this if you're behind a router and have a static external IP address."
+msgstr "Toto použijte, jste-li za routerem a máte statickou externí IP adresu."
+
+#: resources.h:544
+msgid ""
+"Use this option if you have a dynamic IP address. FileZilla will contact the "
+"above server once each session as soon as you use active mode for the first "
+"time. Only the version of FileZilla you're using is submitted to the server."
+msgstr ""
+"Použijte tuto možnost, máte-li dynamickou IP adresu. FileZilla se spojí se "
+"zadaným serverem jednou pro každé sezení jakmile poprvé použijete aktivní "
+"režim. Verze FileZilly je jediná informace, která se přenáší na server."
+
+#: resources.h:116
+msgid "User:"
+msgstr "Uživatelské jméno:"
+
+#: resources.h:104
+msgid "Uses UTF-8 if the server supports it, else use local charset."
+msgstr "Použije UTF-8 pokud ho server podporuje, jinak místní znakovou sadu."
+
+#: resources.h:108
+msgid ""
+"Using the wrong charset can result in filenames not displaying properly."
+msgstr ""
+"Nastavení nesprávné znakové sady může vést k nekorektnímu zobrazení jmen "
+"souborů."
+
+#: resources.h:327
+msgid "Using this wizard you can check for available updates to FileZilla."
+msgstr "Tento průvodce vám umožní zjistit, zda existují aktualizace FileZilly."
+
+#: resources.h:10
+msgid "Valid from:"
+msgstr "Platný od:"
+
+#: resources.h:11
+msgid "Valid to:"
+msgstr "Platný do:"
+
+#: ../../locales/../src/engine/tlssocket.cpp:922
+msgid "Verifying certificate..."
+msgstr "Ověřuji certifikát..."
+
+#: resources.h:43
+msgid "Very high"
+msgstr "Velmi vysoká"
+
+#: resources.h:444
+msgid "View &hidden files"
+msgstr "Zobrazovat s&kryté soubory"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:622
+msgid "View hidden files"
+msgstr "Zobrazovat skryté soubory"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:932
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1017
+msgid "View hidden option set, but unsupported by server"
+msgstr ""
+"Zobrazování skrytých souborů je sice povoleno, ale server ho nepodporuje"
+
+#: resources.h:232
+msgid "W&rite"
+msgstr "Zá&pis"
+
+#: ../../locales/../src/interface/QueueView.cpp:1558
+msgid "Waiting"
+msgstr "Čekám"
+
+#: ../../locales/../src/interface/QueueView.cpp:1201
+msgid "Waiting for browsing connection"
+msgstr "Čekám na spojení pro prohlížení"
+
+#: ../../locales/../src/interface/QueueView.cpp:1222
+msgid "Waiting for password"
+msgstr "Čekám na heslo"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:192
+msgid "Waiting for transfer to be canceled"
+msgstr "Čekám na stornování přenosu"
+
+#: ../../locales/../src/engine/engineprivate.cpp:234
+msgid "Waiting to retry..."
+msgstr "Čekám na opakování..."
+
+#: ../../locales/../src/interface/FileZilla.cpp:197
+msgid ""
+"Warning!\n"
+"\n"
+"A bug in Windows causes problems with FileZilla\n"
+"\n"
+"The bug occurs if you have\n"
+"- Windows Server 2003 or XP 64\n"
+"- Windows Firewall enabled\n"
+"- Application Layer Gateway service enabled\n"
+"See http://support.microsoft.com/kb/931130 for background information.\n"
+"\n"
+"Unless you either disable Windows Firewall or the Application Layer Gateway "
+"service,\n"
+"FileZilla will timeout on big transfers."
+msgstr ""
+"Varování!\n"
+"\n"
+"Chyba ve Windows způsobuje FileZille problémy\n"
+"\n"
+"Tato chyba se vyskytuje polud máte\n"
+"- Windows Server 2003 nebo XP 64\n"
+"- povolenou bránu firewall systému Windows\n"
+"- povolenou službu brány aplikačního rozhraní\n"
+"Pro detailní informace navštivte http://support.microsoft.com/kb/931130 .\n"
+"\n"
+"Dokud nevypnete bránu firewall systému Windows nebo službu brány aplikačního "
+"rozhraní\n"
+"FileZilla překročí časový limit při přenosu velkých souborů."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:944
+msgid "Warning, ignoring data connection from wrong IP."
+msgstr "Varování, ignoruji datové spojení ze špatného IP."
+
+#: ../../locales/../src/interface/updatewizard.cpp:145
+msgid ""
+"Warning, use nightly builds at your own risk.\n"
+"No support is given for nightly builds.\n"
+"Nightly builds may not work as expected and might even damage your system.\n"
+"\n"
+"Do you really want to check for nightly builds?"
+msgstr ""
+"Varování, použití vývojových verzí je na vlastní riziko.\n"
+"Pro tyto verze není poskytována žádná podpora.\n"
+"Vývojové verze nemusí správně fungovat a mohou dokonce poškodit váš systém.\n"
+"\n"
+"Chcete opravdu zjišťovat tyto vývojové verze?"
+
+#: resources.h:269
+msgid "Warning: Potential security breach!"
+msgstr "Varování: možné narušení bezpečnosti!"
+
+#: resources.h:141
+msgid "Widescreen"
+msgstr "Široká obrazovka"
+
+#: resources.h:236
+msgid "Wr&ite"
+msgstr "Záp&is"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:425
+#: ../../locales/../src/interface/netconfwizard.cpp:432
+msgid "Wrong external IP address"
+msgstr "Neplatná externí IP adresa"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:787
+msgid "Wrong lineendings"
+msgstr "Špatné konce řádků"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:759
+msgid "Yes"
+msgstr "ano"
+
+#: resources.h:342
+msgid ""
+"You are already using the most recent version of FileZilla. Please check "
+"again in future."
+msgstr ""
+"Již používáte nejnovější verzi FileZilly. Proveďte prosím kontrolu zase v "
+"budoucnu."
+
+#: resources.h:239
+msgid ""
+"You can use an x at any position to keep the permission the original files "
+"have."
+msgstr "Na libovolné pozici můžete použít x pro zachování původního oprávnění."
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:226
+msgid "You did not enter a new name for the file. Overwrite the file instead?"
+msgstr ""
+"Nezadal jste nový název pro soubor. Chcete ho raději místo toho přepsat?"
+
+#: ../../locales/../src/interface/sitemanager.cpp:520
+msgid "You have to enter a hostname."
+msgstr "Musíte zadat hostitele."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:144
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:90
+msgid "You have to enter a valid IP address."
+msgstr "Musíte zadat platnou IP adresu."
+
+#: ../../locales/../src/interface/sitemanager.cpp:581
+msgid "You have to enter an account name"
+msgstr "Musíte zadat hostitele."
+
+#: ../../locales/../src/interface/sitemanager.cpp:572
+msgid "You have to specify a user name"
+msgstr "Musíte zadat uživatelské jméno"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:610
+msgid ""
+"You likely have a router or firewall which errorneously modified the "
+"transferred data."
+msgstr ""
+"Pravděpodobně máte router nebo firewall, který poškodil přenášená data."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:557
+msgid ""
+"You should have no problems connecting to other servers, file transfers "
+"should work properly."
+msgstr ""
+"Neměl byste mít žádné problémy se spojením na ostatní servery, přenos "
+"souborů by měl pracovat správně."
+
+#: ../../locales/../src/interface/filteredit.cpp:57
+msgid "begins with"
+msgstr "začíná na"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:57
+#: ../../locales/../src/interface/fileexistsdlg.cpp:81
+#: ../../locales/../src/interface/fileexistsdlg.cpp:113
+#: ../../locales/../src/interface/fileexistsdlg.cpp:137
+msgid "bytes"
+msgstr "bajtů"
+
+#: ../../locales/../src/interface/filteredit.cpp:55
+msgid "contains"
+msgstr "obsahuje"
+
+#: ../../locales/../src/interface/filteredit.cpp:58
+msgid "ends with"
+msgstr "končí na"
+
+#: ../../locales/../src/interface/filteredit.cpp:62
+msgid "equals"
+msgstr "je rovna"
+
+#: ../../locales/../src/interface/LocalListView.cpp:805
+#: ../../locales/../src/interface/LocalListView.cpp:823
+#: ../../locales/../src/interface/RemoteListView.cpp:1175
+#: ../../locales/../src/interface/RemoteListView.cpp:1193
+msgid "file"
+msgstr "soubor"
+
+#: ../../locales/../src/interface/edithandler.cpp:80
+msgid "fz3temp-lockfile"
+msgstr "fz3temp-lockfile"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1292
+msgid "fzsftp could not be started"
+msgstr "Nemohu spustit fzsftp"
+
+#: ../../locales/../src/interface/filteredit.cpp:61
+msgid "greater than"
+msgstr "je větší než"
+
+#: ../../locales/../src/interface/filteredit.cpp:56
+msgid "is equal to"
+msgstr "je"
+
+#: ../../locales/../src/interface/edithandler.cpp:748
+#: ../../locales/../src/interface/edithandler.cpp:784
+#: ../../locales/../src/interface/edithandler.cpp:818
+#: ../../locales/../src/interface/edithandler.cpp:852
+msgid "item not found"
+msgstr "položka nenalezena"
+
+#: ../../locales/../src/interface/filteredit.cpp:63
+msgid "less than"
+msgstr "je menší než"
+
+#: ../../locales/../src/interface/filteredit.cpp:59
+msgid "matches regex"
+msgstr "vyhovuje regulárnímu výrazu"
+
+#: resources.h:220
+msgid "png \"c:\\program files\\viewer\\viewer.exe\" -open"
+msgstr "png \"c:\\program files\\viewer\\viewer.exe\" -open"
+
+#: ../../locales/../src/interface/themeprovider.cpp:58
+msgid "themes.xml missing, can not get theme data"
+msgstr "themes.xml chybí, nemohu získat informace o tématech"
+
+#: resources.h:49
+msgid "with the following file?"
+msgstr "následujícím souborem?"

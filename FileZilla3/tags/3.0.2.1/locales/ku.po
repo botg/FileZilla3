@@ -1,0 +1,1619 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2005-08-13 16:03+0200\n"
+"PO-Revision-Date: 2005-07-27 11:26+0200\n"
+"Last-Translator: rezan <rtovjin@kovaraw.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:44
+#: ../../locales/../src/interface/statuslinectrl.cpp:95
+msgid "%H:%M:%S elapsed"
+msgstr "%H:%M:%S derbas bû"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:48
+#: ../../locales/../src/interface/statuslinectrl.cpp:115
+msgid "%H:%M:%S left"
+msgstr "%H:%M:%S maye"
+
+#: ../../locales/../src/interface/QueueView.cpp:114
+#, c-format
+msgid "%d files added to queue"
+msgstr "%d dosya kete dorê"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:107
+#, c-format
+msgid "%s bytes (%d B/s)"
+msgstr "%s bayt (%d B/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:105
+#, c-format
+msgid "%s bytes (%d.%d KB/s)"
+msgstr "%s bayt (%d.%d KB/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:103
+#, c-format
+msgid "%s bytes (%d.%d MB/s)"
+msgstr "%s bayt (%d.%d MB/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:125
+#, c-format
+msgid "%s bytes (? B/s)"
+msgstr "%s bayt (? B/s)"
+
+#: resources.h:184
+msgid "&About..."
+msgstr "&Der barê de..."
+
+#: resources.h:58
+msgid "&Active"
+msgstr "&Çalak e"
+
+#: resources.h:188 resources.h:198
+msgid "&Add files to queue"
+msgstr "&Dosiyan têxe dorê"
+
+#: resources.h:155
+msgid "&Always trust this host, add this key to the cache"
+msgstr ""
+
+#: resources.h:16
+msgid "&Always use this action"
+msgstr "&Her demê vê kirinê bi kar bîne"
+
+#: resources.h:81
+msgid "&Auto"
+msgstr "&Bixweber"
+
+#: resources.h:83
+msgid "&Binary"
+msgstr "&Dubendî"
+
+#: resources.h:50
+msgid "&Browse..."
+msgstr "&Ger..."
+
+#: resources.h:20 resources.h:74 resources.h:78 resources.h:117
+#: resources.h:157 resources.h:169
+msgid "&Cancel"
+msgstr "&Betal"
+
+#: resources.h:62
+msgid "&Connect"
+msgstr "&Girêde"
+
+#: resources.h:216
+msgid "&Copy to clipboard"
+msgstr "&Têxe panoyê"
+
+#: resources.h:182
+msgid "&Crash"
+msgstr ""
+
+#: resources.h:190 resources.h:200
+msgid "&Create directory"
+msgstr "&Peldankê çêke"
+
+#: resources.h:26
+msgid "&Delete"
+msgstr "&Jê bibe"
+
+#: resources.h:196
+msgid "&Download"
+msgstr "&Daxe"
+
+#: resources.h:175
+msgid "&Edit"
+msgstr "&Bipergalîne"
+
+#: resources.h:215
+msgid "&Enter custom command..."
+msgstr "&Fermaneke şexsî binivîse..."
+
+#: resources.h:123
+msgid "&Execute"
+msgstr "&Bixebitîne"
+
+#: resources.h:101
+msgid "&External IP address:"
+msgstr "&Navnîşana IP ya Derve:"
+
+#: resources.h:170
+msgid "&File"
+msgstr "&Dosya"
+
+#: resources.h:206
+msgid "&File Attributes"
+msgstr "&Taybetiyên Dosiyê"
+
+#: resources.h:181
+msgid "&Help"
+msgstr "&Alîkarî"
+
+#: resources.h:210
+msgid "&Highest"
+msgstr "&Herî Bilind"
+
+#: resources.h:98
+msgid "&Highest available port:"
+msgstr "&Port a herî pir bikêrhatî:"
+
+#: resources.h:29 resources.h:218
+msgid "&Host:"
+msgstr "&Komputera Sereke:"
+
+#: resources.h:95
+msgid "&Limit local ports used by FileZilla"
+msgstr "&Portên herêmê yên ji aliyê FileZilla ve tê bikaranîn bi sînor bike"
+
+#: resources.h:60
+msgid "&Limit number of simultaneous connections"
+msgstr "&Hejmara girêdanên hevdem bi sînor bike"
+
+#: resources.h:34
+msgid "&Logontype:"
+msgstr "&Cureyê têketinê:"
+
+#: resources.h:213
+msgid "&Low"
+msgstr "&Nizim"
+
+#: resources.h:61
+msgid "&Maximum number of connections:"
+msgstr "&Hejmara herî zêde ya têkiliyan:"
+
+#: resources.h:23
+msgid "&New Site"
+msgstr "&Malpereke Nû"
+
+#: resources.h:212
+msgid "&Normal"
+msgstr "&Asayî"
+
+#: resources.h:132
+msgid "&Numeric value:"
+msgstr "&Nirxa hejmarî:"
+
+#: resources.h:63 resources.h:73 resources.h:77
+msgid "&OK"
+msgstr "&Temam"
+
+#: resources.h:11
+msgid "&Overwrite"
+msgstr "&Li Ser Binivîse"
+
+#: resources.h:59
+msgid "&Passive"
+msgstr "&Ne Çalak"
+
+#: resources.h:71
+msgid "&Password:"
+msgstr "&Nasnav:"
+
+#: resources.h:30 resources.h:222
+msgid "&Port:"
+msgstr "&Port:"
+
+#: resources.h:224
+msgid "&Quickconnect"
+msgstr "&Zû Girêde"
+
+#: resources.h:121
+msgid "&Read"
+msgstr "&Bixwîne"
+
+#: resources.h:72
+msgid "&Remember password for this session"
+msgstr "&Nasnava danişîne bi bîr bîne"
+
+#: resources.h:87
+msgid "&Remove"
+msgstr "&Rake"
+
+#: resources.h:25 resources.h:194 resources.h:204
+msgid "&Rename"
+msgstr "&Ji Nû Ve Bi Nav Bike"
+
+#: resources.h:13
+msgid "&Resume"
+msgstr "&Bidomîne"
+
+#: resources.h:113
+msgid "&Select language:"
+msgstr "&Peymanê hilbijêre:"
+
+#: resources.h:178
+msgid "&Server"
+msgstr "&Pêşkêşker"
+
+#: resources.h:176
+msgid "&Settings"
+msgstr "&Mîheng"
+
+#: resources.h:171
+msgid "&Site Manager"
+msgstr "&Gerînendeyê Malperê"
+
+#: resources.h:15
+msgid "&Skip"
+msgstr "&Derbas be"
+
+#: resources.h:103
+msgid "&Theme:"
+msgstr "&Dirb:"
+
+#: resources.h:56
+msgid "&Transfer mode:"
+msgstr "&Mod a ragihandinê:"
+
+#: resources.h:167
+msgid "&Update cached key for this host"
+msgstr ""
+
+#: resources.h:186
+msgid "&Upload"
+msgstr "&Bar ke"
+
+#: resources.h:92
+msgid "&Use passive mode"
+msgstr "&Mod a neçalak bi kar bîne"
+
+#: resources.h:39
+msgid "&User:"
+msgstr "&Bikarhêner:"
+
+#: resources.h:220
+msgid "&Username:"
+msgstr "&Navê Bikarhêner:"
+
+#: resources.h:122
+msgid "&Write"
+msgstr "&Binivîse"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:119
+#: ../../locales/../src/interface/statuslinectrl.cpp:124
+msgid "--:--:-- left"
+msgstr "--:--:-- maye"
+
+#: resources.h:86
+msgid "A&dd"
+msgstr "&Têxê"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:90
+msgid "A&pply only to downloads"
+msgstr "B&i tenê ji bo daxistinan bisepîne"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:146
+msgid "A&pply only to uploads"
+msgstr "Bi &tenê ji bo barkirinan bisepîne"
+
+#: resources.h:82
+msgid "A&scii"
+msgstr "A&scii"
+
+#: resources.h:137
+msgid "About FileZilla"
+msgstr "Der barê FileZilla de"
+
+#: resources.h:99
+msgid "Active mode IP"
+msgstr "IP ya mod a çalak"
+
+#: resources.h:189 resources.h:199
+msgid "Add selected files and folders to the transfer queue"
+msgstr "Dosî û peldankê hilbijartî têxe dora ragihandinê"
+
+#: resources.h:52
+msgid "Adjust server timezone offset:"
+msgstr "Cudahiya herêma demî ya pêşkêşker bipergalîne:"
+
+#: resources.h:42
+msgid "Advanced"
+msgstr "Pêşketî"
+
+#: resources.h:35 ../../locales/../src/interface/sitemanager.cpp:562
+#: ../../locales/../src/interface/sitemanager.cpp:732
+#: ../../locales/../src/interface/sitemanager.cpp:786
+msgid "Anonymous"
+msgstr "Nenas"
+
+#: resources.h:17
+msgid "Apply to &current queue only"
+msgstr "Bi tenê ji &bo dora derbasdar bisepîne"
+
+#: resources.h:37 ../../locales/../src/interface/sitemanager.cpp:595
+#: ../../locales/../src/interface/sitemanager.cpp:780
+msgid "Ask for password"
+msgstr "Nasnavê bipirse"
+
+#: resources.h:104
+msgid "Author:"
+msgstr "Nivîskar:"
+
+#: resources.h:84
+msgid "Automatic file type classification"
+msgstr "Dabeşkirina bixweber a cureyên dosiyan"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:390
+#: ../../locales/../src/interface/Mainfrm.cpp:793
+msgid "Break current connection?"
+msgstr "Tu dixwazî dosiya derbasdar bibirrî?"
+
+#: resources.h:143
+msgid "Build date:"
+msgstr "Dîroka hilberînê:"
+
+#: resources.h:142
+msgid "Build information"
+msgstr "Agahiya hilberînê"
+
+#: resources.h:96
+msgid ""
+"By default uses any available local port to establish transfers in active\n"
+"mode. If you want to limit FileZilla to use only a small range of ports,\n"
+"please enter the port range below."
+msgstr ""
+"Wekî heyî mirov dikare ji bo di ragihandina di mod a çalak de porteke\n"
+" herêmî bi kar bîne. Heke tu dixwazî FileZilla bi tenê portên bi navbera "
+"sînorkirî \n"
+" bi kar bîne, vê navberê bîne jêr."
+
+#: resources.h:217
+msgid "C&lear all"
+msgstr "H&emûyî jê bibe"
+
+#: ../../locales/../src/engine/transfersocket.cpp:296
+msgid "Can't read from file"
+msgstr "Dosya nayê xwendin"
+
+#: ../../locales/../src/engine/transfersocket.cpp:220
+msgid "Can't write data to file, disk is full."
+msgstr "Dane li dosiyê nayê nivîsîn, dîsk tijî ye."
+
+#: ../../locales/../src/engine/transfersocket.cpp:222
+#: ../../locales/../src/engine/transfersocket.cpp:225
+msgid "Can't write data to file."
+msgstr "Dane li dosiyê nayê nivîsîn."
+
+#: resources.h:136
+msgid "Cancel"
+msgstr "Betal"
+
+#: resources.h:239
+msgid "Cancel current operation"
+msgstr "Xebata derbasdar betal bike"
+
+#: resources.h:240
+msgid "Cancels the current operation"
+msgstr "Dê xebata derbasdar betal bike"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:297
+msgid "Cannot load Quickconnect bar from resource file"
+msgstr "Ji  dosiya çavkaniyê darikê Zûgirêde nayê barkirin"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:279
+msgid "Cannot load main menu from resource file"
+msgstr "Ji dosya çavkaniyê pêşeka sereke nayê barkirin"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:477
+msgid "Cannot load toolbar from resource file"
+msgstr "Ji dosya çavkaniyê darikê amûran nayê barkirin"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1056
+msgid "Cannot rename file"
+msgstr "Dosya ji nû ve nayê bi navkirin"
+
+#: resources.h:70
+msgid "Challenge:"
+msgstr "Nasnameyê Bipirse:"
+
+#: resources.h:118
+msgid "Change file attributes"
+msgstr "Taybetiyên dosiyê biguhere"
+
+#: resources.h:207
+msgid "Change the file permissions."
+msgstr "Destûrên dosiyê biguhere."
+
+#: ../../locales/../src/interface/sitemanager.cpp:676
+msgid "Choose the default local directory"
+msgstr "Peldanka herêmî ya wekî heyî hilbijêre"
+
+#: resources.h:174
+msgid "Close FileZilla"
+msgstr "FileZilla'yê bigire"
+
+#: resources.h:41
+msgid "Co&mments:"
+msgstr "Şî&rove:"
+
+#: ../../locales/../src/interface/StatusView.cpp:69
+#: ../../locales/../src/interface/StatusView.cpp:111
+msgid "Command:"
+msgstr "Ferman:"
+
+#: resources.h:144
+msgid "Compiled with:"
+msgstr "Berhevkar:"
+
+#: resources.h:145
+msgid "Compiler flags:"
+msgstr "Alên Berhevkaran:"
+
+#: ../../locales/../src/interface/LocalListView.cpp:776
+#: ../../locales/../src/interface/RemoteListView.cpp:683
+msgid "Confirmation needed"
+msgstr "Erêkirin pêwist e"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:294
+msgid "Connected"
+msgstr "Têkilî pêk hat"
+
+#: ../../locales/../src/interface/QueueView.cpp:1106
+msgid "Connecting"
+msgstr "Têkilî pêk tê"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:151
+#, c-format
+msgid "Connecting to %s"
+msgstr "Dest bi %s'e tê kirin"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:109
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:227
+#, c-format
+msgid "Connecting to %s:%d..."
+msgstr "Têkiliya %s:%d tê avakirin..."
+
+#: ../../locales/../src/engine/ControlSocket.cpp:216
+#, fuzzy
+msgid "Connection attempt interrupted by user"
+msgstr "Ji aliyê bikarhêner ve hate rawestandin"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:172
+msgid "Connection established, waiting for welcome message..."
+msgstr "Têkilî çêbû, peyama xêrhatinê tê hêvîkirin..."
+
+#: resources.h:27
+msgid "Cop&y"
+msgstr "&Ji Ber Bigire"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:218
+msgid "Could not connect to server"
+msgstr "Bi pêşkêşker re têkilî çênabe"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:571
+msgid "Could not establish connection to server"
+msgstr "Bi pêşkêşker re têkilî pêk nayê"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1611
+msgid "Could not establish passive connection to server"
+msgstr "Bi pêşkêşker re têkiliya neçalak pêk nayê"
+
+#: ../../locales/../src/interface/FileZilla.cpp:208
+msgid ""
+"Could not find the resource files for FileZilla, closing FileZilla.\n"
+"You can set the data directory of FileZilla using the '--datadir "
+"<custompath>' commandline option or by setting the FZ_DATADIR environment "
+"variable."
+msgstr ""
+"Dosiyên çavkaniyê yên FileZilla nayên dîtin, dê FileZilla were girtin.\n"
+" Peldanka daneyê ya FileZilla'yê '--datadir <custompath>' vebijêrka rêzika "
+"fermanê an jî guherbara cih a FZ_DATADIR biguherîne û çêke."
+
+#: ../../locales/../src/interface/Options.cpp:56
+#, c-format
+msgid ""
+"Could not load \"%s\", make sure the file is valid.\n"
+"For this session, default settings will be used and any changes to the "
+"settings are not persistent."
+msgstr ""
+"\"%s\" nayê barkirin, bawer be ku dosiya derbasdar e.\n"
+"Di vê danişînê de mîhengên heyî dê werin bikaranîn û guhertinên pêkhatî dê "
+"ne mayinde bin."
+
+#: ../../locales/../src/interface/sitemanager.cpp:248
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"Any changes made in the Site Manager could not be saved."
+msgstr ""
+"\"%s\" nayê barkirin, bawer be ku gihaştina dosiyê serbest e û derbasdar e.\n"
+"Guhertinên di Gerînendeyê Malperê de nayên tomarkirin."
+
+#: ../../locales/../src/interface/sitemanager.cpp:157
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"Any changes made in the Site Manager will not be saved."
+msgstr ""
+"\"%s\" nayê barkirin, bawer be ku gihaştina dosiyê serbest e û derbasdar e.\n"
+"Dê guhertinên di Gerînendeyê Malperê de neyên tomarkirin."
+
+#: ../../locales/../src/interface/QueueView.cpp:1441
+#: ../../locales/../src/interface/QueueView.cpp:1477
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"The queue will not be saved."
+msgstr ""
+"\"%s\" nayê barkirin, bawer be ku gihaştina dosiyê serbest e û derbasder e.\n"
+"Dê dor neyê tomarkirin."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:365
+msgid "Could not parse server address:"
+msgstr "Navnîşana pêşkêşker nayê xebitandin:"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1335
+msgid "Could not seek to end of file"
+msgstr "Çûna dawiya dosiyê pêk nayê"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1312
+#, c-format
+msgid "Could not seek to offset %s within file"
+msgstr "Di dosiyê de gihaştina dûriya  %s pêk nayê"
+
+#: ../../locales/../src/interface/sitemanager.cpp:273
+#, c-format
+msgid ""
+"Could not write \"%s\", any changes to the Site Manager could not be saved."
+msgstr ""
+"\"%s\" nayê nivîsîn, guhertinên di Gerînendeyê Malperê de dê neyên "
+"tomarkiirin."
+
+#: ../../locales/../src/interface/QueueView.cpp:1460
+#: ../../locales/../src/interface/QueueView.cpp:1546
+#, c-format
+msgid "Could not write \"%s\", the queue could not be saved."
+msgstr "\"%s\" nayê nivîsîn, dor nayê tomarkirin."
+
+#: resources.h:183
+msgid "Crashes FileZilla instantly. Only used to debug the exception handler"
+msgstr ""
+
+#: resources.h:191 resources.h:201
+msgid "Create a new subdirectory in the current directory"
+msgstr "Di peldanka heyî de bin peldankekê çêke"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:622
+msgid "Create directory"
+msgstr "Peldankekê çêke"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2058
+#, c-format
+msgid "Creating directory '%s'..."
+msgstr "Peldanka '%s' tê çêkirin..."
+
+#: ../../locales/../src/engine/ControlSocket.cpp:210
+msgid "Critical error"
+msgstr "Çewtiyeke xetere"
+
+#: resources.h:57
+msgid "D&efault"
+msgstr "&Wekî Heyî"
+
+#: resources.h:192 resources.h:202
+msgid "D&elete"
+msgstr "Jê &Bibe"
+
+#: resources.h:64
+msgid "D&iscard"
+msgstr "&Tune Bihesibîne"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:48
+msgid "Date"
+msgstr "Dîrok"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:59
+#: ../../locales/../src/interface/fileexistsdlg.cpp:83
+#: ../../locales/../src/interface/fileexistsdlg.cpp:115
+#: ../../locales/../src/interface/fileexistsdlg.cpp:139
+msgid "Date/time unknown"
+msgstr "Dîrok/dem nayê zanîn"
+
+#: resources.h:44 ../../locales/../src/interface/sitemanager.cpp:737
+#: ../../locales/../src/interface/sitemanager.cpp:809
+msgid "Default"
+msgstr "Wekî heyî"
+
+#: resources.h:49
+msgid "Default &local directory:"
+msgstr "Peldanka &herêmî ya wekî heyî:"
+
+#: resources.h:51
+msgid "Default r&emote directory:"
+msgstr "Peldanka &dûr a wekî heyî:"
+
+#: resources.h:80
+msgid "Default transfer type:"
+msgstr "Cureyê ragihandinê ya wekî heyî:"
+
+#: resources.h:193 resources.h:203
+msgid "Delete selected files and folders"
+msgstr "Peldank û dosiyên hilbijartî jê bibe"
+
+#: resources.h:149
+msgid "Details"
+msgstr "Hûragahî"
+
+#: resources.h:161
+msgid "Details for new key:"
+msgstr ""
+
+#: ../../locales/../src/interface/QueueView.cpp:565
+msgid "Direction"
+msgstr "Berêvekirin"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:222
+#, fuzzy
+msgid "Directory listing aborted by user"
+msgstr "Lîstekirina peldanka serkeftî ye"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:239
+msgid "Directory listing successful"
+msgstr "Lîstekirina peldanka serkeftî ye"
+
+#: resources.h:241
+msgid "Disconnect from server"
+msgstr "Têkiliya bi pêşkêşker de tê birrîn"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:103
+#: ../../locales/../src/engine/ControlSocket.cpp:153
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:94
+msgid "Disconnected from server"
+msgstr "Têkiliya bi pêşkêşker re qut bû"
+
+#: ../../locales/../src/interface/QueueView.cpp:1095
+#: ../../locales/../src/interface/statuslinectrl.cpp:145
+msgid "Disconnecting from previous server"
+msgstr "Bi pêşkêşkera borî re têkilî tê birrîn"
+
+#: resources.h:242
+msgid "Disconnects from the currently visible server"
+msgstr "Dê têkiliya bi pêşkêşkera niha dixuye re bibirre"
+
+#: resources.h:185
+msgid "Display about dialog"
+msgstr "Paceya Der Barê de veke"
+
+#: resources.h:48 ../../locales/../src/interface/sitemanager.cpp:609
+#: ../../locales/../src/interface/sitemanager.cpp:800
+msgid "Dos"
+msgstr "Dos"
+
+#: resources.h:197
+msgid "Download selected files and folders"
+msgstr "Dosya û peldankên hilbijartî daxîne"
+
+#: resources.h:127
+msgid "E&xecute"
+msgstr "B&ixebitîne"
+
+#: resources.h:173
+msgid "E&xit"
+msgstr "D&erkeve"
+
+#: resources.h:106
+msgid "Email:"
+msgstr "Epeyam:"
+
+#: resources.h:179
+msgid "Enter &custom command..."
+msgstr "Fer&mana şexsî binivîse..."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:322
+msgid "Enter custom command"
+msgstr "Fermana şexsî binivîse"
+
+#: resources.h:65
+msgid "Enter password"
+msgstr "Nasnavê binivîse"
+
+#: resources.h:219
+msgid ""
+"Enter the address of the server.\n"
+"To specify the server protocol, prepend the host with the protocol "
+"identifier. If no protocol is specified, the default protocol (ftp://) will "
+"be used.\n"
+"You can also enter complete URLS in the form protocol://user:pass@host:port "
+"here, the values in the other fields will be overwritten then."
+msgstr ""
+"Navnişana pêkêşker binivîse. Ji bo \n"
+"dazanîna protokola pêşkêşker, rengpîşeya protokolê deynin pêşiya komputera "
+"navîn. Heke protokol nehatibe belîkirin, protokola (ftp://) dê were "
+"bikaranîn.\n"
+"Di heman demê de tu dikarî URL'yên temam prtotokol://bikarhêner:"
+"nasnav@komputeranavin:port  binivîsî, hingê dê nirxên herêmên din bibin "
+"nederbasdar."
+
+#: resources.h:223
+msgid ""
+"Enter the port on which the server listens.\n"
+"The default for FTP is 21, the default for SFTP is 22."
+msgstr ""
+"Porta ku pêşkêşker lê guhdar dike binivîse.\n"
+"Ji bo FTP'ê wekî heyî 21'e, ji bo SFTP'ê jî 22 ye."
+
+#: ../../locales/../src/engine/transfersocket.cpp:333
+#, c-format
+msgid "Error %d writing to socket"
+msgstr "%d çewtiya lênivîsandina soketê"
+
+#: ../../locales/../src/interface/Options.cpp:57
+#: ../../locales/../src/interface/QueueView.cpp:1442
+#: ../../locales/../src/interface/QueueView.cpp:1478
+#: ../../locales/../src/interface/sitemanager.cpp:158
+#: ../../locales/../src/interface/sitemanager.cpp:249
+msgid "Error loading xml file"
+msgstr "Di xwendina dosiya XML'ê de çewtî"
+
+#: ../../locales/../src/interface/QueueView.cpp:1461
+#: ../../locales/../src/interface/QueueView.cpp:1547
+#: ../../locales/../src/interface/sitemanager.cpp:274
+msgid "Error writing xml file"
+msgstr "Di nivîsandina dosiya XML'ê de çewtî"
+
+#: ../../locales/../src/interface/StatusView.cpp:65
+#: ../../locales/../src/interface/StatusView.cpp:109
+msgid "Error:"
+msgstr "Çewtî:"
+
+#: resources.h:131
+msgid "Exe&cute"
+msgstr "Bi&xebitîne"
+
+#: resources.h:32 ../../locales/../src/interface/sitemanager.cpp:585
+#: ../../locales/../src/interface/sitemanager.cpp:731
+#: ../../locales/../src/interface/sitemanager.cpp:767
+msgid "FTP"
+msgstr "FTP"
+
+#: ../../locales/../src/interface/FileZilla.cpp:54
+#: ../../locales/../src/interface/optionspage_language.cpp:64
+msgid "Failed to change language"
+msgstr "Guherandina peymanê ne serkeftî ye"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:551
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1568
+msgid ""
+"Failed to create listening socket for active mode transfer, trying passive "
+"mode"
+msgstr ""
+"Çêkirina soketa guhdarkirinê ji bo ragihandina mod a çalak ne serkeftî ye, "
+"mod a neçalak tê ceribandin"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1272
+#, c-format
+msgid "Failed to open \"%s\" for appending / writing"
+msgstr "\"%s\" lêzêdekirin / ji bo nivîsê venabe"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1297
+#, c-format
+msgid "Failed to open \"%s\" for reading"
+msgstr "\"%s\" ji bo xwendinê nayê venabe"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1283
+#, c-format
+msgid "Failed to open \"%s\" for writing"
+msgstr "\"%s\" ji bo nivîsandinê venabe"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:224
+msgid "Failed to retrieve directory listing"
+msgstr "Xebata standina listeya peldankan ne serkeftî ye"
+
+#: ../../locales/../src/interface/FileZilla.cpp:54
+#: ../../locales/../src/interface/optionspage_language.cpp:64
+#, c-format
+msgid "Failed to set language to %s, using default system language"
+msgstr "Ziman wekî  %s nayê guherandin, pergal dê zimanê heyî bi kar bîne."
+
+#: ../../locales/../src/interface/optionspage.cpp:6
+msgid "Failed to validate settings"
+msgstr "Derbasdariya mîhengan pêk nehat"
+
+#: ../../locales/../src/interface/LocalListView.cpp:364
+#: ../../locales/../src/interface/LocalListView.cpp:382
+#: ../../locales/../src/interface/LocalListView.cpp:386
+#: ../../locales/../src/interface/RemoteListView.cpp:397
+#: ../../locales/../src/interface/RemoteListView.cpp:415
+#: ../../locales/../src/interface/RemoteListView.cpp:419
+msgid "File"
+msgstr "Dosya"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:73
+msgid "File Types"
+msgstr "Cureyên Dosiyan"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1071
+msgid "File exists"
+msgstr "Dosya hene"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:242
+msgid "File transfer successful"
+msgstr "Ragihandina dosiyan serkeftî ye"
+
+#: ../../locales/../src/interface/FileZilla.cpp:209
+#: ../../locales/../src/interface/Mainfrm.cpp:368
+msgid "FileZilla Error"
+msgstr "Çewtiya FileZilla"
+
+#: ../../locales/../src/interface/LocalListView.cpp:33
+#: ../../locales/../src/interface/RemoteListView.cpp:45
+msgid "Filename"
+msgstr "Navê Dosiyê"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1056
+msgid "Filename invalid"
+msgstr "Navê nederbasdar ê dosiyê"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:88
+msgid "Filename unchanged"
+msgstr "Navê dosiyê neguherî"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1050
+msgid "Filenames may not contain any of the following characters: / * ? < > |"
+msgstr "Navê dosiyan van curetîpan nahundirîne: / * ? < > |"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1015
+msgid ""
+"Filenames may not contain any of the following characters: / \\ : * ? \" < > "
+"|"
+msgstr "Navê dosiyan van curetîpan nahundirîne: / \\ : * ? \" < > |"
+
+#: ../../locales/../src/interface/LocalListView.cpp:34
+#: ../../locales/../src/interface/RemoteListView.cpp:46
+msgid "Filesize"
+msgstr "Mezinahiya dosiyê"
+
+#: ../../locales/../src/interface/LocalListView.cpp:35
+#: ../../locales/../src/interface/RemoteListView.cpp:47
+msgid "Filetype"
+msgstr "Cureê dosiyê"
+
+#: resources.h:152 resources.h:164
+msgid "Fingerprint:"
+msgstr ""
+
+#: ../../locales/../src/interface/LocalListView.cpp:386
+#: ../../locales/../src/interface/RemoteListView.cpp:419
+msgid "Folder"
+msgstr "Peldank"
+
+#: resources.h:28
+msgid "General"
+msgstr "Bi Giştî"
+
+#: resources.h:124
+msgid "Group permissions"
+msgstr "Desturên koman"
+
+#: resources.h:211
+msgid "H&igh"
+msgstr "Bi&lind"
+
+#: ../../locales/../src/interface/QueueView.cpp:714
+msgid "High"
+msgstr "Bilind"
+
+#: ../../locales/../src/interface/QueueView.cpp:716
+msgid "Highest"
+msgstr "Herî Bilind"
+
+#: ../../locales/../src/interface/optionspage_passive.cpp:63
+msgid "Highest available port has to be a number between 1 and 65535."
+msgstr "Port a herî bilind divê di navbera 1 û 65535 'an de be."
+
+#: resources.h:140
+msgid "Homepage:"
+msgstr "Rûpela Têketinê:"
+
+#: resources.h:158
+msgid "Host key mismatch"
+msgstr ""
+
+#: resources.h:68 resources.h:150 resources.h:162
+msgid "Host:"
+msgstr "Komputera Navendî:"
+
+#: resources.h:53
+msgid "Hours,"
+msgstr "Saet,"
+
+#: resources.h:100
+msgid ""
+"If you are behind a router, FileZilla may not be able to detect your "
+"external\n"
+"IP address for active (non-passive) transfers. In this case you should "
+"enter\n"
+" the external IP address here."
+msgstr ""
+"Heke tu li paş router'ekê bî, dibe FileZilla ji bo ragihandina we ya çalak "
+"(ne ku neçalak) \n"
+"navnîşana IP ya we ya derve tênegihîje. Hingê navnîşana derve ya IP ya xwe\n"
+"li vir binivîse."
+
+#: resources.h:114
+msgid "If you change the language, you should restart FileZilla."
+msgstr "Heke tu ziman biguherî divê tu FileZilla'yê ji nû ve vekî."
+
+#: resources.h:88
+msgid ""
+"If you enter the wrong filetypes,\n"
+"those files may get corrupted\n"
+"when transferred."
+msgstr ""
+"Heke tu cureyê çewt ê dosiyê binivîsî,\n"
+"dê ev dosî di dema ragihandinê de\n"
+"xira bibin."
+
+#: resources.h:93
+msgid ""
+"If you have problems to retrieve directory listings or to transfer files,\n"
+"try to toggle the passive mode setting."
+msgstr ""
+"Heke di lîstekirina peldankan de an jî di ragihandina dosiyan de pirsgirêkên "
+"we hebin,\n"
+"guherandina mîhenga mod a neçalak biceribîne."
+
+#: resources.h:38 ../../locales/../src/interface/sitemanager.cpp:597
+#: ../../locales/../src/interface/sitemanager.cpp:783
+msgid "Interactive"
+msgstr "Înteraktîf"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:230
+msgid "Interrupted by user"
+msgstr "Ji aliyê bikarhêner ve hate rawestandin"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1015
+#: ../../locales/../src/interface/LocalListView.cpp:1050
+msgid "Invalid filename"
+msgstr "Navê nederbasdar ê dosiyê"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:136
+msgid "Invalid hostname or host not found"
+msgstr "Navê komputera navendî ne derbasdar e an jî nehate dîtin"
+
+#: ../../locales/../src/engine/server.cpp:85
+#: ../../locales/../src/engine/server.cpp:109
+msgid "Invalid port given. The port has to be a value from 1 to 65535."
+msgstr "Porta têketinê çewte. Nirxa portê divê di navbera  1 û 65535'an de be."
+
+#: ../../locales/../src/engine/server.cpp:31
+msgid ""
+"Invalid protocol specified. Valid protocols are ftp and sftp:// at the "
+"moment."
+msgstr "Prtokola çewt. Ji bo niha protokala rast ftp:// ye."
+
+#: ../../locales/../src/engine/server.cpp:53
+msgid "Invalid username given."
+msgstr "Navê bikarhêner nederbasdar e."
+
+#: resources.h:214
+msgid "L&owest"
+msgstr "H&erî Nizm"
+
+#: resources.h:97
+msgid "L&owest available port:"
+msgstr "P&ort a heyî ya herî nizm"
+
+#: resources.h:112 ../../locales/../src/interface/settingsdialog.cpp:75
+msgid "Language"
+msgstr "Ziman"
+
+#: resources.h:111
+msgid "Large icons"
+msgstr "Îkonên fireh"
+
+#: ../../locales/../src/interface/LocalListView.cpp:36
+msgid "Last modified"
+msgstr "Serastkirina dawî"
+
+#: resources.h:94
+msgid "Limit local ports"
+msgstr "Portên herêmî bi sînor bike"
+
+#: ../../locales/../src/interface/StatusView.cpp:84
+#: ../../locales/../src/interface/StatusView.cpp:120
+msgid "Listing:"
+msgstr "Rêzkirin:"
+
+#: ../../locales/../src/interface/viewheader.cpp:246
+msgid "Local site:"
+msgstr "Malpera herêmî:"
+
+#: ../../locales/../src/interface/QueueView.cpp:709
+msgid "Low"
+msgstr "Nizm"
+
+#: ../../locales/../src/interface/QueueView.cpp:707
+msgid "Lowest"
+msgstr "Herî nizm"
+
+#: ../../locales/../src/interface/optionspage_passive.cpp:52
+msgid "Lowest available port has to be a number between 1 and 65535."
+msgstr "Port a herî nizm a tê bikaranîn divê di navbera  1 û 65535'an de be."
+
+#: resources.h:47 ../../locales/../src/interface/sitemanager.cpp:613
+#: ../../locales/../src/interface/sitemanager.cpp:803
+msgid "MVS"
+msgstr "MVS"
+
+#: resources.h:110
+msgid "Medium icons"
+msgstr "Îkonên navîn"
+
+#: resources.h:54
+msgid "Minutes"
+msgstr "Xulke"
+
+#: ../../locales/../src/interface/sitemanager.cpp:144
+msgid "My Sites"
+msgstr "Malperên Min"
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:58
+#: ../../locales/../src/interface/optionspage_themes.cpp:60
+#: ../../locales/../src/interface/optionspage_themes.cpp:201
+#: ../../locales/../src/interface/optionspage_themes.cpp:203
+msgid "N/a"
+msgstr "Nîn e"
+
+#: resources.h:67
+msgid "Name:"
+msgstr "Nav:"
+
+#: resources.h:24
+msgid "New &Folder"
+msgstr "Pel&danka Nû"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:636
+#: ../../locales/../src/interface/sitemanager.cpp:349
+#: ../../locales/../src/interface/sitemanager.cpp:372
+msgid "New folder"
+msgstr "Peldanka Nû"
+
+#: ../../locales/../src/interface/sitemanager.cpp:515
+#: ../../locales/../src/interface/sitemanager.cpp:538
+msgid "New site"
+msgstr "Malpera Nû"
+
+#: ../../locales/../src/engine/server.cpp:14
+#: ../../locales/../src/engine/server.cpp:78
+#: ../../locales/../src/engine/server.cpp:116
+msgid "No host given, please enter a host."
+msgstr "Komputera navîn nehate dayin, komputera navîn belî bike."
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:166
+msgid "No images available"
+msgstr "Qet wêne nîn e"
+
+#: ../../locales/../src/interface/themeprovider.cpp:77
+msgid "No themes in themes.xml"
+msgstr "Di themes.xml'ê de dirb nîn e"
+
+#: resources.h:36 ../../locales/../src/interface/QueueView.cpp:712
+#: ../../locales/../src/interface/sitemanager.cpp:563
+#: ../../locales/../src/interface/sitemanager.cpp:593
+#: ../../locales/../src/interface/sitemanager.cpp:777
+msgid "Normal"
+msgstr "Asayî"
+
+#: resources.h:19 resources.h:116 resources.h:135 resources.h:146
+#: resources.h:156 resources.h:168
+msgid "OK"
+msgstr "Temam"
+
+#: resources.h:225 resources.h:226
+msgid "Open the Site Manager"
+msgstr "Gerînendeyê Malperê veke"
+
+#: resources.h:177
+msgid "Open the settings dialog of FileZilla"
+msgstr "Paceya mîhengan a FileZilla'yê veke"
+
+#: resources.h:172
+msgid "Opens the Site Manager"
+msgstr "Gerînendeyê Malperê veke"
+
+#: resources.h:12
+msgid "Overwrite &if newer"
+msgstr "Heke &nû be jê bibe"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:51
+msgid "Owner / Group"
+msgstr "Xwedî / Kom"
+
+#: resources.h:120
+msgid "Owner permissions"
+msgstr "Xwediyên destûrê"
+
+#: resources.h:40 resources.h:221
+msgid "Pass&word:"
+msgstr "N&asnav:"
+
+#: resources.h:91
+msgid "Passive Mode"
+msgstr "Mod a Neçalak"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:50
+msgid "Permissions"
+msgstr "Destûr"
+
+#: resources.h:66
+msgid "Please enter a password for this server:"
+msgstr "Ji bo vê pêşkêşkerê nasnavekê binivîse:"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:322
+msgid ""
+"Please enter raw FTP command.\n"
+"Using raw ftp commands will clear the directory cache."
+msgstr ""
+"Fermana saf a FTP'ê binivîse.\n"
+"Bikaranîna fermanên saf ên ftp pêşbîra peldankê jê dibe."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:622
+msgid "Please enter the name of the directory which should be created:"
+msgstr "Navê peldanka dê çêbibe binivîse:"
+
+#: resources.h:10
+msgid "Please select an action:"
+msgstr "Xebatekê binivîse:"
+
+#: ../../locales/../src/interface/chmoddialog.cpp:37
+#, c-format
+msgid "Please select the new attributes for the directory \"%s\"."
+msgstr "Ji bo peldanka \"%s\" taybetiyên nû hilbijêre."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:26
+#, c-format
+msgid "Please select the new attributes for the file \"%s\"."
+msgstr "Ji bo dosiya \"%s\" taybetiyên nû hilbijêre."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:40
+msgid "Please select the new attributes for the selected directories."
+msgstr "Taybetiyên peldan û dosiyên hilbijartî hilbijêre."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:43
+msgid ""
+"Please select the new attributes for the selected files and directories."
+msgstr "Lütfen seçili klasörlerin ve dosyaların özelliklerini seçiniz."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:29
+msgid "Please select the new attributes for the selected files."
+msgstr "Taybetiyên dosiyên hilbijartî hilbijêre."
+
+#: resources.h:108
+msgid "Preview"
+msgstr "Pêşdîtin"
+
+#: ../../locales/../src/interface/QueueView.cpp:568
+msgid "Priority"
+msgstr "Pêşî"
+
+#: resources.h:208
+msgid "Process &Queue"
+msgstr "Bila Dor &Pêk Bê"
+
+#: resources.h:128
+msgid "Public permissions"
+msgstr "Destûrên giştî"
+
+#: ../../locales/../src/interface/QueueView.cpp:1307
+#, c-format
+msgid "Queue: %s%d KB"
+msgstr "Dor: %s%d KB"
+
+#: ../../locales/../src/interface/QueueView.cpp:1302
+#, c-format
+msgid "Queue: %s%d MB"
+msgstr "Dor: %s%d MB"
+
+#: ../../locales/../src/interface/QueueView.cpp:1310
+#, c-format
+msgid "Queue: %s%d bytes"
+msgstr "Dor: %s%d bayt"
+
+#: ../../locales/../src/interface/QueueView.cpp:1298
+msgid "Queue: empty"
+msgstr "Dor: vala"
+
+#: resources.h:125
+msgid "Re&ad"
+msgstr "Bi&xwîne"
+
+#: resources.h:14
+msgid "Re&name"
+msgstr "Ji nû &ve bi nav bike"
+
+#: resources.h:129
+msgid "Rea&d"
+msgstr "Bi&xwîne"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:510
+msgid "Really cancel current operation?"
+msgstr "Tu dixwazî xebata derbasdar bi dawî bînî?"
+
+#: ../../locales/../src/interface/LocalListView.cpp:776
+#: ../../locales/../src/interface/RemoteListView.cpp:683
+msgid "Really delete all selected files and/or directories?"
+msgstr "Tu dixwazî dosya an jî peldanka hilbijartî jê bibî?"
+
+#: resources.h:134
+msgid "Rec&urse into subdirectories"
+msgstr "Di Binpeldankê Paşde Here"
+
+#: resources.h:243 resources.h:244
+msgid "Reconnects to the last used server"
+msgstr "Dê dîsa bi pêşkêşkera dawî re têkeve têkiliyê"
+
+#: resources.h:235 resources.h:236
+msgid "Refresh the file and folder lists"
+msgstr "Lîsteya dosya û peldanka nû dike"
+
+#: ../../locales/../src/interface/QueueView.cpp:566
+msgid "Remote file"
+msgstr "Dosiya dûr"
+
+#: ../../locales/../src/interface/viewheader.cpp:348
+msgid "Remote site:"
+msgstr "Malpera dûr:"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:76
+msgid "Rename file"
+msgstr "Dosiyê ji nû ve bi nav bike"
+
+#: resources.h:195 resources.h:205
+msgid "Rename selected files and folders"
+msgstr "Dosya û peldankên hilbijartî ji nû ve bi nav bike"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2255
+#, c-format
+msgid "Renaming '%s' to '%s'"
+msgstr "Navê '%s' wekî '%s' tê guhertin"
+
+#: ../../locales/../src/interface/StatusView.cpp:73
+#: ../../locales/../src/interface/StatusView.cpp:114
+msgid "Response:"
+msgstr "Bersîv:"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:430
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:594
+msgid "Retrieving directory listing..."
+msgstr "Lîsteya peldankê tê standin..."
+
+#: resources.h:33 ../../locales/../src/interface/sitemanager.cpp:587
+#: ../../locales/../src/interface/sitemanager.cpp:763
+#, fuzzy
+msgid "SFTP"
+msgstr "FTP"
+
+#: ../../locales/../src/interface/QueueView.cpp:1365
+msgid "Scanning for files to add to queue"
+msgstr "Dosiyên dê têkevin dorê tên dîtin"
+
+#: ../../locales/../src/interface/QueueView.cpp:1367
+msgid "Scanning for files to upload"
+msgstr "Dosiyên dê herin hember tên dîtin"
+
+#: resources.h:76
+msgid "Select &page:"
+msgstr "Rûpelê &hilbijêre:"
+
+#: resources.h:22
+msgid "Select Entry:"
+msgstr "Têketinê hilbijêre:"
+
+#: resources.h:102
+msgid "Select Theme"
+msgstr "Dirb hilbijêre"
+
+#: resources.h:180
+msgid "Send custom command to the server otherwise not available"
+msgstr "Fermaneke şexsî bişîne ji pêşkêşker re, heke na naxebite"
+
+#: ../../locales/../src/interface/QueueView.cpp:564
+msgid "Server / Local file"
+msgstr "Pêşkêşker / Dosiya herêmî"
+
+#: resources.h:31 resources.h:43
+msgid "Server&type:"
+msgstr "Cureyê &Pêşkêşker:"
+
+#: resources.h:209
+msgid "Set &Priority"
+msgstr "Y&a Pêşî Belî Bike"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2369
+#, c-format
+msgid "Set permissions of '%s' to '%s'"
+msgstr "Destûrên '%s' bide '%s' ê"
+
+#: resources.h:75
+msgid "Settings"
+msgstr "Mîheng"
+
+#: resources.h:21
+msgid "Site Manager"
+msgstr "Gerînendeyê Malperê"
+
+#: ../../locales/../src/interface/sitemanager.cpp:44
+msgid "Site Manager already open"
+msgstr "Jixwe Gerînendeyê Malperê vekirî ye"
+
+#: ../../locales/../src/interface/QueueView.cpp:567
+msgid "Size"
+msgstr "Mezinahî"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:50
+#: ../../locales/../src/interface/fileexistsdlg.cpp:74
+#: ../../locales/../src/interface/fileexistsdlg.cpp:106
+#: ../../locales/../src/interface/fileexistsdlg.cpp:130
+msgid "Size unknown"
+msgstr "Mezinahî nayê zanîn"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1762
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1847
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:428
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:501
+#, c-format
+msgid "Skipping download of %s"
+msgstr "Daxistina %s derbas dibe"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1766
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1851
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:432
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:505
+#, c-format
+msgid "Skipping upload of %s"
+msgstr "Barkirina %s ya hember derbas bibe"
+
+#: resources.h:109
+msgid "Small icons"
+msgstr "Îkonên mezin"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1020
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1034
+#, c-format
+msgid "Starting download of %s"
+msgstr "Dest bi daxistina %s dike"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1024
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1038
+#, c-format
+msgid "Starting upload of %s"
+msgstr "Barkirina hember a %s dest pê dibe"
+
+#: ../../locales/../src/interface/QueueView.cpp:569
+msgid "Status"
+msgstr "Rewş"
+
+#: ../../locales/../src/interface/StatusView.cpp:88
+#: ../../locales/../src/interface/StatusView.cpp:123
+msgid "Status:"
+msgstr "Rewş:"
+
+#: resources.h:1
+msgid "Target file already exists"
+msgstr "Dosiya armanckirî jixwe heye"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1071
+msgid "Target filename already exists, really continue?"
+msgstr "Dosiya armanckirî jixwe heye, bila bidomîne?"
+
+#: ../../locales/../src/interface/sitemanager.cpp:43
+msgid ""
+"The Site Manager is opened in another instance of FileZilla 3.\n"
+"Do you want to continue? Any changes made in the Site Manager won't be saved "
+"then."
+msgstr ""
+"Gerînendeyê Malperê di danişîneke din a FileZilla 3'yê de vekirî ye.\n"
+"Tu dixwazî bidomînî? Dê guhertinên li Gerînendeyê Malperê neyên tomarkirin."
+
+#: ../../locales/../src/interface/optionspage_filetype.cpp:158
+#, c-format
+msgid "The extension '%s' does already exist in the list"
+msgstr "Cureyê dosiyê '%s' jixwe di lîsteyê de heye"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:66
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:73
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"Please enter a new name:"
+msgstr ""
+"Dosya %s jixwe heye.\n"
+"Navekî nû binivîse:"
+
+#: ../../locales/../src/interface/optionspage_passive.cpp:70
+msgid ""
+"The lowest available port has to be less or equal than the highest available "
+"port."
+msgstr ""
+"Port a Herî Nizm a heyî, divê ji hejmara port a heyî ya Herî Bilind "
+"hindiktir an jî wekî hev be."
+
+#: resources.h:160
+msgid ""
+"The server's host key does not match the key that has been cached. This "
+"means that either the administrator has changed the host key, or you are "
+"actually trying to connect to another computer pretending to be the server.\n"
+"If the host key change was not expected, please contact the server "
+"administrator."
+msgstr ""
+
+#: resources.h:148
+msgid ""
+"The server's host key is not cached in the registry. You have no guarantee "
+"that the server is the computer you think it is."
+msgstr ""
+
+#: resources.h:2
+msgid ""
+"The target file already exists.\n"
+"Would you like to replace the file"
+msgstr ""
+"Dosiya armanckirî jixwe heye.\n"
+"Tu dixwazî dosiyê biguherî"
+
+#: ../../locales/../src/interface/themeprovider.cpp:58
+#: ../../locales/../src/interface/themeprovider.cpp:77
+msgid "Theme error"
+msgstr "Çewtiya dirb"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:74
+msgid "Themes"
+msgstr "Hemû Dirb"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:49
+msgid "Time"
+msgstr "Dem"
+
+#: resources.h:237 resources.h:238
+msgid "Toggles processing of the transfer queue"
+msgstr "Xebatên dora ragihandinê biguhere"
+
+#: resources.h:229 resources.h:230
+msgid "Toggles the display of the local directory tree"
+msgstr "Destûra dîtinê ya dara peldankên herêmî biguhere"
+
+#: resources.h:227 resources.h:228
+msgid "Toggles the display of the message log"
+msgstr "Destûra dîtinê ya tomariya peyaman biguherîne"
+
+#: resources.h:231 resources.h:232
+msgid "Toggles the display of the remote directory tree"
+msgstr "Dê dîtina dara peldanka dûr veke û bigire"
+
+#: resources.h:233 resources.h:234
+msgid "Toggles the display of the transfer queue"
+msgstr "Dê destûra dîtinê ya dora ragihandinê biguhere"
+
+#: ../../locales/../src/interface/StatusView.cpp:80
+#: ../../locales/../src/interface/StatusView.cpp:117
+msgid "Trace:"
+msgstr "Riyê Bişopîne:"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:72
+msgid "Transfer Mode"
+msgstr "Mod a Ragihandinê"
+
+#: resources.h:55
+msgid "Transfer settings"
+msgstr "Mîhengên ragihandinê"
+
+#: ../../locales/../src/interface/QueueView.cpp:1131
+#: ../../locales/../src/interface/statuslinectrl.cpp:154
+msgid "Transferring"
+msgstr "Tê ragihandin"
+
+#: resources.h:90
+msgid "Treat dotfiles (filenames starting with a dot) as Ascii files"
+msgstr ""
+"Dosiyên bi xal (dosiyên navê wan bi xalekê dest pê dikin) wekî Ascii bi kar "
+"bîne"
+
+#: resources.h:89
+msgid "Treat files &without extention as Ascii file"
+msgstr "Dosiyên cureyê &wan tunebin wekî Ascii têbigihîje"
+
+#: resources.h:85
+msgid "Treat the &following filetypes as Ascii files:"
+msgstr "Van cureyên dosiyan wekî Ascii têbigihîje:"
+
+#: resources.h:166
+msgid "Trust the new key and carry on connecting?"
+msgstr ""
+
+#: resources.h:154
+msgid "Trust this host and carry on connecting?"
+msgstr ""
+
+#: resources.h:45 ../../locales/../src/interface/sitemanager.cpp:607
+#: ../../locales/../src/interface/sitemanager.cpp:797
+msgid "Unix"
+msgstr "Unix"
+
+#: resources.h:147
+msgid "Unknown host key"
+msgstr ""
+
+#: resources.h:187
+msgid "Upload selected files and folders"
+msgstr "Dosî û peldankên hilbijartî ragihîne hember"
+
+#: resources.h:69
+msgid "User:"
+msgstr "Bikarhêner:"
+
+#: resources.h:46 ../../locales/../src/interface/sitemanager.cpp:611
+#: ../../locales/../src/interface/sitemanager.cpp:806
+msgid "VMS"
+msgstr "VMS"
+
+#: resources.h:126
+msgid "W&rite"
+msgstr "Binivîse:"
+
+#: ../../locales/../src/interface/QueueView.cpp:1330
+msgid "Waiting"
+msgstr "Li hêviyê ye"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:148
+msgid "Waiting for transfer to be canceled"
+msgstr "Li hêviyê ye ku ragihandin raweste"
+
+#: resources.h:159
+msgid "Warning: Potential security breach!"
+msgstr ""
+
+#: resources.h:130
+msgid "Wr&ite"
+msgstr "Bi&nivîse"
+
+#: resources.h:133
+msgid ""
+"You can use an x at any position to keep the permission the original files "
+"have."
+msgstr ""
+"Ji bo parastina destûra dosiya orjînal tu dikarî x texî pozisyoneke ji rêzê."
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:88
+msgid "You did not enter a new name for the file. Overwrite the file instead?"
+msgstr ""
+"Ji bo dosiyê te navekî nû nenivîsî. Di şûna wê de tu dixwazî dosiyê jê bibî?"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:48
+#: ../../locales/../src/interface/fileexistsdlg.cpp:72
+#: ../../locales/../src/interface/fileexistsdlg.cpp:104
+#: ../../locales/../src/interface/fileexistsdlg.cpp:128
+msgid "bytes"
+msgstr "bayt"
+
+#: ../../locales/../src/interface/LocalListView.cpp:361
+#: ../../locales/../src/interface/LocalListView.cpp:379
+#: ../../locales/../src/interface/RemoteListView.cpp:394
+#: ../../locales/../src/interface/RemoteListView.cpp:412
+msgid "file"
+msgstr "dosya"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:241
+msgid "fzsftp could not be started"
+msgstr ""
+
+#: ../../locales/../src/interface/themeprovider.cpp:58
+msgid "themes.xml missing, can not get theme data"
+msgstr "themes.xml nayê dîtin, em nikarin xwe bigihînin daneyan dirban."
+
+#: resources.h:6
+msgid "with the following file?"
+msgstr "ma bi vê dosiyê?"

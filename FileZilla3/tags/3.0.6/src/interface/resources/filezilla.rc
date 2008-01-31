@@ -1,0 +1,13 @@
+//{{NO_DEPENDENCIES}}
+//#define wxUSE_NO_MANIFEST 1
+
+appicon ICON "FileZilla.ico"
+
+#define APSTUDIO_READONLY_SYMBOLS
+#include <wx/msw/wx.rc>
+#undef APSTUDIO_READONLY_SYMBOLS
+
+
+#ifdef HAS_VERSIONRC
+#include "version.rc"
+#endif

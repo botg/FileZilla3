@@ -1,0 +1,446 @@
+AC_INIT(FileZilla, 3.0.7-rc1, tim.kosse@gmx.de)
+AC_CONFIG_HEADERS([src/include/config.h])
+AC_CONFIG_AUX_DIR(config)
+AM_INIT_AUTOMAKE([dist-bzip2])
+
+AC_CANONICAL_HOST
+
+AC_PROG_CXX
+AM_PROG_CC_C_O
+AC_PROG_INSTALL
+AC_PROG_LIBTOOL
+
+AC_CACHE_SAVE
+
+AC_ARG_ENABLE(locales, AC_HELP_STRING([--enable-locales], [Build message catalogs]), \
+		[locales="$enableval"], [locales="yes"])
+
+AC_ARG_ENABLE(localesonly, AC_HELP_STRING([--enable-localesonly], [Just build locales]), \
+		[localesonly="$enableval"], [localesonly="no"])
+
+if test "$locales" != "yes" -a "$localesonly" = "yes"; then
+  AC_MSG_ERROR([invalid flags: --disable-locales cannot be used together with --locales-only])
+fi
+
+if ! test "$localesonly" = "yes"; then
+
+  if test "X$GCC" = Xyes; then
+    CFLAGS="$CFLAGS -Wall -g -fexceptions"
+    CXXFLAGS="$CXXFLAGS -Wall -g -fexceptions"
+  fi
+
+  # Add build information to config.h
+  # ---------------------------------
+
+  # Add host to config.h
+  AC_DEFINE_UNQUOTED(USED_HOST, ["$host"], [Host system under which the program will run.])
+  AC_DEFINE_UNQUOTED(USED_BUILD, ["$build"], [Build system under which the program was compiled on.])
+
+  # Add used CXXFLAGS to config.h
+  AC_DEFINE_UNQUOTED(USED_CXXFLAGS, ["$CXXFLAGS"], [Define to the used CXXFLAGS to compile this package.])
+
+  # Get compiler (version)
+  AH_TEMPLATE(USED_COMPILER, [Define to name and version of used compiler])
+  if COMPILER=`$CC --version | head -n 1`; then
+    AC_DEFINE_UNQUOTED(USED_COMPILER, ["$COMPILER"])
+  fi
+
+  # Get buildtype.
+  AC_ARG_ENABLE(buildtype, AC_HELP_STRING([--enable-buildtype=TYPE], [DO NOT USE. Reserved for use by official maintainer. TYPE can either be 'official' or 'nightly'.]),
+	[buildtype=$enableval], [buildtype=])
+  buildtype_valid=false
+  if test -z "$buildtype"; then
+    buildtype_valid=true
+  elif test "$buildtype" = "official"; then
+    buildtype_valid=true
+  elif test "$buildtype" = "nightly"; then
+    buildtype_valid=true
+  fi
+
+  if test "$buildtype_valid" != "true"; then
+    AC_MSG_ERROR([invalid buildtype passed])
+  fi
+
+  if ! test -z "$buildtype"; then
+    AC_DEFINE_UNQUOTED(BUILDTYPE, ["$buildtype"], [Buildtype, indicates official builds and nightly builds])
+  fi
+
+  # Detect wxWidgets
+  # ----------------
+
+  AM_OPTIONS_WXCONFIG
+
+  MIN_WX_VERSION="2.8.6"
+  AM_PATH_WXCONFIG($MIN_WX_VERSION, wxWin=1, , [xrc,std])
+  if test "$wxWin" != 1; then
+	AC_MSG_ERROR([
+        	wxWidgets must be installed on your system
+		but wx-config script couldn't be found.
+
+		Please check that wx-config is in path, the directory
+		where wxWidgets libraries are installed (returned by
+		'wx-config --libs' command) is in LD_LIBRARY_PATH or
+		equivalent variable and wxWidgets version is $MIN_WX_VERSION or above.
+	])
+  fi
+
+  AC_SUBST(WX_CONFIG_WITH_ARGS)
+
+  AC_CACHE_SAVE
+
+  # Get OS type for PUTTY frontend
+  # ------------------------------
+
+  AC_MSG_CHECKING([system type for sftp stub])
+  sftpbuild="unix"
+  if echo $host_os | grep "mingw" > /dev/null 2>&1; then sftpbuild="mingw"; fi
+  AC_MSG_RESULT([$sftpbuild])
+
+  # Checks for PuTTY
+  # ----------------
+
+  AC_CHECK_HEADERS([utmpx.h sys/select.h],,,[
+  #include <sys/types.h>
+  #include <utmp.h>])
+
+  AC_SEARCH_LIBS([socket], [xnet])
+  AC_SEARCH_LIBS([getaddrinfo], [xnet])
+  AC_SEARCH_LIBS([in6addr_loopback], [socket])
+
+  AC_CHECK_FUNCS([getaddrinfo ptsname setresuid strsignal updwtmpx])
+  AC_CHECK_FUNCS([gettimeofday ftime])
+  AC_CHECK_FUNCS([in6addr_loopback in6addr_any])
+
+AH_BOTTOM([
+/* Convert autoconf definitions to ones that PuTTY wants. */
+
+#ifndef HAVE_GETADDRINFO
+# define NO_IPV6
+#endif
+#ifndef HAVE_SETRESUID
+# define HAVE_NO_SETRESUID
+#endif
+#ifndef HAVE_STRSIGNAL
+# define HAVE_NO_STRSIGNAL
+#endif
+#if !defined(HAVE_UTMPX_H) || !defined(HAVE_UPDWTMPX)
+# define OMIT_UTMP
+#endif
+#ifndef HAVE_PTSNAME
+# define BSD_PTYS
+#endif
+#ifndef HAVE_SYS_SELECT_H
+# define HAVE_NO_SYS_SELECT_H
+#endif
+])
+
+  # Check for windres on MinGW builds
+  # ---------------------------------
+
+  # Small function to filter the flags for windres,
+  # so that only includes and defines are passed to windres.
+  parseflags() {
+	WINDRESFLAGS=""
+	for opt in "$@"
+	do
+		case "$opt" in
+		-I*)
+			WINDRESFLAGS="$WINDRESFLAGS --include-dir=${opt#-I}"
+			;;
+		-D*)
+			WINDRESFLAGS="$WINDRESFLAGS $opt"
+			;;
+		esac
+	done
+  }
+
+  WINDRESFLAGS=
+  use_resourcefile=
+  AC_MSG_CHECKING([whether to use windres])
+  if echo $host_os | grep "cygwin\|mingw" > /dev/null 2>&1; then
+        if echo $WX_CPPFLAGS | grep __WXMSW__ > /dev/null 2>&1; then
+		if test -z "$host_alias"; then
+			hostaliaswindres=
+		else
+			hostaliaswindres="$host_alias-windres"
+		fi
+		AC_MSG_RESULT([yes])
+		AC_PATH_PROGS([WINDRES], [windres $hostaliaswindres $host_os-windres])
+		if test "x$WINDRES" = "x"; then
+			AC_MSG_ERROR([windres could not be found, please make sure this program is within your path.])
+		fi
+                use_resourcefile=true
+                parseflags $WX_CPPFLAGS
+	else
+		AC_MSG_RESULT([no])
+	fi
+  else
+	AC_MSG_RESULT([no])
+  fi
+  AC_SUBST(WINDRES)
+  AC_SUBST(WINDRESFLAGS)
+
+  # version.rc.in needs a major, minor and micro version number
+  vnumber=${PACKAGE_VERSION%-*}
+  PACKAGE_VERSION_MAJOR=${vnumber%%.*}
+  vnumber=${vnumber#$PACKAGE_VERSION_MAJOR}
+  vnumber=${vnumber#.}
+  PACKAGE_VERSION_MINOR=${vnumber%%.*}
+  vnumber=${vnumber#$PACKAGE_VERSION_MINOR}
+  vnumber=${vnumber#.}
+  PACKAGE_VERSION_MICRO=${vnumber%%.*}
+  vnumber=${vnumber#$PACKAGE_VERSION_MICRO}
+  vnumber=${vnumber#.}
+  PACKAGE_VERSION_NANO=${vnumber%%.*}
+
+  if test -z "$PACKAGE_VERSION_MAJOR"; then
+    PACKAGE_VERSION_MAJOR=0
+  fi
+  if test -z "$PACKAGE_VERSION_MINOR"; then
+    PACKAGE_VERSION_MINOR=0
+  fi
+  if test -z "$PACKAGE_VERSION_MICRO"; then
+    PACKAGE_VERSION_MICRO=0
+  fi
+  if test -z "$PACKAGE_VERSION_NANO"; then
+    PACKAGE_VERSION_NANO=0
+  fi
+
+  AC_SUBST(PACKAGE_VERSION_MAJOR)
+  AC_SUBST(PACKAGE_VERSION_MINOR)
+  AC_SUBST(PACKAGE_VERSION_MICRO)
+  AC_SUBST(PACKAGE_VERSION_NANO)
+
+  # Mac OS X specific checks
+  # ------------------------
+
+  # Create application bundle on OS X
+  if echo $WX_CPPFLAGS | grep __WXMAC__; then
+    macappbundle="yes"
+  else
+    macappbundle="no"
+  fi
+
+  # Installer creation under Windows
+  # --------------------------------
+
+  # Create installer under Windows
+  if echo $host_os | grep "mingw" > /dev/null 2>&1; then
+    makensisscript="yes"
+  else
+    makensisscript="no"
+  fi
+
+  if echo $host_os | grep "mingw" > /dev/null 2>&1; then
+    AC_CONFIG_FILES(data/install.nsi)
+    AC_CONFIG_FILES(data/makezip.sh)
+  fi
+
+  # Libidn checks
+  # -------------
+
+  AC_CHECK_HEADER(idna.h,, 
+  [
+    AC_MSG_ERROR([idna.h not found which is part of GNU libidn.])
+  ])
+
+  AC_ARG_WITH(idn-lib,
+  	AC_HELP_STRING([--with-idn-lib=FILE], [Use the given path to the idn library.]),
+  [
+	if test "$withval" != "yes" -a "$withval" != ""; then
+		IDN_LIB=$withval
+	fi
+  ])
+
+  if test "x$IDN_LIB" = "x"; then
+    AC_CHECK_LIB(idn, stringprep_check_version, IDN_LIB="-lidn",
+                 AC_MSG_ERROR([GNU libidn not found. Try using --with-idn-lib=FILE to specify the library path.])
+                 )
+  fi
+
+  AC_SUBST(IDN_LIB)
+
+  # Binreloc
+  # --------
+
+  # Check if we should use BinReloc
+  AH_TEMPLATE(ENABLE_BINRELOC, [Define ENABLE_BINRELOC on systems where the executable
+                                location can be obtained using /proc/self/maps])
+  AC_MSG_CHECKING([whether to use BinReloc])
+  if echo $host_os | grep -i "cygwin\|mingw\|mac" > /dev/null 2>&1 ; then
+    use_binreloc=no
+  else
+    use_binreloc=yes
+    AC_DEFINE(ENABLE_BINRELOC)
+  fi
+
+  AC_MSG_RESULT([$use_binreloc])
+
+  # Precompiled headers support
+  # ---------------------------
+
+  AC_MSG_CHECKING([whether to use precompiled headers])
+  use_precomp=""
+  AC_ARG_ENABLE(precomp, AC_HELP_STRING([--enable-precomp], [Use precompiled headers]), \
+                use_precomp="$enableval")
+  if test -z "$use_precomp"; then
+    if test "X$GCC" = Xyes; then
+      if gcc_version=`$CC -dumpversion` > /dev/null 2>&1; then
+        major=`echo $gcc_version | cut -d. -f1`
+        minor=`echo $gcc_version | sed "s/@<:@-,a-z,A-Z@:>@.*//" | cut -d. -f2`
+        if test -z "$major" || test -z "$minor"; then
+          use_precomp=no
+        elif test "$major" -ge 4; then
+          use_precomp=yes
+        else
+          use_precomp=no
+        fi
+      else
+        use_precomp=no
+      fi
+    else
+      use_precomp=no
+    fi
+  fi
+  if test "x$use_precomp" = "xyes"; then
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+  fi
+
+  # CppUnit tests
+  # -------------
+
+  AM_PATH_CPPUNIT([1.10.2], [has_cppunit="yes"])
+
+  # Updatecheck related flags
+  # -------------------------
+
+  AC_ARG_ENABLE(manualupdatecheck, AC_HELP_STRING([--disable-manualupdatecheck], [Disallow the user to manually check for new versions. Implies --disable-autoupdatecheck]),
+	[manualupdatecheck=$enableval], [manualupdatecheck="yes"])
+
+  if test "$manualupdatecheck" = "no"; then
+    manualupdatecheck="0"
+  else
+    manualupdatecheck="1"
+  fi
+  AC_DEFINE_UNQUOTED(FZ_MANUALUPDATECHECK, $manualupdatecheck, [Set to 1 to enable user initiated update checks])
+
+  AC_ARG_ENABLE(autoupdatecheck, AC_HELP_STRING([--disable-autoupdatecheck], [Disables the ability of FileZilla to check for new versions automatically.]),
+	[autoupdatecheck=$enableval], [autoupdatecheck="yes"])
+
+  if test "$manualupdatecheck" = "1" -a "$autoupdatecheck" != "no"; then
+    autoupdatecheck="1"
+  else
+    autoupdatecheck="0"
+  fi
+  AC_DEFINE_UNQUOTED(FZ_AUTOUPDATECHECK, $autoupdatecheck, [Set to 1 to add support for automated update checks])
+
+  # GnuTLS
+  # ------
+
+  AM_PATH_LIBGNUTLS(2.0.4,, AC_MSG_ERROR([[
+***
+*** libgnutls 2.0.4 or greater was not found. You may want to get it from
+*** ftp://ftp.gnutls.org/pub/gnutls/]]))
+
+  AC_SUBST(LIBGNUTLS_LIBS)
+  AC_SUBST(LIBGNUTLS_CFLAGS)
+
+fi
+
+# Everything translation related
+# ------------------------------
+
+FILEZILLA_LINGUAS=
+FILEZILLA_LINGUAS_PO=
+FILEZILLA_LINGUAS_MO=
+FILEZILLA_LINGUAS_PO_NEW=
+
+if test "$locales" = "yes"; then
+  AC_PATH_PROG(xgettext, xgettext)
+  if test -z "$xgettext"; then
+    AC_MSG_ERROR([xgettext not found, please install the GNU gettext package and make sure xgettext is in the path.])
+  fi
+
+  AC_PATH_PROG(msgfmt, msgfmt)
+  if test -z "$msgfmt"; then
+    AC_MSG_ERROR([ msgfmt not found, please install the GNU gettext package and make sure  msgfmt is in the path.])
+  fi
+
+  FZ_PATH_PROG_VER(msgmerge, msgmerge, 0.11.0)
+  if test -z "$msgmerge"; then
+    AC_MSG_ERROR([msgmerge not found or too old, please install a current version of the GNU gettext package and make sure msgmerge is in the path.])
+  fi
+
+  AC_MSG_CHECKING([available FZ3 message catalogs])
+
+  FILEZILLA_LINGUAS_PO=
+  FILEZILLA_LINGUAS=
+
+  if /bin/ls > /dev/null; then
+    LSPROG='/bin/ls'
+  else
+    LSPROG='ls'
+  fi
+
+  if test x$srcdir = x; then
+    path="locales"
+  else
+    path="$srcdir/locales"
+  fi
+  for i in `$LSPROG $path/*.po`; do
+    i=${i%.*}
+    i=${i##*/}
+    FILEZILLA_LINGUAS_PO=$FILEZILLA_LINGUAS_PO${FILEZILLA_LINGUAS_PO:+ }\$\(srcdir\)/$i.po
+    FILEZILLA_LINGUAS_PO_NEW=$FILEZILLA_LINGUAS_PO_NEW${FILEZILLA_LINGUAS_PO_NEW:+ }$i.po.new
+    FILEZILLA_LINGUAS=$FILEZILLA_LINGUAS${FILEZILLA_LINGUAS:+ }$i
+    FILEZILLA_LINGUAS_MO=$FILEZILLA_LINGUAS_MO${FILEZILLA_LINGUAS_MO:+ }$i.mo
+  done
+
+  AC_MSG_RESULT([$FILEZILLA_LINGUAS])
+
+fi
+
+AC_PATH_PROG([WXRC], [wxrc --version])
+if test "x$WXRC" = "x"; then
+  AC_MSG_ERROR([
+    wxrc could not be found. This program gets build together with wxWidgets.
+    Please make sure wxrc is within your path.
+  ])
+fi
+
+AC_SUBST(CATALOGS_TO_INSTALL)
+AC_SUBST(FILEZILLA_LINGUAS)
+AC_SUBST(FILEZILLA_LINGUAS_PO)
+AC_SUBST(FILEZILLA_LINGUAS_PO_NEW)
+AC_SUBST(FILEZILLA_LINGUAS_MO)
+
+
+# Output automake conditionals
+# ----------------------------
+
+AM_CONDITIONAL([MINGW], [echo $host_os | grep "mingw"])
+AM_CONDITIONAL([LOCALES_ONLY], [test "$localesonly" = "yes"])
+AM_CONDITIONAL([LOCALES], [test "$locales" = "yes"])
+AM_CONDITIONAL(SFTP_MINGW, [test "$sftpbuild" = "mingw"])
+AM_CONDITIONAL(SFTP_UNIX, [test "$sftpbuild" = "unix"])
+AM_CONDITIONAL(USE_RESOURCEFILE, test "$use_resourcefile" = "true")
+AM_CONDITIONAL(MACAPPBUNDLE, [test "$macappbundle" = "yes"])
+AM_CONDITIONAL(MAKENSISSCRIPT, [test "$makensisscript" = "yes"])
+AM_CONDITIONAL(USE_BINRELOC, test "$use_binreloc" = "yes")
+AM_CONDITIONAL(ENABLE_PRECOMP, test "x$use_precomp" = "xyes")
+AM_CONDITIONAL(HAS_CPPUNIT, [test "$has_cppunit" = "yes"])
+
+AC_CONFIG_FILES(Makefile src/Makefile src/engine/Makefile src/tinyxml/Makefile
+src/interface/Makefile src/interface/resources/Makefile src/include/Makefile
+locales/Makefile src/interface/resources/16x16/Makefile
+src/interface/resources/32x32/Makefile data/Makefile
+src/interface/resources/cyril/Makefile
+src/interface/resources/cyril/16x16/Makefile
+src/interface/resources/blukis/Makefile
+src/putty/Makefile src/putty/unix/Makefile src/putty/windows/Makefile
+tests/Makefile src/interface/resources/version.rc
+src/interface/resources/MacInfo.plist
+src/fzshellext/Makefile src/fzshellext/version.rc)
+AC_OUTPUT

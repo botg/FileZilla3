@@ -11,7 +11,7 @@
             <object class="wxFlexGridSizer">
               <object class="sizeritem">
                 <object class="wxStaticText">
-                  <label>Some misconfigured remote servers which are behind a router, may reply with their local IP address.</label>
+                  <label>Some misconfigured remote servers which are behind a router, may reply with their local ip address.</label>
                 </object>
               </object>
               <object class="sizeritem">
@@ -791,8 +791,6 @@
                               </object>
                               <flag>wxGROW</flag>
                             </object>
-                            <vgap>5</vgap>
-                            <hgap>5</hgap>
                             <object class="sizeritem">
                               <object class="wxStaticLine"/>
                               <flag>wxTOP|wxBOTTOM|wxGROW</flag>
@@ -905,13 +903,6 @@
                               <border>5</border>
                             </object>
                           </object>
-                        </object>
-                        <object class="sizeritem">
-                          <object class="wxCheckBox" name="ID_BYPASSPROXY">
-                            <label>B&amp;ypass proxy</label>
-                          </object>
-                          <flag>wxALL</flag>
-                          <border>5</border>
                         </object>
                         <object class="sizeritem">
                           <object class="wxStaticLine"/>
@@ -1395,7 +1386,7 @@
           </object>
           <object class="sizeritem">
             <object class="wxRadioButton" name="ID_TYPE_ASCII">
-              <label>A&amp;SCII</label>
+              <label>A&amp;scii</label>
             </object>
             <flag>wxLEFT|wxRIGHT</flag>
             <border>4</border>
@@ -1469,7 +1460,7 @@
           </object>
           <object class="sizeritem">
             <object class="wxCheckBox" name="ID_ASCIIWITHOUT">
-              <label>Treat files &amp;without extension as ASCII file</label>
+              <label>Treat files &amp;without extension as Ascii file</label>
               <checked>1</checked>
             </object>
             <flag>wxLEFT|wxRIGHT</flag>
@@ -1477,7 +1468,7 @@
           </object>
           <object class="sizeritem">
             <object class="wxCheckBox" name="ID_ASCIIDOTFILE">
-              <label>&amp;Treat dotfiles (filenames starting with a dot) as ASCII files</label>
+              <label>&amp;Treat dotfiles (filenames starting with a dot) as Ascii files</label>
               <checked>1</checked>
             </object>
             <flag>wxALL</flag>
@@ -1740,7 +1731,7 @@
               <vgap>5</vgap>
               <object class="sizeritem">
                 <object class="wxCheckBox" name="ID_USEKEEPALIVE">
-                  <label>Send FTP keep-alive commands</label>
+                  <label>Send FTP Keep-alive commands</label>
                 </object>
               </object>
               <object class="sizeritem">

@@ -528,7 +528,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 	pData->loginSequence.clear();
 
 	int proxyType = m_pEngine->GetOptions()->GetOptionVal(OPTION_FTP_PROXY_TYPE);
-	if (!proxyType || server.GetBypassProxy())
+	if (!proxyType)
 	{
 		// User
 		t_loginCommand cmd = {false, false, user, _T("")};
@@ -1185,7 +1185,6 @@ public:
 		viewHiddenCheck = false;
 		viewHidden = false;
 		m_pDirectoryListingParser = 0;
-		mdtm_index = 0;
 	}
 
 	virtual ~CFtpListOpData()
@@ -4147,7 +4146,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 	CFtpLogonOpData* pData = new CFtpLogonOpData;
 	m_pCurOpData = pData;
 
-	if (m_pEngine->GetOptions()->GetOptionVal(OPTION_FTP_PROXY_TYPE) && !server.GetBypassProxy())
+	if (m_pEngine->GetOptions()->GetOptionVal(OPTION_FTP_PROXY_TYPE))
 	{
 		pData->host = m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_HOST);
 		int pos = pData->host.Find(':');

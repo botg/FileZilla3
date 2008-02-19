@@ -280,7 +280,7 @@ void CFilterEditDialog::OnFilterTypeChange(wxCommandEvent& event)
 	MakeControls(filter, item);
 }
 
-void CFilterEditDialog::MakeControls(const CFilterCondition& condition, int i /*=-1*/)
+void CFilterEditDialog::MakeControls(const CFilterCondition& condition, unsigned int i /*=-1*/)
 {
 	wxRect size = m_pListCtrl->GetClientSize();
 
@@ -325,9 +325,6 @@ void CFilterEditDialog::MakeControls(const CFilterCondition& condition, int i /*
 		break;
 	case permissions:
 		controls.pCondition->Create(m_pListCtrl, wxID_ANY, wxPoint(20 + typeRect.GetWidth(), posy), wxDefaultSize, permissionConditionTypes);
-		break;
-	default:
-		wxFAIL_MSG(_T("Unhandled condition"));
 		break;
 	}
 	controls.pCondition->Select(condition.condition);
@@ -419,9 +416,6 @@ void CFilterEditDialog::SaveFilter(CFilter& filter)
 				condition.strValue = _T("1");
 				condition.value = 1;
 			}
-			break;
-		default:
-			wxFAIL_MSG(_T("Unhandled condition"));
 			break;
 		}
 
@@ -694,7 +688,7 @@ bool CFilterEditDialog::Validate()
 			wxMessageBox(_("At least one filter condition is incomplete"), _("Filter validation failed"), wxICON_ERROR, this);
 			return false;
 		}
-		else if (type == (enum t_filterType)::size)
+		else if (type == size)
 		{
 			long number;
 			if (!controls.pValue->GetValue().ToLong(&number) || number < 0)

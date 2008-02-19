@@ -98,7 +98,9 @@ BEGIN_EVENT_TABLE(CMainFrame, wxFrame)
 #ifdef EVT_TOOL_DROPDOWN
 	EVT_TOOL_DROPDOWN(XRCID("ID_TOOLBAR_SITEMANAGER"), CMainFrame::OnSitemanagerDropdown)
 #endif
-		EVT_NAVIGATION_KEY(CMainFrame::OnNavigationKeyEvent)
+	EVT_UPDATE_UI(XRCID("ID_MENU_SERVER_CMD"), CMainFrame::OnUpdateMenuCustomcommand)
+	EVT_UPDATE_UI(XRCID("ID_MENU_SERVER_VIEWHIDDEN"), CMainFrame::OnUpdateMenuShowHidden)
+	EVT_NAVIGATION_KEY(CMainFrame::OnNavigationKeyEvent)
 	EVT_SET_FOCUS(CMainFrame::OnGetFocus)
 	EVT_CHAR_HOOK(CMainFrame::OnChar)
 	EVT_MENU(XRCID("ID_MENU_EDIT_FILTERS"), CMainFrame::OnFilter)
@@ -672,7 +674,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		{
 			CConditionalDialog dlg(this, CConditionalDialog::confirm_preserve_timestamps, CConditionalDialog::ok, true);
 			dlg.SetTitle(_("Preserving file timestamps"));
-			dlg.AddText(_("Please note that preserving timestamps on uploads on FTP, FTPS and FTPES servers only works if they support the MFMT command."));
+			dlg.AddText(_("Please note that preserving timestamps on uploads only works on FTP, FTPS and FTPES servers (but not SFTP) supporting the MFMT command."));
 			dlg.Run();
 		}
 		COptions::Get()->SetOption(OPTION_PRESERVE_TIMESTAMPS, event.IsChecked() ? 1 : 0);
@@ -899,11 +901,7 @@ bool CMainFrame::CreateToolBar()
 
 void CMainFrame::OnUpdateToolbarDisconnect(wxUpdateUIEvent& event)
 {
-	bool enable = m_pState->IsRemoteConnected() && m_pState->IsRemoteIdle();
-	event.Enable(enable);
-
-	m_pMenuBar->FindItem(XRCID("ID_MENU_SERVER_DISCONNECT"), 0)->Enable(enable);
-    m_pMenuBar->FindItem(XRCID("ID_MENU_SERVER_CMD"), 0)->Enable(m_pState->m_pEngine && m_pState->m_pEngine->IsConnected() && m_pState->m_pCommandQueue->Idle());
+	event.Enable(m_pState->IsRemoteConnected() && m_pState->IsRemoteIdle());
 }
 
 void CMainFrame::OnDisconnect(wxCommandEvent& event)
@@ -1077,17 +1075,14 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 
 void CMainFrame::OnUpdateToolbarReconnect(wxUpdateUIEvent &event)
 {
-	bool enable;
 	if (!m_pState->m_pEngine || m_pState->m_pEngine->IsConnected() || !m_pState->m_pCommandQueue->Idle())
-		enable = false;
-	else
 	{
-		CServer server;
-		enable = COptions::Get()->GetLastServer(server);
+		event.Enable(false);
+		return;
 	}
-	
-	event.Enable(enable);
-	m_pMenuBar->FindItem(XRCID("ID_MENU_SERVER_RECONNECT"), 0)->Enable(enable);
+
+	CServer server;
+	event.Enable(COptions::Get()->GetLastServer(server));
 }
 
 void CMainFrame::OnReconnect(wxCommandEvent &event)
@@ -1654,6 +1649,36 @@ void CMainFrame::ConnectToSite(CSiteManagerItemData* const pData)
 
 	if (pData->m_localDir != _T(""))
 		m_pState->SetLocalDir(pData->m_localDir);
+}
+
+void CMainFrame::OnUpdateMenuCustomcommand(wxUpdateUIEvent& event)
+{
+	if (!m_pMenuBar)
+		return;
+
+	event.Enable(m_pState->m_pEngine && m_pState->m_pEngine->IsConnected() && m_pState->m_pCommandQueue->Idle());
+}
+
+void CMainFrame::OnUpdateMenuShowHidden(wxUpdateUIEvent& event)
+{
+	bool enable = true;
+
+	const CServer* pServer;
+	if (m_pState && (pServer = m_pState->GetServer()))
+	{
+		switch (pServer->GetProtocol())
+		{
+		case FTP:
+		case FTPS:
+		case FTPES:
+			break;
+		default:
+			enable = false;
+		}
+	}
+	event.Enable(enable);
+
+	event.Check(COptions::Get()->GetOptionVal(OPTION_VIEW_HIDDEN_FILES) != 0);
 }
 
 void CMainFrame::CheckChangedSettings()

@@ -42,7 +42,7 @@ public:
 	bool Create(wxWindow* parent);
 
 	/// Creates the controls and sizers
-	void CreateControls(wxWindow* parent);
+	void CreateControls();
 
 	bool GetServer(CSiteManagerItemData& data);
 

@@ -3821,8 +3821,8 @@ static int do_ssh1_login(Ssh ssh, unsigned char *in, int inlen,
 	    }
 	    s->cur_prompt->to_server = TRUE;
 	    s->cur_prompt->name = dupstr("SSH password");
-	    // FZ: We construct our own prompt in the GUI
-	    add_prompt(s->cur_prompt, dupprintf("Password: "),
+	    add_prompt(s->cur_prompt, dupprintf("%.90s@%.90s's password: ",
+						s->username, ssh->savedhost),
 		       FALSE, SSH_MAX_PASSWORD_LEN);
 	}
 
@@ -7803,10 +7803,9 @@ static void do_ssh2_authconn(Ssh ssh, unsigned char *in, int inlen,
 		    }
 		    /* FIXME: ugly to print "Using..." in prompt _every_
 		     * time round. Can this be done more subtly? */
-		    // FZ: fixed
 		    s->cur_prompt->instruction =
-			dupprintf("%.*s",
-				  inst_len, inst);
+			dupprintf("Using keyboard-interactive authentication.%s%.*s",
+				  inst_len ? "\n" : "", inst_len, inst);
 		    s->cur_prompt->instr_reqd = TRUE;
 
 		    /*
@@ -7830,8 +7829,6 @@ static void do_ssh2_authconn(Ssh ssh, unsigned char *in, int inlen,
 				   dupprintf("%.*s", prompt_len, prompt),
 				   echo, SSH_MAX_PASSWORD_LEN);
 		    }
-		    logeventf(ssh, "Using keyboard-interactive authentication. inst_len: %d, num_prompts: %d", inst_len, s->num_prompts);
-
 
 		    /*
 		     * Get the user's responses.
@@ -7896,8 +7893,9 @@ static void do_ssh2_authconn(Ssh ssh, unsigned char *in, int inlen,
 		s->cur_prompt = new_prompts(ssh->frontend);
 		s->cur_prompt->to_server = TRUE;
 		s->cur_prompt->name = dupstr("SSH password");
-		// FZ: We construct our own prompt in the GUI
-		add_prompt(s->cur_prompt, dupprintf("Password: "),
+		add_prompt(s->cur_prompt, dupprintf("%.90s@%.90s's password: ",
+						    s->username,
+						    ssh->savedhost),
 			   FALSE, SSH_MAX_PASSWORD_LEN);
 
 		ret = get_userpass_input(s->cur_prompt, NULL, 0);

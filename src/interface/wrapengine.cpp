@@ -732,9 +732,9 @@ int CWrapEngine::GetWidthFromCache(const char* name)
 		return 0;
 	}
 
-	wxString language = wxGetApp().GetCurrentLanguageCode();
+	int language = wxGetApp().GetCurrentLanguage();
 
-	TiXmlElement* pLanguage = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
+	TiXmlElement* pLanguage = FindElementWithAttribute(pElement, "Language", "id", language);
 	if (!pLanguage)
 	{
 		delete pDocument->GetDocument();
@@ -777,9 +777,9 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 		return;
 	}
 
-	wxString language = wxGetApp().GetCurrentLanguageCode();
+	int language = wxGetApp().GetCurrentLanguage();
 
-	TiXmlElement* pLanguage = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
+	TiXmlElement* pLanguage = FindElementWithAttribute(pElement, "Language", "id", language);
 	if (!pLanguage)
 	{
 		delete pDocument->GetDocument();
@@ -807,30 +807,6 @@ CWrapEngine::CWrapEngine()
 
 CWrapEngine::~CWrapEngine()
 {
-}
-
-static wxString GetLocaleFile(const wxString& localesDir, wxString name)
-{
-	if (wxFileName::FileExists(localesDir + name + _T("/filezilla.mo")))
-		return name;
-
-	size_t pos = name.Find('@');
-	if (pos > 0)
-	{
-		name = name.Left(pos);
-		if (wxFileName::FileExists(localesDir + name + _T("/filezilla.mo")))
-			return name;
-	}
-
-	pos = name.Find('_');
-	if (pos > 0)
-	{
-		name = name.Left(pos);
-		if (wxFileName::FileExists(localesDir + name + _T("/filezilla.mo")))
-			return name;
-	}
-
-	return _T("");
 }
 
 bool CWrapEngine::LoadCache()
@@ -912,29 +888,6 @@ bool CWrapEngine::LoadCache()
 		}
 	}
 
-	if (!cacheValid)
-	{
-		// Clear all languages
-		TiXmlElement* pLanguage = pElement->FirstChildElement("Language");
-		while (pLanguage)
-		{
-			pElement->RemoveChild(pLanguage);
-			pLanguage = pElement->FirstChildElement("Language");
-		}
-	}
-
-	// Get current language
-	wxString language = wxGetApp().GetCurrentLanguageCode();
-	if (language == _T(""))
-		language = _T("default");
-
-	TiXmlElement* languageElement = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
-	if (!languageElement)
-	{
-		languageElement = pElement->InsertEndChild(TiXmlElement("Language"))->ToElement();
-		languageElement->SetAttribute("id", language.mb_str());
-	}
-
 	// Get static text font and measure sample text
 	wxFrame* pFrame = new wxFrame;
 	pFrame->Create(0, -1, _T("Title"), wxDefaultPosition, wxDefaultSize, wxFRAME_TOOL_WINDOW);
@@ -943,9 +896,9 @@ bool CWrapEngine::LoadCache()
 	wxFont font = pText->GetFont();
 	wxString fontDesc = font.GetNativeFontInfoDesc();
 
-	TiXmlElement* pFontElement = languageElement->FirstChildElement("Font");
+	TiXmlElement* pFontElement = pElement->FirstChildElement("Font");
 	if (!pFontElement)
-		pFontElement = languageElement->InsertEndChild(TiXmlElement("Font"))->ToElement();
+		pFontElement = pElement->InsertEndChild(TiXmlElement("Font"))->ToElement();
 
 	if (GetTextAttribute(pFontElement, "font") != fontDesc)
 	{
@@ -954,7 +907,7 @@ bool CWrapEngine::LoadCache()
 	}
 
 	int width, height;
-	pText->GetTextExtent(_T("Just some test string we are measuring. If width or heigh differ from the recorded values, invalidate cache. 1234567890MMWWII"), &width, &height);
+	pText->GetTextExtent(_T("Just some test string we are measuring. If width or heigh differ from the recorded values, invalidate cache."), &width, &height);
 
 	if (GetAttributeInt(pFontElement, "width") != width ||
 		GetAttributeInt(pFontElement, "height") != height)
@@ -966,31 +919,71 @@ bool CWrapEngine::LoadCache()
 
 	pFrame->Destroy();
 
-	// Get language file
-	const wxString& localesDir = wxGetApp().GetLocalesDir();
-	wxString name = GetLocaleFile(localesDir, language);
 
-	if (name != _T(""))
-	{
-		wxFileName fn(localesDir + name + _T("/filezilla.mo"));
-		wxDateTime date = fn.GetModificationTime();
-		wxLongLong ticks = date.GetTicks();
-
-		const char* languageNodeDate = languageElement->Attribute("date");
-		if (!languageNodeDate || strcmp(languageNodeDate, ticks.ToString().mb_str()))
-		{
-			languageElement->SetAttribute("date", ticks.ToString().mb_str());
-			cacheValid = false;
-		}
-	}
-	else
-		languageElement->SetAttribute("date", "");
 	if (!cacheValid)
 	{
-		TiXmlElement* dialog;
-		while ((dialog = languageElement->FirstChildElement("Dialog")))
-			languageElement->RemoveChild(dialog);
+		// Clear all languages
+		TiXmlElement* pLanguage = pElement->FirstChildElement("Language");
+		while (pLanguage)
+		{
+			pElement->RemoveChild(pLanguage);
+			pLanguage = pElement->FirstChildElement("Language");
+		}
 	}
+
+	// Enumerate language files
+	// ------------------------
+
+	const wxLanguageInfo* pInfo = wxLocale::FindLanguageInfo(_T("en"));
+	if (pInfo)
+	{
+		TiXmlElement* languageElement = FindElementWithAttribute(pElement, "Language", "id", pInfo->Language);
+		if (!languageElement)
+		{
+			languageElement = pElement->InsertEndChild(TiXmlElement("Language"))->ToElement();
+			languageElement->SetAttribute("id", pInfo->Language);
+		}
+	}
+
+
+	wxString localesDir = wxGetApp().GetLocalesDir();
+	if (localesDir != _T("") && dir.Open(localesDir))
+	{
+		wxString locale;
+		for (bool found = dir.GetFirst(&locale); found; found = dir.GetNext(&locale))
+		{
+			if (!wxFileName::FileExists(localesDir + locale + _T("/filezilla.mo")))
+				continue;
+
+			wxString name;
+			const wxLanguageInfo* pInfo = wxLocale::FindLanguageInfo(locale);
+			if (!pInfo)
+				continue;
+
+			wxFileName fn(localesDir + locale + _T("/filezilla.mo"));
+			wxDateTime date = fn.GetModificationTime();
+			wxLongLong ticks = date.GetTicks();
+
+			TiXmlElement* languageElement = FindElementWithAttribute(pElement, "Language", "id", pInfo->Language);
+			if (!languageElement)
+			{
+				languageElement = pElement->InsertEndChild(TiXmlElement("Language"))->ToElement();
+				languageElement->SetAttribute("id", pInfo->Language);
+				languageElement->SetAttribute("date", ticks.ToString().mb_str());
+			}
+			else
+			{
+				const char* languageNodeDate = languageElement->Attribute("date");
+				if (!languageNodeDate || strcmp(languageNodeDate, ticks.ToString().mb_str()))
+				{
+					languageElement->SetAttribute("date", ticks.ToString().mb_str());
+					languageElement->Clear();
+				}
+			}
+		}
+	}
+
+	// Outdated cache entries are now purged
 
 	wxString error;
 	if (!SaveXmlFile(file, pDocument, &error))

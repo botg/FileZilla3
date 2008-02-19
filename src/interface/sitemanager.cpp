@@ -76,15 +76,15 @@ public:
 			return wxDragNone;
 		if (hit == m_pSiteManager->m_dropSource)
 			return wxDragNone;
-
+	
 		const bool predefined = m_pSiteManager->IsPredefinedItem(hit);
 		if (predefined)
 			return wxDragNone;
-
+	
 		wxTreeCtrl *pTree = XRCCTRL(*m_pSiteManager, "ID_SITETREE", wxTreeCtrl);
 		if (pTree->GetItemData(hit))
 			return wxDragNone;
-
+	
 		wxTreeItemId item = hit;
 		while (item != pTree->GetRootItem())
 		{
@@ -101,7 +101,7 @@ public:
 
 		if (!m_pSiteManager->MoveItems(m_pSiteManager->m_dropSource, hit, def == wxDragCopy))
 			return wxDragNone;
-
+	
 		return def;
 	}
 
@@ -120,15 +120,15 @@ public:
 			return wxDragNone;
 		if (hit == m_pSiteManager->m_dropSource)
 			return wxDragNone;
-
+	
 		const bool predefined = m_pSiteManager->IsPredefinedItem(hit);
 		if (predefined)
 			return wxDragNone;
-
+	
 		wxTreeCtrl *pTree = XRCCTRL(*m_pSiteManager, "ID_SITETREE", wxTreeCtrl);
 		if (pTree->GetItemData(hit))
 			return wxDragNone;
-
+	
 		wxTreeItemId item = hit;
 		while (item != pTree->GetRootItem())
 		{
@@ -142,7 +142,7 @@ public:
 
 		if (def == wxDragMove && pTree->GetItemParent(m_pSiteManager->m_dropSource) == hit)
 			return wxDragNone;
-
+	
 		return def;
 	}
 
@@ -282,7 +282,9 @@ bool CSiteManager::Create(wxWindow* parent)
 		delete m_pSiteManagerMutex;
 		m_pSiteManagerMutex = 0;
 	}
-	CreateControls(parent);
+	SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
+	SetParent(parent);
+	CreateControls();
 
 	// Now create the imagelist for the site tree
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
@@ -319,21 +321,12 @@ bool CSiteManager::Create(wxWindow* parent)
 
 	pTree->SetDropTarget(new CSiteManagerDropTarget(this));
 
-#ifdef __WXGTK__
-	CSiteManagerItemData* data = 0;
-	wxTreeItemId item = pTree->GetSelection();
-	if (item.IsOk())
-		data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
-	if (!data)
-		XRCCTRL(*this, "wxID_OK", wxButton)->SetFocus();
-#endif
-
 	return true;
 }
 
-void CSiteManager::CreateControls(wxWindow* parent)
+void CSiteManager::CreateControls()
 {
-	wxXmlResource::Get()->LoadDialog(this, parent, _T("ID_SITEMANAGER"));
+	wxXmlResource::Get()->LoadDialog(this, GetParent(), _T("ID_SITEMANAGER"));
 
 	wxChoice *pProtocol = XRCCTRL(*this, "ID_PROTOCOL", wxChoice);
 	pProtocol->Append(CServer::GetProtocolName(FTP));
@@ -1122,10 +1115,6 @@ bool CSiteManager::UpdateServer()
 	else
 		data->m_server.SetEncodingType(ENCODING_AUTO);
 
-	if (XRCCTRL(*this, "ID_BYPASSPROXY", wxCheckBox)->GetValue())
-		data->m_server.SetBypassProxy(true);
-	else
-		data->m_server.SetBypassProxy(false);
 	return true;
 }
 
@@ -1203,10 +1192,6 @@ void CSiteManager::SetCtrlState()
 
 	const bool predefined = IsPredefinedItem(item);
 
-#ifdef __WXGTK__
-	wxWindow* pFocus = FindFocus();
-#endif
-
 	CSiteManagerItemData* data = 0;
 	if (item.IsOk())
 		data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
@@ -1227,7 +1212,6 @@ void CSiteManager::SetCtrlState()
 		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetValue(_T(""));
 		XRCCTRL(*this, "ID_PORT", wxTextCtrl)->SetValue(_T(""));
 		XRCCTRL(*this, "ID_PROTOCOL", wxChoice)->SetStringSelection(_("FTP"));
-		XRCCTRL(*this, "ID_BYPASSPROXY", wxCheckBox)->SetValue(false);
 		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(_("Anonymous"));
 		XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetValue(_T(""));
 		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->SetValue(_T(""));
@@ -1246,9 +1230,6 @@ void CSiteManager::SetCtrlState()
 
 		XRCCTRL(*this, "ID_CHARSET_AUTO", wxRadioButton)->SetValue(true);
 		XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->SetValue(_T(""));
-#ifdef __WXGTK__
-		XRCCTRL(*this, "wxID_OK", wxButton)->SetDefault();
-#endif
 	}
 	else
 	{
@@ -1277,7 +1258,6 @@ void CSiteManager::SetCtrlState()
 		else
 			XRCCTRL(*this, "ID_PROTOCOL", wxChoice)->SetStringSelection(CServer::GetProtocolName(FTP));
 		XRCCTRL(*this, "ID_PROTOCOL", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_BYPASSPROXY", wxCheckBox)->SetValue(data->m_server.GetBypassProxy());
 
 		XRCCTRL(*this, "ID_USER", wxTextCtrl)->Enable(!predefined && data->m_server.GetLogonType() != ANONYMOUS);
 		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->Enable(!predefined && data->m_server.GetLogonType() == NORMAL || data->m_server.GetLogonType() == ACCOUNT);
@@ -1383,23 +1363,7 @@ void CSiteManager::SetCtrlState()
 		XRCCTRL(*this, "ID_CHARSET_CUSTOM", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->Enable(!predefined && data->m_server.GetEncodingType() == ENCODING_CUSTOM);
 		XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->SetValue(data->m_server.GetCustomEncoding());
-#ifdef __WXGTK__
-		XRCCTRL(*this, "ID_CONNECT", wxButton)->SetDefault();
-#endif
 	}
-#ifdef __WXGTK__
-	if (pFocus && !pFocus->IsEnabled())
-	{
-		for (wxWindow* pParent = pFocus->GetParent(); pParent; pParent = pParent->GetParent())
-		{
-			if (pParent == this)
-			{
-				XRCCTRL(*this, "wxID_OK", wxButton)->SetFocus();
-				break;
-			}
-		}
-	}
-#endif
 }
 
 void CSiteManager::OnCharsetChange(wxCommandEvent& event)
@@ -1749,7 +1713,7 @@ void CSiteManager::OnBeginDrag(wxTreeEvent& event)
 		event.Veto();
 		return;
 	}
-
+	
 	wxTreeItemId item = event.GetItem();
 	if (!item.IsOk())
 	{
@@ -1766,7 +1730,7 @@ void CSiteManager::OnBeginDrag(wxTreeEvent& event)
 	source.SetData(obj);
 
 	m_dropSource = item;
-
+	
 	source.DoDragDrop(root_or_predefined ? wxDrag_CopyOnly : wxDrag_DefaultMove);
 
 	m_dropSource = wxTreeItemId();
@@ -1830,7 +1794,7 @@ bool CSiteManager::MoveItems(wxTreeItemId source, wxTreeItemId target, bool copy
 	work.push_back(pair);
 
 	std::list<wxTreeItemId> expand;
-
+	
 	while (!work.empty())
 	{
 		itempair pair = work.front();
@@ -1879,7 +1843,7 @@ bool CSiteManager::MoveItems(wxTreeItemId source, wxTreeItemId target, bool copy
 		pTree->Expand(*iter);
 
 	pTree->Expand(target);
-
+	
 	return true;
 }
 

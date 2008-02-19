@@ -23,7 +23,6 @@ public:
 
 	bool SetLocale(int language);
 	int GetCurrentLanguage() const;
-	wxString GetCurrentLanguageCode() const;
 
 	void DisplayEncodingWarning();
 

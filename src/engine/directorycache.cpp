@@ -83,25 +83,13 @@ bool CDirectoryCache::Lookup(CDirectoryListing &listing, const CServer &server, 
 
 bool CDirectoryCache::Lookup(CDirectoryListing &listing, const CServer &server, const CServerPath &path, wxString subDir, bool allowUnsureEntries, bool& is_outdated)
 {
-	tCacheIter iter;
-	if (Lookup(iter, server, path, subDir, allowUnsureEntries, is_outdated))
-	{
-		listing = iter->listing;
-		return true;
-	}
-
-	return false;
-}
-
-bool CDirectoryCache::Lookup(tCacheIter &cacheIter, const CServer &server, const CServerPath &path, wxString subDir, bool allowUnsureEntries, bool& is_outdated)
-{
-	CServerEntry* const pServerEntry = GetServerEntry(server);
+	const CServerEntry* const pServerEntry = GetServerEntry(server);
 	if (!pServerEntry)
 		return false;
 
 	if (subDir != _T(".."))
 	{
-		for (tCacheIter iter = pServerEntry->cacheList.begin(); iter != pServerEntry->cacheList.end(); iter++)
+		for (tCacheConstIter iter = pServerEntry->cacheList.begin(); iter != pServerEntry->cacheList.end(); iter++)
 		{
 			const CCacheEntry &entry = *iter;
 
@@ -112,7 +100,7 @@ bool CDirectoryCache::Lookup(tCacheIter &cacheIter, const CServer &server, const
 					if (!allowUnsureEntries && entry.listing.m_hasUnsureEntries)
 						return false;
 
-					cacheIter = iter;
+					listing = entry.listing;
 					is_outdated = (wxDateTime::Now() - entry.createTime).GetSeconds() > CACHE_TIMEOUT;
 					return true;
 				}
@@ -128,7 +116,7 @@ bool CDirectoryCache::Lookup(tCacheIter &cacheIter, const CServer &server, const
 					if (!allowUnsureEntries && entry.listing.m_hasUnsureEntries)
 						return false;
 
-					cacheIter = iter;
+					listing = entry.listing;
 					is_outdated = (wxDateTime::Now() - entry.createTime).GetSeconds() > CACHE_TIMEOUT;
 					return true;
 				}
@@ -138,7 +126,7 @@ bool CDirectoryCache::Lookup(tCacheIter &cacheIter, const CServer &server, const
 	else
 	{
 		// Search own entry
-		tCacheIter iter;
+		tCacheConstIter iter;
 		for (iter = pServerEntry->cacheList.begin(); iter != pServerEntry->cacheList.end(); iter++)
 		{
 			const CCacheEntry &entry = *iter;
@@ -155,7 +143,7 @@ bool CDirectoryCache::Lookup(tCacheIter &cacheIter, const CServer &server, const
 		if (iter == pServerEntry->cacheList.end())
 			return false;
 
-		bool res = Lookup(cacheIter, server, iter->listing.path, _T(""), allowUnsureEntries, is_outdated);
+		bool res = Lookup(listing, server, iter->listing.path, _T(""), allowUnsureEntries, is_outdated);
 		if (res)
 			is_outdated = (wxDateTime::Now() - iter->createTime).GetSeconds() > CACHE_TIMEOUT;
 		return res;
@@ -495,43 +483,32 @@ void CDirectoryCache::RemoveDir(const CServer& server, const CServerPath& path, 
 
 void CDirectoryCache::Rename(const CServer& server, const CServerPath& pathFrom, const wxString& fileFrom, const CServerPath& pathTo, const wxString& fileTo)
 {
-	tCacheIter iter;
+	CDirectoryListing listing;
 	bool is_outdated = false;
-	bool found = Lookup(iter, server, pathFrom, _T(""), true, is_outdated);
+	bool found = Lookup(listing, server, pathFrom, true, is_outdated);
 	if (found)
 	{
-		CDirectoryListing& listing = iter->listing;
-		if (pathFrom == pathTo)
+		unsigned int i;
+		for (i = 0; i < listing.GetCount(); i++)
 		{
-			RemoveFile(server, pathFrom, fileTo);
-			unsigned int i;
-			for (i = 0; i < listing.GetCount(); i++)
-			{
-				if (listing[i].name == fileFrom)
-					break;
-			}
-			if (i != listing.GetCount())
-			{
-				listing[i].name = fileTo;
-				listing[i].unsure = true;
-				listing.m_hasUnsureEntries |= UNSURE_CHANGE;
-			}
-			return;
+			if (listing[i].name == fileFrom)
+				break;
 		}
-		else
+		if (i != listing.GetCount())
 		{
-			unsigned int i;
-			for (i = 0; i < listing.GetCount(); i++)
+			if (listing[i].dir)
 			{
-				if (listing[i].name == fileFrom)
-					break;
+				RemoveDir(server, pathFrom, fileFrom);
+				UpdateFile(server, pathTo, fileTo, true, dir);
 			}
-			if (i != listing.GetCount())
+			else
 			{
-				if (listing[i].dir)
+				if (pathFrom == pathTo)
 				{
-					RemoveDir(server, pathFrom, fileFrom);
-					UpdateFile(server, pathTo, fileTo, true, dir);
+					RemoveFile(server, pathFrom, fileTo);
+					listing[i].name = fileTo;
+					listing[i].unsure = true;
+					listing.m_hasUnsureEntries |= UNSURE_CHANGE;
 				}
 				else
 				{
@@ -539,12 +516,18 @@ void CDirectoryCache::Rename(const CServer& server, const CServerPath& pathFrom,
 					UpdateFile(server, pathTo, fileTo, true, file);
 				}
 			}
-			return;
+		}
+		else
+		{
+			// Be on the safe side, invalidate everything.
+			InvalidateServer(server);
 		}
 	}
-
-	// We know nothing, be on the safe side abd invalidate everything.
-	InvalidateServer(server);
+	else
+	{
+		// We know nothing, invalidate everything.
+		InvalidateServer(server);
+	}
 }
 
 void CDirectoryCache::AddParent(const CServer& server, const CServerPath& path, const CServerPath& parentPath, const wxString subDir)

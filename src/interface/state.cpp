@@ -8,7 +8,6 @@
 #include "filezillaapp.h"
 #include "RemoteListView.h"
 #include "recursive_operation.h"
-#include "statusbar.h"
 
 CState::CState(CMainFrame* pMainFrame)
 {
@@ -244,12 +243,10 @@ void CState::SetServer(const CServer* server)
 		delete m_pServer;
 	}
 
-	m_pMainFrame->GetStatusBar()->DisplayDataType(server);
 	if (server)
 		m_pServer = new CServer(*server);
 	else
 	{
-		m_pMainFrame->GetStatusBar()->DisplayDataType(false);
 		if (m_pServer)
 			m_pMainFrame->SetTitle(_T("FileZilla"));
 		m_pServer = 0;

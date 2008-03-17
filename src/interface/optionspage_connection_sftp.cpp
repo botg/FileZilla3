@@ -120,7 +120,7 @@ bool COptionsPageConnectionSFTP::Send(const wxString& cmd)
 	if (!m_pProcess)
 		return false;
 
-	const wxWX2MBbuf buf = (cmd + _T("\n")).mb_str();
+	wxWX2MBbuf buf = (cmd + _T("\n")).mb_str();
 	const size_t len = strlen(buf);
 
 	wxOutputStream* stream = m_pProcess->GetOutputStream();

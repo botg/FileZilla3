@@ -1006,12 +1006,6 @@ CFileListCtrl<CLocalFileData>::CSortComparisonObject CLocalListView::GetSortComp
 
 void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 {
-	if (GetEditControl())
-	{
-		event.Skip();
-		return;
-	}
-
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_LOCALFILELIST"));
 	if (!pMenu)
 		return;

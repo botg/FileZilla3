@@ -2,6 +2,7 @@
 <FileZilla3>
   <Theme>
     <Name>Cyril</Name>
+    <Subdir>cyril</Subdir>
     <Author>Cyril Burnet</Author>
     <Mail>cyril@techeo.com</Mail>
     <size>16x16</size>

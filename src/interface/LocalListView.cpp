@@ -293,8 +293,6 @@ bool CLocalListView::DisplayDir(wxString dirname)
 	std::list<wxString> selectedNames;
 	if (m_dir != dirname)
 	{
-		ResetSearchPrefix();
-
 		if (IsComparing())
 			ExitComparisonMode();
 

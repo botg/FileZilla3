@@ -592,8 +592,6 @@ void CRemoteListView::SetDirectoryListing(const CDirectoryListing *pDirectoryLis
 	std::list<wxString> selectedNames;
 	if (reset)
 	{
-		ResetSearchPrefix();
-
 		if (IsComparing())
 			ExitComparisonMode();
 

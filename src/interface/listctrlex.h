@@ -28,7 +28,6 @@ protected:
 	virtual wxString GetItemText(int item, unsigned int column) { return _T(""); }
 
 	virtual wxString OnGetItemText(long item, long column) const;
-	void ResetSearchPrefix();
 
 private:
 	// Keyboard prefix search

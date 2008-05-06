@@ -345,14 +345,17 @@ template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString na
 	if (typeIter != m_fileTypeMap.end())
 		return typeIter->second;
 
-	wxString desc;
 	wxFileType *pType = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
 	if (!pType)
 	{
+		wxString desc = ext;
+		desc += _T("-");
+		desc += _("file");
 		m_fileTypeMap[ext] = desc;
 		return desc;
 	}
 
+	wxString desc;
 	if (pType->GetDescription(&desc) && desc != _T(""))
 	{
 		delete pType;
@@ -361,7 +364,9 @@ template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString na
 	}
 	delete pType;
 
-	desc = _("File");
+	desc = ext;
+	desc += _T("-");
+	desc += _("file");
 	m_fileTypeMap[ext.MakeLower()] = desc;
 	return desc;
 #endif

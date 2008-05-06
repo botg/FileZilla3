@@ -166,7 +166,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../include/"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;PACKAGE_VERSION=\&quot;3.0.1\&quot;;USED_HOST=\&quot;i586-pc-mingw32msvc\&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;PACKAGE_VERSION=\&quot;3.0.1\&quot;;USED_HOST=\&quot;xxx\&quot;"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
@@ -240,7 +240,7 @@
 				OmitFramePointers="TRUE"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="../include/"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;PACKAGE_VERSION=\&quot;3.0.1\&quot;;USED_HOST=\&quot;i586-pc-mingw32msvc\&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -458,9 +458,6 @@
 			</File>
 			<File
 				RelativePath=".\clearprivatedata.cpp">
-			</File>
-			<File
-				RelativePath=".\cmdline.cpp">
 			</File>
 			<File
 				RelativePath=".\commandqueue.cpp">
@@ -708,9 +705,6 @@
 			</File>
 			<File
 				RelativePath=".\clearprivatedata.h">
-			</File>
-			<File
-				RelativePath=".\cmdline.h">
 			</File>
 			<File
 				RelativePath=".\commandqueue.h">

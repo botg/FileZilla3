@@ -2667,19 +2667,14 @@ void CSftpControlSocket::OnRateAvailable(enum CRateLimiter::rate_direction direc
 
 void CSftpControlSocket::OnQuotaRequest(enum CRateLimiter::rate_direction direction)
 {
-	wxLongLong bytes = GetAvailableBytes(direction);
+	int bytes = GetAvailableBytes(direction);
 	if (bytes > 0)
 	{
-		int b;
-		if (bytes > INT_MAX)
-			b = INT_MAX;
-		else
-			b = bytes.GetLo();
-		AddToStream(wxString::Format(_T("-%d%d\n"), (int)direction, b));
-		UpdateUsage(direction, b);
+		AddToStream(wxString::Format(_T("-%d%d\n"), (int)direction, bytes));
+		UpdateUsage(direction, bytes);
 	}
 	else if (bytes < 0)
-		AddToStream(wxString::Format(_T("-%d-\n"), (int)direction));
+		AddToStream(wxString::Format(_T("-%d-\n"), (int)direction, bytes));
 	else
 		Wait(direction);
 }

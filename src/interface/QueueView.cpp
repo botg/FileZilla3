@@ -387,7 +387,7 @@ protected:
 	CQueueView* m_pOwner;
 	CFolderScanItem* m_pFolderItem;
 
-	CFilterManager m_filters;
+	CFilterDialog m_filters;
 
 	wxMutex m_sync;
 	wxCondition m_condition;
@@ -407,7 +407,7 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 	m_activeCountDown = 0;
 	m_activeCountUp = 0;
 	m_activeMode = 0;
-	m_quit = 0;
+	m_quit = false;
 	m_waitStatusLineUpdate = false;
 	m_lastTopItem = -1;
 	m_pFolderProcessingThread = 0;
@@ -1414,8 +1414,7 @@ bool CQueueView::SetActive(bool active /*=true*/)
 
 bool CQueueView::Quit()
 {
-	if (!m_quit)
-		m_quit = 1;
+	m_quit = true;
 
 #ifdef __WXMSW__
 	if (m_actionAfterWarnDialog)
@@ -1448,13 +1447,9 @@ bool CQueueView::Quit()
 
 	DeleteEngines();
 
-	if (m_quit == 1)
-	{
-		SaveQueue();
-		m_quit = 2;
-	}
+	SaveQueue();
 
-	SaveColumnSettings(OPTION_QUEUE_COLUMN_WIDTHS, -1, -1);
+	COptions::Get()->SaveColumnWidths(this, OPTION_QUEUE_COLUMN_WIDTHS);
 
 	return true;
 }

@@ -44,16 +44,16 @@ void CSocketBackend::UpdateResults()
 
 void CSocketBackend::Write(const void *buffer, unsigned int len)
 {
-	wxLongLong max = GetAvailableBytes(CRateLimiter::outbound);
-	if (max == 0)
+	int max = GetAvailableBytes(CRateLimiter::outbound);
+	if (!max)
 	{
 		Wait(CRateLimiter::outbound);
 		m_error = true;
 		m_lastError = wxSOCKET_WOULDBLOCK;
 		return;
 	}
-	else if (max > 0 && max < len)
-		len = max.GetLo();
+	else if (max > 0 && (unsigned int)max < len)
+		len = max;
 
 	m_pSocket->Write(buffer, len);
 	UpdateResults();
@@ -64,16 +64,16 @@ void CSocketBackend::Write(const void *buffer, unsigned int len)
 
 void CSocketBackend::Read(void *buffer, unsigned int len)
 {
-	wxLongLong max = GetAvailableBytes(CRateLimiter::inbound);
-	if (max == 0)
+	int max = GetAvailableBytes(CRateLimiter::inbound);
+	if (!max)
 	{
 		Wait(CRateLimiter::inbound);
 		m_error = true;
 		m_lastError = wxSOCKET_WOULDBLOCK;
 		return;
 	}
-	else if (max > 0 && max < len)
-		len = max.GetLo();
+	else if (max > 0 && (unsigned int)max < len)
+		len = max;
 
 	m_pSocket->Read(buffer, len);
 	UpdateResults();

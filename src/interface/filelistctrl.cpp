@@ -10,7 +10,6 @@
 
 BEGIN_EVENT_TABLE_TEMPLATE1(CFileListCtrl, wxListCtrlEx, CFileData)
 EVT_LIST_COL_CLICK(wxID_ANY, CFileListCtrl<CFileData>::OnColumnClicked)
-EVT_LIST_COL_RIGHT_CLICK(wxID_ANY, CFileListCtrl<CFileData>::OnColumnRightClicked)
 END_EVENT_TABLE()
 
 template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pParent, CState* pState, CQueueView* pQueue)
@@ -346,17 +345,14 @@ template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString na
 	if (typeIter != m_fileTypeMap.end())
 		return typeIter->second;
 
+	wxString desc;
 	wxFileType *pType = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
 	if (!pType)
 	{
-		wxString desc = ext;
-		desc += _T("-");
-		desc += _("file");
 		m_fileTypeMap[ext] = desc;
 		return desc;
 	}
 
-	wxString desc;
 	if (pType->GetDescription(&desc) && desc != _T(""))
 	{
 		delete pType;
@@ -365,9 +361,7 @@ template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString na
 	}
 	delete pType;
 
-	desc = ext;
-	desc += _T("-");
-	desc += _("file");
+	desc = _("File");
 	m_fileTypeMap[ext.MakeLower()] = desc;
 	return desc;
 #endif
@@ -493,26 +487,4 @@ template<class CFileData> void CFileListCtrl<CFileData>::ComparisonRestoreSelect
 			}
 		}
 	}
-}
-
-template<class CFileData> void CFileListCtrl<CFileData>::OnColumnRightClicked(wxListEvent& event)
-{
-	ShowColumnEditor();
-}
-
-template<class CFileData> void CFileListCtrl<CFileData>::InitSort(int optionID)
-{
-	wxString sortInfo = COptions::Get()->GetOption(optionID);
-	m_sortDirection = sortInfo[0] - '0';
-	if (m_sortDirection < 0 || m_sortDirection > 1)
-		m_sortDirection = 0;
-
-	if (sortInfo.Len() == 3)
-	{
-		m_sortColumn = sortInfo[2] - '0';
-		if (m_sortColumn < 0 || m_sortColumn > GetColumnCount())
-			m_sortColumn = 0;
-	}
-	else
-		m_sortColumn = 0;
 }

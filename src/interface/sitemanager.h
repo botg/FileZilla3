@@ -47,9 +47,6 @@ public:
 
 	// This function also clears the Id map
 	static CSiteManagerItemData* GetSiteById(int id);
-	static CSiteManagerItemData* GetSiteByPath(wxString sitePath);
-
-	static bool UnescapeSitePath(wxString path, std::list<wxString>& result);
 
 protected:
 	// Creates the controls and sizers

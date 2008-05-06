@@ -344,17 +344,31 @@ CRemoteListView::CRemoteListView(wxWindow* pParent, CState *pState, CQueueView* 
 	m_pInfoText = 0;
 	m_pDirectoryListing = 0;
 
-	const unsigned long widths[6] = { 80, 75, 80, 100, 80, 80 };
+	unsigned long widths[6] = { 80, 75, 80, 100, 80, 80 };
 
-	AddColumn(_("Filename"), wxLIST_FORMAT_LEFT, widths[0]);
-	AddColumn(_("Filesize"), wxLIST_FORMAT_RIGHT, widths[1]);
-	AddColumn(_("Filetype"), wxLIST_FORMAT_LEFT, widths[2]);
-	AddColumn(_("Last modified"), wxLIST_FORMAT_LEFT, widths[3]);
-	AddColumn(_("Permissions"), wxLIST_FORMAT_LEFT, widths[4]);
-	AddColumn(_("Owner / Group"), wxLIST_FORMAT_LEFT, widths[5]);
-	LoadColumnSettings(OPTION_REMOTEFILELIST_COLUMN_WIDTHS, OPTION_REMOTEFILELIST_COLUMN_SHOWN, OPTION_REMOTEFILELIST_COLUMN_ORDER);
+	if (!wxGetKeyState(WXK_SHIFT) || !wxGetKeyState(WXK_ALT) || !wxGetKeyState(WXK_CONTROL))
+		COptions::Get()->ReadColumnWidths(OPTION_REMOTEFILELIST_COLUMN_WIDTHS, 6, widths);
 
-	InitSort(OPTION_REMOTEFILELIST_SORTORDER);
+	InsertColumn(0, _("Filename"), wxLIST_FORMAT_LEFT, widths[0]);
+	InsertColumn(1, _("Filesize"), wxLIST_FORMAT_RIGHT, widths[1]);
+	InsertColumn(2, _("Filetype"), wxLIST_FORMAT_LEFT, widths[2]);
+	InsertColumn(3, _("Last modified"), wxLIST_FORMAT_LEFT, widths[3]);
+	InsertColumn(4, _("Permissions"), wxLIST_FORMAT_LEFT, widths[4]);
+	InsertColumn(5, _("Owner / Group"), wxLIST_FORMAT_LEFT, widths[5]);
+
+	wxString sortInfo = COptions::Get()->GetOption(OPTION_REMOTEFILELIST_SORTORDER);
+	m_sortDirection = sortInfo[0] - '0';
+	if (m_sortDirection < 0 || m_sortDirection > 1)
+		m_sortDirection = 0;
+
+	if (sortInfo.Len() == 3)
+	{
+		m_sortColumn = sortInfo[2] - '0';
+		if (m_sortColumn < 0 || m_sortColumn > 5)
+			m_sortColumn = 0;
+	}
+	else
+		m_sortColumn = 0;
 
 	m_dirIcon = GetIconIndex(dir);
 	SetImageList(GetSystemImageList(), wxIMAGE_LIST_SMALL);
@@ -625,7 +639,7 @@ void CRemoteListView::SetDirectoryListing(const CDirectoryListing *pDirectoryLis
 
 		m_indexMapping.push_back(m_pDirectoryListing->GetCount());
 
-		CFilterManager filter;
+		CFilterDialog filter;
 		for (unsigned int i = 0; i < m_pDirectoryListing->GetCount(); i++)
 		{
 			const CDirentry& entry = (*m_pDirectoryListing)[i];
@@ -1249,17 +1263,8 @@ void CRemoteListView::OnMenuMkdir(wxCommandEvent& event)
 		dlg.SelectText(pos, pos + newName.Length());
 	}
 
-	const CServerPath oldPath = m_pDirectoryListing->path;
-
 	if (dlg.ShowModal() != wxID_OK)
 		return;
-
-	if (!m_pDirectoryListing || oldPath != m_pDirectoryListing->path ||
-		!m_pState->IsRemoteIdle())
-	{
-		wxBell();
-		return;
-	}
 
 	path = m_pDirectoryListing->path;
 	if (!path.ChangePath(dlg.GetValue()))
@@ -1698,7 +1703,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent& event)
 
 void CRemoteListView::ApplyCurrentFilter()
 {
-	CFilterManager filter;
+	CFilterDialog filter;
 
 	if (!filter.HasSameLocalAndRemoteFilters() && IsComparing())
 		ExitComparisonMode();

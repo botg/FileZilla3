@@ -38,8 +38,6 @@ protected:
 
 	void StartUpdateCheck();
 
-	wxString GetDownloadDir();
-
 	DECLARE_EVENT_TABLE()
 	void OnCheck(wxCommandEvent& event);
 	void OnPageChanging(wxWizardEvent& event);

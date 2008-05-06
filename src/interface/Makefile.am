@@ -15,7 +15,6 @@ filezilla_SOURCES = aboutdialog.cpp \
 		buildinfo.cpp \
 		chmoddialog.cpp \
 		clearprivatedata.cpp \
-		cmdline.cpp \
 		commandqueue.cpp \
 		conditionaldialog.cpp \
 		customheightlistctrl.cpp \
@@ -98,7 +97,6 @@ noinst_HEADERS = aboutdialog.h \
 		 buildinfo.h \
 		 chmoddialog.h \
 		 clearprivatedata.h \
-		 cmdline.h \
 		 commandqueue.h \
 		 conditionaldialog.h \
 		 customheightlistctrl.h \

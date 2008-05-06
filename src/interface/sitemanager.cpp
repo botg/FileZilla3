@@ -415,8 +415,42 @@ public:
 	CSiteManagerXmlHandler_Tree(wxTreeCtrl* pTree, wxTreeItemId root, const wxString& lastSelection)
 		: m_pTree(pTree), m_item(root)
 	{
-		if (!CSiteManager::UnescapeSitePath(lastSelection, m_lastSelection))
-			m_lastSelection.clear();
+		wxString name;
+		const wxChar *p = lastSelection;
+
+		// Undo escapement
+		bool lastBackslash = false;
+		while (*p)
+		{
+			const wxChar& c = *p;
+			if (c == '\\')
+			{
+				if (lastBackslash)
+				{
+					name += _T("\\");
+					lastBackslash = false;
+				}
+				else
+					lastBackslash = true;
+			}
+			else if (c == '/')
+			{
+				if (lastBackslash)
+				{
+					name += _T("/");
+					lastBackslash = 0;
+				}
+				else
+				{
+					if (!name.IsEmpty())
+						m_lastSelection.push_back(name);
+					name.clear();
+				}
+			}
+			else
+				name += *p;
+			p++;
+		}
 		m_wrong_sel_depth = 0;
 	}
 
@@ -2017,191 +2051,4 @@ void CSiteManager::RememberLastSelected()
 		path = _T("0") + path;
 
 	COptions::Get()->SetOption(OPTION_SITEMANAGER_LASTSELECTED, path);
-}
-
-bool CSiteManager::UnescapeSitePath(wxString path, std::list<wxString>& result)
-{
-	result.clear();
-
-	wxString name;
-	const wxChar *p = path;
-
-	// Undo escapement
-	bool lastBackslash = false;
-	while (*p)
-	{
-		const wxChar& c = *p;
-		if (c == '\\')
-		{
-			if (lastBackslash)
-			{
-				name += _T("\\");
-				lastBackslash = false;
-			}
-			else
-				lastBackslash = true;
-		}
-		else if (c == '/')
-		{
-			if (lastBackslash)
-			{
-				name += _T("/");
-				lastBackslash = 0;
-			}
-			else
-			{
-				if (!name.IsEmpty())
-					result.push_back(name);
-				name.clear();
-			}
-		}
-		else
-			name += *p;
-		p++;
-	}
-	if (lastBackslash)
-		return false;
-	if (name != _T(""))
-		result.push_back(name);
-
-	return !result.empty();
-}
-
-class CSiteManagerXmlHandler_ByPath : public CSiteManagerXmlHandler
-{
-public:
-	CSiteManagerXmlHandler_ByPath(const wxString& lastSelection)
-	{
-		m_theItemData = 0;
-		if (!CSiteManager::UnescapeSitePath(lastSelection, m_lastSelection))
-			m_lastSelection.clear();
-		m_wrong_sel_depth = 0;
-	}
-
-	virtual ~CSiteManagerXmlHandler_ByPath()
-	{
-	}
-
-	virtual bool AddFolder(const wxString& name, bool expanded)
-	{
-		if (m_theItemData)
-			return false;
-
-		if (!m_wrong_sel_depth && !m_lastSelection.empty())
-		{
-			const wxString& first = m_lastSelection.front();
-			if (first == name)
-				m_lastSelection.pop_front();
-			else
-				m_wrong_sel_depth++;
-		}
-		else
-			m_wrong_sel_depth++;
-
-		return true;
-	}
-
-	virtual bool AddSite(const wxString& name, CSiteManagerItemData* data)
-	{
-		if (m_theItemData)
-		{
-			delete data;
-			return false;
-		}
-
-		if (m_wrong_sel_depth || m_lastSelection.empty())
-		{
-			delete data;
-			return true;
-		}
-
-		const wxString& first = m_lastSelection.front();
-		if (first != name)
-		{
-			delete data;
-			return true;
-		}
-
-		m_lastSelection.clear();
-		m_theItemData = data;		
-	
-		return true;
-	}
-
-	virtual bool LevelUp()
-	{
-		if (m_wrong_sel_depth)
-			m_wrong_sel_depth--;
-
-		return m_theItemData == 0;
-	}
-
-	// Our result
-	CSiteManagerItemData* m_theItemData;
-
-protected:
-
-	std::list<wxString> m_lastSelection;
-	int m_wrong_sel_depth;
-};
-
-CSiteManagerItemData* CSiteManager::GetSiteByPath(wxString sitePath)
-{
-	wxChar c = sitePath[0];
-	if (c != '0' && c != '1')
-	{
-		wxMessageBox(_("Site path has to begin with 0 or 1."), _("Invalid site path"));
-		return 0;
-	}
-
-	sitePath = sitePath.Mid(1);
-
-	// We have to synchronize access to sitemanager.xml so that multiple processed don't write
-	// to the same file or one is reading while the other one writes.
-	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
-
-	CXmlFile file;
-	TiXmlElement* pDocument = 0;
-
-	if (c == '0')
-		pDocument = file.Load(_T("sitemanager"));
-	else
-	{
-		const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
-		if (defaultsDir == _T(""))
-		{
-			wxMessageBox(_("Site does not exist."), _("Invalid site path"));
-			return 0;
-		}
-		wxFileName name(defaultsDir, _T("fzdefaults.xml"));
-		pDocument = file.Load(name);
-	}
-	
-	if (!pDocument)
-	{
-		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName().GetFullPath().c_str());
-		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
-
-		return 0;
-	}
-
-	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-	if (!pElement)
-	{
-		wxMessageBox(_("Site does not exist."), _("Invalid site path"));
-		return 0;
-	}
-
-
-	CSiteManagerXmlHandler_ByPath handler(sitePath);
-
-	Load(pElement, &handler);
-
-	if (!handler.m_theItemData)
-	{
-		wxMessageBox(_("Site does not exist."), _("Invalid site path"));
-		return 0;
-	}
-
-	return handler.m_theItemData;
 }

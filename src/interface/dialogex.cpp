@@ -60,7 +60,6 @@ int wxDialogEx::ShowModal()
 	CenterOnParent();
 
 #ifdef __WXMSW__
-	// All open menus need to be closed or app will become unresponsive.
 	::EndMenu();
 #endif
 	return wxDialog::ShowModal();

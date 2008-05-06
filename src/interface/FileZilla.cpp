@@ -9,7 +9,6 @@
 #endif
 #include "xmlfunctions.h"
 #include <wx/tokenzr.h>
-#include "cmdline.h"
 
 #include <wx/xrc/xh_bmpbt.h>
 #include <wx/xrc/xh_bttn.h>
@@ -72,14 +71,12 @@ CFileZillaApp::CFileZillaApp()
 {
 	m_pWrapEngine = 0;
 	m_pLocale = 0;
-	m_pCommandLine = 0;
 }
 
 CFileZillaApp::~CFileZillaApp()
 {
 	delete m_pLocale;
 	delete m_pWrapEngine;
-	delete m_pCommandLine;
 	COptions::Destroy();
 }
 
@@ -151,22 +148,12 @@ bool CFileZillaApp::OnInit()
 #if wxUSE_DEBUGREPORT && wxUSE_ON_FATAL_EXCEPTION
 	//wxHandleFatalExceptions();
 #endif
+	wxApp::OnInit();
 
 	wxSystemOptions::SetOption(_T("msw.remap"), 0);
 	wxSystemOptions::SetOption(_T("mac.listctrl.always_use_generic"), 1);
 
-	int cmdline_result = ProcessCommandLine();
-	if (!cmdline_result)
-		return false;
-
 	LoadLocales();
-
-	if (cmdline_result < 0)
-	{
-		m_pCommandLine->DisplayUsage();
-		return false;
-	}
-
 	InitDefaultsDir();
 	InitSettingsDir();
 
@@ -834,36 +821,4 @@ void CFileZillaApp::CheckExistsFzsftp()
 	else
 #endif
 		COptions::Get()->SetOption(OPTION_FZSFTP_EXECUTABLE, executable);
-}
-
-#ifdef __WXMSW__
-extern "C" BOOL CALLBACK EnumWindowCallback(HWND hwnd, LPARAM lParam)
-{
-	HWND child = FindWindowEx(hwnd, 0, 0, _T("FileZilla process identificator 3919DB0A-082D-4560-8E2F-381A35969FB4"));
-	if (child)
-	{
-		::PostMessage(hwnd, WM_ENDSESSION, (WPARAM)TRUE, (LPARAM)ENDSESSION_LOGOFF);
-	}
-
-	return TRUE;
-}
-#endif
-
-int CFileZillaApp::ProcessCommandLine()
-{
-	m_pCommandLine = new CCommandLine(argc, argv);
-	int res = m_pCommandLine->Parse() ? 1 : -1;
-
-	if (res > 0)
-	{
-		if (m_pCommandLine->HasSwitch(CCommandLine::close))
-		{
-#ifdef __WXMSW__
-			EnumWindows((WNDENUMPROC)EnumWindowCallback, 0);
-#endif
-			return 0;
-		}
-	}
-
-	return res;
 }

@@ -65,7 +65,6 @@ protected:
 	void OpenSiteManager(const CServer* pServer = 0);
 	void InitToolbarState();
 	void InitMenubarState();
-	void ProcessCommandLine();
 
 	// If resizing the window, make sure the individual splitter windows don't get too small
 	void ApplySplitterConstraints();
@@ -157,8 +156,6 @@ protected:
 	float m_ViewSplitterSashPos;
 	bool m_bInitDone;
 	bool m_bQuit;
-	wxEventType m_closeEvent;
-	wxTimer m_closeEventTimer;
 
 	CAsyncRequestQueue* m_pAsyncRequestQueue;
 	CState* m_pState;

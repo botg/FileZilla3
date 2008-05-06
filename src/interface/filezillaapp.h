@@ -6,7 +6,6 @@
 #endif
 
 class CWrapEngine;
-class CCommandLine;
 class CFileZillaApp : public wxApp
 {
 public:
@@ -30,15 +29,12 @@ public:
 
 	CWrapEngine* GetWrapEngine();
 
-	const CCommandLine* GetCommandLine() const { return m_pCommandLine; }
-
 protected:
 	bool InitDefaultsDir();
 	bool InitSettingsDir();
 	wxString GetSettingsDirFromDefaults();
 	bool LoadResourceFiles();
 	bool LoadLocales();
-	int ProcessCommandLine();
 
 	wxLocale* m_pLocale;
 
@@ -61,8 +57,6 @@ protected:
 	bool FileExists(const wxString& file) const;
 
 	CWrapEngine* m_pWrapEngine;
-
-	CCommandLine* m_pCommandLine;
 };
 
 DECLARE_APP(CFileZillaApp)

@@ -444,11 +444,11 @@ bool CLocalTreeView::DisplayDrives(wxTreeItemId parent)
 
 void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, const wxString& knownSubdir /*=_T("")*/)
 {
-	CLocalFileSystem local_filesystem;
+	wxDir dir;
 
 	{
 		wxLogNull log;
-		if (!local_filesystem.BeginFindFiles(dirname, true))
+		if (!dir.Open(dirname))
 		{
 			if (knownSubdir != _T(""))
 			{
@@ -476,18 +476,16 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 	DeleteChildren(parent);
 	m_setSelection = false;
 
+	wxString file;
+
 	CFilterManager filter;
 
 	bool matchedKnown = false;
 
-	wxString file;
-	bool wasLink;
-	int attributes;
-	bool is_dir;
-	const wxLongLong size(-1);
-	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, 0, &attributes))
+	const wxLongLong size = -1;
+
+	for (bool found = dir.GetFirst(&file, _T(""), wxDIR_DIRS | wxDIR_HIDDEN); found; found = dir.GetNext(&file))
 	{
-		wxASSERT(is_dir);
 		if (file == _T(""))
 		{
 			wxGetApp().DisplayEncodingWarning();
@@ -501,6 +499,10 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 		if (file != knownSubdir)
 #endif
 		{
+			int attributes;
+			bool isLink;
+			if (CLocalFileSystem::GetFileInfo(fullName, isLink, 0, 0, &attributes) != CLocalFileSystem::dir)
+				continue;
 			if (filter.FilenameFiltered(file, true, size, true, attributes))
 				continue;
 		}
@@ -526,31 +528,21 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 bool CLocalTreeView::HasSubdir(const wxString& dirname)
 {
 	wxLogNull nullLog;
-
-	CFilterManager filter;
-	
-	CLocalFileSystem local_filesystem;
-	if (!local_filesystem.BeginFindFiles(dirname, true))
+	wxDir dir(dirname);
+	if (!dir.IsOpened())
 		return false;
 
+	CFilterManager filter;
 	wxString file;
-	bool wasLink;
-	int attributes;
-	bool is_dir;
-	const wxLongLong size(-1);
-	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, 0, &attributes))
+	const wxLongLong size = -1;
+	for (bool found = dir.GetFirst(&file, _T(""), wxDIR_DIRS | wxDIR_HIDDEN); found; found = dir.GetNext(&file))
 	{
-		wxASSERT(is_dir);
-		if (file == _T(""))
-		{
-			wxGetApp().DisplayEncodingWarning();
+		int attributes;
+		bool isLink;
+		if (CLocalFileSystem::GetFileInfo(dirname + wxFileName::GetPathSeparator() + file, isLink, 0, 0, &attributes) != CLocalFileSystem::dir)
 			continue;
-		}
-
-		wxString fullName = dirname + file;
 		if (filter.FilenameFiltered(file, true, size, true, attributes))
 			continue;
-
 		return true;
 	}
 
@@ -719,8 +711,8 @@ void CLocalTreeView::Refresh()
 		t_dir dir = dirsToCheck.front();
 		dirsToCheck.pop_front();
 
-		CLocalFileSystem local_filesystem;
-		if (!local_filesystem.BeginFindFiles(dir.dir, true))
+		wxDir find(dir.dir);
+		if (!find.IsOpened())
 		{
 			// Dir does exist (listed in parent) but may not be accessible.
 			// Recurse into children anyhow, they might be accessible again.
@@ -738,15 +730,10 @@ void CLocalTreeView::Refresh()
 			continue;
 		}
 
-		std::list<wxString> dirs;
-
-		
+		const wxLongLong size = -1;
 		wxString file;
-		const wxLongLong size(-1);
-		bool was_link;
-		bool is_dir;
-		int attributes;
-		while (local_filesystem.GetNextFile(file, was_link, is_dir, 0, 0, &attributes))
+		std::list<wxString> dirs;
+		for (bool found = find.GetFirst(&file, _T(""), wxDIR_DIRS | wxDIR_HIDDEN); found; found = find.GetNext(&file))
 		{
 			if (file == _T(""))
 			{
@@ -754,12 +741,17 @@ void CLocalTreeView::Refresh()
 				continue;
 			}
 
+			int attributes;
+			bool isLink;
+			if (CLocalFileSystem::GetFileInfo(dir.dir + file, isLink, 0, 0, &attributes) != CLocalFileSystem::dir)
+				continue;
 			if (filter.FilenameFiltered(file, true, size, true, attributes))
 				continue;
 
-			dirs.push_back(file);
+			if (!filter.FilenameFiltered(file, true, size, true, attributes))
+				dirs.push_back(file);
 		}
-		dirs.sort(sortfunc);		
+		dirs.sort(sortfunc);
 
 		bool inserted = false;
 

@@ -352,32 +352,42 @@ bool CLocalListView::DisplayDir(wxString dirname)
 regular_dir:
 #endif
 		CFilterManager filter;
-		CLocalFileSystem local_filesystem;
 
-		if (!local_filesystem.BeginFindFiles(dirname, false))
+		wxDir dir(dirname);
+		if (!dir.IsOpened())
 		{
 			SetItemCount(1);
 			return false;
 		}
-
+		wxString file;
+		bool found = dir.GetFirst(&file);
 		int num = m_fileData.size();
-		CLocalFileData data;
-		data.flags = normal;
-		data.icon = -2;
-		bool wasLink;
-		while (local_filesystem.GetNextFile(data.name, wasLink, data.dir, &data.size, &data.lastModified, &data.attributes))
+		while (found)
 		{
-			if (data.name == _T(""))
+			if (file == _T(""))
 			{
 				wxGetApp().DisplayEncodingWarning();
+				found = dir.GetNext(&file);
 				continue;
 			}
+			const wxString fullName = dirname + file;
+			CLocalFileData data;
+
+			data.flags = normal;
+			data.icon = -2;
+			data.name = file;
+
+			bool wasLink;
+			enum CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileInfo(fullName, wasLink, &data.size, &data.lastModified, &data.attributes);
+			data.dir = type == CLocalFileSystem::dir;
 			data.hasTime = data.lastModified.IsValid();
 
 			m_fileData.push_back(data);
 			if (!filter.FilenameFiltered(data.name, data.dir, data.size, true, data.attributes))
 				m_indexMapping.push_back(num);
 			num++;
+
+			found = dir.GetNext(&file);
 		}
 	}
 

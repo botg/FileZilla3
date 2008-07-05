@@ -1,11 +1,6 @@
 #ifndef __CONTROLSOCKET_H__
 #define __CONTROLSOCKET_H__
 
-#include "socket.h"
-#include "logging_private.h"
-#include "backend.h"
-#include "socket.h"
-
 class COpData
 {
 public:
@@ -108,6 +103,9 @@ enum TransferEndReason
 	failed_resumetest
 };
 
+#include "logging_private.h"
+#include "backend.h"
+
 class CTransferStatus;
 class CControlSocket: public wxEvtHandler, public CLogging
 {
@@ -129,7 +127,7 @@ public:
 	virtual int Mkdir(const CServerPath& path) { return FZ_REPLY_NOTSUPPORTED; }
 	virtual int Rename(const CRenameCommand& command) { return FZ_REPLY_NOTSUPPORTED; }
 	virtual int Chmod(const CChmodCommand& command) { return FZ_REPLY_NOTSUPPORTED; }
-	virtual bool Connected() = 0;
+	virtual bool Connected() const = 0;
 
 	// If m_pCurrentOpData is zero, this function returns the current command
 	// from the engine.
@@ -139,7 +137,6 @@ public:
 
 	void SendAsyncRequest(CAsyncRequestNotification* pNotification);
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification) = 0;
-	bool SetFileExistsAction(CFileExistsNotification *pFileExistsNotification);
 
 	void InitTransferStatus(wxFileOffset totalSize, wxFileOffset startOffset, bool list);
 	void SetTransferStatusStartTime();
@@ -266,26 +263,31 @@ protected:
 	void OnObtainLock(wxCommandEvent& event);
 };
 
-class CRealControlSocket : public CControlSocket, public CSocket
+class CRealControlSocket : public CControlSocket, public wxSocketClient
 {
 public:
 	CRealControlSocket(CFileZillaEnginePrivate *pEngine);
 	virtual ~CRealControlSocket();
 
 	virtual int Connect(const CServer &server);
+	virtual int ContinueConnect(const wxIPV4address *address);
 
-	virtual bool Connected() { return GetState() == CSocket::connected; }
+	virtual bool Connected() const { return IsConnected(); }
 
 protected:
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
 	void ResetSocket();
 
+	// Easier functions to get the IP addresses
+	virtual wxString GetLocalIP() const;
+	virtual wxString GetPeerIP() const;
+
 	DECLARE_EVENT_TABLE();
-	virtual void OnSocketEvent(CSocketEvent &event);
+	virtual void OnSocketEvent(wxSocketEvent &event);
 	virtual void OnConnect();
 	virtual void OnReceive();
 	virtual void OnSend();
-	virtual void OnClose(int error);
+	virtual void OnClose();
 	
 	virtual bool Send(const char *buffer, int len);
 
@@ -293,6 +295,8 @@ protected:
 
 	char *m_pSendBuffer;
 	int m_nSendBufferLen;
+
+	bool m_onConnectCalled;
 };
 
 #endif

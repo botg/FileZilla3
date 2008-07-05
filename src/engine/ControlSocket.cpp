@@ -2,10 +2,9 @@
 #include "logging_private.h"
 #include "ControlSocket.h"
 #include <idna.h>
+#include "asynchostresolver.h"
 #include "directorycache.h"
 #include "servercapabilities.h"
-#include "local_filesys.h"
-#include <errno.h>
 
 DECLARE_EVENT_TYPE(fzOBTAINLOCK, -1)
 DEFINE_EVENT_TYPE(fzOBTAINLOCK)
@@ -197,7 +196,8 @@ int CControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 }
 
 wxString CControlSocket::ConvertDomainName(wxString domain)
-{
+{return domain;
+/*
 	const wxWCharBuffer buffer = wxConvCurrent->cWX2WC(domain);
 
 	int len = 0;
@@ -219,7 +219,7 @@ wxString CControlSocket::ConvertDomainName(wxString domain)
 
 	wxString result = wxConvCurrent->cMB2WX(output);
 	free(output);
-	return result;
+	return result;*/
 }
 
 void CControlSocket::Cancel()
@@ -863,21 +863,21 @@ void CControlSocket::SendAsyncRequest(CAsyncRequestNotification* pNotification)
 // ------------------
 
 BEGIN_EVENT_TABLE(CRealControlSocket, CControlSocket)
-	EVT_FZ_SOCKET(wxID_ANY, CRealControlSocket::OnSocketEvent)
+	EVT_SOCKET(wxID_ANY, CRealControlSocket::OnSocketEvent)
 END_EVENT_TABLE()
 
 CRealControlSocket::CRealControlSocket(CFileZillaEnginePrivate *pEngine)
-	: CControlSocket(pEngine), CSocket(this, 0)
+	: CControlSocket(pEngine), wxSocketClient(wxSOCKET_NOWAIT)
 {
 	m_pBackend = new CSocketBackend(this, this);
 
 	m_pSendBuffer = 0;
 	m_nSendBufferLen = 0;
+	m_onConnectCalled = false;
 }
 
 CRealControlSocket::~CRealControlSocket()
 {
-	Close();
 	delete m_pBackend;
 	m_pBackend = 0;
 }
@@ -926,7 +926,7 @@ bool CRealControlSocket::Send(const char *buffer, int len)
 	return true;
 }
 
-void CRealControlSocket::OnSocketEvent(CSocketEvent &event)
+void CRealControlSocket::OnSocketEvent(wxSocketEvent &event)
 {
 	if (!m_pBackend)
 		return;
@@ -934,38 +934,25 @@ void CRealControlSocket::OnSocketEvent(CSocketEvent &event)
 	if (event.GetId() != m_pBackend->GetId())
 		return;
 
-	switch (event.GetType())
+	switch (event.GetSocketEvent())
 	{
-	case CSocketEvent::hostaddress:
-		{
-			const wxString& address = event.GetData();
-			LogMessage(Status, _("Connecting to %s..."), address.c_str()); 
-		}
+	case wxSOCKET_CONNECTION:
+		m_onConnectCalled = true;
+		OnConnect();
 		break;
-	case CSocketEvent::connection_next:
-		if (event.GetError())
-			LogMessage(Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()).c_str()); 
-		break;
-	case CSocketEvent::connection:
-		if (event.GetError())
+	case wxSOCKET_INPUT:
+		if (!m_onConnectCalled)
 		{
-			LogMessage(Status, _("Connection attempt failed with \"%s\"."), CSocket::GetErrorDescription(event.GetError()).c_str()); 
-			OnClose(event.GetError());
-		}
-		else
+			m_onConnectCalled = true;
 			OnConnect();
-		break;
-	case CSocketEvent::read:
+		}
 		OnReceive();
 		break;
-	case CSocketEvent::write:
+	case wxSOCKET_OUTPUT:
 		OnSend();
 		break;
-	case CSocketEvent::close:
-		OnClose(event.GetError());
-		break;
-	default:
-		LogMessage(Debug_Warning, _T("Unhandled socket event %d"), event.GetType());
+	case wxSOCKET_LOST:
+		OnClose();
 		break;
 	}
 }
@@ -1019,17 +1006,12 @@ void CRealControlSocket::OnSend()
 	}
 }
 
-void CRealControlSocket::OnClose(int error)
+void CRealControlSocket::OnClose()
 {
-	LogMessage(Debug_Verbose, _T("CRealControlSocket::OnClose(%d)"), error);
+	LogMessage(Debug_Verbose, _T("CRealControlSocket::OnClose()"));
 
 	if (GetCurrentCommandId() != cmd_connect)
-	{
-		if (!error)
-			LogMessage(::Error, _("Connection closed by server"));
-		else
-			LogMessage(::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error).c_str());
-	}
+		LogMessage(::Error, _("Disconnected from server"));
 	DoClose();
 }
 
@@ -1050,23 +1032,58 @@ int CRealControlSocket::Connect(const CServer &server)
 	else
 		pData = static_cast<CConnectOpData *>(m_pCurOpData);
 
-	wxString host = pData ? pData->host : server.GetHost();
-	const unsigned int port = pData ? pData->port : m_pCurrentServer->GetPort();
-
-	// International domain names
-	host = ConvertDomainName(host);
-
-	LogMessage(Status, _("Resolving address of %s"), host.c_str());
-	
-	int res = CSocket::Connect(host, port);
-
-	// Treat success same as EINPROGRESS, we wait for connect notification in any case
-	if (res && res != EINPROGRESS)
+	const wxString& host = pData ? pData->host : server.GetHost();
+	if (!IsIpAddress(host))
 	{
-		LogMessage(::Error, _("Could not connect to server: %s"), CSocket::GetErrorDescription(res).c_str());
-		DoClose();
-		return FZ_REPLY_ERROR;
+		LogMessage(Status, _("Resolving IP-Address for %s"), host.c_str());
+		CAsyncHostResolver *resolver = new CAsyncHostResolver(m_pEngine, ConvertDomainName(host));
+		m_pEngine->AddNewAsyncHostResolver(resolver);
+
+		resolver->Create();
+		resolver->Run();
 	}
+	else
+	{
+		wxIPV4address addr;
+		addr.Hostname(host);
+		return ContinueConnect(&addr);
+	}
+
+	return FZ_REPLY_WOULDBLOCK;
+}
+
+int CRealControlSocket::ContinueConnect(const wxIPV4address *address)
+{
+	LogMessage(__TFILE__, __LINE__, this, Debug_Verbose, _T("CRealControlSocket::ContinueConnect(%p) m_pEngine=%p"), address, m_pEngine);
+	if (GetCurrentCommandId() != cmd_connect ||
+		!m_pCurrentServer)
+	{
+		LogMessage(Debug_Warning, _T("Invalid context for call to ContinueConnect(), cmd=%d, m_pCurrentServer=%p"), GetCurrentCommandId(), m_pCurrentServer);
+		return DoClose(FZ_REPLY_INTERNALERROR);
+	}
+
+	if (!address)
+	{
+		LogMessage(::Error, _("Invalid hostname or host not found"));
+		return DoClose(FZ_REPLY_ERROR | FZ_REPLY_CRITICALERROR);
+	}
+
+	CConnectOpData* pData;
+	if (!m_pCurOpData || m_pCurOpData->opId != cmd_connect)
+		pData = 0;
+	else
+		pData = static_cast<CConnectOpData *>(m_pCurOpData);
+
+	const unsigned int port = pData ? pData->port : m_pCurrentServer->GetPort();
+	LogMessage(Status, _("Connecting to %s:%d..."), address->IPAddress().c_str(), port);
+
+	wxIPV4address addr = *address;
+	addr.Service(port);
+
+	bool res = wxSocketClient::Connect(addr, false);
+
+	if (!res && LastError() != wxSOCKET_WOULDBLOCK)
+		return DoClose();
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -1089,169 +1106,26 @@ void CRealControlSocket::ResetSocket()
 		m_nSendBufferLen = 0;
 	}
 
+	m_onConnectCalled = false;
+
 	delete m_pBackend;
 	m_pBackend = 0;
 }
 
-bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNotification)
+wxString CRealControlSocket::GetLocalIP() const
 {
-	wxASSERT(pFileExistsNotification);
+	wxIPV4address addr;
+	if (!GetLocal(addr))
+		return _T("");
 
-	if (!m_pCurOpData || m_pCurOpData->opId != cmd_transfer)
-	{
-		LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("No or invalid operation in progress, ignoring request reply %f"), pFileExistsNotification->GetRequestID());
-		return false;
-	}
+	return addr.IPAddress();
+}
 
-	CFileTransferOpData *pData = static_cast<CFileTransferOpData *>(m_pCurOpData);
+wxString CRealControlSocket::GetPeerIP() const
+{
+	wxIPV4address addr;
+	if (!GetPeer(addr))
+		return _T("");
 
-	switch (pFileExistsNotification->overwriteAction)
-	{
-	case CFileExistsNotification::overwrite:
-		SendNextCommand();
-		break;
-	case CFileExistsNotification::overwriteNewer:
-		if (!pFileExistsNotification->localTime.IsValid() || !pFileExistsNotification->remoteTime.IsValid())
-			SendNextCommand();
-		else if (pFileExistsNotification->download && pFileExistsNotification->localTime.IsEarlierThan(pFileExistsNotification->remoteTime))
-			SendNextCommand();
-		else if (!pFileExistsNotification->download && pFileExistsNotification->localTime.IsLaterThan(pFileExistsNotification->remoteTime))
-			SendNextCommand();
-		else
-		{
-			if (pData->download)
-			{
-				wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
-				LogMessage(Status, _("Skipping download of %s"), filename.c_str());
-			}
-			else
-			{
-				LogMessage(Status, _("Skipping upload of %s"), pData->localFile.c_str());
-			}
-			ResetOperation(FZ_REPLY_OK);
-		}
-		break;
-	case CFileExistsNotification::overwriteSize:
-		/* First compare flags both size known but different, one size known and the other not (obviously they are different).
-		Second compare flags the remaining case in which we need to send command : both size unknown */
-		if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize == -1))
-			SendNextCommand();
-		else
-		{
-			if (pData->download)
-			{
-				wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
-				LogMessage(Status, _("Skipping download of %s"), filename.c_str());
-			}
-			else
-			{
-				LogMessage(Status, _("Skipping upload of %s"), pData->localFile.c_str());
-			}
-			ResetOperation(FZ_REPLY_OK);
-		}
-		break;
-	case CFileExistsNotification::overwriteSizeOrNewer:
-		if (!pFileExistsNotification->localTime.IsValid() || !pFileExistsNotification->remoteTime.IsValid())
-			SendNextCommand();
-		/* First compare flags both size known but different, one size known and the other not (obviously they are different).
-		Second compare flags the remaining case in which we need to send command : both size unknown */
-		else if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize == -1))
-			SendNextCommand();
-		else if (pFileExistsNotification->download && pFileExistsNotification->localTime.IsEarlierThan(pFileExistsNotification->remoteTime))
-			SendNextCommand();
-		else if (!pFileExistsNotification->download && pFileExistsNotification->localTime.IsLaterThan(pFileExistsNotification->remoteTime))
-			SendNextCommand();
-		else
-		{
-			if (pData->download)
-			{
-				wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
-				LogMessage(Status, _("Skipping download of %s"), filename.c_str());
-			}
-			else
-			{
-				LogMessage(Status, _("Skipping upload of %s"), pData->localFile.c_str());
-			}
-			ResetOperation(FZ_REPLY_OK);
-		}
-		break;
-	case CFileExistsNotification::resume:
-		if (pData->download && pData->localFileSize != -1)
-			pData->resume = true;
-		else if (!pData->download && pData->remoteFileSize != -1)
-			pData->resume = true;
-		SendNextCommand();
-		break;
-	case CFileExistsNotification::rename:
-		if (pData->download)
-		{
-			wxFileName fn = pData->localFile;
-			fn.SetFullName(pFileExistsNotification->newName);
-			pData->localFile = fn.GetFullPath();
-
-			wxLongLong size;
-			bool isLink;
-			if (CLocalFileSystem::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == CLocalFileSystem::file)
-				pData->localFileSize = size.GetValue();
-			else
-				pData->localFileSize = -1;
-
-			if (CheckOverwriteFile() == FZ_REPLY_OK)
-				SendNextCommand();
-		}
-		else
-		{
-			pData->remoteFile = pFileExistsNotification->newName;
-
-			CDirectoryListing listing;
-			CDirectoryCache cache;
-			bool is_outdated = false;
-			bool found = cache.Lookup(listing, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, true, is_outdated);
-			if (found)
-			{
-				bool differentCase = false;
-				bool found = false;
-				for (unsigned int i = 0; i < listing.GetCount(); i++)
-				{
-					if (!listing[i].name.CmpNoCase(pData->remoteFile))
-					{
-						if (listing[i].name != pData->remoteFile)
-							differentCase = true;
-						else
-						{
-							wxLongLong size = listing[i].size;
-							pData->remoteFileSize = size.GetLo() + ((wxFileOffset)size.GetHi() << 32);
-							found = true;
-							break;
-						}
-					}
-				}
-				if (found)
-				{
-					if (CheckOverwriteFile() != FZ_REPLY_OK)
-						break;
-				}
-			}
-			SendNextCommand();
-		}
-		break;
-	case CFileExistsNotification::skip:
-		if (pData->download)
-		{
-			wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
-			LogMessage(Status, _("Skipping download of %s"), filename.c_str());
-		}
-		else
-		{
-			LogMessage(Status, _("Skipping upload of %s"), pData->localFile.c_str());
-		}
-		ResetOperation(FZ_REPLY_OK);
-		break;
-	default:
-		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Unknown file exists action: %d"), pFileExistsNotification->overwriteAction);
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return false;
-	}
-
-	return true;
+	return addr.IPAddress();
 }

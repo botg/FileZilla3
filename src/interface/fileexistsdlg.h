@@ -17,7 +17,7 @@ public:
 	/// Creates the controls and sizers
 	void CreateControls();
 	
-	enum CFileExistsNotification::OverwriteAction GetAction() const;
+	int GetAction() const;
 	bool Always(bool &directionOnly, bool &queueOnly) const;
 
 protected:
@@ -29,8 +29,8 @@ protected:
 	wxString GetPathEllipsis(wxString path, wxWindow *window);
 
 	CFileExistsNotification *m_pNotification;
-	wxRadioButton *m_pAction1, *m_pAction2, *m_pAction3, *m_pAction4, *m_pAction5, *m_pAction6, *m_pAction7;
-	enum CFileExistsNotification::OverwriteAction m_action;
+	wxRadioButton *m_pAction1, *m_pAction2, *m_pAction3, *m_pAction4, *m_pAction5;
+	int m_action;
 	bool m_always;
 	bool m_directionOnly;
 	bool m_queueOnly;

@@ -605,7 +605,7 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, CNotification* p
 				else
 				{
 					// Set default file exists action
-					pFileExistsNotification->overwriteAction = pEngineData->pItem->m_defaultFileExistsAction;
+					pFileExistsNotification->overwriteAction = (enum CFileExistsNotification::OverwriteAction)pEngineData->pItem->m_defaultFileExistsAction;
 				}
 			}
 			break;
@@ -1642,7 +1642,7 @@ void CQueueView::OnFolderThreadComplete(wxCommandEvent& event)
 	ProcessUploadFolderItems();
 }
 
-bool CQueueView::QueueFiles(const std::list<t_newEntry> &entryList, bool queueOnly, bool download, CServerItem* pServerItem, const enum CFileExistsNotification::OverwriteAction defaultFileExistsAction)
+bool CQueueView::QueueFiles(const std::list<t_newEntry> &entryList, bool queueOnly, bool download, CServerItem* pServerItem, const int defaultFileExistsAction)
 {
 	wxASSERT(pServerItem);
 
@@ -2236,7 +2236,7 @@ void CQueueView::OnFolderThreadFiles(wxCommandEvent& event)
 	RefreshItem(pItem);
 }
 
-void CQueueView::SetDefaultFileExistsAction(enum CFileExistsNotification::OverwriteAction action, const enum TransferDirection direction)
+void CQueueView::SetDefaultFileExistsAction(int action, const enum TransferDirection direction)
 {
 	for (std::vector<CServerItem*>::iterator iter = m_serverList.begin(); iter != m_serverList.end(); iter++)
 		(*iter)->SetDefaultFileExistsAction(action, direction);
@@ -2251,7 +2251,7 @@ void CQueueView::OnSetDefaultFileExistsAction(wxCommandEvent &event)
 	if (!dlg.Load(this, true))
 		return;
 
-	enum CFileExistsNotification::OverwriteAction downloadAction, uploadAction;
+	int downloadAction, uploadAction;
 	if (!dlg.Run(&downloadAction, &uploadAction))
 		return;
 

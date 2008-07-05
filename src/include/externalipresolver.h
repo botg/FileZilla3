@@ -1,6 +1,8 @@
 #ifndef __EXTERNALIPRESOLVER_H__
 #define __EXTERNALIPRESOLVER_H__
 
+#include "asynchostresolver.h"
+
 class fzExternalIPResolveEvent : public wxEvent
 {
 public:
@@ -18,8 +20,6 @@ extern const wxEventType fzEVT_EXTERNALIPRESOLVE;
         (wxObject *) NULL \
     ),
 
-class CSocket;
-class CSocketEvent;
 class CExternalIPResolver : public wxEvtHandler
 {
 public:
@@ -43,17 +43,20 @@ protected:
 
 	bool m_done;
 
+	CAsyncHostResolver* m_pHostResolver;
+
 	static wxString m_ip;
 	static bool m_checked;
 
 	wxString m_data;
 
-	CSocket *m_pSocket;
+	wxSocketClient *m_pSocket;
 
 	DECLARE_EVENT_TABLE();
-	void OnSocketEvent(CSocketEvent& event);
+	void OnAsyncHostResolver(fzAsyncHostResolveEvent& event);
+	void OnSocketEvent(wxSocketEvent& event);
 
-	void OnConnect(int error);
+	void OnConnect();
 	void OnClose();
 	void OnReceive();
 	void OnHeader();

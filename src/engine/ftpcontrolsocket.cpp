@@ -1,9 +1,10 @@
-#include <wx/defs.h>
+#include <wx/wx.h>
+
 #ifdef __WXMSW__
-// For AF_INET6
-#include <winsock2.h>
-#include <ws2tcpip.h>
+// wxWidgets offers us no way to get the socket handle.
+#define WriteMsg UsefulDefineHackToGetFd(int* fd) { *fd = m_socket->m_fd; return *this; } wxSocketBase& WriteMsg
 #endif
+
 #include "FileZilla.h"
 
 #ifdef __WXMSW__
@@ -27,16 +28,16 @@
 #define LOGON_WELCOME	0
 #define LOGON_AUTH_TLS	1
 #define LOGON_AUTH_SSL	2
-#define LOGON_AUTH_WAIT	3
-#define LOGON_LOGON		4
-#define LOGON_SYST		5
-#define LOGON_FEAT		6
-#define LOGON_CLNT		7
-#define LOGON_OPTSUTF8	8
-#define LOGON_PBSZ		9
-#define LOGON_PROT		10
-#define LOGON_CUSTOMCOMMANDS 11
-#define LOGON_DONE		12
+#define LOGON_LOGON		3
+#define LOGON_SYST		4
+#define LOGON_FEAT		5
+#define LOGON_CLNT		6
+#define LOGON_OPTSUTF8	7
+#define LOGON_PBSZ		8
+#define LOGON_PROT		9
+#define LOGON_CUSTOMCOMMANDS 10
+#define LOGON_DONE		11
+
 
 #ifdef __WXMSW__
 
@@ -60,6 +61,11 @@ struct tcp_keepalive
 	u_long  keepaliveinterval;
 };
 
+#endif
+
+#ifdef _MSC_VER
+// Only needed on MSVC, MinGW already brings this along
+extern "C" int WINAPI WSAIoctl(SOCKET, DWORD, LPVOID, DWORD, LPVOID, DWORD, LPDWORD, void*, void*);
 #endif
 
 #endif //__WXMSW__
@@ -230,65 +236,58 @@ void CFtpControlSocket::OnReceive()
 {
 	LogMessage(Debug_Verbose, _T("CFtpControlSocket::OnReceive()"));
 
-	while (true)
+	m_pBackend->Read(m_receiveBuffer + m_bufferLen, RECVBUFFERSIZE - m_bufferLen);
+
+	if (m_pBackend->Error())
 	{
-		m_pBackend->Read(m_receiveBuffer + m_bufferLen, RECVBUFFERSIZE - m_bufferLen);
-
-		if (m_pBackend->Error())
+		if (m_pBackend->LastError() != wxSOCKET_WOULDBLOCK)
 		{
-			if (m_pBackend->LastError() != wxSOCKET_WOULDBLOCK)
-			{
-				LogMessage(::Error, _("Disconnected from server"));
-				DoClose();
-			}
-			return;
-		}
-
-		int numread = m_pBackend->LastCount();
-		if (!numread)
-		{
-			LogMessage(::Error, _("Connection closed by server"));
+			LogMessage(::Error, _("Disconnected from server"));
 			DoClose();
-			return;
 		}
-
-		m_pEngine->SetActive(true);
-
-		char* start = m_receiveBuffer;
-		m_bufferLen += numread;
-
-		for (int i = start - m_receiveBuffer; i < m_bufferLen; i++)
-		{
-			char& p = m_receiveBuffer[i];
-			if (p == '\r' ||
-				p == '\n' ||
-				p == 0)
-			{
-				int len = i - (start - m_receiveBuffer);
-				if (!len)
-				{
-					start++;
-					continue;
-				}
-
-				if (len > MAXLINELEN)
-					len = MAXLINELEN;
-				p = 0;
-				wxString line = ConvToLocal(start);
-				start = m_receiveBuffer + i + 1;
-
-				ParseLine(line);
-
-				// Abort if connection got closed
-				if (!m_pCurrentServer)
-					return;
-			}
-		}
-		memmove(m_receiveBuffer, start, m_bufferLen - (start - m_receiveBuffer));
-		m_bufferLen -= (start -m_receiveBuffer);
-		if (m_bufferLen > MAXLINELEN)
-			m_bufferLen = MAXLINELEN;
+		return;
 	}
+
+	int numread = m_pBackend->LastCount();
+	if (!numread)
+		return;
+
+	m_pEngine->SetActive(true);
+
+	char* start = m_receiveBuffer;
+	m_bufferLen += numread;
+
+	for (int i = start - m_receiveBuffer; i < m_bufferLen; i++)
+	{
+		char& p = m_receiveBuffer[i];
+		if (p == '\r' ||
+			p == '\n' ||
+			p == 0)
+		{
+			int len = i - (start - m_receiveBuffer);
+			if (!len)
+			{
+				start++;
+				continue;
+			}
+
+			if (len > MAXLINELEN)
+				len = MAXLINELEN;
+			p = 0;
+			wxString line = ConvToLocal(start);
+			start = m_receiveBuffer + i + 1;
+
+			ParseLine(line);
+
+			// Abort if connection got closed
+			if (!m_pCurrentServer)
+				return;
+		}
+	}
+	memmove(m_receiveBuffer, start, m_bufferLen - (start - m_receiveBuffer));
+	m_bufferLen -= (start -m_receiveBuffer);
+	if (m_bufferLen > MAXLINELEN)
+		m_bufferLen = MAXLINELEN;
 }
 
 void CFtpControlSocket::ParseLine(wxString line)
@@ -389,7 +388,6 @@ void CFtpControlSocket::OnConnect()
 
 	// Enable SO_KEEPALIVE, lots of clueless users have broken routers and
 	// firewalls which terminate the control connection on long transfers.
-	/*XXX
 	int enabled = 1;
 	SetOption(SOL_SOCKET, SO_KEEPALIVE, &enabled, sizeof(enabled));
 
@@ -410,7 +408,7 @@ void CFtpControlSocket::OnConnect()
 	if (res)
 		LogMessage(::Debug_Info, _T("WSAIoctl with SIO_KEEPALIVE_VALS failed with %d"), (int)WSAGetLastError());
 #endif //__WXMSW__
-*/
+
 	if (m_pCurrentServer->GetProtocol() == FTPS)
 	{
 		if (!m_pTlsSocket)
@@ -807,10 +805,6 @@ int CFtpControlSocket::LogonParseResponse()
 			}
 
 			pData->neededCommands[LOGON_AUTH_SSL] = 0;
-			pData->opState = LOGON_AUTH_WAIT;
-
-			if (res == FZ_REPLY_WOULDBLOCK)
-				return FZ_REPLY_WOULDBLOCK;
 		}
 	}
 	else if (pData->opState == LOGON_LOGON)
@@ -934,6 +928,21 @@ int CFtpControlSocket::LogonParseResponse()
 		if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes)
 			m_useUTF8 = false;
 	}
+	/*
+	else if (pData->opState == LOGON_CLNT)
+	{
+		// Don't check return code, it has no meaning for us
+	}
+	else if (pData->opState == LOGON_OPTSUTF8)
+	{
+		// If server obeys RFC 2640 this command had no effect, return code
+		// is irrelevant
+	}
+	else if (pData->opState == LOGON_PBSZ)
+	{
+		// Nothing to do
+	}
+	*/
 	else if (pData->opState == LOGON_PROT)
 	{
 		if (code == 2 || code == 3)
@@ -1027,9 +1036,6 @@ int CFtpControlSocket::LogonSend()
 	bool res;
 	switch (pData->opState)
 	{
-	case LOGON_AUTH_WAIT:
-		LogMessage(Debug_Info, _T("LogonSend() called during LOGON_AUTH_WAIT, ignoring"));
-		break;
 	case LOGON_AUTH_TLS:
 		res = Send(_T("AUTH TLS"));
 		break;
@@ -2126,7 +2132,6 @@ int CFtpControlSocket::FileTransfer(const wxString localFile, const CServerPath 
 	int res = ChangeDir(pData->remotePath);
 	if (res != FZ_REPLY_OK)
 		return res;
-
 	return ParseSubcommandResult(FZ_REPLY_OK);
 }
 
@@ -2640,7 +2645,7 @@ void CFtpControlSocket::TransferEnd()
 	}
 
 	enum TransferEndReason reason = m_pTransferSocket->GetTransferEndreason();
-	if (reason == ::none)
+	if (reason == none)
 	{
 		LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("Call to TransferEnd at unusual time"));
 		return;
@@ -2682,8 +2687,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 		m_pCurOpData->waitForAsyncRequest = false;
 	}
 
-	const enum RequestId requestId = pNotification->GetRequestID();
-	switch (requestId)
+	switch (pNotification->GetRequestID())
 	{
 	case reqId_fileexists:
 		{
@@ -2698,6 +2702,37 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 			CFileExistsNotification *pFileExistsNotification = reinterpret_cast<CFileExistsNotification *>(pNotification);
 			switch (pFileExistsNotification->overwriteAction)
 			{
+			case CFileExistsNotification::overwrite:
+				SendNextCommand();
+				break;
+			case CFileExistsNotification::overwriteNewer:
+				if (!pFileExistsNotification->localTime.IsValid() || !pFileExistsNotification->remoteTime.IsValid())
+					SendNextCommand();
+				else if (pFileExistsNotification->download && pFileExistsNotification->localTime.IsEarlierThan(pFileExistsNotification->remoteTime))
+					SendNextCommand();
+				else if (!pFileExistsNotification->download && pFileExistsNotification->localTime.IsLaterThan(pFileExistsNotification->remoteTime))
+					SendNextCommand();
+				else
+				{
+					if (pData->download)
+					{
+						wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
+						LogMessage(Status, _("Skipping download of %s"), filename.c_str());
+					}
+					else
+					{
+						LogMessage(Status, _("Skipping upload of %s"), pData->localFile.c_str());
+					}
+					ResetOperation(FZ_REPLY_OK);
+				}
+				break;
+			case CFileExistsNotification::resume:
+				if (pData->download && pData->localFileSize != -1)
+					pData->resume = true;
+				else if (!pData->download && pData->remoteFileSize != -1)
+					pData->resume = true;
+				SendNextCommand();
+				break;
 			case CFileExistsNotification::rename:
 				if (pData->download)
 				{
@@ -2763,8 +2798,22 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 
 				}
 				break;
+			case CFileExistsNotification::skip:
+				if (pData->download)
+				{
+					wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
+					LogMessage(Status, _("Skipping download of %s"), filename.c_str());
+				}
+				else
+				{
+					LogMessage(Status, _("Skipping upload of %s"), pData->localFile.c_str());
+				}
+				ResetOperation(FZ_REPLY_OK);
+				break;
 			default:
-				return SetFileExistsAction(pFileExistsNotification);
+				LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Unknown file exists action: %d"), pFileExistsNotification->overwriteAction);
+				ResetOperation(FZ_REPLY_INTERNALERROR);
+				return false;
 			}
 		}
 		break;
@@ -2799,13 +2848,6 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 
 			CCertificateNotification* pCertificateNotification = reinterpret_cast<CCertificateNotification *>(pNotification);
 			m_pTlsSocket->TrustCurrentCert(pCertificateNotification->m_trusted);
-
-			if (m_pCurOpData && m_pCurOpData->opId == cmd_connect &&
-				m_pCurOpData->opState == LOGON_AUTH_WAIT)
-			{
-				m_pCurOpData->opState = LOGON_LOGON;
-			}
-			SendNextCommand();
 		}
 		break;
 	default:
@@ -3627,29 +3669,6 @@ bool CFtpControlSocket::IsMisleadingListResponse() const
 	return false;
 }
 
-bool CFtpControlSocket::ParseEpsvResponse(CRawTransferOpData* pData)
-{
-	int pos = m_Response.Find(_T("(|||"));
-	if (pos == -1)
-		return false;
-
-	int pos2 = m_Response.Mid(pos + 4).Find(_T("|)"));
-	if (pos2 <= 0)
-		return false;
-
-	wxString number = m_Response.Mid(pos + 4, pos2);
-	unsigned long port;
-	if (!number.ToULong(&port))
-		 return false;
-
-	if (port <= 0 || port > 65535)
-	   return false;
-
-	pData->port = port;
-	pData->host = GetPeerIP();
-	return true;
-}
-
 bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 {
 	// Validate ip address
@@ -3680,7 +3699,7 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 	pData->host.Replace(_T(","), _T("."));
 
 	const wxString peerIP = GetPeerIP();
-	if (!IsRoutableAddress(pData->host, GetAddressFamily()) && IsRoutableAddress(peerIP, GetAddressFamily()))
+	if (!IsRoutableAddress(pData->host) && IsRoutableAddress(peerIP))
 	{
 		if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) || pData->bTriedActive)
 		{
@@ -3706,7 +3725,7 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 	if (mode)
 	{
 		if (m_pEngine->GetOptions()->GetOptionVal(OPTION_NOEXTERNALONLOCAL) &&
-			!IsRoutableAddress(GetPeerIP(), GetAddressFamily()))
+			!IsRoutableAddress(GetPeerIP()))
 			// Skip next block, use local address
 			goto getLocalIP;
 	}
@@ -3880,12 +3899,7 @@ int CFtpControlSocket::TransferParseResponse()
 		}
 		if (pData->bPasv)
 		{
-			bool parsed;
-			if (GetAddressFamily() == AF_INET6)
-				parsed = ParseEpsvResponse(pData);
-			else
-				parsed = ParsePasvResponse(pData);
-			if (!parsed)
+			if (!ParsePasvResponse(pData))
 			{
 				if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK))
 				{
@@ -4014,10 +4028,7 @@ int CFtpControlSocket::TransferSend()
 		if (pData->bPasv)
 		{
 			pData->bTriedPasv = true;
-			if (GetAddressFamily() == AF_INET6)
-				cmd = _T("EPSV");
-			else
-				cmd = _T("PASV");
+			cmd = _T("PASV");
 		}
 		else
 		{
@@ -4031,10 +4042,7 @@ int CFtpControlSocket::TransferSend()
 				if (portArgument != _T(""))
 				{
 					pData->bTriedActive = true;
-					if (GetAddressFamily() == AF_INET6)
-						cmd = _T("EPRT " + portArgument);
-					else
-						cmd = _T("PORT " + portArgument);
+					cmd = _T("PORT " + portArgument);
 					break;
 				}
 			}
@@ -4049,10 +4057,7 @@ int CFtpControlSocket::TransferSend()
 			pData->bTriedActive = true;
 			pData->bTriedPasv = true;
 			pData->bPasv = true;
-			if (GetAddressFamily() == AF_INET6)
-				cmd = _T("EPSV");
-			else
-				cmd = _T("PASV");
+			cmd = _T("PASV");
 		}
 		break;
 	case rawtransfer_rest:
@@ -4204,7 +4209,6 @@ int CFtpControlSocket::Connect(const CServer &server)
 	{
 		pData->neededCommands[LOGON_AUTH_TLS] = 0;
 		pData->neededCommands[LOGON_AUTH_SSL] = 0;
-		pData->neededCommands[LOGON_AUTH_WAIT] = 0;
 		if (server.GetProtocol() != FTPS)
 		{
 			pData->neededCommands[LOGON_PBSZ] = 0;

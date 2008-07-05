@@ -11,25 +11,19 @@ bool COptionsPageFileExists::LoadPage()
 	const int dlAction = m_pOptions->GetOptionVal(OPTION_FILEEXISTS_DOWNLOAD);
 	switch (dlAction)
 	{
-	case CFileExistsNotification::overwrite:
+	case 1:
 		SetRCheck(XRCID("ID_DL_OVERWRITE"), true, failure);
 		break;
-	case CFileExistsNotification::overwriteNewer:
+	case 2:
 		SetRCheck(XRCID("ID_DL_OVERWRITEIFNEWER"), true, failure);
 		break;
-	case CFileExistsNotification::overwriteSize:
-		SetRCheck(XRCID("ID_DL_OVERWRITESIZE"), true, failure);
-		break;
-	case CFileExistsNotification::overwriteSizeOrNewer:
-		SetRCheck(XRCID("ID_DL_OVERWRITESIZEORNEWER"), true, failure);
-		break;
-	case CFileExistsNotification::resume:
+	case 3:
 		SetRCheck(XRCID("ID_DL_RESUME"), true, failure);
 		break;
-	case CFileExistsNotification::rename:
+	case 4:
 		SetRCheck(XRCID("ID_DL_RENAME"), true, failure);
 		break;
-	case CFileExistsNotification::skip:
+	case 5:
 		SetRCheck(XRCID("ID_DL_SKIP"), true, failure);
 		break;
 	default:
@@ -40,25 +34,19 @@ bool COptionsPageFileExists::LoadPage()
 	const int ulAction = m_pOptions->GetOptionVal(OPTION_FILEEXISTS_UPLOAD);
 	switch (ulAction)
 	{
-	case CFileExistsNotification::overwrite:
+	case 1:
 		SetRCheck(XRCID("ID_UL_OVERWRITE"), true, failure);
 		break;
-	case CFileExistsNotification::overwriteNewer:
+	case 2:
 		SetRCheck(XRCID("ID_UL_OVERWRITEIFNEWER"), true, failure);
 		break;
-	case CFileExistsNotification::overwriteSize:
-		SetRCheck(XRCID("ID_UL_OVERWRITESIZE"), true, failure);
-		break;
-	case CFileExistsNotification::overwriteSizeOrNewer:
-		SetRCheck(XRCID("ID_UL_OVERWRITESIZEORNEWER"), true, failure);
-		break;
-	case CFileExistsNotification::resume:
+	case 3:
 		SetRCheck(XRCID("ID_UL_RESUME"), true, failure);
 		break;
-	case CFileExistsNotification::rename:
+	case 4:
 		SetRCheck(XRCID("ID_UL_RENAME"), true, failure);
 		break;
-	case CFileExistsNotification::skip:
+	case 5:
 		SetRCheck(XRCID("ID_UL_SKIP"), true, failure);
 		break;
 	default:
@@ -73,41 +61,33 @@ bool COptionsPageFileExists::LoadPage()
 
 bool COptionsPageFileExists::SavePage()
 {
-	enum CFileExistsNotification::OverwriteAction value;
+	int value;
 	if (GetRCheck(XRCID("ID_DL_OVERWRITE")))
-		value = CFileExistsNotification::overwrite;
+		value = 1;
 	else if (GetRCheck(XRCID("ID_DL_OVERWRITEIFNEWER")))
-		value = CFileExistsNotification::overwriteNewer;
-	else if (GetRCheck(XRCID("ID_DL_OVERWRITESIZE")))
-		value = CFileExistsNotification::overwriteSize;
-	else if (GetRCheck(XRCID("ID_DL_OVERWRITESIZEORNEWER")))
-		value = CFileExistsNotification::overwriteSizeOrNewer;
+		value = 2;
 	else if (GetRCheck(XRCID("ID_DL_RESUME")))
-		value = CFileExistsNotification::resume;
+		value = 3;
 	else if (GetRCheck(XRCID("ID_DL_RENAME")))
-		value = CFileExistsNotification::rename;
+		value = 4;
 	else if (GetRCheck(XRCID("ID_DL_SKIP")))
-		value = CFileExistsNotification::skip;
+		value = 5;
 	else
-		value = CFileExistsNotification::ask;
+		value = 0;
 	m_pOptions->SetOption(OPTION_FILEEXISTS_DOWNLOAD, value);
 
 	if (GetRCheck(XRCID("ID_UL_OVERWRITE")))
-		value = CFileExistsNotification::overwrite;
+		value = 1;
 	else if (GetRCheck(XRCID("ID_UL_OVERWRITEIFNEWER")))
-		value = CFileExistsNotification::overwriteNewer;
-	else if (GetRCheck(XRCID("ID_UL_OVERWRITESIZE")))
-		value = CFileExistsNotification::overwriteSize;
-	else if (GetRCheck(XRCID("ID_UL_OVERWRITESIZEORNEWER")))
-		value = CFileExistsNotification::overwriteSizeOrNewer;
+		value = 2;
 	else if (GetRCheck(XRCID("ID_UL_RESUME")))
-		value = CFileExistsNotification::resume;
+		value = 3;
 	else if (GetRCheck(XRCID("ID_UL_RENAME")))
-		value = CFileExistsNotification::rename;
+		value = 4;
 	else if (GetRCheck(XRCID("ID_UL_SKIP")))
-		value = CFileExistsNotification::skip;
+		value = 5;
 	else
-		value = CFileExistsNotification::ask;
+		value = 0;
 	m_pOptions->SetOption(OPTION_FILEEXISTS_UPLOAD, value);
 
 	m_pOptions->SetOption(OPTION_ASCIIRESUME, GetCheck(XRCID("ID_ASCIIRESUME")));

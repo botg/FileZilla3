@@ -19,8 +19,6 @@ public:
 
 	int GetId() const { return m_Id; }
 
-	static int GetNextId();
-
 protected:
 	wxEvtHandler* const m_pEvtHandler;
 
@@ -35,11 +33,10 @@ private:
 	static int m_nextId;
 };
 
-class CSocket;
 class CSocketBackend : public CBackend
 {
 public:
-	CSocketBackend(wxEvtHandler* pEvtHandler, CSocket* pSocket);
+	CSocketBackend(wxEvtHandler* pEvtHandler, wxSocketBase* pSocket);
 	virtual ~CSocketBackend();
 	// Backend definitions
 	virtual void Read(void *buffer, unsigned int len);
@@ -52,7 +49,8 @@ public:
 protected:
 	virtual void OnRateAvailable(enum CRateLimiter::rate_direction direction);
 
-	CSocket* m_pSocket;
+	void UpdateResults();
+	wxSocketBase* m_pSocket;
 
 	bool m_error;
 	int m_lastCount;

@@ -10,7 +10,7 @@ public:
 
 protected:
 	virtual int ContinueConnect(const wxIPV4address *address);
-	virtual bool Connected() { return m_pCurrentServer != 0; }
+	virtual bool Connected() const { return m_pCurrentServer != 0; }
 
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
 	virtual int SendNextCommand();
@@ -23,7 +23,7 @@ protected:
 	virtual int FileTransferParseResponse(char* p, unsigned int len);
 	virtual int FileTransferSubcommandResult(int prevResult);
 
-	int InternalConnect(wxString host, unsigned short port);
+	int InternalConnect(const wxString& host, unsigned short port);
 	int DoInternalConnect();
 
 	virtual void OnConnect();

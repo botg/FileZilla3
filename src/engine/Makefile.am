@@ -9,7 +9,7 @@ libengine_a_CXXFLAGS = $(WX_CXXFLAGS_ONLY)
 libengine_a_CFLAGS = $(WX_CFLAGS_ONLY)
 
 
-libengine_a_SOURCES = \
+libengine_a_SOURCES = asynchostresolver.cpp \
 		backend.cpp \
 		commands.cpp ControlSocket.cpp \
 		directorycache.cpp directorylisting.cpp directorylistingparser.cpp \
@@ -25,7 +25,6 @@ libengine_a_SOURCES = \
 		server.cpp serverpath.cpp\
 		servercapabilities.cpp \
 		sftpcontrolsocket.cpp \
-		socket.cpp \
 		tlssocket.cpp \
 		threadex.cpp timeex.cpp transfersocket.cpp
 
@@ -38,7 +37,6 @@ noinst_HEADERS = backend.h \
 		ratelimiter.h \
 		servercapabilities.h \
 		sftpcontrolsocket.h \
-		socket.h \
 		tlssocket.h \
 		transfersocket.h
 

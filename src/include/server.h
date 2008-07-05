@@ -22,7 +22,6 @@ enum ServerType
 	ZVM,
 	HPNONSTOP,
 	DOS_VIRTUAL,
-	CYGWIN,
 
 	SERVERTYPE_MAX
 };

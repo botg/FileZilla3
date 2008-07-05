@@ -28,14 +28,6 @@
   RequestExecutionLevel highest
 
 ;--------------------------------
-; Libtool executable target path
-
-  !include libtoolexecutablesubdir.nsh
-  !ifndef LT_EXEDIR
-    !define LT_EXEDIR ""
-  !endif
-
-;--------------------------------
 ;Include Modern UI and functions
 
   !include "MUI2.nsh"
@@ -660,15 +652,13 @@ FunctionEnd
 ;--------------------------------
 ;Installer Sections
 
-Section "FileZilla Client" SecMain
-
-  SectionIn 1 RO
+${MementoSection} "FileZilla Client" SecMain
 
   SetOutPath "$INSTDIR"
   
-  File "..\src\interface\${LT_EXEDIR}FileZilla.exe"
-  File "..\src\putty\${LT_EXEDIR}fzsftp.exe"
-  File "..\src\putty\${LT_EXEDIR}fzputtygen.exe"
+  File "..\src\interface\FileZilla.exe"
+  File "..\src\putty\fzsftp.exe"
+  File "..\src\putty\fzputtygen.exe"
   File "${srcdir}\mingwm10.dll"
   File "${top_srcdir}\GPL.html"
   File "${top_srcdir}\NEWS"
@@ -745,7 +735,7 @@ Section "FileZilla Client" SecMain
   ${endif}
   Pop $R0
 
-SectionEnd
+${MementoSectionEnd}
 
 !macro INSTALLLANGFILE LANG
 

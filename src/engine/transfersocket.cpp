@@ -1,9 +1,3 @@
-#include <wx/defs.h>
-#ifdef __WXMSW__
-// For AF_INET6
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#endif
 #include "FileZilla.h"
 #include "transfersocket.h"
 #include "ftpcontrolsocket.h"
@@ -11,10 +5,9 @@
 #include "optionsbase.h"
 #include "iothread.h"
 #include "tlssocket.h"
-#include <errno.h>
 
 BEGIN_EVENT_TABLE(CTransferSocket, wxEvtHandler)
-	EVT_FZ_SOCKET(wxID_ANY, CTransferSocket::OnSocketEvent)
+	EVT_SOCKET(wxID_ANY, CTransferSocket::OnSocketEvent)
 	EVT_IOTHREAD(wxID_ANY, CTransferSocket::OnIOThreadEvent)
 END_EVENT_TABLE();
 
@@ -88,115 +81,66 @@ wxString CTransferSocket::SetupActiveTransfer(const wxString& ip)
 	delete m_pSocketServer;
 	m_pSocketServer = 0;
 
+	wxIPV4address addr;
+	addr.AnyAddress();
+	addr.Service(0);
+
 	m_pSocketServer = CreateSocketServer();
 	if (!m_pSocketServer)
 		return _T("");
 
-	int error;
-	int port = m_pSocketServer->GetLocalPort(error);
-	if (port == -1)
+	if (!m_pSocketServer->GetLocal(addr))
 	{
 		delete m_pSocketServer;
 		m_pSocketServer = 0;
 		return _T("");
 	}
 
-	wxString portArguments;
-	if (m_pSocketServer->GetAddressFamily() == AF_INET6)
-	{
-		portArguments = wxString::Format(_T("|2|%s|%d|"), ip.c_str(), port);
-	}
-	else
-	{
-		portArguments = ip;
-		portArguments += wxString::Format(_T(",%d,%d"), port / 256, port % 256);
-		portArguments.Replace(_T("."), _T(","));
-	}
+	wxString portArguments = ip;
+	portArguments += wxString::Format(_T(",%d,%d"), addr.Service() / 256, addr.Service() % 256);
+	portArguments.Replace(_T("."), _T(","));
+
+	m_pSocketServer->SetEventHandler(*this);
+	m_pSocketServer->SetNotify(wxSOCKET_CONNECTION_FLAG);
+	m_pSocketServer->Notify(true);
 
 	return portArguments;
 }
 
-void CTransferSocket::OnSocketEvent(CSocketEvent &event)
+void CTransferSocket::OnSocketEvent(wxSocketEvent &event)
 {
-	if (m_pSocketServer && event.GetId() == m_pSocketServer->GetId())
+	switch (event.GetSocketEvent())
 	{
-		if (event.GetType() == CSocketEvent::connection)
-			OnAccept(event.GetError());
-		else
-			m_pControlSocket->LogMessage(::Debug_Info, _T("Unhandled socket event %d from listening socket"), event.GetType());
-		return;
-	}
-
-	if (m_pBackend)
-	{
-		if (event.GetId() != m_pBackend->GetId())
-		{
-			m_pControlSocket->LogMessage(::Debug_Info, _T("Skipping socket event %d, id mismatch."), event.GetType());
-			return;
-		}
-	}
-	else
-	{
-		if (!m_pSocket || m_pSocket->GetId() != event.GetId())
-		{
-			m_pControlSocket->LogMessage(::Debug_Info, _T("Skipping socket event %d, no socket or id mismatch."), event.GetType());
-			return;
-		}
-	}
-
-	switch (event.GetType())
-	{
-	case CSocketEvent::connection:
-		OnConnect();
+	case wxSOCKET_CONNECTION:
+		OnConnect(event);
 		break;
-	case CSocketEvent::read:
+	case wxSOCKET_INPUT:
 		OnReceive();
 		break;
-	case CSocketEvent::write:
+	case wxSOCKET_OUTPUT:
 		OnSend();
 		break;
-	case CSocketEvent::close:
-		OnClose(event.GetError());
-		break;
-	default:
-		m_pControlSocket->LogMessage(::Debug_Info, _T("Unhandled socket event %d"), event.GetType());
+	case wxSOCKET_LOST:
+		OnClose(event);
 		break;
 	}
 }
 
-void CTransferSocket::OnAccept(int error)
-{
-	m_pControlSocket->SetAlive();
-	m_pControlSocket->LogMessage(::Debug_Verbose, _T("CTransferSocket::OnAccept(%d)"), error);
-
-	if (!m_pSocketServer)
-	{
-		m_pControlSocket->LogMessage(::Debug_Warning, _T("No socket server in OnAccept"), error);
-		return;
-	}
-
-	m_pSocket = m_pSocketServer->Accept(error);
-	if (!m_pSocket)
-	{
-		if (error == EAGAIN)
-			m_pControlSocket->LogMessage(::Debug_Verbose, _("No pending connection"));
-		else
-		{
-			m_pControlSocket->LogMessage(::Status, _("Could not accept connection: %s"), CSocket::GetErrorDescription(error).c_str());
-			TransferEnd(transfer_failure);
-		}
-		return;
-	}
-	delete m_pSocketServer;
-	m_pSocketServer = 0;
-
-	OnConnect();
-}
-
-void CTransferSocket::OnConnect()
+void CTransferSocket::OnConnect(wxSocketEvent &event)
 {
 	m_pControlSocket->SetAlive();
 	m_pControlSocket->LogMessage(::Debug_Verbose, _T("CTransferSocket::OnConnect"));
+	if (m_pSocketServer)
+	{
+		m_pSocket = m_pSocketServer->Accept(false);
+		if (!m_pSocket)
+		{
+			TransferEnd(transfer_failure);
+			return;
+		}
+		delete m_pSocketServer;
+		m_pSocketServer = 0;
+	}
 
 	if (!m_pSocket)
 	{
@@ -237,115 +181,105 @@ void CTransferSocket::OnReceive()
 
 	if (m_transferMode == list)
 	{
-		while (true)
+		char *pBuffer = new char[4096];
+		m_pBackend->Read(pBuffer, 4096);
+		if (m_pBackend->Error())
 		{
-			char *pBuffer = new char[4096];
-			m_pBackend->Read(pBuffer, 4096);
-			if (m_pBackend->Error())
+			delete [] pBuffer;
+			int error = m_pBackend->LastError();
+			if (error == wxSOCKET_NOERROR)
+				TransferEnd(successful);
+			else if (error != wxSOCKET_WOULDBLOCK)
 			{
-				delete [] pBuffer;
-				int error = m_pBackend->LastError();
-				if (error == wxSOCKET_NOERROR)
-					TransferEnd(successful);
-				else if (error != wxSOCKET_WOULDBLOCK)
-				{
-					m_pControlSocket->LogMessage(Debug_Warning, _T("Read failed with error %d"), error);
-					TransferEnd(transfer_failure);
-				}
-				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound))
-				{
-					wxSocketEvent evt(m_pBackend->GetId());
-					evt.m_event = wxSOCKET_LOST;
-					wxPostEvent(this, evt);
-				}
-				return;
+				m_pControlSocket->LogMessage(Debug_Warning, _T("Read failed with error %d"), error);
+				TransferEnd(transfer_failure);
 			}
-			int numread = m_pBackend->LastCount();
+			else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound))
+			{
+				wxSocketEvent evt(m_pBackend->GetId());
+				evt.m_event = wxSOCKET_LOST;
+				wxPostEvent(this, evt);
+			}
+			return;
+		}
+		int numread = m_pBackend->LastCount();
 
-			if (numread > 0)
+		if (numread > 0)
+		{
+			m_pDirectoryListingParser->AddData(pBuffer, numread);
+			m_pEngine->SetActive(true);
+			if (!m_madeProgress)
 			{
-				m_pDirectoryListingParser->AddData(pBuffer, numread);
-				m_pEngine->SetActive(true);
-				if (!m_madeProgress)
-				{
-					m_madeProgress = 2;
-					m_pControlSocket->SetTransferStatusMadeProgress();
-				}
-				m_pControlSocket->UpdateTransferStatus(numread);
-				if (m_onCloseCalled)
-				{
-					wxSocketEvent evt(m_pBackend->GetId());
-					evt.m_event = wxSOCKET_LOST;
-					wxPostEvent(this, evt);
-				}
+				m_madeProgress = 2;
+				m_pControlSocket->SetTransferStatusMadeProgress();
 			}
-			else
+			m_pControlSocket->UpdateTransferStatus(numread);
+			if (m_onCloseCalled)
 			{
-				delete [] pBuffer;
-				if (!numread)
-					TransferEnd(successful);
-				else if (numread < 0)
-				{
-					m_pControlSocket->LogMessage(Debug_Warning, _T("  numread < 0"));
-					TransferEnd(transfer_failure);
-				}
-				return;
+				wxSocketEvent evt(m_pBackend->GetId());
+				evt.m_event = wxSOCKET_LOST;
+				wxPostEvent(this, evt);
+			}
+		}
+		else
+		{
+			delete [] pBuffer;
+			if (!numread)
+				TransferEnd(successful);
+			else if (numread < 0)
+			{
+				m_pControlSocket->LogMessage(Debug_Warning, _T("  numread < 0"));
+				TransferEnd(transfer_failure);
 			}
 		}
 	}
 	else if (m_transferMode == download)
 	{
-		while (true)
+		if (!CheckGetNextWriteBuffer())
+			return;
+
+		m_pBackend->Read(m_pTransferBuffer, m_transferBufferLen);
+		if (m_pBackend->Error())
 		{
-			if (!CheckGetNextWriteBuffer())
-				return;
-
-			m_pBackend->Read(m_pTransferBuffer, m_transferBufferLen);
-			if (m_pBackend->Error())
-			{
-				int error = m_pBackend->LastError();
-				if (error == wxSOCKET_NOERROR)
-					FinalizeWrite();
-				else if (error != wxSOCKET_WOULDBLOCK)
-					TransferEnd(transfer_failure);
-				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound))
-				{
-					wxSocketEvent evt(m_pBackend->GetId());
-					evt.m_event = wxSOCKET_LOST;
-					wxPostEvent(this, evt);
-				}
-				return;
-			}
-			int numread = m_pBackend->LastCount();
-
-			if (numread > 0)
-			{
-				m_pEngine->SetActive(true);
-				if (!m_madeProgress)
-				{
-					m_madeProgress = 2;
-					m_pControlSocket->SetTransferStatusMadeProgress();
-				}
-				m_pControlSocket->UpdateTransferStatus(numread);
-
-				m_pTransferBuffer += numread;
-				m_transferBufferLen -= numread;
-
-				CheckGetNextWriteBuffer();
-
-				if (m_onCloseCalled && m_transferEndReason == none)
-				{
-					wxSocketEvent evt(m_pBackend->GetId());
-					evt.m_event = wxSOCKET_LOST;
-					wxPostEvent(this, evt);
-				}
-			}
-			else //!numread
-			{
+			int error = m_pBackend->LastError();
+			if (error == wxSOCKET_NOERROR)
 				FinalizeWrite();
-				break;
+			else if (error != wxSOCKET_WOULDBLOCK)
+				TransferEnd(transfer_failure);
+			else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound))
+			{
+				wxSocketEvent evt(m_pBackend->GetId());
+				evt.m_event = wxSOCKET_LOST;
+				wxPostEvent(this, evt);
+			}
+			return;
+		}
+		int numread = m_pBackend->LastCount();
+
+		if (numread > 0)
+		{
+			m_pEngine->SetActive(true);
+			if (!m_madeProgress)
+			{
+				m_madeProgress = 2;
+				m_pControlSocket->SetTransferStatusMadeProgress();
+			}
+			m_pControlSocket->UpdateTransferStatus(numread);
+
+			m_pTransferBuffer += numread;
+			m_transferBufferLen -= numread;
+
+			CheckGetNextWriteBuffer();
+
+			if (m_onCloseCalled && m_transferEndReason == none)
+			{
+				wxSocketEvent evt(m_pBackend->GetId());
+				evt.m_event = wxSOCKET_LOST;
+				wxPostEvent(this, evt);
 			}
 		}
+		else //!numread
+			FinalizeWrite();
 	}
 	else if (m_transferMode == resumetest)
 	{
@@ -445,9 +379,9 @@ void CTransferSocket::OnSend()
 	}
 }
 
-void CTransferSocket::OnClose(int error)
+void CTransferSocket::OnClose(wxSocketEvent &event)
 {
-	m_pControlSocket->LogMessage(::Debug_Verbose, _T("CTransferSocket::OnClose(%d)"), error);
+	m_pControlSocket->LogMessage(::Debug_Verbose, _T("CTransferSocket::OnClose"));
 	m_onCloseCalled = true;
 
 	if (m_transferEndReason != none)
@@ -477,19 +411,13 @@ void CTransferSocket::OnClose(int error)
 		return;
 	}
 
+	if (!m_pTlsSocket)
+		m_pSocket->SetNotify(wxSOCKET_OUTPUT_FLAG | wxSOCKET_CONNECTION_FLAG | wxSOCKET_LOST_FLAG);
+
 	char buffer[100];
 	m_pBackend->Peek(&buffer, 100);
 	if (!m_pBackend->Error() && m_pBackend->LastCount())
 	{
-#ifndef __WXMSW__
-		wxFAIL_MSG(_T("Peek isn't supposed to return data after close notification"));
-#endif
-
-		// MSDN says this:
-		//   FD_CLOSE being posted after all data is read from a socket.
-		//   An application should check for remaining data upon receipt
-		//   of FD_CLOSE to avoid any possibility of losing data.
-		// First half is actually plain wrong.
 		OnReceive();
 
 		return;
@@ -514,19 +442,29 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 	delete m_pSocketServer;
 	m_pSocketServer = 0;
 
-	m_pSocket = new CSocket(this, 0);
+	wxSocketClient* pSocketClient = new wxSocketClient(wxSOCKET_NOWAIT);
 
-	int res = m_pSocket->Connect(host, port);
-	if (res && res != EINPROGRESS)
+	pSocketClient->SetEventHandler(*this);
+	pSocketClient->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_OUTPUT_FLAG | wxSOCKET_CONNECTION_FLAG | wxSOCKET_LOST_FLAG);
+	pSocketClient->Notify(true);
+
+	wxIPV4address addr;
+	addr.Hostname(host);
+	addr.Service(port);
+
+	bool res = pSocketClient->Connect(addr, false);
+
+	if (!res && pSocketClient->LastError() != wxSOCKET_WOULDBLOCK)
 	{
-		delete m_pSocket;
-		m_pSocket = 0;
+		delete pSocketClient;
 		return false;
 	}
 
-	SetSocketBufferSizes(m_pSocket);
+	SetSocketBufferSizes(pSocketClient);
 
-	if (!res)
+	m_pSocket = pSocketClient;
+
+	if (res)
 	{
 		if (!InitBackend())
 			return false;
@@ -545,7 +483,7 @@ void CTransferSocket::SetActive()
 	}
 
 	m_bActive = true;
-	if (m_pSocket && m_pSocket->GetState() == CSocket::connected)
+	if (m_pSocket && m_pSocket->IsConnected())
 		TriggerPostponedEvents();
 }
 
@@ -577,13 +515,13 @@ void CTransferSocket::TransferEnd(enum TransferEndReason reason)
 	m_pEngine->SendEvent(engineTransferEnd);
 }
 
-CSocket* CTransferSocket::CreateSocketServer(int port)
+wxSocketServer* CTransferSocket::CreateSocketServer(const wxIPV4address& addr)
 {
-	CSocket* pServer = new CSocket(this, CBackend::GetNextId());
-	int res = pServer->Listen(m_pControlSocket->GetAddressFamily(), port);
-	if (res)
+	wxSocketServer* pServer = new wxSocketServer(addr, wxSOCKET_NOWAIT | wxSOCKET_REUSEADDR);
+	if (!pServer->Ok())
 	{
 		delete pServer;
+		pServer = 0;
 		return 0;
 	}
 
@@ -592,7 +530,7 @@ CSocket* CTransferSocket::CreateSocketServer(int port)
 	return pServer;
 }
 
-CSocket* CTransferSocket::CreateSocketServer()
+wxSocketServer* CTransferSocket::CreateSocketServer()
 {
 	wxIPV4address addr, controladdr;
 	addr.AnyAddress();
@@ -600,8 +538,10 @@ CSocket* CTransferSocket::CreateSocketServer()
 	if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_LIMITPORTS))
 	{
 		// Ask the systen for a port
-		CSocket* pServer = CreateSocketServer(0);
-		return pServer;
+		addr.Service(0);
+		wxSocketServer* pServer = CreateSocketServer(addr);
+		if (pServer)
+			return pServer;
 	}
 
 	// Try out all ports in the port range.
@@ -627,12 +567,13 @@ CSocket* CTransferSocket::CreateSocketServer()
 		start = rand() * (high - low) / (RAND_MAX < INT_MAX ? RAND_MAX + 1 : RAND_MAX) + low;
 	}
 
-	CSocket* pServer = 0;
+	wxSocketServer* pServer = 0;
 
 	int count = high - low + 1;
 	while (count--)
 	{
-		pServer = CreateSocketServer(start++);
+		addr.Service(start++);
+		pServer = CreateSocketServer(addr);
 		if (pServer)
 			break;
 	}
@@ -747,12 +688,10 @@ bool CTransferSocket::InitTls(const CTlsSocket* pPrimaryTlsSocket)
 		return false;
 	}
 
-	int res = m_pTlsSocket->Handshake(pPrimaryTlsSocket);
-	if (res && res != FZ_REPLY_WOULDBLOCK)
+	if (!m_pTlsSocket->Handshake(pPrimaryTlsSocket))
 	{
 		delete m_pTlsSocket;
 		m_pTlsSocket = 0;
-		return false;
 	}
 
 	m_pBackend = m_pTlsSocket;
@@ -794,14 +733,13 @@ bool CTransferSocket::InitBackend()
 	return true;
 }
 
-void CTransferSocket::SetSocketBufferSizes(CSocket* pSocket)
+void CTransferSocket::SetSocketBufferSizes(wxSocketBase* pSocket)
 {
 	wxCHECK_RET(pSocket, _("SetSocketBufferSize called without socket"));
-
-	/*XXX
+	
 	int value = m_pEngine->GetOptions()->GetOptionVal(OPTION_SOCKET_BUFFERSIZE_SEND);
 	pSocket->SetOption(SOL_SOCKET, SO_SNDBUF, &value, sizeof(value));
 
 	value = m_pEngine->GetOptions()->GetOptionVal(OPTION_SOCKET_BUFFERSIZE_RECV);
-	pSocket->SetOption(SOL_SOCKET, SO_RCVBUF, &value, sizeof(value));*/
+	pSocket->SetOption(SOL_SOCKET, SO_RCVBUF, &value, sizeof(value));
 }

@@ -27,8 +27,7 @@ static const wxString typeNames[SERVERTYPE_MAX] = {
 	_T("VxWorks"),
 	_T("z/VM"),
 	_T("HP NonStop"),
-	wxTRANSLATE("DOS-like with virtual paths"),
-	_T("Cygwin")
+	wxTRANSLATE("DOS-like with virtual paths")
 };
 
 CServer::CServer()
@@ -126,29 +125,7 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 		host = host.Left(pos);
 	}
 
-	if (host[0] == '[')
-	{
-		// Probably IPv6 address
-		pos = host.Find(']');
-		if (pos == -1)
-		{
-			error = _("Host starts with '[' but no closing bracket found.");
-			return false;
-		}
-		if (host[pos + 1])
-		{
-			if (host[pos + 1] != ':')
-			{
-				error = _("Invalid host, after closing bracket only colon and port may follow.");
-				return false;
-			}
-			pos++;
-		}
-		else
-			pos = -1;
-	}
-	else
-		pos = host.Find(':');
+	pos = host.Find(':');
 	if (pos != -1)
 	{
 		if (!pos)

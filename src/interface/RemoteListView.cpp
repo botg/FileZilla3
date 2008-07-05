@@ -1997,16 +1997,7 @@ void CRemoteListView::RepositionInfoText()
 	rect.height = size.y;
 
 	m_pInfoText->SetSize(rect);
-#ifdef __WXMSW__
-	if (GetLayoutDirection() != wxLayout_RightToLeft)
-	{
-		m_pInfoText->Refresh(true);
-		m_pInfoText->Update();
-	}
-	else
-#endif
-		m_pInfoText->Refresh(false);
-
+	m_pInfoText->Refresh(false);
 }
 
 void CRemoteListView::OnStateChange(enum t_statechange_notifications notification, const wxString& data)
@@ -2046,11 +2037,6 @@ void CRemoteListView::SetInfoText()
 	if (!m_pInfoText)
 	{
 		m_pInfoText = new CInfoText(this, text);
-#ifdef __WXMSW__
-		if (GetLayoutDirection() != wxLayout_RightToLeft)
-			m_pInfoText->SetDoubleBuffered(true);
-#endif
-
 		RepositionInfoText();
 		return;
 	}

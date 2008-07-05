@@ -21,9 +21,6 @@ wxStatusBarEx::wxStatusBarEx(wxTopLevelWindow* pParent)
 
 #ifdef __WXMSW__
 	m_parentWasMaximized = false;
-
-	if (GetLayoutDirection() != wxLayout_RightToLeft)
-		SetDoubleBuffered(true);
 #endif
 }
 
@@ -186,11 +183,6 @@ void wxStatusBarEx::OnSize(wxSizeEvent& event)
 
 	for (std::list<struct t_statbar_child>::iterator iter = m_children.begin(); iter != m_children.end(); iter++)
 		PositionChild(*iter);
-
-#ifdef __WXMSW__
-	if (GetLayoutDirection() != wxLayout_RightToLeft)
-		Update();
-#endif
 }
 
 class CEncryptionIndicator : public wxStaticBitmap
@@ -357,8 +349,8 @@ void CStatusBar::MeasureQueueSizeWidth()
 	dc.SetFont(GetFont());
 
 	wxSize s = dc.GetTextExtent(_("Queue: empty"));
-	s.IncTo(dc.GetTextExtent(wxString::Format(_("Queue: %s%d MiB"), _T(">"), 8888)));
-	s.IncTo(dc.GetTextExtent(wxString::Format(_("Queue: %s%d bytes"), _T(">"), 8888)));
+	s.IncTo(dc.GetTextExtent(wxString::Format(_("Queue: %s%d MiB"), ">", 8888)));
+	s.IncTo(dc.GetTextExtent(wxString::Format(_("Queue: %s%d bytes"), ">", 8888)));
 
 	SetFieldWidth(-2, s.x + 10);
 }

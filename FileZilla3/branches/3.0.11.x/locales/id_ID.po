@@ -1,0 +1,5781 @@
+# translation of id_ID.po to Bahasa Indonesia
+# Willy Sudiarto Raharjo <willysr@gmail.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: id_ID\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-06-15 15:54+0200\n"
+"PO-Revision-Date: 2008-06-14 18:36+0700\n"
+"Last-Translator: Willy Sudiarto Raharjo <willysr@gmail.com>\n"
+"Language-Team: Bahasa Indonesia <proyek-ooo@yahoogroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:52
+#: ../../locales/../src/interface/statuslinectrl.cpp:136
+msgid "%H:%M:%S elapsed"
+msgstr "%H:%M:%S terlewati"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:56
+#: ../../locales/../src/interface/statuslinectrl.cpp:161
+msgid "%H:%M:%S left"
+msgstr "%H:%M:%S lagi"
+
+#: resources.h:259
+#, no-c-format
+msgid ""
+"%a - Account (Lines containing this will be omitted if not using Account "
+"logontype)"
+msgstr ""
+"%a - Akun (Baris yang mengandung informasi ini akan diabaikan jika tidak "
+"menggunakan jenis login Account)"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:52
+#: ../../locales/../src/interface/filelist_statusbar.cpp:63
+#: ../../locales/../src/interface/filelist_statusbar.cpp:75
+#, c-format
+msgid "%d directory"
+msgid_plural "%d directories"
+msgstr[0] "%d direktori"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:51
+#: ../../locales/../src/interface/filelist_statusbar.cpp:74
+#, c-format
+msgid "%d file"
+msgid_plural "%d files"
+msgstr[0] "%d berkas"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:70
+#, c-format
+msgid "%d file. Total size: %s"
+msgid_plural "%d files. Total size: %s"
+msgstr[0] "%d berkas. Ukuran total: %s"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:68
+#, c-format
+msgid "%d file. Total size: At least %s"
+msgid_plural "%d files. Total size: At least %s"
+msgstr[0] "%d berkas. Ukuran total: Paling tidak %s"
+
+#: ../../locales/../src/interface/QueueView.cpp:2235
+#, c-format
+msgid "%d files added to queue"
+msgstr "%d berkas telah dimasukkan ke antrian"
+
+#: resources.h:256
+msgid "%h - Host"
+msgstr "%h - Host"
+
+#: resources.h:258
+#, no-c-format
+msgid "%p - Password"
+msgstr "%p - Kata sandi"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:52
+#, c-format
+msgid "%s - Certificate expired!"
+msgstr "%s - Sertifikat kadaluarsa!"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:36
+#, c-format
+msgid "%s - Not yet valid!"
+msgstr "%s - Belum juga valid!"
+
+#: resources.h:260
+#, no-c-format
+msgid "%s - Proxy user"
+msgstr "%s - Pengguna proxy"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:80
+#, c-format
+msgid "%s and %s. Total size: %s"
+msgstr "%s dan %s. Ukuran total: %s"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:78
+#, c-format
+msgid "%s and %s. Total size: At least %s"
+msgstr "%s dan %s. Ukuran total: Paling tidak %s"
+
+#: ../../locales/../src/interface/LocalListView.cpp:477
+#: ../../locales/../src/interface/LocalListView.cpp:494
+#, c-format
+msgid "%s byte"
+msgid_plural "%s bytes"
+msgstr[0] "%s byte"
+
+#: ../../locales/../src/interface/updatewizard.cpp:693
+#, c-format
+msgid "%s bytes"
+msgstr "%s byte"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:153
+#: ../../locales/../src/interface/updatewizard.cpp:677
+#, c-format
+msgid "%s bytes (%d B/s)"
+msgstr "%s bytes (%d B/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:151
+#: ../../locales/../src/interface/updatewizard.cpp:675
+#, c-format
+msgid "%s bytes (%d.%d KB/s)"
+msgstr "%s bytes (%d.%d KB/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:149
+#: ../../locales/../src/interface/updatewizard.cpp:673
+#, c-format
+msgid "%s bytes (%d.%d MB/s)"
+msgstr "%s bytes (%d.%d MB/s)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:171
+#, c-format
+msgid "%s bytes (? B/s)"
+msgstr "%s bytes (? B/s)"
+
+#: ../../locales/../src/interface/FileZilla.cpp:738
+#, c-format
+msgid ""
+"%s could not be found. Without this component of FileZilla, SFTP will not "
+"work.\n"
+"\n"
+"Please download FileZilla again. If this problem persists, please submit a "
+"bug report."
+msgstr ""
+"%s tidak bisa ditemukan. Tanpa komponen FileZilla ini, SFTP tidak akan "
+"bekerja.\n"
+"\n"
+"Harap mendownload FileZilla kembali. Jika hal ini masih tetap ada, harap "
+"kirimkan laporan kesalahan."
+
+#: ../../locales/../src/interface/FileZilla.cpp:832
+#, c-format
+msgid ""
+"%s could not be found. Without this component of FileZilla, SFTP will not "
+"work.\n"
+"\n"
+"Possible solutions:\n"
+"- Make sure %s is in a directory listed in your PATH environment variable.\n"
+"- Set the full path to %s in the FZ_FZSFTP environment variable."
+msgstr ""
+"%s tidak ditemukan. Tanpa komponen FileZilla ini, SFTP tidak akan bekerja.\n"
+"\n"
+"Solusi yang mungkin:\n"
+"- Pastikan %s berada dalam direktori yang terdaftar pada variabel lingkungan "
+"PATH Anda.\n"
+"- Tentukan path lengkap pada %s pada variabel lingkungan FZ_FZSFTP."
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:69
+#, c-format
+msgid "%s with %d bits"
+msgstr "%s dengan %d bit"
+
+#: resources.h:257
+#, no-c-format
+msgid "%u - Username"
+msgstr "%u - Nama pengguna"
+
+#: resources.h:261
+#, no-c-format
+msgid "%w - Proxy password"
+msgstr "%w - Kata sandi proxy"
+
+#: resources.h:557
+msgid "&About..."
+msgstr "&Tentang..."
+
+#: resources.h:109
+msgid "&Account:"
+msgstr "&Akun:"
+
+#: resources.h:123 resources.h:473 resources.h:653
+msgid "&Active"
+msgstr "&Aktif"
+
+#: resources.h:561 resources.h:575
+msgid "&Add files to queue"
+msgstr "&Tambahkan berkas ke antrian"
+
+#: resources.h:482
+msgid "&Add keyfile..."
+msgstr "&Tambah berkas kunci..."
+
+#: resources.h:620 resources.h:636
+msgid "&Add to queue"
+msgstr "&Tambahkan ke antrian"
+
+#: resources.h:22
+msgid "&Always trust certificate in future sessions."
+msgstr "&Selalu percaya sertifikat pada sesi di masa mendatang."
+
+#: resources.h:311
+msgid "&Always trust this host, add this key to the cache"
+msgstr "&Selalu percaya pada host ini, tambahkan kunci ini pada cache"
+
+#: resources.h:241
+msgid "&Always use default editor"
+msgstr "&Selalu gunakan editor default ini"
+
+#: resources.h:85
+msgid "&Always use this action"
+msgstr "&Selalu gunakan aksi ini"
+
+#: resources.h:396 resources.h:415
+msgid "&Ask for action"
+msgstr "&Tanya aksi"
+
+#: resources.h:366
+msgid "&Ask your operating system for the external IP address"
+msgstr "&Tanya sistem operasi Anda untuk alamat IP eksternal"
+
+#: resources.h:153 resources.h:541
+msgid "&Auto"
+msgstr "&Otomatis"
+
+#: resources.h:129
+msgid "&Autodetect"
+msgstr "&Deteksi otomatis"
+
+#: resources.h:617
+msgid "&Automatically remove successful transfers"
+msgstr "&Hapus transfer yang berhasil secara otomatis"
+
+#: resources.h:155 resources.h:543
+msgid "&Binary"
+msgstr "&Biner"
+
+#: resources.h:221
+msgid "&Binary prefixes using SI symbols. (e.g. 1 KB = 1024 bytes)"
+msgstr "&Awalan biner menggunakan simbol SI. (cth. 1 KB = 1024 byte)"
+
+#: resources.h:115 resources.h:238
+msgid "&Browse..."
+msgstr "&Jelajah..."
+
+#: resources.h:65
+msgid "&Burst tolerance:"
+msgstr "&Toleransi burst:"
+
+#: resources.h:147 resources.h:151 resources.h:268 resources.h:325
+msgid "&Cancel"
+msgstr "&Batal"
+
+#: resources.h:377
+msgid "&Check for beta versions of FileZilla"
+msgstr "&Periksa versi beta FileZilla"
+
+#: resources.h:524
+msgid "&Clear private data..."
+msgstr "&Hapus data privat..."
+
+#: resources.h:597
+msgid "&Close FileZilla"
+msgstr "&Tutup FileZilla"
+
+#: resources.h:135
+msgid "&Connect"
+msgstr "&Menghubungkan"
+
+#: resources.h:346
+msgid "&Copy"
+msgstr "&Salin"
+
+#: resources.h:514
+msgid "&Copy current connection to Site Manager..."
+msgstr "&Salin koneksi saat ini ke Manajemen Situs..."
+
+#: resources.h:606
+msgid "&Copy to clipboard"
+msgstr "&Salin ke clipboard"
+
+#: resources.h:609
+msgid "&Crash"
+msgstr "&Rusak"
+
+#: resources.h:567 resources.h:578 resources.h:622 resources.h:638
+msgid "&Create directory"
+msgstr "&Buat direktori"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:588
+msgid "&Debug"
+msgstr "&Debug"
+
+#: resources.h:228
+msgid "&Debug information in message log:"
+msgstr "&Informasi debug pada pesan log:"
+
+#: resources.h:237
+msgid "&Default editor:"
+msgstr "Editor &default:"
+
+#: resources.h:539 resources.h:589
+msgid "&Default file exists action..."
+msgstr "&Aksi default jika berkas sudah ada..."
+
+#: resources.h:185
+msgid "&Delay between failed login attempts:"
+msgstr "&Keterlambatan diantara percobaan login yang gagal:"
+
+#: resources.h:95 resources.h:328 resources.h:344 resources.h:569
+#: resources.h:640
+msgid "&Delete"
+msgstr "&Hapus"
+
+#: resources.h:528
+msgid "&Directory comparison"
+msgstr "Perbandingan &direktori"
+
+#: resources.h:548
+msgid "&Disconnect"
+msgstr "&Putuskan hubungan"
+
+#: resources.h:598
+msgid "&Disconnect from server"
+msgstr "&Terputus dari server"
+
+#: resources.h:219
+msgid "&Display size in bytes"
+msgstr "&Tampilkan ukuran dalam byte"
+
+#: ../../locales/../src/interface/conditionaldialog.cpp:25
+msgid "&Don't show this dialog again."
+msgstr "&Jangan tampilkan dialog ini lagi."
+
+#: resources.h:371
+msgid "&Don't use external IP address on local connections."
+msgstr "&Jangan gunakan alamat IP eksternal pada koneksi lokal."
+
+#: resources.h:573 resources.h:618
+msgid "&Download"
+msgstr "&Download"
+
+#: resources.h:520 resources.h:565
+msgid "&Edit"
+msgstr "&Edit"
+
+#: resources.h:330
+msgid "&Edit filters..."
+msgstr "Filter &edit..."
+
+#: resources.h:529 resources.h:631
+msgid "&Enable"
+msgstr "&Aktifkan"
+
+#: resources.h:199
+msgid "&Enable automatic update check"
+msgstr "&Aktifkan pemeriksaan update otomatis"
+
+#: resources.h:133
+msgid "&Encoding:"
+msgstr "&Enkoding:"
+
+#: resources.h:605
+msgid "&Enter custom command..."
+msgstr "&Masukkan perintah sendiri..."
+
+#: resources.h:274
+msgid "&Execute"
+msgstr "&Eksekusi"
+
+#: resources.h:442
+msgid "&Export Site Manager entries"
+msgstr "&Ekspor daftar manajemen situs"
+
+#: resources.h:515
+msgid "&Export..."
+msgstr "&Ekspor..."
+
+#: resources.h:48
+msgid "&Fall back to active mode"
+msgstr "&Kembali ke mode aktif"
+
+#: resources.h:511
+msgid "&File"
+msgstr "&Berkas"
+
+#: resources.h:584 resources.h:628
+msgid "&File Attributes..."
+msgstr "&Atribut berkas..."
+
+#: resources.h:327
+msgid "&Filter sets:"
+msgstr "&Sekumpulan filter:"
+
+#: resources.h:342
+msgid "&Filters:"
+msgstr "&Filters"
+
+#: ../../locales/../src/interface/edithandler.cpp:641
+msgid "&Finish editing"
+msgstr "&Selesaikan pengeditan"
+
+#: resources.h:460
+msgid "&Finish editing and delete local file"
+msgstr "&Selesaikan pengeditan dan hapus berkas lokal"
+
+#: resources.h:369
+msgid "&Get external IP address from the following URL:"
+msgstr "&Dapatkan alamat IP eksternal dari URL berikut:"
+
+#: resources.h:555
+msgid "&Getting help..."
+msgstr "&Mendapatkan bantuan..."
+
+#: resources.h:552
+msgid "&Help"
+msgstr "&Bantuan"
+
+#: resources.h:591
+msgid "&Highest"
+msgstr "&Tertinggi"
+
+#: resources.h:364
+msgid "&Highest available port:"
+msgstr "&Port tertinggi yand ada:"
+
+#: resources.h:98 resources.h:691
+msgid "&Host:"
+msgstr "&Mesin:"
+
+#: resources.h:220
+msgid "&IEC binary prefixes (e.g. 1 KiB = 1024 bytes)"
+msgstr "&Prefix biner IEC (cth. 1 KiB = 1024 byte)"
+
+#: resources.h:208
+msgid "&ISO 8601 (example: 2007-09-15)"
+msgstr "ISO 8601 (contoh: 2007-09-15)"
+
+#: resources.h:516
+msgid "&Import..."
+msgstr "&Import..."
+
+#: resources.h:243
+msgid "&Inherit system's filetype associations"
+msgstr "&Turunkan asosiasi jenis berkas sistem"
+
+#: resources.h:165
+msgid "&Layout of file and directory panes:"
+msgstr "&Layout dari berkas dan direktori:"
+
+#: resources.h:361
+msgid "&Limit local ports used by FileZilla"
+msgstr "&Batasi port lokal yang digunakan FileZilla"
+
+#: resources.h:125
+msgid "&Limit number of simultaneous connections"
+msgstr "&Batasi jumlah koneksi simultan"
+
+#: resources.h:534
+msgid "&Local directory tree"
+msgstr "Pohon direktori &lokal"
+
+#: resources.h:101
+msgid "&Logontype:"
+msgstr "&TipeLogon:"
+
+#: resources.h:594
+msgid "&Low"
+msgstr "&Rendah"
+
+#: resources.h:126
+msgid "&Maximum number of connections:"
+msgstr "&Jumlah maksimum koneksi:"
+
+#: resources.h:183
+msgid "&Maximum number of retries:"
+msgstr "&Jumlah maksimum percobaan:"
+
+#: resources.h:533
+msgid "&Message log"
+msgstr "Log &pesan"
+
+#: resources.h:523
+msgid "&Network configuration wizard..."
+msgstr "&Panduan konfigurasi jaringan..."
+
+#: resources.h:343
+msgid "&New"
+msgstr "&Baru"
+
+#: resources.h:92
+msgid "&New Site"
+msgstr "&Situs Baru"
+
+#: ../../locales/../src/interface/updatewizard.cpp:828
+msgid "&New version available!"
+msgstr "&Versi baru tersedia!"
+
+#: resources.h:462
+msgid "&No"
+msgstr "&Tidak"
+
+#: resources.h:250
+msgid "&None"
+msgstr "%Tidak ada"
+
+#: resources.h:593
+msgid "&Normal"
+msgstr "&Normal"
+
+#: resources.h:200
+msgid "&Number of days between update checks:"
+msgstr "&Jumlah hari diantara pemeriksaan update:"
+
+#: resources.h:283
+msgid "&Numeric value:"
+msgstr "&Nilai numerik:"
+
+#: resources.h:136 resources.h:146
+msgid "&OK"
+msgstr "&OK"
+
+#: resources.h:253
+msgid "&OPEN"
+msgstr "%BUKA"
+
+#: resources.h:563
+msgid "&Open"
+msgstr "&Buka"
+
+#: resources.h:80 resources.h:397 resources.h:416
+msgid "&Overwrite"
+msgstr "&Timpa"
+
+#: resources.h:124
+msgid "&Passive"
+msgstr "&Pasif"
+
+#: resources.h:144
+msgid "&Password:"
+msgstr "&KataKunci:"
+
+#: resources.h:601
+msgid "&Play sound"
+msgstr "&Mainkan suara"
+
+#: resources.h:99 resources.h:695
+msgid "&Port:"
+msgstr "&Port:"
+
+#: resources.h:544
+msgid "&Preserve timestamps of transferred files"
+msgstr "&Pertahankan waktu pada berkas yang ditransfer"
+
+#: resources.h:451
+msgid "&Queue"
+msgstr "&Antrian"
+
+#: resources.h:697
+msgid "&Quickconnect"
+msgstr "&KoneksiCepat"
+
+#: resources.h:272
+msgid "&Read"
+msgstr "&Baca"
+
+#: resources.h:547
+msgid "&Reconnect"
+msgstr "&Hubungkan ulang"
+
+#: resources.h:526
+msgid "&Refresh"
+msgstr "&Perbarui"
+
+#: resources.h:145
+msgid "&Remember password for this session"
+msgstr "&Ingat Kata kunci untuk sesi ini"
+
+#: resources.h:159
+msgid "&Remove"
+msgstr "&Hapus"
+
+#: resources.h:483
+msgid "&Remove key"
+msgstr "&Hapus kunci"
+
+#: resources.h:588
+msgid "&Remove selected"
+msgstr "&Hapus yang dipilih"
+
+#: resources.h:94 resources.h:345 resources.h:571 resources.h:582
+#: resources.h:626 resources.h:642
+msgid "&Rename"
+msgstr "&Ganti nama"
+
+#: resources.h:556
+msgid "&Report a bug..."
+msgstr "&Laporkan kesalahan..."
+
+#: resources.h:690
+msgid "&Restart Wizard"
+msgstr "&Ulang kembali Panduan"
+
+#: resources.h:82 resources.h:399 resources.h:418
+msgid "&Resume"
+msgstr "&Teruskan"
+
+#: resources.h:599
+msgid "&Run command..."
+msgstr "&Jalankan perintah..."
+
+#: resources.h:181
+msgid "&Run configuration wizard now..."
+msgstr "&Jalankan panduan konfigurasi sekarang..."
+
+#: resources.h:202
+msgid "&Run update check now..."
+msgstr "&Jalankan pemeriksaan update sekarang..."
+
+#: resources.h:252
+msgid "&SITE"
+msgstr "%SITUS"
+
+#: resources.h:329
+msgid "&Save as..."
+msgstr "&Simpan sebagai..."
+
+#: resources.h:196
+msgid "&Select language:"
+msgstr "&Pilih bahasa:"
+
+#: resources.h:506
+msgid "&Select the columns that should be displayed:"
+msgstr "&Pilih kolom yang harus ditampilkan:"
+
+#: resources.h:545
+msgid "&Server"
+msgstr "&Server"
+
+#: resources.h:450
+msgid "&Settings"
+msgstr "&Pengaturan"
+
+#: resources.h:521
+msgid "&Settings..."
+msgstr "&Pengaturan..."
+
+#: resources.h:227
+msgid "&Show debug menu"
+msgstr "&Tampilkan menu debug"
+
+#: resources.h:600
+msgid "&Show message"
+msgstr "&Tampilkan pesan"
+
+#: resources.h:225
+msgid "&Show timestamps in message log"
+msgstr "&Tampilkan timestamp pada pesan log"
+
+#: resources.h:512
+msgid "&Site Manager..."
+msgstr "&Manajemen Situs..."
+
+#: resources.h:84
+msgid "&Skip"
+msgstr "&Lewati"
+
+#: resources.h:170
+msgid "&Swap local and remote panes"
+msgstr "&Tukar jendela lokal dan remote"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:228
+msgid "&Test"
+msgstr "&Tes"
+
+#: resources.h:189
+msgid "&Theme:"
+msgstr "&Tema:"
+
+#: resources.h:537
+msgid "&Transfer"
+msgstr "&Transfer"
+
+#: resources.h:121
+msgid "&Transfer mode:"
+msgstr "Mode &transfer"
+
+#: resources.h:536
+msgid "&Transfer queue"
+msgstr "Antrian &transfer"
+
+#: resources.h:162
+msgid "&Treat dotfiles as ASCII files"
+msgstr "&Anggap berkas bertitik sebagai berkas ASCII"
+
+#: resources.h:466
+msgid "&Unedit"
+msgstr "&Batalkan Edit"
+
+#: resources.h:323
+msgid "&Update cached key for this host"
+msgstr "&Update kunci yang di-cache untuk mesin ini"
+
+#: resources.h:559 resources.h:634
+msgid "&Upload"
+msgstr "&Upload"
+
+#: resources.h:367
+msgid "&Use the following IP address:"
+msgstr "&Gunakan alamat IP berikut:"
+
+#: resources.h:47
+msgid "&Use the server's external IP address instead"
+msgstr "&Gunakan alamat IP eksternal server"
+
+#: resources.h:223
+msgid "&Use thousands separator"
+msgstr "&Gunakan pemisah ribuan"
+
+#: resources.h:107
+msgid "&User:"
+msgstr "&Pengguna:"
+
+#: resources.h:693
+msgid "&Username:"
+msgstr "&Nama pengguna:"
+
+#: ../../locales/../src/interface/updatewizard.cpp:824
+#, c-format
+msgid "&Version %s"
+msgstr "&Versi %s"
+
+#: resources.h:525
+msgid "&View"
+msgstr "&Lihat"
+
+#: resources.h:577
+msgid "&View / Edit"
+msgstr "&Lihat / Edit"
+
+#: resources.h:273
+msgid "&Write"
+msgstr "&Tulis"
+
+#: resources.h:461
+msgid "&Yes"
+msgstr "&Ya"
+
+#: ../../locales/../src/interface/state.cpp:107
+#, c-format
+msgid "'%s' does not exist or cannot be accessed."
+msgstr "'%s' tidak ada atau tidak bisa diakses."
+
+#: ../../locales/../src/interface/sitemanager.cpp:829
+msgid "'Account' logontype not supported by selected protocol"
+msgstr "Jenis login 'Akun' tidak didukung oleh protokol yang dipilih"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:666
+msgid ""
+"'quote' is usually a local command used by commandline clients to send the "
+"arguments following 'quote' to the server. You might want to enter the raw "
+"command without the leading 'quote'."
+msgstr ""
+"'quote' biasanya perintah lokal yang digunakan oleh klien untuk mengirimkan "
+"argumen mengikuti 'quote' pada server. Anda bisa memasukkan perintah tanpa "
+"awalan 'quote'."
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:85
+#, c-format
+msgid "(%d object filtered)"
+msgid_plural "(%d objects filtered)"
+msgstr[0] "(%d objek terfilter)"
+
+#: resources.h:53 resources.h:55
+msgid "(0 for no limit)"
+msgstr "(0 untuk tanpa batas)"
+
+#: resources.h:184
+msgid "(0-99)"
+msgstr "(0-99)"
+
+#: resources.h:186
+msgid "(0-999 seconds)"
+msgstr "(0-999 detik)"
+
+#: resources.h:51
+msgid "(1-10)"
+msgstr "(1-10)"
+
+#: resources.h:58
+msgid "(5-9999, 0 to disable)"
+msgstr "(5-9999, 0 untuk menonaktifkan)"
+
+#: resources.h:201
+msgid "(At least 7 days)"
+msgstr "(Paling tidak 7 hari)"
+
+#: resources.h:216
+msgid "(example: %H:%M)"
+msgstr "(contoh: %H:%M)"
+
+#: resources.h:210
+msgid "(example: %Y-%m-%d)"
+msgstr "(contoh: %Y-%m-%d)"
+
+#: resources.h:62 resources.h:64
+msgid "(in KB/s)"
+msgstr "(dalam KB/s)"
+
+#: ../../locales/../src/interface/updatewizard.cpp:685
+msgid ", %H:%M:%S left"
+msgstr ", %H:%M:%S lagi"
+
+#: ../../locales/../src/interface/updatewizard.cpp:689
+msgid ", --:--:-- left"
+msgstr ", --:--:-- Lagi"
+
+#: resources.h:678
+msgid "-"
+msgstr "-"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:165
+#: ../../locales/../src/interface/statuslinectrl.cpp:170
+msgid "--:--:-- left"
+msgstr "--:--:-- Lagi"
+
+#: ../../locales/../src/interface/cmdline.cpp:69
+msgid "-c cannot be used together with an FTP URL."
+msgstr "-c tidak bisa digunakan bersama dengan FTP URL."
+
+#: ../../locales/../src/interface/cmdline.cpp:57
+msgid "-s and -c cannot be present at the same time."
+msgstr "-s dan -c tidak bisa ada pada waktu yang bersamaan."
+
+#: ../../locales/../src/interface/cmdline.cpp:63
+msgid "-s cannot be used together with an FTP URL."
+msgstr "-s tidak bisa digunakan bersama dengan FTP URL"
+
+#: resources.h:229
+msgid "0 - None"
+msgstr "0 - Tidak ada"
+
+#: resources.h:230
+msgid "1 - Warning"
+msgstr "1 - Peringatan"
+
+#: resources.h:231
+msgid "2 - Info"
+msgstr "2 - Informasi"
+
+#: resources.h:232
+msgid "3 - Verbose"
+msgstr "3 - Detail"
+
+#: resources.h:233
+msgid "4 - Debug"
+msgstr "4 - Debug"
+
+#: ../../locales/../src/engine/directorylistingparser.cpp:1591
+msgid ";1"
+msgstr ";1"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:122
+msgid "A default editor needs to be set."
+msgstr "Editor default harus ditentukan."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:147
+#: ../../locales/../src/interface/RemoteTreeView.cpp:106
+msgid "A directory cannot be dragged into one if its subdirectories."
+msgstr "Sebuah direktori tidak bisa digeser pada salah satu sub direktorinya."
+
+#: resources.h:650
+msgid ""
+"A few servers don't allow passive mode or are misconfigured. In such cases "
+"you would have to use active mode. In active mode, FileZilla opens a port "
+"and asks the server to connect to it."
+msgstr ""
+"Beberapa server tidak mengijinkan mode pasif atau salah konfigurasi. Pada "
+"kasus demikian, Anda harus menggunakan mode aktif. Pada mode aktif, "
+"FileZilla membuka sebuah port dan meminta server untuk terhubung ke port "
+"tersebut."
+
+#: resources.h:456
+msgid "A file previously opened has been changed:"
+msgstr "Sebuah berkas yang sebelumnya dibuka sudah berubah:"
+
+#: ../../locales/../src/interface/LocalListView.cpp:2043
+#: ../../locales/../src/interface/RemoteListView.cpp:2371
+msgid ""
+"A file with that name is already being edited. Discard old file and download "
+"the new file?"
+msgstr ""
+"Berkas dengan nama tersebut sudah diedit sebelumnya. Hapus berkas lama dan "
+"download berkas baru?"
+
+#: ../../locales/../src/interface/LocalListView.cpp:2039
+#: ../../locales/../src/interface/RemoteListView.cpp:2360
+msgid "A file with that name is already being transferred."
+msgstr "Berkas dengan nama tersebut sudah ditransfer."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2365
+msgid ""
+"A file with that name is still being edited. Please close it and try again."
+msgstr ""
+"Berkas dengan nama tersebut masih diedit. Harap ditutup dan coba kembali."
+
+#: ../../locales/../src/interface/FileZilla.cpp:718
+msgid ""
+"A local filename could not be decoded.\n"
+"Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
+"correctly.\n"
+"Unless you fix this problem, files might be missing in the file listings.\n"
+"No further warning will be displayed this session."
+msgstr ""
+"Nama berkas lokal tidak bisa diterjemahkan.\n"
+"Pastikan variabel lingkungan LC_CTYPE (atau LC_ALL) sudah ditentukan dengan "
+"benar.\n"
+"Jika Anda tidak memperbaiki masalah ini, berkas-berkas mungkin hilang pada "
+"daftar.\n"
+"Tidak ada pesan lain yang akan ditampilkan pada sesi ini."
+
+#: resources.h:379
+msgid "A newer version of FileZilla is available:"
+msgstr "Versi baru dari FileZilla sudah tersedia:"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:725
+msgid ""
+"A proper server always shows all files, but some broken servers hide files "
+"from the user. Use this option to force the server to show all files."
+msgstr ""
+"Server yang benar selalu menampilkan semua berkas, tetapi beberapa server "
+"yang salah menyembunyikan berkas dari pengguna. Gunakan opsi ini untuk "
+"memaksa server menampilkan semua berkas."
+
+#: resources.h:478
+msgid ""
+"A proper server does not require this. Contact the server administrator if "
+"you need this."
+msgstr ""
+"Server yang benar tidak membutuhkan ini. Kontak administrator server jika "
+"Anda memerlukannya."
+
+#: resources.h:154 resources.h:542
+msgid "A&SCII"
+msgstr "A&SCII"
+
+#: resources.h:158
+msgid "A&dd"
+msgstr "T&ambah"
+
+#: resources.h:429
+msgid "A&llow resume of ASCII files"
+msgstr "&Ijinkan melanjutkan berkas-berkas ASCII"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:106
+msgid "A&pply only to downloads"
+msgstr "G&unakan hanya untuk download"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:162
+msgid "A&pply only to uploads"
+msgstr "G&unakan hanya untuk upload"
+
+#: resources.h:286
+msgid "A&pply to all files and directories"
+msgstr "&Terapkan pada semua berkas dan direktori"
+
+#: resources.h:404 resources.h:422
+msgid "A&sk for action"
+msgstr "&Tanya aksi"
+
+#: resources.h:291
+msgid "About FileZilla"
+msgstr "Tentang FileZilla"
+
+#: resources.h:106 ../../locales/../src/interface/sitemanager.cpp:826
+#: ../../locales/../src/interface/sitemanager.cpp:876
+#: ../../locales/../src/interface/sitemanager.cpp:1070
+#: ../../locales/../src/interface/sitemanager.cpp:1071
+#: ../../locales/../src/interface/sitemanager.cpp:1109
+#: ../../locales/../src/interface/sitemanager.cpp:1332
+msgid "Account"
+msgstr "Akun"
+
+#: resources.h:596
+msgid "Action after queue &completion"
+msgstr "Aksi setelah antrian &selesai"
+
+#: resources.h:465
+msgid "Action on selected file:"
+msgstr "Aksi pada berkas yang terpilih:"
+
+#: resources.h:79
+msgid "Action:"
+msgstr "Aksi:"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:112
+msgid "Active mode"
+msgstr "Mode aktif"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:601
+msgid ""
+"Active mode FTP test failed. FileZilla does not know the correct external IP "
+"address."
+msgstr ""
+"Pengujian mode aktif FTP gagal. FileZilla tidak tahu alamat IP eksternal "
+"yang benar."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:588
+msgid ""
+"Active mode FTP test failed. FileZilla does not know the correct external IP "
+"address. In addition to that, your router has modified the sent address."
+msgstr ""
+"Pengujian mode aktif FTP gagal. FileZilla tidak tahu alamat IP eksternal "
+"yang benar. Sebagai tambahan, router Anda telah memodifikasi alamat "
+"pengiriman."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:576
+msgid ""
+"Active mode FTP test failed. FileZilla knows the correct external IP "
+"address, but your router or firewall has misleadingly modified the sent "
+"address."
+msgstr ""
+"Pengujian mode aktif FTP gagal. FileZilla tahu alamat IP eksternal yang "
+"benar, tetapi router atau firewall Anda telah memodifikasi alamat pengiriman."
+
+#: resources.h:372
+msgid "Active mode IP"
+msgstr "IP mode aktif"
+
+#: resources.h:352
+msgid "Add &more"
+msgstr "&Tambah lagi"
+
+#: resources.h:621 resources.h:637
+msgid "Add selected directory to the transfer queue"
+msgstr "Masukkan direktori yang dipilih pada antrian transfer"
+
+#: resources.h:562 resources.h:576
+msgid "Add selected files and folders to the transfer queue"
+msgstr "Masukkan berkas dan direktori yang dipilih pada antrian transfer"
+
+#: resources.h:117
+msgid "Adjust server timezone offset:"
+msgstr "Sesuaikan offset zone waktu server:"
+
+#: resources.h:111
+msgid "Advanced"
+msgstr "Tingkat lanjut"
+
+#: resources.h:376
+msgid "Advanced options:"
+msgstr "Opsi tingkat lanjut:"
+
+#: resources.h:488
+msgid "Algorithm:"
+msgstr "Algoritma:"
+
+#: resources.h:679
+msgid "All ports in the given range have to be between 1024 and 65535."
+msgstr "Semua port pada jarak yang diberikan harus diantara 1024 dan 65535."
+
+#: resources.h:474
+msgid "Allow &fall back to other transfer mode on failure"
+msgstr "Ijinkan &kembali pada mode transfer lain jika gagal"
+
+#: resources.h:654
+msgid "Allow fallback to other transfer mode on failure"
+msgstr "Ijinkan kembali pada mode transfer lain jika gagal"
+
+#: resources.h:484
+msgid ""
+"Alternatively you can use the Pageant tool from PuTTY to manage your keys, "
+"FileZilla does recognize Pageant."
+msgstr ""
+"Alternatif lain, Anda bisa menggunakan aplikasi Pageant dari PuTTY untuk "
+"mengelola kunci Anda, FileZilla bisa mengenali Pageant."
+
+#: resources.h:485
+msgid ""
+"Alternatively you can use your system's SSH agent. To do so, make sure the "
+"SSH&AUTH&SOCK environment variable is set."
+msgstr ""
+"Alternatif lain, Anda bisa menggunakan agent SSH sistem Anda. Untuk "
+"melakukannya, pastikan variabel lingkungan SSH&AUTH&SOCK sudah diset."
+
+#: ../../locales/../src/interface/updatewizard.cpp:868
+msgid ""
+"Alternatively, visit http://filezilla-project.org to download the most "
+"recent version."
+msgstr ""
+"Alternatif lain, kunjungi http://filezilla-project.org  untuk mendownload "
+"versi terbaru. "
+
+#: ../../locales/../src/interface/sitemanager.cpp:1843
+msgid ""
+"An item with the same name as the dragged item already exists at the target "
+"location."
+msgstr ""
+"Berkas dengan nama yang sama dengan berkas yang sedang di-geser sudah ada "
+"pada lokasi target."
+
+#: resources.h:102 ../../locales/../src/interface/sitemanager.cpp:867
+#: ../../locales/../src/interface/sitemanager.cpp:1069
+#: ../../locales/../src/interface/sitemanager.cpp:1265
+#: ../../locales/../src/interface/sitemanager.cpp:1335
+msgid "Anonymous"
+msgstr "Anonim"
+
+#: resources.h:350
+msgid "Any of the following"
+msgstr "Satu dari berikut"
+
+#: resources.h:288
+msgid "App&ly to directories only"
+msgstr "&Terapkan pada direktori saja"
+
+#: resources.h:340
+msgid "Apply"
+msgstr "Terapkan"
+
+#: resources.h:86
+msgid "Apply to &current queue only"
+msgstr "Terapkan pada &antrian saat ini saja"
+
+#: resources.h:287
+msgid "Apply to &files only"
+msgstr "Terapkan pada &berkas saja"
+
+#: ../../locales/../src/interface/filteredit.cpp:108
+#: ../../locales/../src/interface/updatewizard.cpp:237
+msgid "Archive"
+msgstr "Arsip"
+
+#: resources.h:104 ../../locales/../src/interface/sitemanager.cpp:1105
+#: ../../locales/../src/interface/sitemanager.cpp:1326
+msgid "Ask for password"
+msgstr "Tanya Kata kunci"
+
+#: resources.h:675
+msgid "Ask operating system for a port."
+msgstr "Tanya sistem operasi untuk sebuah port."
+
+#: resources.h:665
+msgid "Ask your operating system for the external IP address"
+msgstr "Tanya sistem operasi Anda untuk alamat IP eksternal"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:151
+msgid "Associated program not found:"
+msgstr "Program yang sesuai tidak ditemukan:"
+
+#: ../../locales/../src/interface/filteredit.cpp:698
+msgid "At least one filter condition is incomplete"
+msgstr "Paling tidak satu kondisi filter tidak lengkap"
+
+#: resources.h:684
+msgid "At this point, all required information has been gathered."
+msgstr "Pada titik ini, semua informasi yang diperlukan sudah didapatkan."
+
+#: ../../locales/../src/interface/filteredit.cpp:107
+msgid "Attribute"
+msgstr "Atribut"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:579
+msgid "Authentication failed."
+msgstr "Authentikasi gagal."
+
+#: resources.h:190
+msgid "Author:"
+msgstr "Pembuat:"
+
+#: resources.h:156
+msgid "Automatic file type classification"
+msgstr "Klasifikasi jenis berkas secara otomatis"
+
+#: resources.h:198
+msgid "Automatic update check"
+msgstr "Pemeriksaan update otomatis"
+
+#: resources.h:194
+msgid "Available sizes"
+msgstr "Ukuran yang tersedia"
+
+#: resources.h:113
+msgid "B&ypass proxy"
+msgstr "%Lewat proxy"
+
+#: ../../locales/../src/interface/edithandler.cpp:911
+#: ../../locales/../src/interface/edithandler.cpp:937
+msgid "Being edited"
+msgstr "Sedang diedit"
+
+#: resources.h:169
+msgid "Blackboard"
+msgstr "Blackboard"
+
+#: ../../locales/../src/interface/state.cpp:281
+msgid "Break current connection?"
+msgstr "Hentikan koneksi saat ini?"
+
+#: resources.h:299
+msgid "Build date:"
+msgstr "Tanggal pembuatan:"
+
+#: resources.h:296
+msgid "Build information"
+msgstr "Informasi pembuatan"
+
+#: resources.h:362
+msgid ""
+"By default uses any available local port to establish transfers in active "
+"mode. If you want to limit FileZilla to use only a small range of ports, "
+"please enter the port range below."
+msgstr ""
+"Secara default menggunakan sembarang port lokal yang tersedia untuk "
+"melakukan transfer pada mode aktif. Jika Anda hendak membatasi FileZilla "
+"untuk hanya menggunakan port tertentu, harap masukan batasan port dibawah "
+"ini."
+
+#: resources.h:546
+msgid "C&ancel current operation"
+msgstr "B&atalkan operasi saat ini"
+
+#: resources.h:378
+msgid "C&heck for nightly builds of FileZilla"
+msgstr "&Periksa untuk pembuatan harian dari FileZilla"
+
+#: resources.h:607
+msgid "C&lear all"
+msgstr "B&ersihkan semua"
+
+#: resources.h:209
+msgid "C&ustom"
+msgstr "&Kustomisasi"
+
+#: resources.h:244
+msgid "C&ustom filetype associations:"
+msgstr "Klasifikasi jenis berkas kustomisasi:"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1455
+msgid "CSftpControlSocket::ChangeDirSend()"
+msgstr "CSftpControlSocket::ChangeDirSend()"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1448
+msgid "CSftpControlSocket::ChangeDirSubcommandResult()"
+msgstr "CSftpControlSocket::ChangeDirSubcommandResult()"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1503
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1263
+msgid "Calculating timezone offset of server..."
+msgstr "Menkalkulasi offset zona waktu server..."
+
+#: ../../locales/../src/engine/transfersocket.cpp:622
+msgid "Can't read from file"
+msgstr "Tidak dapat membaca dari berkas"
+
+#: ../../locales/../src/engine/transfersocket.cpp:601
+#: ../../locales/../src/engine/transfersocket.cpp:674
+msgid "Can't write data to file."
+msgstr "Tidak dapat menulis data ke berkas"
+
+#: ../../locales/../src/engine/transfersocket.cpp:599
+#: ../../locales/../src/engine/transfersocket.cpp:672
+#, c-format
+msgid "Can't write data to file: %s"
+msgstr "Tidak dapat menulis data ke berkas: %s"
+
+#: resources.h:24 resources.h:89 resources.h:290 resources.h:313
+#: resources.h:339 resources.h:359 resources.h:412 resources.h:439
+#: resources.h:446 resources.h:454 resources.h:510
+msgid "Cancel"
+msgstr "Batal"
+
+#: resources.h:712
+msgid "Cancel current operation"
+msgstr "Batalkan operasi saat ini"
+
+#: resources.h:713
+msgid "Cancels the current operation"
+msgstr "Batalkan operasi saat ini"
+
+#: ../../locales/../src/interface/state.cpp:119
+#, c-format
+msgid "Cannot access '%s', no media inserted or drive not ready."
+msgstr ""
+"Tidak bisa mengakses '%s', tidak ada media yang dimasukkan atau drive tidak "
+"siap"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:644
+msgid "Cannot add server to Site Manager"
+msgstr "Tidak bisa menambahkan server pada Manajemen Situs"
+
+#: ../../locales/../src/interface/listingcomparison.cpp:74
+msgid ""
+"Cannot compare directories, different filters for local and remote "
+"directories are enabled"
+msgstr ""
+"Tidak dapat membandingkan direktori, filter yang berbeda untuk direktori "
+"lokal dan remote diaktifkan"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2443
+msgid "Cannot compare directories, not connected to a server."
+msgstr "Tidak dapat membandingkan direktori, tidak terhubung ke server."
+
+#: ../../locales/../src/interface/filteredit.cpp:471
+msgid "Cannot create new filter"
+msgstr "Tidak dapat membuat filter baru"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2333
+#: ../../locales/../src/interface/RemoteListView.cpp:2340
+msgid "Cannot edit file"
+msgstr "Tidak dapat mengedit berkas"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:342
+msgid ""
+"Cannot establish FTP connection to an SFTP server. Please select proper "
+"protocol."
+msgstr ""
+"Tidak bisa membuat koneksi FTP pada server SFTP. Harap pilih protokol yang "
+"benar."
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:30
+msgid "Cannot load Quickconnect bar from resource file"
+msgstr "Tidak dapat membuka papan Koneksi cepat dari berkas sumber"
+
+#: ../../locales/../src/interface/import.cpp:37
+msgid "Cannot load file, not a valid XML file."
+msgstr "Tidak bisa memuat berkas, bukan berkas XML yang valid."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:386
+msgid "Cannot load keyfile"
+msgstr "Tidak dapat memuat berkas kunci"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:571
+msgid "Cannot load main menu from resource file"
+msgstr "Tidak dapat membuka menu utama dari berkas sumber"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1043
+msgid "Cannot load toolbar from resource file"
+msgstr "Tidak dapat membuka toolbar dari berkas sumber"
+
+#: ../../locales/../src/interface/sitemanager.cpp:968
+msgid "Cannot rename entry"
+msgstr "Tidak dapat mengganti nama daftar"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1585
+msgid "Cannot rename file"
+msgstr "Tidak dapat mengganti nama berkas"
+
+#: ../../locales/../src/interface/filter.cpp:318
+msgid "Cannot save filterset"
+msgstr "Tidak dapat menyimpat kumpulan filter"
+
+#: ../../locales/../src/interface/filter.cpp:278
+msgid "Cannot select filter"
+msgstr "Tidak dapat memilih filter"
+
+#: ../../locales/../src/interface/edithandler.cpp:871
+msgid "Cannot show dialog"
+msgstr "Tidak bisa menampilkan dialog"
+
+#: ../../locales/../src/interface/LocalListView.cpp:2039
+#: ../../locales/../src/interface/RemoteListView.cpp:2360
+msgid "Cannot view / edit selected file"
+msgstr "Tidak bisa melihat / edit berkas yang dipilih"
+
+#: resources.h:433
+msgid "Categories"
+msgstr "Kategori"
+
+#: ../../locales/../src/interface/statusbar.cpp:416
+msgid "Certificate and session data are not available yet."
+msgstr "Data sertifikat dan sesi tidak tersedia."
+
+#: resources.h:25
+msgid "Certificate details"
+msgstr "Detail sertifikat"
+
+#: resources.h:14 resources.h:37
+msgid "Certificate issuer"
+msgstr "Pembuat sertifikat"
+
+#: resources.h:143
+msgid "Challenge:"
+msgstr "Tantangan:"
+
+#: resources.h:269
+msgid "Change file attributes"
+msgstr "Ganti atribut berkas"
+
+#: resources.h:585 resources.h:629
+msgid "Change the file permissions."
+msgstr "Ganti hak akses berkas."
+
+#: ../../locales/../src/interface/FileZilla.cpp:718
+msgid "Character encoding issue"
+msgstr "Masalah enkoding karakter"
+
+#: resources.h:127
+msgid "Charset"
+msgstr "Charset"
+
+#: resources.h:203
+msgid "Check for &beta versions and release candidates"
+msgstr "Periksa versi &beta dan release candidate"
+
+#: resources.h:553
+msgid "Check for &updates..."
+msgstr "Periksa &update..."
+
+#: resources.h:554
+msgid "Check for newer versions of FileZilla"
+msgstr "Periksa versi baru dari FileZilla"
+
+#: ../../locales/../src/interface/updatewizard.cpp:68
+msgid "Check for updates"
+msgstr "Periksa update"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:761
+msgid "Checking for correct external IP address"
+msgstr "Memeriksa alamat IP eksternal yang benar"
+
+#: resources.h:374
+msgid "Checking for updates"
+msgstr "Memeriksa update"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1200
+msgid "Choose the default local directory"
+msgstr "Pilih direktori lokal default"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:833
+msgid "Chunk data improperly terminated"
+msgstr "Potongan data terhapus secara tidak benar"
+
+#: resources.h:17 resources.h:40
+msgid "Cipher:"
+msgstr "Cipher:"
+
+#: resources.h:166
+msgid "Classic"
+msgstr "Klasik"
+
+#: resources.h:436
+msgid "Clear &Site Manager entries"
+msgstr "Hapus daftar &Manajemen Situs"
+
+#: resources.h:608
+msgid "Clear &layout cache"
+msgstr "Hapus cache &layout"
+
+#: resources.h:434
+msgid "Clear &quickconnect history"
+msgstr "Hapus sejarah &koneksi cepat"
+
+#: resources.h:435
+msgid "Clear &reconnect information"
+msgstr "Hapus informasi &koneksi ulang"
+
+#: resources.h:437
+msgid "Clear &transfer queue"
+msgstr "Hapus antrian &transfer"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:128
+msgid "Clear history"
+msgstr "Hapus sejarah"
+
+#: resources.h:431 ../../locales/../src/interface/clearprivatedata.cpp:34
+#: ../../locales/../src/interface/clearprivatedata.cpp:40
+#: ../../locales/../src/interface/clearprivatedata.cpp:46
+#: ../../locales/../src/interface/clearprivatedata.cpp:68
+#: ../../locales/../src/interface/clearprivatedata.cpp:90
+msgid "Clear private data"
+msgstr "Hapus data privat"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:127
+msgid "Clear quickconnect bar"
+msgstr "Hapus koneksi cepat"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:568
+msgid "Click on Finish to save your configuration."
+msgstr "Klik pada Selesai untuk menyimpan konfigurasi Anda."
+
+#: ../../locales/../src/interface/updatewizard.cpp:867
+msgid "Click on next to download the new version."
+msgstr "Klik pada selanjutnya untuk mendownload versi baru."
+
+#: resources.h:497
+msgid "Client to server MAC:"
+msgstr "Klien ke server MAC:"
+
+#: resources.h:495
+msgid "Client to server cipher:"
+msgstr "Cipher klien ke server:"
+
+#: resources.h:519 ../../locales/../src/interface/Mainfrm.cpp:1201
+#: ../../locales/../src/interface/Mainfrm.cpp:1224
+msgid "Close FileZilla"
+msgstr "Tutup FileZilla"
+
+#: ../../locales/../src/interface/cmdline.cpp:10
+msgid "Close all running instances of FileZilla"
+msgstr "Tutup semua FileZilla yang sedang berjalan"
+
+#: resources.h:110
+msgid "Co&mments:"
+msgstr "Ko&mentar:"
+
+#: ../../locales/../src/interface/listctrlex.cpp:643
+msgid "Column properties"
+msgstr "Properti kolom"
+
+#: resources.h:504
+msgid "Column setup"
+msgstr "Setup kolom"
+
+#: resources.h:239
+msgid "Command and its arguments should be properly quoted."
+msgstr "Perintah dan argumennya harus diberi tanda kutip dengan benar."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:136
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:150
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:167
+msgid "Command failed"
+msgstr "Perintah gagal"
+
+#: ../../locales/../src/engine/engineprivate.cpp:217
+msgid "Command not supported by this protocol"
+msgstr "Perintah tidak didukung oleh protokol ini"
+
+#: ../../locales/../src/interface/StatusView.cpp:228
+#: ../../locales/../src/interface/StatusView.cpp:270
+msgid "Command:"
+msgstr "Perintah:"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:40
+msgid "Comment"
+msgstr "Komentar"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:131
+msgid "Common name:"
+msgstr "Nama umum:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:426
+#: ../../locales/../src/interface/netconfwizard.cpp:441
+msgid "Communication tainted by router or firewall"
+msgstr "Komunikasi diputus oleh router atau firewall"
+
+#: resources.h:531 resources.h:633
+msgid "Compare &modification time"
+msgstr "Bandingkan waktu &modifikasi"
+
+#: resources.h:530 resources.h:632
+msgid "Compare file&size"
+msgstr "Bandingkan &ukuran berkas"
+
+#: resources.h:178
+msgid "Comparison &threshold (in minutes):"
+msgstr "Batasan &perbandingan (dalam menit):"
+
+#: ../../locales/../src/interface/optionspage_interface.cpp:42
+msgid "Comparison threshold needs to be between 0 and 1440 minutes."
+msgstr "Jumlah percobaan harus diantara 0 dan 1440 menit."
+
+#: resources.h:297
+msgid "Compiled for:"
+msgstr "Dikompilasi untuk:"
+
+#: resources.h:298
+msgid "Compiled on:"
+msgstr "Dikompilasi pada:"
+
+#: resources.h:300
+msgid "Compiled with:"
+msgstr "Dikompilasi dengan:"
+
+#: resources.h:301
+msgid "Compiler flags:"
+msgstr "Opsi kompiler:"
+
+#: ../../locales/../src/interface/filteredit.cpp:109
+msgid "Compressed"
+msgstr "Terkompresi"
+
+#: resources.h:49
+msgid "Concurrent transfers"
+msgstr "Transfer konkurensi"
+
+#: resources.h:354
+msgid "Conditions are c&ase sensitive"
+msgstr "Kondisi bersifat &case sensitive"
+
+#: resources.h:683
+msgid "Configuration test"
+msgstr "Pengujian konfigurasi"
+
+#: resources.h:657
+msgid "Configure passive mode"
+msgstr "Konfigurasi mode pasif"
+
+#: resources.h:673
+msgid "Configure port range"
+msgstr "Konfigurasi batasan port"
+
+#: ../../locales/../src/engine/local_filesys.cpp:122
+#: ../../locales/../src/interface/RemoteListView.cpp:1366
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1042
+msgid "Confirmation needed"
+msgstr "Dibutuhkan konfirmasi"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:564
+msgid "Congratulations, your configuration seems to be working."
+msgstr "Selamat, konfigurasi Anda bekerja."
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:126
+msgid "Connect bypassing proxy settings"
+msgstr "Pengaturan koneksi tanpa melalui proxy"
+
+#: ../../locales/../src/interface/cmdline.cpp:8
+msgid "Connect to specified Site Manager site"
+msgstr "Hubungkan ke situs Manajemen Situs yang ditentukan"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:964
+msgid "Connected"
+msgstr "Terhubung"
+
+#: ../../locales/../src/interface/QueueView.cpp:1258
+msgid "Connecting"
+msgstr "Menghubungkan"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:207
+#: ../../locales/../src/interface/statuslinectrl.cpp:195
+#, c-format
+msgid "Connecting to %s"
+msgstr "Menghubungkan ke %s"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:1078
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:511
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:343
+#, c-format
+msgid "Connecting to %s:%d..."
+msgstr "Menghubungkan ke %s:%d..."
+
+#: ../../locales/../src/interface/updatewizard.cpp:283
+#: ../../locales/../src/interface/updatewizard.cpp:783
+msgid "Connecting to server"
+msgstr "Menghubungkan ke server"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:110
+msgid "Connection"
+msgstr "Koneksi"
+
+#: ../../locales/../src/interface/QueueView.cpp:924
+msgid "Connection attempt failed"
+msgstr "Percobaan koneksi gagal"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:123
+#: ../../locales/../src/engine/engineprivate.cpp:368
+msgid "Connection attempt interrupted by user"
+msgstr "Percobaan koneksi diinterupsi oleh pengguna"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:543
+msgid "Connection closed"
+msgstr "Koneksi tertutup"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:416
+msgid "Connection established, initializing TLS..."
+msgstr "Koneksi terbentuk, menginisialisasi TLS..."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:322
+msgid "Connection established, sending HTTP request"
+msgstr "Koneksi terbentuk, mengirimkan permintaan HTTP"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:445
+msgid "Connection established, waiting for welcome message..."
+msgstr "Koneksi terbentuk, menunggu ucapan selamat datang..."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:338
+msgid "Connection lost"
+msgstr "Koneksi putus"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:616
+msgid "Connection timed out"
+msgstr "Koneksi time out"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:1064
+msgid "Connection timed out."
+msgstr "Koneksi time out."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:560
+msgid "Connection with server got closed prematurely."
+msgstr "Koneksi dengan server tertutup secara prematur."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:552
+msgid "Connection with the test server failed."
+msgstr "Koneksi dengan server pengujian gagal"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:270
+msgid "Convert keyfile"
+msgstr "Konversi berkas kunci"
+
+#: resources.h:96
+msgid "Cop&y"
+msgstr "Sal&in"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1479
+#, c-format
+msgid "Copy (%d) of %s"
+msgstr "Salin (%d) dari %s"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1456
+#, c-format
+msgid "Copy of %s"
+msgstr "Salinan dari %s"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:125
+msgid "Could not connect to server"
+msgstr "Tidak dapat terhubung ke server"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:729
+msgid "Could not convert command to server encoding"
+msgstr "Tidak dapat mengkonversi perintah ke enkoding server"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:312
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:322
+msgid "Could not convert private key"
+msgstr "Tidak dapat mengkonversi kunci privat"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2227
+#: ../../locales/../src/interface/RemoteTreeView.cpp:813
+msgid ""
+"Could not determine the target of the Drag&Drop operation.\n"
+"Either the shell extension is not installed properly or you didn't drop the "
+"files into an Explorer window."
+msgstr ""
+"Tidak bisa menentukan target dari operasi Drag&Drop.\n"
+"Entah ekstensi shell tidak terinstal dengan benar atau Anda tidak meletakkan "
+"berkas pada jendela Explorer."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4073
+msgid "Could not establish connection to server"
+msgstr "Tidak dapat menjalin hubungan dengan server"
+
+#: ../../locales/../src/interface/FileZilla.cpp:431
+msgid ""
+"Could not find the resource files for FileZilla, closing FileZilla.\n"
+"You can set the data directory of FileZilla using the '--datadir "
+"<custompath>' commandline option or by setting the FZ_DATADIR environment "
+"variable."
+msgstr ""
+"Tidak dapat menemukan berkas sumber bagi FileZilla, menutup FileZilla.\n"
+"Anda dapat menentukan direktori data untuk FileZilla menggunakan opsi "
+"perintah '--datadir <custompath>' atau dengan menentukan variabel lingkungan "
+"FZ_DATADIR."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:726
+msgid "Could not generate custom login sequence."
+msgstr "Tidak dapat menghasilkan urutan login."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:150
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:167
+msgid "Could not get reply from fzputtygen."
+msgstr "Tidak dapat mendapatkan jawaban dari fzputtygen."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2333
+msgid "Could not get temporary directory to download file into."
+msgstr "Tidak bisa mendapatkan direktori sementara untuk mendownload berkas"
+
+#: ../../locales/../src/interface/Options.cpp:135
+#, c-format
+msgid ""
+"Could not load \"%s\", make sure the file is valid.\n"
+"For this session, default settings will be used and any changes to the "
+"settings are not persistent."
+msgstr ""
+"Tidak dapat membuka  \"%s\", pastikan berkas valid.\n"
+"Untuk sesi ini, pengaturan default akan digunakan dan semua perubahan pada "
+"aturan tidak akan permanen."
+
+#: ../../locales/../src/interface/wrapengine.cpp:924
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed."
+msgstr "Tidak dapat membuka \"%s\", pastikan berkas valid dan dapat diakses."
+
+#: ../../locales/../src/interface/filter.cpp:164
+#: ../../locales/../src/interface/filter.cpp:758
+#: ../../locales/../src/interface/sitemanager.cpp:646
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"Any changes made in the Site Manager could not be saved."
+msgstr ""
+"Tidak dapat membuka \"%s\", pastikan berkas valid dan dapat diakses\n"
+"Semua perubahan di Manajemen Situs tidak dapat disimpan."
+
+#: ../../locales/../src/interface/import.cpp:111
+#: ../../locales/../src/interface/import.cpp:294
+#: ../../locales/../src/interface/sitemanager.cpp:529
+#: ../../locales/../src/interface/sitemanager.cpp:1646
+#: ../../locales/../src/interface/sitemanager.cpp:2165
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"Any changes made in the Site Manager will not be saved."
+msgstr ""
+"Tidak dapat membuka \"%s\", pastikan berkas valid dan dapat diakses.\n"
+"Semua perubahan di Manajemen Situs tidak akan disimpan."
+
+#: ../../locales/../src/interface/QueueView.cpp:1694
+#: ../../locales/../src/interface/QueueView.cpp:1721
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"The queue will not be saved."
+msgstr ""
+"Tidak dapat membuka \"%s\", pastikan berkas valid dan dapat diakses.\n"
+"Antrian tidak akan disimpan."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:220
+msgid "Could not load keyfile"
+msgstr "Tidak dapat memuat berkas kunci"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:297
+msgid "Could not load private key"
+msgstr "Tidak bisa memuat kunci privat"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:70
+msgid "Could not parse server address:"
+msgstr "Tidak dapat memproses alamat server:"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2573
+#, c-format
+msgid "Could not seek to offset %s within file"
+msgstr "Tidak dapat mencari ke offset %s dari berkas"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2504
+msgid "Could not seek to the end of the file"
+msgstr "Tidak dapat mencari hingga ke akhir berkas"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:136
+msgid "Could not send command to fzputtygen."
+msgstr "Tidak dapat mengirimkan perintah ke fzputtygen."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2593
+msgid "Could not spawn IO thread"
+msgstr "Tidak dapat mengulang thread IO"
+
+#: ../../locales/../src/interface/QueueView.cpp:963
+#: ../../locales/../src/interface/QueueView.cpp:968
+msgid "Could not start transfer"
+msgstr "Tidak dapat memulai transfer"
+
+#: ../../locales/../src/interface/sitemanager.cpp:672
+#, c-format
+msgid ""
+"Could not write \"%s\", any changes to the Site Manager could not be saved: %"
+"s"
+msgstr ""
+"Tidak dapat menulis \"%s\", semua perubahan pada Manajemen Situs tidak dapat "
+"disimpan: %s"
+
+#: ../../locales/../src/interface/QueueView.cpp:1704
+#: ../../locales/../src/interface/QueueView.cpp:1740
+#, c-format
+msgid "Could not write \"%s\", the queue could not be saved."
+msgstr "Tidak dapat menulis \"%s\", antrian tidak dapat disimpan."
+
+#: ../../locales/../src/interface/wrapengine.cpp:1075
+#, c-format
+msgid "Could not write \"%s\": %s"
+msgstr "Tidak bisa menulis \"%s\": %s"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:322
+#, c-format
+msgid "Could not write keyfile: %s"
+msgstr "Tidak bisa menulis berkas kunci: %s"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:135
+msgid "Country:"
+msgstr "Negara:"
+
+#: resources.h:610
+msgid "Crashes FileZilla instantly. Only used to debug the exception handler"
+msgstr "FileZilla rusak seketika. Hanya gunakan untuk melakukan debug"
+
+#: resources.h:568 resources.h:579 resources.h:623 resources.h:639
+msgid "Create a new subdirectory in the current directory"
+msgstr "Membuat sub direkori baru di direktori saat ini"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1186
+#: ../../locales/../src/interface/LocalTreeView.cpp:1297
+#: ../../locales/../src/interface/RemoteListView.cpp:1302
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1209
+msgid "Create directory"
+msgstr "Membuat direktori"
+
+#: ../../locales/../src/interface/QueueView.cpp:1331
+msgid "Creating directory"
+msgstr "Membuat direktori"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3186
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2041
+#, c-format
+msgid "Creating directory '%s'..."
+msgstr "Membuat direktori '%s'..."
+
+#: ../../locales/../src/engine/ControlSocket.cpp:112
+msgid "Critical error"
+msgstr "Kesalahan kritis"
+
+#: ../../locales/../src/interface/statusbar.cpp:321
+msgid "Current transfer type is set to ASCII."
+msgstr "Jenis transfer saat ini ditentukan ke ASCII."
+
+#: ../../locales/../src/interface/statusbar.cpp:331
+msgid "Current transfer type is set to automatic detection."
+msgstr "Jenis transfer saat ini ditentukan ke pendeteksian otomatis."
+
+#: ../../locales/../src/interface/statusbar.cpp:326
+msgid "Current transfer type is set to binary."
+msgstr "Jenis transfer saat ini ditentukan ke biner."
+
+#: resources.h:215 resources.h:254
+msgid "Cus&tom"
+msgstr "Kus&tomisasi"
+
+#: ../../locales/../src/interface/filter.cpp:113
+msgid "Custom filter set"
+msgstr "Sekumpulan filter kustomisasi"
+
+#: resources.h:222
+msgid "D&ecimal prefixes using SI symbols (e.g. 1 KB = 1000 bytes)"
+msgstr "Prefix d&esimal menggunakan simbol SI (cth. 1 KB = 1000 byte)"
+
+#: resources.h:122
+msgid "D&efault"
+msgstr "D&efault"
+
+#: resources.h:580 resources.h:624
+msgid "D&elete"
+msgstr "H&apus"
+
+#: resources.h:333
+msgid "D&isable all"
+msgstr "&Nonaktifkan semua"
+
+#: resources.h:137
+msgid "D&iscard"
+msgstr "B&uang"
+
+#: ../../locales/../src/engine/server.cpp:30
+msgid "DOS-like with virtual paths"
+msgstr "Seperi DOS dengan path virtual"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2345
+msgid "Dangerous filetype"
+msgstr "Jenis berkas berbahaya"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:41
+msgid "Data"
+msgstr "Data"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:979
+#: ../../locales/../src/interface/netconfwizard.cpp:1045
+msgid "Data socket closed too early."
+msgstr "Soket data tertutup terlalu cepat"
+
+#: resources.h:206
+msgid "Date formatting"
+msgstr "Pemformatan tanggal"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:121
+msgid "Date/time format"
+msgstr "Format tanggal/waktu"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:75
+#: ../../locales/../src/interface/fileexistsdlg.cpp:99
+#: ../../locales/../src/interface/fileexistsdlg.cpp:131
+#: ../../locales/../src/interface/fileexistsdlg.cpp:155
+msgid "Date/time unknown"
+msgstr "Tanggal/waktu tidak diketahui"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:129
+msgid "Debug"
+msgstr "Debug"
+
+#: resources.h:226
+msgid "Debugging settings"
+msgstr "Pengaturan debug"
+
+#: resources.h:114
+msgid "Default &local directory:"
+msgstr "Direktori &lokal default:"
+
+#: ../../locales/../src/engine/server.cpp:22
+msgid "Default (Autodetect)"
+msgstr "Default (Deteksi Otomatis)"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:112
+msgid "Default editor not properly quoted."
+msgstr "Editor default tidak diberi tanda kutip dengan benar."
+
+#: resources.h:392
+msgid "Default file exists action"
+msgstr "Aksi berkas sudah ada default"
+
+#: resources.h:116
+msgid "Default r&emote directory:"
+msgstr "Direktori r&emote default:"
+
+#: ../../locales/../src/interface/sitemanager.cpp:893
+msgid ""
+"Default remote path cannot be parsed. Make sure it is valid and is supported "
+"by the selected servertype."
+msgstr ""
+"Path remote default tidak bisa diproses. Pastikan sudah valid dan didukung "
+"oleh jenis server yang dipilih."
+
+#: ../../locales/../src/interface/optionspage_language.cpp:21
+msgid "Default system language"
+msgstr "Bahasa sistem default"
+
+#: resources.h:651
+msgid "Default transfer mode:"
+msgstr "Mode transfer default:"
+
+#: resources.h:152
+msgid "Default transfer type:"
+msgstr "Jenis transfer default:"
+
+#: resources.h:370 resources.h:670
+msgid "Default: http://ip.filezilla-project.org/ip.php"
+msgstr "Default: http://ip.filezilla-project.org/ip.php"
+
+#: ../../locales/../src/interface/optionspage_connection.cpp:40
+msgid ""
+"Delay between failed connection attempts has to be between 1 and 999 seconds."
+msgstr ""
+"Keterlambatan diantara percobaan koneksi yang gagal harus diantara 1 dan 999 "
+"detik."
+
+#: ../../locales/../src/engine/engineprivate.cpp:664
+msgid "Delaying connection due to previously failed connection attempt..."
+msgstr "Menunda koneksi karena percobaan koneksi yang gagal sebelumnya..."
+
+#: ../../locales/../src/interface/sitemanager.cpp:1001
+msgid "Delete Site Manager entry"
+msgstr "Hapus daftar Manajemen Situs"
+
+#: resources.h:625 resources.h:641
+msgid "Delete selected directory"
+msgstr "Hapus direktori yang dipilih"
+
+#: resources.h:570 resources.h:581
+msgid "Delete selected files and directories"
+msgstr "Hapus berkas-berkas dan direktori yang dipilih"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:1004
+msgid "Desktop"
+msgstr "Desktop"
+
+#: resources.h:3 resources.h:26 resources.h:305
+msgid "Details"
+msgstr "Detail"
+
+#: resources.h:317
+msgid "Details for new key:"
+msgstr "Detail untuk kunci baru:"
+
+#: resources.h:357
+msgid "Dire&ctories"
+msgstr "Dire&ktori"
+
+#: ../../locales/../src/interface/queue.cpp:1126
+msgid "Direction"
+msgstr "Arah"
+
+#: resources.h:176 resources.h:630 resources.h:720 resources.h:721
+#: ../../locales/../src/interface/filelistctrl.cpp:359
+#: ../../locales/../src/interface/Mainfrm.cpp:2236
+msgid "Directory comparison"
+msgstr "Perbandingan direktori"
+
+#: ../../locales/../src/interface/listingcomparison.cpp:74
+#: ../../locales/../src/interface/listingcomparison.cpp:82
+#: ../../locales/../src/interface/listingcomparison.cpp:88
+msgid "Directory comparison failed"
+msgstr "Perbandingan direktori gagal"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:129
+msgid "Directory listing aborted by user"
+msgstr "Pendataan direktori dibatalkan oleh pengguna"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2030
+msgid "Directory listing failed"
+msgstr "Pendataan direktori gagal"
+
+#: resources.h:326
+msgid "Directory listing filters"
+msgstr "Filter pendataan direktori"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:133
+msgid "Directory listing successful"
+msgstr "Pendataan direktori berhasil"
+
+#: resources.h:336
+msgid "Disa&ble all"
+msgstr "&Nonaktifkan semua"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:727
+msgid ""
+"Disable this option again if you will not be able to see the correct "
+"directory contents anymore."
+msgstr ""
+"Nonaktifkan opsi ini kembali jika Anda tidak bisa melihat isi direktori "
+"dengan benar."
+
+#: resources.h:714
+msgid "Disconnect from server"
+msgstr "Putuskan hubungan dari server"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:69
+#: ../../locales/../src/engine/ControlSocket.cpp:1014
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:245
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:913
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:915
+#: ../../locales/../src/interface/QueueView.cpp:922
+#: ../../locales/../src/interface/QueueView.cpp:960
+msgid "Disconnected from server"
+msgstr "Telah terputus dari server"
+
+#: ../../locales/../src/interface/QueueView.cpp:1233
+#: ../../locales/../src/interface/statuslinectrl.cpp:189
+msgid "Disconnecting from previous server"
+msgstr "Memutuskan dari server sebelumnya"
+
+#: resources.h:715
+msgid "Disconnects from the currently visible server"
+msgstr "Memutuskan dari server yang terlihat sekarang"
+
+#: resources.h:558
+msgid "Display about dialog"
+msgstr "Tampilkan dialog \"tentang\""
+
+#: resources.h:604
+msgid "Do &nothing"
+msgstr "Tidak &lakukan apa-apa"
+
+#: ../../locales/../src/interface/optionspage_updatecheck.cpp:60
+#: ../../locales/../src/interface/updatewizard.cpp:156
+msgid ""
+"Do you really want to check for beta versions?\n"
+"Unless you want to test new features, keep using stable versions."
+msgstr ""
+"Apakah Anda hendak menguji versi beta?\n"
+"Kecuali Anda hendak menguji fitur baru, selalu gunakan versi stabil."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1204
+#: ../../locales/../src/interface/Mainfrm.cpp:1228
+msgid "Do you really want to close FileZilla?"
+msgstr "Apakah Anda hendak menutup FileZilla?"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:34
+msgid ""
+"Do you really want to delete all Site Manager entries and the transfer queue?"
+msgstr ""
+"Apakah Anda hendak menghapus semua daftar Manajemen Situs dan antrian "
+"transfer?"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:46
+msgid "Do you really want to delete all Site Manager entries?"
+msgstr "Apakah Anda hendak menghapus semua daftar Manajemen Situs?"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1003
+msgid "Do you really want to delete selected entry?"
+msgstr "Apakah Anda hendak menghapus daftar yang terpilih?"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:40
+msgid "Do you really want to delete the transfer queue?"
+msgstr "Apakah Anda hendak menghapus antrian transfer?"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:667
+#, c-format
+msgid "Do you really want to send '%s' to the server?"
+msgstr "Apakah Anda hendak mengirimkan '%s' pada server?"
+
+#: resources.h:672
+msgid "Don't use external IP address on &local connections."
+msgstr "Jangan gunakan alamat IP eksternal pada koneksi &lokal."
+
+#: resources.h:163
+msgid "Dotfiles are filenames starting with a dot, e.g. .htaccess"
+msgstr ""
+"Berkas bertitik adalah nama berkas yang dimulai dengan titik, misalnya ."
+"htaccess"
+
+#: resources.h:61
+msgid "Download &limit:"
+msgstr "&Batasan download:"
+
+#: resources.h:619
+msgid "Download selected directory"
+msgstr "Download direktori yang dipilih"
+
+#: resources.h:574
+msgid "Download selected files and directories"
+msgstr "Download berkas-berkas dan direktori yang dipilih"
+
+#: ../../locales/../src/interface/edithandler.cpp:896
+msgid "Downloading"
+msgstr "Mendownload"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:339
+#: ../../locales/../src/interface/updatewizard.cpp:276
+#, c-format
+msgid "Downloading %s"
+msgstr "Mendownload %s"
+
+#: resources.h:394 resources.h:414
+msgid "Downloads"
+msgstr "Download"
+
+#: ../../locales/../src/interface/LocalListView.cpp:100
+#: ../../locales/../src/interface/LocalTreeView.cpp:90
+#: ../../locales/../src/interface/QueueView.cpp:72
+#: ../../locales/../src/interface/RemoteListView.cpp:94
+#: ../../locales/../src/interface/RemoteTreeView.cpp:79
+msgid ""
+"Drag&drop between different instances of FileZilla has not been implemented "
+"yet."
+msgstr "Drag&drop antar FileZilla yang berbeda belum diimplementasikan."
+
+#: ../../locales/../src/interface/LocalListView.cpp:106
+#: ../../locales/../src/interface/LocalTreeView.cpp:96
+#: ../../locales/../src/interface/QueueView.cpp:83
+#: ../../locales/../src/interface/RemoteListView.cpp:100
+#: ../../locales/../src/interface/RemoteTreeView.cpp:85
+msgid "Drag&drop between different servers has not been implemented yet."
+msgstr "Drag&drop antara server yang berbeda belum diimplementasikan."
+
+#: ../../locales/../src/interface/filteredit.cpp:477
+#: ../../locales/../src/interface/filteredit.cpp:544
+#: ../../locales/../src/interface/filteredit.cpp:585
+msgid "Duplicate filter name"
+msgstr "Nama filter duplikat"
+
+#: resources.h:332
+msgid "E&nable all"
+msgstr "&Aktifkan semua"
+
+#: resources.h:278
+msgid "E&xecute"
+msgstr "E&ksekusi"
+
+#: resources.h:518
+msgid "E&xit"
+msgstr "Ke&luar"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:139
+msgid "E-Mail:"
+msgstr "E-Mail:"
+
+#: ../../locales/../src/interface/filteredit.cpp:683
+msgid "Each filter needs at least one condition."
+msgstr "Setiap filter perlu paling tidak satu kondisi."
+
+#: resources.h:341
+msgid "Edit filters"
+msgstr "Edit filter"
+
+#: resources.h:566
+msgid ""
+"Edit the file with the configured editor and upload changes to the server."
+msgstr ""
+"Edit berkas dengan editor yang telah dikonfigurasi dan upload perubahan pada "
+"server."
+
+#: resources.h:192
+msgid "Email:"
+msgstr "Email:"
+
+#: ../../locales/../src/interface/QueueView.cpp:2025
+msgid "Empty command"
+msgstr "Masukkan perintah sendiri"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:147
+msgid "Empty command."
+msgstr "Perintah kosong."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2032
+msgid "Empty directory listing"
+msgstr "Daftar direktori kosong"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:89
+msgid "Empty directory."
+msgstr "Direktori kosong."
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:140
+msgid "Empty file extension."
+msgstr "Ekstensi berkas kosong"
+
+#: ../../locales/../src/interface/filteredit.cpp:535
+#: ../../locales/../src/interface/filteredit.cpp:579
+msgid "Empty filter names are not allowed."
+msgstr "Nama filter kosong tidak diijinkan."
+
+#: ../../locales/../src/interface/filteredit.cpp:535
+#: ../../locales/../src/interface/filteredit.cpp:579
+msgid "Empty name"
+msgstr "Nama kosong"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:115
+msgid "Empty quoted string."
+msgstr "String tanda kutip kosong."
+
+#: resources.h:335
+msgid "En&able all"
+msgstr "Ak&tifkan semua"
+
+#: ../../locales/../src/interface/filteredit.cpp:110
+msgid "Encrypted"
+msgstr "Terenkripsi"
+
+#: resources.h:494
+msgid "Encryption"
+msgstr "Enkripsi"
+
+#: resources.h:486
+msgid "Encryption details"
+msgstr "Detail enkripsi"
+
+#: ../../locales/../src/interface/filelistctrl.cpp:361
+msgid "End comparison and change sorting order?"
+msgstr "Akhiri perbandingan dan ganti urutan pengurutan?"
+
+#: resources.h:549
+msgid "Enter &custom command..."
+msgstr "Masukkan &perintah sendiri..."
+
+#: ../../locales/../src/interface/QueueView.cpp:2014
+msgid "Enter command"
+msgstr "Masukkan perintah"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:655
+msgid "Enter custom command"
+msgstr "Masukkan perintah sendiri"
+
+#: ../../locales/../src/interface/filteredit.cpp:464
+#: ../../locales/../src/interface/filteredit.cpp:523
+#: ../../locales/../src/interface/filteredit.cpp:572
+msgid "Enter filter name"
+msgstr "Masukkan nama filter"
+
+#: ../../locales/../src/interface/filter.cpp:311
+msgid "Enter name for filterset"
+msgstr "Masukkan nama untuk kelompok filter"
+
+#: resources.h:138
+msgid "Enter password"
+msgstr "Masukkan Kata kunci"
+
+#: resources.h:692
+msgid ""
+"Enter the address of the server.\n"
+"To specify the server protocol, prepend the host with the protocol "
+"identifier. If no protocol is specified, the default protocol (ftp://) will "
+"be used.\n"
+"You can also enter complete URLs in the form protocol://user:pass@host:port "
+"here, the values in the other fields will be overwritten then."
+msgstr ""
+"Masukkan alamat server.\n"
+"Untuk menentukan protokol server, masukkan host dengan protokolnya. Jika "
+"protokol tidak ditentukan, protokol default (ftp://) akan digunakan.\n"
+"Anda juga dapat memasukkan URL lengkap dalam bentuk protokol://pengguna:"
+"katasandi@host:port disini, nilai di field lainnya akan ditimpa."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:276
+#, c-format
+msgid ""
+"Enter the password for the file '%s'.\n"
+"Please note that the converted file will not be password protected."
+msgstr ""
+"Masukkan kata sandi untuk berkas '%s'.\n"
+"Harap dicatat bahwa berkas yang dikonversi akan tanpa proteksi kata sandi."
+
+#: resources.h:696
+msgid ""
+"Enter the port on which the server listens.\n"
+"The default for FTP is 21, the default for SFTP is 22."
+msgstr ""
+"Masukkan port yang digunakan oleh server.\n"
+"Port default FTP adalah 21, port default SFTP adalah 22."
+
+#: ../../locales/../src/engine/transfersocket.cpp:376
+#, c-format
+msgid "Error %d writing to socket"
+msgstr "Kesalahan %d menulis ke socket"
+
+#: ../../locales/../src/interface/export.cpp:26
+msgid "Error exporting settings"
+msgstr "Kesalahan pengaturan ekspor"
+
+#: ../../locales/../src/interface/import.cpp:29
+#: ../../locales/../src/interface/import.cpp:37
+#: ../../locales/../src/interface/import.cpp:100
+msgid "Error importing"
+msgstr "Kesalahan dalam mengimpor"
+
+#: ../../locales/../src/interface/filter.cpp:165
+#: ../../locales/../src/interface/filter.cpp:759
+#: ../../locales/../src/interface/import.cpp:112
+#: ../../locales/../src/interface/import.cpp:295
+#: ../../locales/../src/interface/Options.cpp:136
+#: ../../locales/../src/interface/QueueView.cpp:1695
+#: ../../locales/../src/interface/QueueView.cpp:1722
+#: ../../locales/../src/interface/sitemanager.cpp:530
+#: ../../locales/../src/interface/sitemanager.cpp:647
+#: ../../locales/../src/interface/sitemanager.cpp:1647
+#: ../../locales/../src/interface/sitemanager.cpp:2166
+#: ../../locales/../src/interface/wrapengine.cpp:925
+msgid "Error loading xml file"
+msgstr "Kesalahan memuat berkas xml"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:97
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:116
+msgid "Error starting program"
+msgstr "Kesalahan menjalankan program"
+
+#: ../../locales/../src/interface/QueueView.cpp:1705
+#: ../../locales/../src/interface/QueueView.cpp:1741
+#: ../../locales/../src/interface/sitemanager.cpp:673
+#: ../../locales/../src/interface/wrapengine.cpp:1076
+msgid "Error writing xml file"
+msgstr "Kesalahan menulis berkas xml"
+
+#: ../../locales/../src/interface/StatusView.cpp:226
+#: ../../locales/../src/interface/StatusView.cpp:266
+msgid "Error:"
+msgstr "Kesalahan:"
+
+#: resources.h:246
+msgid "Example:"
+msgstr "Contoh:"
+
+#: resources.h:282
+msgid "Exe&cute"
+msgstr "Jal&ankan"
+
+#: ../../locales/../src/interface/updatewizard.cpp:235
+msgid "Executable"
+msgstr "&Dapat dieksekusi"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1783
+msgid "Executable contains no version info, cannot check for updates."
+msgstr "Aplikasi tidak berisi informasi versi, tidak bisa memeriksa update."
+
+#: resources.h:167
+msgid "Explorer"
+msgstr "Penjelajah"
+
+#: resources.h:444
+msgid "Export &Queue"
+msgstr "Ekspor &Antrian "
+
+#: resources.h:443
+msgid "Export &Settings"
+msgstr "&Pengaturan Ekspor"
+
+#: resources.h:440
+msgid "Export settings"
+msgstr "Pengaturan ekspor"
+
+#: resources.h:347
+msgid "F&ilter name:"
+msgstr "Nama F&ilter"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:111
+#: ../../locales/../src/interface/sitemanager.cpp:1263
+msgid "FTP"
+msgstr "FTP"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:50
+msgid "FTP Engine not initialized, can't connect"
+msgstr "Mesin FTP tidak bisa diinisialisasi, tidak terhubung"
+
+#: resources.h:476
+msgid "FTP Keep-alive"
+msgstr "FTP Keep-alive"
+
+#: resources.h:248 ../../locales/../src/interface/settingsdialog.cpp:114
+msgid "FTP Proxy"
+msgstr "Proxy FTP"
+
+#: ../../locales/../src/interface/cmdline.cpp:14
+msgid "FTP URL"
+msgstr "FTP URL"
+
+#: resources.h:648
+msgid ""
+"FTP uses secondary connections for data transfers. These additional "
+"connections can be established in two ways."
+msgstr ""
+"FTP menggunakan koneksi kedua untuk transfer data. Koneksi tambahan ini "
+"harus dibuat dalam dua cara."
+
+#: ../../locales/../src/engine/server.cpp:17
+msgid "FTPES - FTP over explicit TLS/SSL"
+msgstr "FTPES - FTP diatas TLS/SSL eksplisit"
+
+#: ../../locales/../src/engine/server.cpp:16
+msgid "FTPS - FTP over implicit TLS/SSL"
+msgstr "TFTPS - FTP diatas TLS/SSL implisit"
+
+#: ../../locales/../src/interface/LocalListView.cpp:611
+#: ../../locales/../src/interface/LocalListView.cpp:1301
+#: ../../locales/../src/interface/LocalTreeView.cpp:874
+#: ../../locales/../src/interface/viewheader.cpp:501
+msgid "Failed to change directory"
+msgstr "Gagal mengganti direktori"
+
+#: ../../locales/../src/interface/FileZilla.cpp:214
+#: ../../locales/../src/interface/FileZilla.cpp:222
+#: ../../locales/../src/interface/FileZilla.cpp:224
+#: ../../locales/../src/interface/optionspage_language.cpp:103
+msgid "Failed to change language"
+msgstr "Gagal mengganti bahasa"
+
+#: ../../locales/../src/interface/updatewizard.cpp:306
+msgid "Failed to check for newer version of FileZilla."
+msgstr "Gagal memeriksa versi baru dari FileZilla."
+
+#: ../../locales/../src/interface/sitemanager.cpp:1843
+msgid "Failed to copy or move sites"
+msgstr "Gagal menyalin atau memindahkan situs"
+
+#: ../../locales/../src/interface/xmlfunctions.cpp:377
+msgid "Failed to create backup copy of xml file"
+msgstr "Gagal membuat salinan backup dari berkas xml"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:787
+msgid "Failed to create listen socket, aborting"
+msgstr "Gagal membuat soket, membatalkan"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4052
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4056
+msgid "Failed to create listening socket for active mode transfer"
+msgstr "Gagal membuat soket untuk mengirim mode transfer aktif"
+
+#: ../../locales/../src/interface/updatewizard.cpp:308
+msgid "Failed to download the latest version of FileZilla."
+msgstr "Gagal mendownload versi terbaru dari FileZilla."
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:631
+msgid "Failed to get 'My Documents' path"
+msgstr "Gagal untuk mendapatkan path 'Dokumenku'"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:617
+msgid "Failed to get desktop path"
+msgstr "Gagal mengambil path desktop"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:944
+msgid "Failed to get peer address of control connection, connection closed."
+msgstr ""
+"Gagal untuk mendapatkan alamat peer dari kontrol koneksi, koneksi terputus."
+"Gagal untuk mendapatkan alamat peer dari koneksi kontrol, koneksi terputus."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:952
+msgid "Failed to get peer address of data connection, connection closed."
+msgstr ""
+"Gagal untuk mendapatkan alamat peer dari koneksi data, koneksi terputus."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:230
+msgid "Failed to initialize FTP engine"
+msgstr "Gagal untuk menginisialisasi mesin FTP"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:425
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:795
+msgid "Failed to initialize TLS."
+msgstr "Gagal untuk menginisialisasi TLS."
+
+#: ../../locales/../src/interface/settingsdialog.cpp:160
+msgid "Failed to load panels, invalid resource files?"
+msgstr "Gagal memuat panel, berkas resource tidak valid?"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:296
+#, c-format
+msgid "Failed to load private key: %s"
+msgstr "Gagal memuat kunci privat: %s"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2493
+#, c-format
+msgid "Failed to open \"%s\" for appending / writing"
+msgstr "Gagal membuka \"%s\" untuk menambah / menulis"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2557
+#, c-format
+msgid "Failed to open \"%s\" for reading"
+msgstr "Gagal membuka \"%s\" untuk dibaca"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2536
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:379
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:440
+#, c-format
+msgid "Failed to open \"%s\" for writing"
+msgstr "Gagal membuka \"%s\" untuk ditulis"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:1008
+msgid "Failed to receive data"
+msgstr "Gagal menerima data"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:131
+msgid "Failed to retrieve directory listing"
+msgstr "Gagal mengambil daftar direktori"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:715
+msgid "Failed to retrieve external ip address, aborting"
+msgstr "Gagal mengambil alamat ip eksternal, membatalkan"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3775
+msgid "Failed to retrieve external ip address, using local address"
+msgstr "Gagal mengambil alamat ip eksternal, menggunakan alamat lokal"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3796
+msgid "Failed to retrieve local ip address."
+msgstr "Gagal mengambil alamat ip lokal."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:684
+msgid "Failed to retrieve local ip address. Aborting"
+msgstr "Gagal mengambil alamat ip lokal. Membatalkan"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:612
+msgid "Failed to retrieve the external IP address."
+msgstr "Gagal mengambil alamat IP eksternal."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:307
+msgid "Failed to send command."
+msgstr "Gagal mengirimkan perintah."
+
+#: ../../locales/../src/interface/FileZilla.cpp:222
+#, c-format
+msgid "Failed to set language to %s (%s), using default system language"
+msgstr "Gagal menentukan bahasa ke %s (%s), menggunakan bahasa sistem default"
+
+#: ../../locales/../src/interface/FileZilla.cpp:207
+#, c-format
+msgid ""
+"Failed to set language to %s (%s), using default system language (%s, %s)."
+msgstr ""
+"Gagal menentukan bahasa ke %s (%s), menggunakan bahasa sistem default (%s, %"
+"s)."
+
+#: ../../locales/../src/interface/FileZilla.cpp:191
+#, c-format
+msgid "Failed to set language to %s (%s), using default system language."
+msgstr "Gagal menentukan bahasa ke %s (%s), menggunakan bahasa sistem default"
+
+#: ../../locales/../src/interface/FileZilla.cpp:224
+#: ../../locales/../src/interface/optionspage_language.cpp:103
+#, c-format
+msgid "Failed to set language to %s, using default system language"
+msgstr "Gagal menentukan bahasa ke %s, menggunakan bahasa sistem default"
+
+#: ../../locales/../src/interface/FileZilla.cpp:203
+#, c-format
+msgid "Failed to set language to %s, using default system language (%s, %s)."
+msgstr "Gagal menentukan bahasa ke %s, gunakan bahasa sistem default (%s, %s)."
+
+#: ../../locales/../src/interface/FileZilla.cpp:188
+#, c-format
+msgid "Failed to set language to %s, using default system language."
+msgstr "Gagal menentukan bahasa ke %s, menggunakan bahasa sistem default."
+
+#: ../../locales/../src/interface/optionspage.cpp:193
+msgid "Failed to validate settings"
+msgstr "Gagal memvalidasi pengaturan"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:568
+#, c-format
+msgid "Failed to write to file %s"
+msgstr "Gagal menulis ke berkas %s"
+
+#: ../../locales/../src/interface/xmlfunctions.cpp:391
+msgid "Failed to write xml file"
+msgstr "Gagal menulis berkas xml"
+
+#: ../../locales/../src/interface/queueview_failed.cpp:15
+msgid "Failed transfers"
+msgstr "Pengiriman yang gagal"
+
+#: resources.h:663
+msgid "Fall back to active mode"
+msgstr "Kembali ke mode aktif"
+
+#: resources.h:356
+msgid "Fil&es"
+msgstr "B&erkas"
+
+#: ../../locales/../src/interface/filelistctrl.cpp:414
+#: ../../locales/../src/interface/filelistctrl.cpp:432
+#: ../../locales/../src/interface/filelistctrl.cpp:442
+msgid "File"
+msgstr "Berkas"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:117
+msgid "File Types"
+msgstr "Jenis Berkas"
+
+#: ../../locales/../src/interface/import.cpp:100
+msgid "File does not contain any importable data."
+msgstr "Berkas tidak mengandung data yang dapat diimpor."
+
+#: ../../locales/../src/interface/settingsdialog.cpp:124
+msgid "File editing"
+msgstr "Pengeditan berkas"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1600
+msgid "File exists"
+msgstr "Berkas ada"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:118
+msgid "File exists action"
+msgstr "Aksi jika berkas ada"
+
+#: resources.h:455
+msgid "File has changed"
+msgstr "Berkas sudah berubah"
+
+#: ../../locales/../src/interface/FileZilla.cpp:739
+#: ../../locales/../src/interface/FileZilla.cpp:833
+#: ../../locales/../src/interface/optionspage_edit.cpp:183
+msgid "File not found"
+msgstr "Berkas tidak ditemukan"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:154
+msgid "File transfer successful"
+msgstr "Transfer berkas berhasil"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1203
+msgid "File transfers still in progress."
+msgstr "Transfer berkas sedang dalam proses."
+
+#: ../../locales/../src/interface/FileZilla.cpp:432
+#: ../../locales/../src/interface/quickconnectbar.cpp:50
+msgid "FileZilla Error"
+msgstr "FileZilla Bermasalah"
+
+#: resources.h:685
+msgid ""
+"FileZilla can now test your configuration to ensure everything is configured "
+"properly."
+msgstr ""
+"FileZilla sekarang bisa menguji konfigurasi Anda untuk memastikan semua "
+"sudah sudah benar."
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:107
+msgid "FileZilla does not support the HTTP protocol"
+msgstr "FileZilla tidak mendukung protokol HTTP"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1568
+msgid "FileZilla needs to be restarted for the language change to take effect."
+msgstr "FileZilla harus dijalankan ulang agar perubahan bahasa berjalan."
+
+#: resources.h:532
+msgid "Filelist status &bars"
+msgstr "&Status bar daftar berkas"
+
+#: resources.h:171
+msgid "Filelists"
+msgstr "Daftar berkas"
+
+#: ../../locales/../src/interface/edithandler.cpp:882
+#: ../../locales/../src/interface/filteredit.cpp:101
+#: ../../locales/../src/interface/LocalListView.cpp:258
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:39
+#: ../../locales/../src/interface/RemoteListView.cpp:349
+msgid "Filename"
+msgstr "Nama berkas"
+
+#: resources.h:527
+msgid "Filename &filters..."
+msgstr "&Filter nama berkas..."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1585
+msgid "Filename invalid"
+msgstr "Nama berkas tidak valid"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:229
+msgid "Filename unchanged"
+msgstr "Nama berkas tidak berubah"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1396
+msgid "Filenames may not contain any of the following characters: / * ? < > |"
+msgstr "Nama berkas tidak boleh menggunakan karakter berikut: / * ? < > |"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1371
+msgid ""
+"Filenames may not contain any of the following characters: / \\ : * ? \" < > "
+"|"
+msgstr ""
+"Nama berkas tidak boleh menggunakan karakter berikut: / \\ : * ? \" < > |"
+
+#: resources.h:463
+msgid "Files currently being edited"
+msgstr "Berkas saat ini sedang diedit"
+
+#: ../../locales/../src/interface/filteredit.cpp:102
+#: ../../locales/../src/interface/LocalListView.cpp:259
+#: ../../locales/../src/interface/RemoteListView.cpp:350
+msgid "Filesize"
+msgstr "Ukuran berkas"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:122
+msgid "Filesize format"
+msgstr "Format ukuran berkas"
+
+#: ../../locales/../src/interface/LocalListView.cpp:260
+#: ../../locales/../src/interface/RemoteListView.cpp:351
+msgid "Filetype"
+msgstr "Jenis berkas"
+
+#: resources.h:242
+msgid "Filetype associations"
+msgstr "Asosiasi jenis berkas"
+
+#: resources.h:348
+msgid "Filter &out all files that:"
+msgstr "Filter &out semua berkas yang:"
+
+#: resources.h:355
+msgid "Filter applies to:"
+msgstr "Filter diterapkan pada:"
+
+#: ../../locales/../src/interface/filteredit.cpp:729
+msgid "Filter name already exists"
+msgstr "Nama filter sudah ada"
+
+#: ../../locales/../src/interface/filter.cpp:325
+msgid "Filter set already exists"
+msgstr "Kumpulan filter sudah ada"
+
+#: resources.h:718 resources.h:719
+msgid "Filter the directory listings"
+msgstr "Filter daftar direktori"
+
+#: ../../locales/../src/interface/filteredit.cpp:683
+#: ../../locales/../src/interface/filteredit.cpp:698
+#: ../../locales/../src/interface/filteredit.cpp:709
+#: ../../locales/../src/interface/filteredit.cpp:720
+#: ../../locales/../src/interface/filteredit.cpp:729
+msgid "Filter validation failed"
+msgstr "Validasi filter gagal"
+
+#: resources.h:10 resources.h:33
+msgid "Fingerprint (MD5):"
+msgstr "Sidik jari (MD5):"
+
+#: resources.h:11 resources.h:34
+msgid "Fingerprint (SHA-1):"
+msgstr "Sidik jari (SHA-1):"
+
+#: resources.h:308 resources.h:320
+msgid "Fingerprint:"
+msgstr "Sidik jari:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:42
+msgid "Firewall and router configuration wizard"
+msgstr "Panduan konfigurasi firewall dan router"
+
+#: ../../locales/../src/interface/filelistctrl.cpp:437
+msgid "Folder"
+msgstr "Direktori"
+
+#: resources.h:180
+msgid ""
+"For more detailed information about what these options do, please run the "
+"network configuration wizard."
+msgstr ""
+"Untuk informasi lebih detail tentang opsi-opsi ini, harap jalankan panduan "
+"konfigurasi jaringan."
+
+#: resources.h:680
+msgid "For reliability you should specify a range of at least 10 ports."
+msgstr "Untuk reliabilitas, Anda harus menentukan paling tidak 10 port."
+
+#: resources.h:131
+msgid "Force &UTF-8"
+msgstr "Paksa &UTF-8"
+
+#: resources.h:551
+msgid "Force showing &hidden files"
+msgstr "Paksa menampilkan berkas &tersembunyi"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:722
+msgid "Force showing hidden files"
+msgstr "Paksa menampilkan berkas tersembunyi"
+
+#: resources.h:255
+msgid "Format specifications:"
+msgstr "Klasifikasi format:"
+
+#: resources.h:245
+msgid "Format: Extension followed by properly quoted command and arguments."
+msgstr ""
+"Format: Ekstensi diikuti dengan perintah dan argumen yang diberi tanda kutip "
+"dengan benar."
+
+#: resources.h:97
+msgid "General"
+msgstr "Umum"
+
+#: resources.h:669
+msgid "Get external IP address from the following URL:"
+msgstr "Dapatkan alamat IP eksternal dari URL berikut:"
+
+#: ../../locales/../src/interface/filter.cpp:325
+msgid "Given filterset name already exists, overwrite filter set?"
+msgstr "Karena nama filter sudah ada, timpa kumpulan filter yang ada?"
+
+#: resources.h:275
+msgid "Group permissions"
+msgstr "Hak akses grup"
+
+#: resources.h:592
+msgid "H&igh"
+msgstr "T&inggi"
+
+#: resources.h:490
+msgid "Hash:"
+msgstr "Hash:"
+
+#: ../../locales/../src/interface/filteredit.cpp:111
+msgid "Hidden"
+msgstr "Tersembunyi"
+
+#: resources.h:67 ../../locales/../src/interface/queue.cpp:853
+#: ../../locales/../src/interface/queue.cpp:934
+msgid "High"
+msgstr "Tinggi"
+
+#: ../../locales/../src/interface/queue.cpp:855
+#: ../../locales/../src/interface/queue.cpp:936
+msgid "Highest"
+msgstr "Tertinggi"
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:74
+msgid "Highest available port has to be a number between 1024 and 65535."
+msgstr "Port tertinggi yang tersedia harus angka antara 1024 dan 65535."
+
+#: resources.h:337
+msgid ""
+"Hold the shift key to toggle the filter state on both sides simultanously."
+msgstr ""
+"Tahan kunci shift untuk mengganti kondisi filter pada kedua sisi secara "
+"simultan."
+
+#: resources.h:294
+msgid "Homepage:"
+msgstr "Situs:"
+
+#: resources.h:492
+msgid "Host key fingerprint:"
+msgstr "Sidik jari kunci host:"
+
+#: resources.h:314
+msgid "Host key mismatch"
+msgstr "Kunci mesin tidak cocok"
+
+#: resources.h:4 resources.h:27 resources.h:141 resources.h:306
+#: resources.h:318
+msgid "Host:"
+msgstr "Mesin:"
+
+#: resources.h:118
+msgid "Hours,"
+msgstr "Jam,"
+
+#: resources.h:214
+msgid "I&SO 8601 (example: 15:47)"
+msgstr "I&SO 8601 (contoh: 15:47)"
+
+#: resources.h:59
+msgid ""
+"If no data can be sent or received during this time, the connection will be "
+"closed and FileZilla will try to reconnect."
+msgstr ""
+"Jika tidak ada data yang bisa dikirimkan atau diterima pada waktu ini, "
+"koneksi akan ditutup dan FileZilla akan mencoba menghubungkan ulang."
+
+#: resources.h:235
+msgid "If reporting bugs, please provide logs with \"Verbose\" logging level."
+msgstr ""
+"Jika melaporkan kesalahan, harap sediakan log dengan level pencatatan "
+"\"Detail\"."
+
+#: resources.h:660
+msgid ""
+"If the automatic test at the end of this wizard succeeds, but you cannot "
+"transfer files to a particular server, the server might be misconfigured and "
+"you should try active mode. You can set the transfer mode on a per-server "
+"basis in the Site Manager."
+msgstr ""
+"Jika pengujian otomatis pada akhir panduan ini sukses, tetapi Anda tidak "
+"bisa mentransfer berkas pada server tertentu, server tersebut mungkin salah "
+"konfigurasi dan Anda harus mencoba mode aktif. Anda bisa menentukan mode "
+"transfer dengan basis per server pada Manajemen Situs."
+
+#: resources.h:655
+msgid ""
+"If the fallback option is enabled, you will be able to connect to "
+"misconfigured servers which reject the selected transfer mode."
+msgstr ""
+"Jika opsi kembali (fallback) diaktifkan, Anda bisa terhubung ke server yang "
+"salah konfigurasi yang menolak mode transfer yang dipilih."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:620
+msgid ""
+"If this problem persists, please contact your router or firewall "
+"manufacturer for a solution."
+msgstr ""
+"Jika masalah ini tetap muncul, harap hubungi pembuat router atau firewall "
+"Anda untuk solusinya."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:578
+msgid "If this problem stays, please contact your router manufacturer."
+msgstr "Jika masalah ini tetap ada, harap hubungi pembuat router Anda."
+
+#: resources.h:410 resources.h:428
+msgid ""
+"If using 'overwrite if newer', your system time has to be synchronized with "
+"the server. If the time differs (e.g. different timezone), specify a "
+"timezone offset in the site manager."
+msgstr ""
+"Jika menggunakan 'timpa jika lebih baru', waktu sistem Anda harus "
+"disinkronkan dengan server. Jika waktu berbeda (misalnya zona waktu "
+"berbeda), tentukan offset zona waktu pada manajemen situs."
+
+#: resources.h:177
+msgid ""
+"If using timestamp based comparison, consider two files equal if their "
+"timestamp differerence does not exceed this threshold."
+msgstr ""
+"Jika menggunakan perbandingan berbasis timestamp, pertimbangkan dua berkas "
+"sama jika perbedaan timestamp diantara keduanya tidak melebihi batas "
+"threshold ini."
+
+#: resources.h:197
+msgid "If you change the language, you should restart FileZilla."
+msgstr "Jika Anda mengganti bahasa, FileZilla harus dijalankan ulang."
+
+#: resources.h:686
+msgid ""
+"If you click on test, FileZilla will connect to probe.filezilla-project.org "
+"and will perform some simple tests."
+msgstr ""
+"Jika Anda klik pada pengujian, FileZilla akan terhubung ke probe.filezilla-"
+"project.org dan melakukan pengujian sederhana."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1227
+msgid "If you close FileZilla, your changes will be lost."
+msgstr "Jika Anda menutup FileZilla, perubahan Anda akan hilang."
+
+#: resources.h:160
+msgid ""
+"If you enter the wrong filetypes, those files may get corrupted when "
+"transferred."
+msgstr ""
+"Jika Anda salah memasukkan jenis berkas, berkas tersebut mungkin akan rusak "
+"ketika ditransfer"
+
+#: resources.h:687
+msgid "If you get any errors, your configuration is not correct."
+msgstr ""
+"Jika Anda mendapatkan sembarang kesalahan, konfigurasi Anda tidak benar."
+
+#: resources.h:475
+msgid ""
+"If you have problems to retrieve directory listings or to transfer files, "
+"try to change the default transfer mode."
+msgstr ""
+"Jika Anda memiliki masalah mendapatkan daftar direktori atau mentransfer "
+"berkas,  coba untuk mengganti mode transfer default."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:566
+msgid ""
+"If you keep having problems with a specific server, the server itself or a "
+"remote router or firewall might be misconfigured. In this case try to toggle "
+"passive mode and contact the server administrator for help."
+msgstr ""
+"Jika Anda tetap mendapatkan masalah dengan server tertentu, server tersebut "
+"atau router remote atau firewall mungkin salah konfigurasi. Pada kasus ini, "
+"coba ganti mode pasif dan hubungi administrator server untuk bantuan."
+
+#: resources.h:646
+msgid ""
+"If you sucessfully complete the wizard and the final test succeeds, any "
+"firewalls and routers you have should be configured properly."
+msgstr ""
+"Jika Anda berhasil menyelesaikan panduan dan pengujian final berhasil, "
+"sembarang firewall dan router yang Anda miliki seharusnya terkonfigurasi "
+"dengan baik."
+
+#: resources.h:682
+msgid ""
+"If you use a firewall, make sure FileZilla is allowed to accept connection "
+"on all given ports."
+msgstr ""
+"Jika Anda menggunakan sebuah firewall, pastikan FileZilla diijinkan menerima "
+"koneksi dari semua port yang diberikan."
+
+#: resources.h:681
+msgid ""
+"If you use a router, make sure all these ports are forwarded to the machine "
+"you're running FileZilla on."
+msgstr ""
+"Jika Anda menggunakan router, pastikan semua port diteruskan pada mesin "
+"dimana Anda menjalankan FileZilla."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:591
+msgid ""
+"If your router keeps changing the IP address, please contact your router "
+"manufacturer."
+msgstr ""
+"Jika router Anda terus menerus berganti alamat IP, harap hubungi pembuat "
+"router Anda."
+
+#: ../../locales/../src/interface/import.cpp:91
+msgid "Import data from older version"
+msgstr "Mengimpor data dari versi lama"
+
+#: resources.h:447
+msgid "Import settings"
+msgstr "Impor pengaturan"
+
+#: ../../locales/../src/interface/import.cpp:77
+#: ../../locales/../src/interface/import.cpp:80
+msgid "Import successful"
+msgstr "Impor berhasil"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:137
+#: ../../locales/../src/interface/optionspage_edit.cpp:144
+msgid "Improperly quoted association."
+msgstr "Pemberian tanda kutip pada asosiasi salah"
+
+#: resources.h:674
+msgid ""
+"In active mode, FileZilla has to listen on a port for data transfers. You "
+"have to specify which ports FileZilla will use."
+msgstr ""
+"Pada mode aktif, FileZilla harus mendengarkan sebuah port untuk transfer "
+"data. Anda harus menentukan port yang akan digunakan FileZilla."
+
+#: resources.h:676
+msgid ""
+"In case you have a router, you will have to forward all available ports, as "
+"FileZilla has no influence on the ports your system chooses."
+msgstr ""
+"Jika Anda memiliki router, Anda harus mengirimkan semua port yang tersedia, "
+"karena FileZilla tidak punya hubungan pada port yang dipilih sistem Anda."
+
+#: resources.h:391
+msgid ""
+"In case you prefer automatic updates, you can enable automatic update checks "
+"in the settings dialog."
+msgstr ""
+"Jika Anda memilih update otomatis, Anda bisa mengaktifkan pengujian update "
+"otomatis pada dialog pengaturan."
+
+#: resources.h:365 resources.h:664
+msgid ""
+"In order to use active mode, FileZilla needs to know your external IP "
+"address."
+msgstr ""
+"Untuk menggunakan mode aktif, FileZilla harus tahu alamat IP eksternal Anda."
+
+#: resources.h:649
+msgid ""
+"In passive mode, which is recommended for most users, FileZilla asks the "
+"server for a port and connects to the given port. Not much configuration has "
+"to be done for this."
+msgstr ""
+"Pada mode pasif, yang disarankan untuk semua pengguna, FileZilla akan "
+"bertanya kepada server untuk sebuah port dan terhubung ke port tersebut. "
+"Tidak banyak konfigurasi yang harus dilakukan untuk ini."
+
+#: ../../locales/../src/interface/QueueView.cpp:918
+msgid "Incorrect password"
+msgstr "Kata kunci salah"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:785
+msgid "Initializing TLS..."
+msgstr "Menginisialisasi TLS..."
+
+#: resources.h:105 ../../locales/../src/interface/sitemanager.cpp:1107
+#: ../../locales/../src/interface/sitemanager.cpp:1329
+msgid "Interactive"
+msgstr "Interaktif"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:119
+msgid "Interface"
+msgstr "Antarmuka"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:159
+#: ../../locales/../src/interface/QueueView.cpp:883
+#: ../../locales/../src/interface/QueueView.cpp:1386
+msgid "Interrupted by user"
+msgstr "DIinterupsi oleh pengguna"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:751
+msgid "Invalid Content-Length"
+msgstr "Ukuran konten tidak valid"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:625
+msgid "Invalid HTTP Response"
+msgstr "Respon HTTP tidak valid"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:482
+#: ../../locales/../src/engine/ControlSocket.cpp:542
+msgid ""
+"Invalid character sequence received, disabling UTF-8. Select UTF-8 option in "
+"site manager to force UTF-8."
+msgstr ""
+"Urutan karakter yang diterima tidak valid, menonaktifkan UTF-8. Memilih opsi "
+"UTF-8 pada manajemen situs untuk memaksa UTF-8."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:875
+msgid "Invalid chunk size"
+msgstr "Ukuran potongan berkas tidak valid"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:353
+#: ../../locales/../src/interface/netconfwizard.cpp:363
+#: ../../locales/../src/interface/netconfwizard.cpp:372
+msgid "Invalid data received"
+msgstr "Data yang diterima tidak valid"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:45
+#: ../../locales/../src/interface/verifycertdialog.cpp:61
+msgid "Invalid date"
+msgstr "Tanggal tidak valid"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1371
+#: ../../locales/../src/interface/LocalListView.cpp:1396
+msgid "Invalid filename"
+msgstr "Nama berkas tidak valid"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:1067
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:147
+msgid "Invalid hostname or host not found"
+msgstr "Nama mesin tidak valid atau mesin tidak ditemukan"
+
+#: ../../locales/../src/engine/server.cpp:141
+#: ../../locales/../src/engine/server.cpp:154
+msgid "Invalid port given. The port has to be a value from 1 to 65535."
+msgstr "Port yang diberikan tidak valid. Port harus bernilai 1 sampai 65535."
+
+#: ../../locales/../src/engine/server.cpp:60
+msgid ""
+"Invalid protocol specified. Valid protocols are:\n"
+"ftp:// for normal FTP,\n"
+"sftp:// for SSH file transfer protocol,\n"
+"ftps:// for FTP over SSL (implicit) and\n"
+"ftpes:// for FTP over SSL (explicit)."
+msgstr ""
+"Protokol yang diberikan tidak valid. Protokol yang valid adalah:\n"
+"ftp:// untuk FTP normal,\n"
+"sftp:// untuk protokol transfer berkas melalui SSH ,\n"
+"ftps:// untuk FTP diatas SSL (implicit) dan \n"
+"ftpes:// untuk FTP diatas SSL (explicit)."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:635
+msgid "Invalid response code"
+msgstr "Kode respon tidak valid"
+
+#: ../../locales/../src/interface/sitemanager.cpp:2136
+#: ../../locales/../src/interface/sitemanager.cpp:2156
+#: ../../locales/../src/interface/sitemanager.cpp:2174
+#: ../../locales/../src/interface/sitemanager.cpp:2185
+msgid "Invalid site path"
+msgstr "Path site tidak valid"
+
+#: ../../locales/../src/interface/filteredit.cpp:709
+msgid "Invalid size in condition"
+msgstr "Ukuran tidak valid"
+
+#: ../../locales/../src/engine/server.cpp:105
+msgid "Invalid username given."
+msgstr "Nama Pengguna tidak valid."
+
+#: resources.h:174
+msgid "Keep directories on top"
+msgstr "Pertahankan direktori diatas"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:726
+msgid ""
+"Keep in mind that not all servers support this feature and may return "
+"incorrect listings if this option is enabled. Although FileZilla performs "
+"some tests to check if the server supports this feature, the test may fail."
+msgstr ""
+"Perhatikan bahwa tidak semua server mendukung fitur ini dan bisa "
+"mengembalikan daftar yang salah jika Meskipun FileZilla melakukan beberapa "
+"pengujian untuk melihat apakah server mendukung fitur ini, pengujian bisa "
+"gagal."
+
+#: resources.h:487
+msgid "Key exchange"
+msgstr "Pertukaran kunci"
+
+#: resources.h:595
+msgid "L&owest"
+msgstr "Ter&endah"
+
+#: resources.h:195 ../../locales/../src/interface/settingsdialog.cpp:123
+msgid "Language"
+msgstr "Bahasa"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1568
+msgid "Language changed"
+msgstr "Bahasa sudah berubah"
+
+#: ../../locales/../src/interface/LocalListView.cpp:261
+#: ../../locales/../src/interface/RemoteListView.cpp:352
+msgid "Last modified"
+msgstr "Terakhir dimodifikasi"
+
+#: resources.h:164
+msgid "Layout"
+msgstr "Layout"
+
+#: resources.h:52
+msgid "Limit for concurrent &downloads:"
+msgstr "Batas untuk &download konkuren:"
+
+#: resources.h:54
+msgid "Limit for concurrent &uploads:"
+msgstr "Batas untuk &upload konkuren:"
+
+#: resources.h:360
+msgid "Limit local ports"
+msgstr "Batas port lokal"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:818
+msgid "Line length exceeded"
+msgstr "Ukuran baris kelebihan"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:267
+msgid "Listen socket closed"
+msgstr "Soket ditutup"
+
+#: ../../locales/../src/interface/StatusView.cpp:237
+#: ../../locales/../src/interface/StatusView.cpp:285
+msgid "Listing:"
+msgstr "Daftar:"
+
+#: resources.h:363
+msgid "Lo&west available port:"
+msgstr "Port ter&endah yang tersedia:"
+
+#: ../../locales/../src/interface/edithandler.cpp:927
+msgid "Local"
+msgstr "Lokal:"
+
+#: resources.h:331
+msgid "Local filters:"
+msgstr "Filter lokal:"
+
+#: ../../locales/../src/interface/viewheader.cpp:328
+msgid "Local site:"
+msgstr "Situs lokal:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:137
+msgid "Locality:"
+msgstr "Lokalitas:"
+
+#: resources.h:224 ../../locales/../src/interface/settingsdialog.cpp:128
+msgid "Logging"
+msgstr "Melakukan pencatatan"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:834
+msgid ""
+"Login data contains non-ASCII characters and server might not be UTF-8 "
+"aware. Cannot fall back to local charset since using proxy."
+msgstr ""
+"Data login berisi karakter non-ASCII dan server mungkin tidak mendukung UTF-"
+"8. Tidak bisa kembali ke charset lokal karena menggunakan proxy."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:841
+msgid ""
+"Login data contains non-ASCII characters and server might not be UTF-8 "
+"aware. Trying local charset."
+msgstr ""
+"Data login berisi karakter non-ASCII dan server mungkin tidak mendukung UTF-"
+"8. Mencoba charset lokal."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:870
+msgid "Login sequence fully executed yet not logged in. Aborting."
+msgstr "Urutan login dilakukan, namun belum login. Membatalkan."
+
+#: ../../locales/../src/interface/queue.cpp:848
+#: ../../locales/../src/interface/queue.cpp:929
+msgid "Low"
+msgstr "Rendah"
+
+#: ../../locales/../src/interface/queue.cpp:846
+#: ../../locales/../src/interface/queue.cpp:927
+msgid "Lowest"
+msgstr "Terendah"
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:68
+msgid "Lowest available port has to be a number between 1024 and 65535."
+msgstr "Port terendah yang tersedia harus angka antara 1024 dan 65535."
+
+#: resources.h:19 resources.h:42
+msgid "MAC:"
+msgstr "MAC:"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:806
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:818
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:833
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:875
+#, c-format
+msgid "Malformed chunk data: %s"
+msgstr "Bagian data rusak: %s"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:751
+#, c-format
+msgid "Malformed header: %s"
+msgstr "Header rusak: %s"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:595
+msgid "Malformed reply, server not sending proper lineendings"
+msgstr "Balasan rusak, server tidak mengirimkan akhir baris yang benar"
+
+#: resources.h:349
+msgid "Match all of the following"
+msgstr "Cocokkan semua dari pilihan berikut"
+
+#: resources.h:50
+msgid "Maximum simultaneous &transfers:"
+msgstr "Jumlah maksimum &transfer secara simultan:"
+
+#: resources.h:119
+msgid "Minutes"
+msgstr "Menit"
+
+#: resources.h:508
+msgid "Move &down"
+msgstr "Ke &bawah"
+
+#: resources.h:507
+msgid "Move &up"
+msgstr "Ke &atas"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:1023
+msgid "My Computer"
+msgstr "Komputerku"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:1013
+msgid "My Documents"
+msgstr "Dokumenku"
+
+#: ../../locales/../src/interface/sitemanager.cpp:517
+#: ../../locales/../src/interface/sitemanager.cpp:519
+#: ../../locales/../src/interface/sitemanager.cpp:1687
+msgid "My Sites"
+msgstr "Situsku"
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:206
+#: ../../locales/../src/interface/optionspage_themes.cpp:208
+msgid "N/a"
+msgstr "N/a"
+
+#: ../../locales/../src/interface/sitemanager.cpp:968
+msgid "Name already exists"
+msgstr "Nama sudah ada"
+
+#: resources.h:140
+msgid "Name:"
+msgstr "Nama:"
+
+#: ../../locales/../src/interface/filteredit.cpp:720
+msgid "Need to enter filter name"
+msgstr "Harus memasukkan nama filter"
+
+#: ../../locales/../src/interface/sitemanager.cpp:861
+msgid "Need to specify a character encoding"
+msgstr "Harus menentukan enkoding karakter"
+
+#: resources.h:93
+msgid "New &Folder"
+msgstr "Direktori &Baru"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:1300
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1223
+msgid "New directory"
+msgstr "Direktori baru"
+
+#: ../../locales/../src/interface/filteredit.cpp:459
+msgid "New filter"
+msgstr "Filter baru"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1316
+#: ../../locales/../src/interface/sitemanager.cpp:754
+#: ../../locales/../src/interface/sitemanager.cpp:777
+msgid "New folder"
+msgstr "Direktori baru"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1942
+#: ../../locales/../src/interface/sitemanager.cpp:1965
+msgid "New site"
+msgstr "Situs baru"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:894
+msgid "No"
+msgstr "Tidak"
+
+#: ../../locales/../src/interface/export.cpp:26
+msgid "No category to export selected"
+msgstr "Tidak ada kategori yang akan diekspor"
+
+#: ../../locales/../src/interface/QueueView.cpp:2025
+msgid "No command given, aborting."
+msgstr "Tidak ada perintah yang diberikan, membatalkan."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3742
+msgid "No external IP address set, trying default."
+msgstr ""
+"Tidak ada alamat IP eksternal yang ditentukan, mencoba menggunakan default."
+
+#: ../../locales/../src/interface/edithandler.cpp:871
+msgid "No files are currently being edited."
+msgstr "Tidak ada berkas yang sedang diedit."
+
+#: ../../locales/../src/interface/filteredit.cpp:471
+msgid "No filter name given"
+msgstr "Tidak ada nama filter yang diberikan"
+
+#: ../../locales/../src/engine/server.cpp:45
+#: ../../locales/../src/engine/server.cpp:134
+#: ../../locales/../src/engine/server.cpp:164
+msgid "No host given, please enter a host."
+msgstr "Tidak ada mesin yang diberikan, harap masukkan sebuah mesin."
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:98
+msgid "No images available"
+msgstr "Tidak ada gambar yang tersedia"
+
+#: ../../locales/../src/interface/QueueView.cpp:2682
+msgid "No more files in the queue!"
+msgstr "Tidak ada lagi berkas pada antrian!"
+
+#: ../../locales/../src/interface/filter.cpp:318
+msgid "No name for the filterset given."
+msgstr "Tidak ada nama untuk kelompok filter yang diberikan."
+
+#: ../../locales/../src/interface/sitemanager.cpp:1653
+#: ../../locales/../src/interface/sitemanager.cpp:1665
+#: ../../locales/../src/interface/sitemanager.cpp:1696
+msgid "No sites available"
+msgstr "Tidak ada situs yang tersedia"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:67
+msgid "None"
+msgstr "Tidak ada"
+
+#: resources.h:351
+msgid "None of the following"
+msgstr "Tidak ada pada berikut ini"
+
+#: resources.h:66 resources.h:103 ../../locales/../src/interface/queue.cpp:851
+#: ../../locales/../src/interface/queue.cpp:932
+#: ../../locales/../src/interface/sitemanager.cpp:1070
+#: ../../locales/../src/interface/sitemanager.cpp:1103
+#: ../../locales/../src/interface/sitemanager.cpp:1323
+msgid "Normal"
+msgstr "Normal"
+
+#: ../../locales/../src/interface/queueview_failed.cpp:330
+msgid "Not all items could be requeued for viewing / editing."
+msgstr "Tidak semua barang bisa di antrikan ulang untuk dilihat / diedit."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2028
+msgid "Not connected to any server"
+msgstr "Tidak terhubung pada sembarang server"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:644
+msgid "Not connected to any server."
+msgstr "Tidak terhubung pada sembarang server."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:724
+msgid "Note that this feature is only supported using the FTP protocol."
+msgstr "Perhatikan bahwa fitur ini hanya didukung menggunakan protokol FTP."
+
+#: resources.h:265
+msgid "Note: This only works with plain, unencrypted FTP connections."
+msgstr "Catatan: Ini hanya bekerja dengan koneksi FTP tak terenkripsi."
+
+#: ../../locales/../src/interface/optionspage_connection.cpp:34
+msgid "Number of retries has to be between 0 and 99."
+msgstr "Jumlah percobaan harus diantara 0 dan 99."
+
+#: resources.h:469
+msgid "O&pen file"
+msgstr "&Buka berkas"
+
+#: resources.h:405 resources.h:423
+msgid "O&verwrite"
+msgstr "&Timpa"
+
+#: resources.h:23 resources.h:44 resources.h:88 resources.h:150
+#: resources.h:267 resources.h:289 resources.h:302 resources.h:312
+#: resources.h:324 resources.h:338 resources.h:358 resources.h:411
+#: resources.h:438 resources.h:445 resources.h:453 resources.h:470
+#: resources.h:503 resources.h:509
+msgid "OK"
+msgstr "OK"
+
+#: resources.h:656
+msgid ""
+"On the following pages, the selected transfer mode will be configured, as "
+"well as the fallback mode if enabled."
+msgstr ""
+"Pada halaman berikut, mode transfer yang dipilih akan dikonfigurasi, dan "
+"juga mode kembali jika diaktifkan."
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:904
+msgid "Once"
+msgstr "Satu kali"
+
+#: resources.h:205
+msgid ""
+"Only the versions of FileZilla and the operating system you are using will "
+"be submitted to the server."
+msgstr ""
+"Hanya versi FileZilla dan sistem operasi yang Anda gunakan yang akan "
+"dikirimkan ke server."
+
+#: resources.h:698 resources.h:699
+msgid "Open the Site Manager"
+msgstr "Buka Manajemen Situs"
+
+#: resources.h:564
+msgid "Open the file."
+msgstr "Buka berkas."
+
+#: resources.h:522
+msgid "Open the settings dialog of FileZilla"
+msgstr "Buka dialog pengaturan FileZilla"
+
+#: ../../locales/../src/interface/LocalListView.cpp:2030
+#: ../../locales/../src/interface/LocalListView.cpp:2058
+#: ../../locales/../src/interface/LocalListView.cpp:2110
+#: ../../locales/../src/interface/LocalListView.cpp:2117
+msgid "Opening failed"
+msgstr "Pembukaan berkas gagal"
+
+#: resources.h:513
+msgid "Opens the Site Manager"
+msgstr "Buka Manajemen Situs"
+
+#: ../../locales/../src/interface/FileZilla.cpp:274
+msgid "Operating system problem detected"
+msgstr "Masalah sistem operasi terdeteksi"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:132
+msgid "Organization:"
+msgstr "Organisasi:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:147
+msgid "Other:"
+msgstr "Lainnya:"
+
+#: resources.h:398 resources.h:417
+msgid "Ov&erwrite if source newer"
+msgstr "Timpa &jika sumber lebih baru"
+
+#: resources.h:406 resources.h:424
+msgid "Over&write if source newer"
+msgstr "Timpa j&ika sumber lebih baru"
+
+#: resources.h:179
+msgid "Overview"
+msgstr "Gambaran"
+
+#: resources.h:81
+msgid "Overwrite &if source newer"
+msgstr "Timpa &jika sumber lebih baru"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:354
+msgid "Owner / Group"
+msgstr "Pemilik / Grup"
+
+#: resources.h:271
+msgid "Owner permissions"
+msgstr "Hak akses pemilik"
+
+#: resources.h:262
+#, no-c-format
+msgid "P&roxy host:"
+msgstr "Host p&roxy:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:488
+msgid "PORT command tainted by router or firewall."
+msgstr "Perintah PORT diabaikan oleh router atau firewall."
+
+#: resources.h:472
+msgid "Pa&ssive (recommended)"
+msgstr "Pa&sif (disarankan)"
+
+#: ../../locales/../src/interface/updatewizard.cpp:239
+msgid "Package"
+msgstr "Paket"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:2418
+msgid "Parameter not a valid URL"
+msgstr "Parameter bukan URL yang valid"
+
+#: resources.h:108 resources.h:694
+msgid "Pass&word:"
+msgstr "Kata &kunci:"
+
+#: resources.h:652
+msgid "Passive (recommended)"
+msgstr "Pasif (disarankan)"
+
+#: resources.h:45 ../../locales/../src/interface/settingsdialog.cpp:113
+msgid "Passive mode"
+msgstr "Mode pasif"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:584
+#: ../../locales/../src/interface/netconfwizard.cpp:597
+#: ../../locales/../src/interface/netconfwizard.cpp:608
+msgid "Passive mode has been set as default transfer mode."
+msgstr "Mode pasif telah ditentukan sebagai mode transfer default."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:278
+msgid "Password required"
+msgstr "Kata sandi diperlukan"
+
+#: ../../locales/../src/interface/edithandler.cpp:908
+#: ../../locales/../src/interface/edithandler.cpp:1031
+#: ../../locales/../src/interface/edithandler.cpp:1119
+msgid "Pending removal"
+msgstr "Penghapusan tertunda"
+
+#: ../../locales/../src/interface/filteredit.cpp:120
+msgid "Permission"
+msgstr "Hak akses"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:353
+msgid "Permissions"
+msgstr "Hak akses"
+
+#: resources.h:388
+msgid ""
+"Please check http://filezilla-project.org for the most recent version of "
+"FileZilla."
+msgstr ""
+"Harap periksa http://filezilla-project.org untuk versi terbaru FileZilla."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:553
+msgid ""
+"Please check on http://filezilla-project.org/probe.php that the server is "
+"running and carefully check your settings again."
+msgstr ""
+"Harap periksa http://filezilla-project.org/probe.php bahwa server sudah "
+"berjalan dan periksa pengaturan Anda kembali."
+
+#: ../../locales/../src/interface/updatewizard.cpp:847
+msgid ""
+"Please check the package manager of your system for an updated package or "
+"visit http://filezilla-project.org to download the source code of FileZilla."
+msgstr ""
+"Harap periksa manajemen paket pada sistem Anda untuk paket baru atau "
+"kunjungi http://filezilla-project.org untuk mendownload kode sumber dari "
+"FileZilla."
+
+#: resources.h:658
+msgid ""
+"Please configure any firewalls and routers so that FileZilla can establish "
+"outgoing connection to arbitrary ports."
+msgstr ""
+"Harap konfigurasi sembarang firewall dan router sehingga FileZilla bisa "
+"membuat koneksi keluar pada sembarang port."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:619
+msgid "Please disable settings like 'DMZ mode' or 'Game mode' on your router."
+msgstr ""
+"Harap nonaktifkan pengaturan seperti 'mode DMZ' atau 'mode Game' pada router "
+"Anda."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:561
+msgid ""
+"Please ensure you have a stable internet connection and check on http://"
+"filezilla-project.org/probe.php that the server is running."
+msgstr ""
+"Pastikan Anda memiliki koneksi Internet yang stabil dan periksa pada http://"
+"filezilla-project.org/probe.php bahwa server berjalan."
+
+#: ../../locales/../src/interface/optionspage_dateformatting.cpp:70
+msgid "Please enter a custom date format."
+msgstr "Harap masukkan format tanggal kustomisasi."
+
+#: ../../locales/../src/interface/optionspage_dateformatting.cpp:73
+msgid "Please enter a custom time format."
+msgstr "Harap masukkan format waktu kustomisasi."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:68
+msgid "Please enter a download speedlimit greater or equal to 0 KB/s."
+msgstr ""
+"Harap masukkan batas kecepatan download lebih besar atau sama dengan 0 KB/s."
+
+#: ../../locales/../src/interface/filteredit.cpp:464
+msgid "Please enter a name for the new filter."
+msgstr "Harap masukkan nama untuk filter baru."
+
+#: ../../locales/../src/interface/filteredit.cpp:572
+msgid "Please enter a new name for the copied filter."
+msgstr "Harap masukkan nama baru untuk filter yang disalin."
+
+#: ../../locales/../src/interface/filteredit.cpp:523
+msgid "Please enter a new name for the filter."
+msgstr "Harap masukkan nama baru untuk filter."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:56
+msgid ""
+"Please enter a number between 0 and 10 for the number of concurrent "
+"downloads."
+msgstr "Harap masukkan angka antara 0 dan 10 untuk jumlah download konkuren."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:60
+msgid ""
+"Please enter a number between 0 and 10 for the number of concurrent uploads."
+msgstr "Harap masukkan angka antara 0 dan 10 untuk jumlah upload konkuren."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:52
+msgid ""
+"Please enter a number between 1 and 10 for the number of concurrent "
+"transfers."
+msgstr "Harap masukkan angka antara 1 dan 10 untuk jumlah transfer konkuren."
+
+#: resources.h:139
+msgid "Please enter a password for this server:"
+msgstr "Harap masukkan kata sandi untuk server ini:"
+
+#: ../../locales/../src/interface/QueueView.cpp:2014
+msgid ""
+"Please enter a path and executable to run.\n"
+"E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
+"You can also optionally specify program arguments."
+msgstr ""
+"Harap masukkan path dan aplikasi yang akan dijalankan.\n"
+"Misalnya c:\\path\\file.exe pada MS Windows atau /path/file pada Unix.\n"
+"Anda juga bisa menentukan argumen program secara opsional."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:64
+msgid ""
+"Please enter a timeout between 5 and 9999 seconds or 0 to disable timeouts."
+msgstr ""
+"Harap masukan waktu timeout antara 5 dan 9999 detik atau 0 untuk "
+"menonaktifkan timeout."
+
+#: ../../locales/../src/interface/filter.cpp:311
+msgid "Please enter a unique name for this filter set"
+msgstr "Harap masukkan nama unik untuk kumpulan filter ini"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:182
+msgid "Please enter a valid portrange."
+msgstr "Harap masukkan jarak port yang valid"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:161
+msgid "Please enter an URL where to get your external address from"
+msgstr "Harap masukkan URL untuk mendapatkan alamat eksternal Anda"
+
+#: ../../locales/../src/interface/optionspage_updatecheck.cpp:40
+msgid "Please enter an update interval of at least 7 days"
+msgstr "Harap masukkan waktu interval paling tidak 7 hari"
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:72
+msgid "Please enter an upload speedlimit greater or equal to 0 KB/s."
+msgstr ""
+"Harap masukkan batas kecepatan upload lebih besar atau sama dengan 0 KB/s"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:655
+msgid ""
+"Please enter raw FTP command.\n"
+"Using raw ftp commands will clear the directory cache."
+msgstr ""
+"Harap masukkan perintah FTP.\n"
+"Menggunakan perintah ftp akan menghapus cache direktori."
+
+#: ../../locales/../src/interface/LocalListView.cpp:1186
+#: ../../locales/../src/interface/LocalTreeView.cpp:1297
+#: ../../locales/../src/interface/RemoteListView.cpp:1302
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1209
+msgid "Please enter the name of the directory which should be created:"
+msgstr "Masukkan nama direktori yang akan dibuat:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:142
+msgid "Please enter your external IP address"
+msgstr "Harap masukkan alamat IP eksternal Anda"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:589
+#: ../../locales/../src/interface/netconfwizard.cpp:602
+msgid ""
+"Please enter your external IP address on the active mode page of this "
+"wizard. In case you have a dynamic address or don't know your external "
+"address, use the external resolver option."
+msgstr ""
+"Harap masukkan alamat IP eksternal Anda pada mode aktif dari panduan ini."
+"Jika Anda memiliki alamat dinamis atau tidak tahu alamat eksternal, gunakan "
+"opsi resolver eksternal."
+
+#: resources.h:645
+msgid ""
+"Please follow the instructions carefully, as wrong configuration will "
+"prevent successful FTP connections."
+msgstr ""
+"Harap ikuti instruksi dengan benar, karena konfigurasi yang salah akan "
+"mencegah koneksi FTP yang sukses."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:613
+msgid ""
+"Please make sure FileZilla is allowed to establish outgoing connections and "
+"make sure you typed the address of the address resolver correctly."
+msgstr ""
+"Harap pastikan FileZilla diijinkan untuk membuat koneksi keluar dan pastikan "
+"Anda menuliskan alamat dari alamat resolver dengan benar."
+
+#: ../../locales/../src/interface/FileZilla.cpp:213
+msgid "Please make sure the requested locale is installed on your system."
+msgstr "Harap pastikan lokal yang diminta sudah terinstall pada sistem Anda."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:572
+msgid ""
+"Please make sure you are running the latest version of FileZilla. Visit "
+"http://filezilla-project.org for details."
+msgstr ""
+"Harap pastikan Anda menjalankan versi terbaru dari FileZilla. Kunjungi "
+"http://filezilla-project.org untuk lebih detail."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:590
+msgid ""
+"Please make sure your router is using the latest available firmware. "
+"Furthermore, your router has to be configured properly. You will have to use "
+"manual port forwarding. Don't run your router in the so called 'DMZ mode' or "
+"'game mode'."
+msgstr ""
+"Harap pastikan router Anda menggunakan firmware terbaru. Lebih lanjut, "
+"router Anda harus dikonfigurasi dengan benar. Anda harus melakukan "
+"meneruskan port secara manual. Jangan jalankan router Anda pada 'mode DMZ' "
+"atau 'mode game'."
+
+#: resources.h:659
+msgid ""
+"Please note that FileZilla has no influence on the port the server chooses. "
+"So the server might choose a port which your firewall thinks is only used by "
+"trojans or other malware. This might raise a false alarm you can safely "
+"discard."
+msgstr ""
+"Harap diperhatikan bahwa FileZilla tidak punya kepentingan pada port yang "
+"dipilih server. Sehingga server mungkin memilih port yang oleh Firewall Anda "
+"dianggap digunakan oleh trojan atau malware. Hal ini bisa menimbulkan false "
+"alarm yang bisa Anda abaikan."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:778
+msgid ""
+"Please note that preserving timestamps on uploads on FTP, FTPS and FTPES "
+"servers only works if they support the MFMT command."
+msgstr ""
+"Harap perhatikan bahwa mempertahankan waktu timestamp pada upload hanya "
+"berlaku pada server FTP, FTPS, dan FTPES yang mendukung perintah MFMT."
+
+#: resources.h:187
+msgid ""
+"Please note that some servers might ban you if you try to reconnect too "
+"often or in too short intervals."
+msgstr ""
+"Harap perhatikan bahwa beberapa server bisa memblokir Anda jika Anda terlalu "
+"banyak melakukan hubungan ulang pada interval yang singkat."
+
+#: resources.h:211 resources.h:217
+#, no-c-format
+msgid ""
+"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"details"
+msgstr ""
+"Harap baca http://wiki.filezilla-project.org/Date_and_Time_formatting untuk "
+"detailnya"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:567
+msgid ""
+"Please run this wizard again should you change your network environment or "
+"in case you suddenly encounter problems with servers that did work "
+"previously."
+msgstr ""
+"Harap jalankan panduan ini kembali jika Anda mengganti lingkungan jaringan "
+"atau Anda mengalami masalah dengan server padahal sebelumnya bekerja dengan "
+"baik."
+
+#: resources.h:452
+msgid "Please select the categories you would like to import."
+msgstr "Harap memilih kategori yang hendak Anda import."
+
+#: resources.h:647
+msgid "Please select the default transfer mode you would like to use."
+msgstr "Harap pilih mode transfer default yang hendak Anda gunakan."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:38
+#, c-format
+msgid "Please select the new attributes for the directory \"%s\"."
+msgstr "Harap pilih attribut baru untuk direktori \"%s\"."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:27
+#, c-format
+msgid "Please select the new attributes for the file \"%s\"."
+msgstr "Harap pilih atribut baru untuk berkas \"%s\"."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:41
+msgid "Please select the new attributes for the selected directories."
+msgstr "Tentukan atribut baru dari direktori yang dipilih."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:44
+msgid ""
+"Please select the new attributes for the selected files and directories."
+msgstr "Harap pilih atribut baru dari berkas dan direktori yang dipilih."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:30
+msgid "Please select the new attributes for the selected files."
+msgstr "Harap pilih attribut baru untuk berkas yang dipilih"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:577
+msgid ""
+"Please update your firewall and make sure your router is using the latest "
+"available firmware. Furthermore, your router has to be configured properly. "
+"You will have to use manual port forwarding. Don't run your router in the so "
+"called 'DMZ mode' or 'game mode'. Things like protocol inspection or "
+"protocol specific 'fixups' have to be disabled"
+msgstr ""
+"Harap update firewall Anda dan pastikan router Anda menggunakan firmware "
+"terbaru. Lebih lanjut, router Anda harus dikonfigurasi dengan benar. Anda "
+"harus melakukan meneruskan port secara manual. Jangan jalankan router Anda "
+"pada 'mode DMZ' atau 'mode game'. Hal-hal seperti inspeksi protokol atau "
+"'perbaikan' pada protokol tertentu harus dinonaktifkan"
+
+#: resources.h:390
+msgid ""
+"Please visit http://filezilla-project.org for more information about "
+"FileZilla."
+msgstr ""
+"Harap kunjungi http://filezilla-project.org untuk informasi lebih lanjut "
+"tentang FileZilla."
+
+#: ../../locales/../src/interface/updatewizard.cpp:845
+#: ../../locales/../src/interface/updatewizard.cpp:861
+msgid ""
+"Please visit http://filezilla-project.org to download the most recent "
+"version."
+msgstr ""
+"Harap kunjungi http://filezilla-project.org untuk mendownload versi terbaru."
+
+#: ../../locales/../src/interface/sitemanager.cpp:1516
+#: ../../locales/../src/interface/sitemanager.cpp:1686
+msgid "Predefined Sites"
+msgstr "Situs Terdefinisi"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:777
+msgid "Preserving file timestamps"
+msgstr "Mempertahankan berkas waktu"
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:247
+msgid "Preview:"
+msgstr "Preview:"
+
+#: ../../locales/../src/engine/tlssocket.cpp:783
+msgid "Primary connection and data connection certificates don't match."
+msgstr "Sertifikat koneksi utama dan koneksi data tidak sesuai."
+
+#: resources.h:173
+msgid "Prioritize directories (default)"
+msgstr "Direktori prioritas (default)"
+
+#: ../../locales/../src/interface/queue.cpp:1129
+msgid "Priority"
+msgstr "Prioritas"
+
+#: resources.h:204
+msgid "Privacy policy:"
+msgstr "Aturan privasi:"
+
+#: resources.h:481
+msgid "Private &keys:"
+msgstr "&Kunci privat:"
+
+#: resources.h:264
+msgid "Pro&xy password:"
+msgstr "Katasandi pro&xy:"
+
+#: resources.h:538 resources.h:586
+msgid "Process &Queue"
+msgstr "Proses &Antrian"
+
+#: resources.h:263
+msgid "Proxy &user:"
+msgstr "&Pengguna proxy:"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4195
+msgid "Proxy set but proxy host or port invalid"
+msgstr "Proxy ditentukan tetapi host atau port proxy tidak valid"
+
+#: resources.h:479
+msgid "Public Key Authentication"
+msgstr "Authentikasi Kunci Publik"
+
+#: resources.h:9 resources.h:32
+msgid "Public key algorithm:"
+msgstr "Algoritma kunci publik:"
+
+#: resources.h:279
+msgid "Public permissions"
+msgstr "Hak akses publik"
+
+#: ../../locales/../src/interface/QueueView.cpp:2737
+msgid "Queue has been fully processed"
+msgstr "Antrian sudah diproses sepenuhnya"
+
+#: ../../locales/../src/interface/statusbar.cpp:285
+#, c-format
+msgid "Queue: %s%d %c"
+msgstr "Antrian: %s%d %c"
+
+#: ../../locales/../src/interface/statusbar.cpp:358
+#, c-format
+msgid "Queue: %s%d MiB"
+msgstr "Antrian: %s%d MiB"
+
+#: ../../locales/../src/interface/statusbar.cpp:278
+#: ../../locales/../src/interface/statusbar.cpp:359
+#, c-format
+msgid "Queue: %s%d bytes"
+msgstr "Antrian: %s%d bytes"
+
+#: ../../locales/../src/interface/statusbar.cpp:251
+#: ../../locales/../src/interface/statusbar.cpp:357
+msgid "Queue: empty"
+msgstr "Antrian: kosong"
+
+#: ../../locales/../src/interface/QueueView.cpp:399
+msgid "Queued files"
+msgstr "Berkas antrian"
+
+#: resources.h:602
+msgid "R&eboot system"
+msgstr "R&eboot sistem"
+
+#: resources.h:535
+msgid "R&emote directory tree"
+msgstr "Pohon direktori R&emote"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:664
+msgid "Raw FTP command"
+msgstr "Perintah Raw FTP"
+
+#: resources.h:276
+msgid "Re&ad"
+msgstr "Ba&ca"
+
+#: resources.h:83 resources.h:400 resources.h:419
+msgid "Re&name"
+msgstr "Ganti &nama"
+
+#: resources.h:280
+msgid "Rea&d"
+msgstr "Bac&a"
+
+#: ../../locales/../src/interface/filteredit.cpp:112
+msgid "Read-only"
+msgstr "Hanya-baca"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1088
+msgid "Really cancel current operation?"
+msgstr "Yakin batalkan operasi yang sedang berjalan?"
+
+#: ../../locales/../src/engine/local_filesys.cpp:122
+#: ../../locales/../src/interface/RemoteListView.cpp:1366
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1042
+msgid "Really delete all selected files and/or directories?"
+msgstr "Yakin menghapus semua berkas dan/atau direktori yang dipilih?"
+
+#: ../../locales/../src/interface/queueview_failed.cpp:17
+msgid "Reason"
+msgstr "Alasan"
+
+#: ../../locales/../src/interface/QueueView.cpp:2745
+msgid "Reboot now"
+msgstr "Reboot sistem sekarang"
+
+#: resources.h:285
+msgid "Rec&urse into subdirectories"
+msgstr "Mas&uk jauh kedalam sub direktori"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:992
+#: ../../locales/../src/interface/netconfwizard.cpp:1001
+#: ../../locales/../src/interface/netconfwizard.cpp:1025
+msgid "Received data tainted"
+msgstr "Data yang diterima ditolak"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:68
+msgid ""
+"Reconnect information cannot be cleared while connected to a server.\n"
+"If you continue, your connection will be disconnected."
+msgstr ""
+"Informasi koneksi ulang tidak bisa dihapus selama terhubung ke server.\n"
+"Jika Anda melanjutkan, koneksi Anda akan terputus."
+
+#: resources.h:182
+msgid "Reconnection settings"
+msgstr "Pengaturan koneksi ulang"
+
+#: resources.h:716 resources.h:717
+msgid "Reconnects to the last used server"
+msgstr "Sambung lagi ke server yang terakhir digunakan"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:700
+msgid "Redirection to invalid address"
+msgstr "Pengalihan ke alamat yang tidak valid"
+
+#: resources.h:708 resources.h:709
+msgid "Refresh the file and folder lists"
+msgstr "Perbarui daftar berkas dan direktori"
+
+#: ../../locales/../src/interface/edithandler.cpp:892
+msgid "Remote"
+msgstr "Remote"
+
+#: ../../locales/../src/engine/tlssocket.cpp:735
+msgid "Remote certificate not trusted."
+msgstr "Sertifikat remote tidak dipercaya."
+
+#: ../../locales/../src/interface/queue.cpp:1127
+msgid "Remote file"
+msgstr "Berkas remote"
+
+#: resources.h:334
+msgid "Remote filters:"
+msgstr "Filter remote:"
+
+#: ../../locales/../src/interface/viewheader.cpp:528
+msgid "Remote site:"
+msgstr "Situs remote:"
+
+#: resources.h:611 resources.h:614
+msgid "Remove &all"
+msgstr "Hapus &semua"
+
+#: resources.h:353 resources.h:612 resources.h:615
+msgid "Remove &selected"
+msgstr "Hapus &yang terpilih"
+
+#: resources.h:408 resources.h:426
+msgid "Rena&me"
+msgstr "&Ganti nama"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:217
+msgid "Rename file"
+msgstr "Ganti nama berkas"
+
+#: resources.h:627 resources.h:643
+msgid "Rename selected directory"
+msgstr "Ganti nama direktori yang terpilih"
+
+#: resources.h:572 resources.h:583
+msgid "Rename selected files and directories"
+msgstr "Ganti nama berkas dan direktori yang terpilih"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3408
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2539
+#, c-format
+msgid "Renaming '%s' to '%s'"
+msgstr "Mengganti nama '%s' menjadi '%s'"
+
+#: resources.h:407 resources.h:425
+msgid "Res&ume"
+msgstr "&Lanjutkan"
+
+#: resources.h:613 resources.h:616
+msgid "Reset and requeue selected files"
+msgstr "Ulangi dan antri ulang berkas yang terpilih"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:1038
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:486
+#, c-format
+msgid "Resolving IP-Address for %s"
+msgstr "Me-resolve Alamat-IP untuk %s"
+
+#: ../../locales/../src/interface/updatewizard.cpp:928
+msgid "Resolving hostname"
+msgstr "Me-resolve nama mesin"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:395
+#: ../../locales/../src/interface/StatusView.cpp:231
+#: ../../locales/../src/interface/StatusView.cpp:274
+msgid "Response:"
+msgstr "Respon:"
+
+#: resources.h:430
+msgid ""
+"Resuming ASCII files can cause problems if server uses a different line "
+"ending format than the client."
+msgstr ""
+"Melanjutkan berkas ASCII dapat menimbulkan masalah jika server menggunakan "
+"format akhir baris yang berbeda dengan klien."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1229
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:969
+msgid "Retrieving directory listing..."
+msgstr "Mengambil daftar direktori..."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3760
+#: ../../locales/../src/interface/netconfwizard.cpp:703
+#, c-format
+msgid "Retrieving external IP address from %s"
+msgstr "Menerima alamat IP eksternal dari %s"
+
+#: resources.h:517
+msgid "S&how files currently being edited..."
+msgstr "&Tampilkan berkas yang sedang diedit..."
+
+#: resources.h:603
+msgid "S&hutdown system"
+msgstr "&Mematikan sistem"
+
+#: resources.h:401 resources.h:420
+msgid "S&kip"
+msgstr "&Lewati"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:115
+msgid "SFTP"
+msgstr "SFTP"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:842
+msgid "Save settings?"
+msgstr "Simpan pengaturan?"
+
+#: ../../locales/../src/interface/QueueView.cpp:1615
+msgid "Scanning for files to add to queue"
+msgstr "Membaca berkas untuk di masukkan ke antrian"
+
+#: ../../locales/../src/interface/QueueView.cpp:1617
+msgid "Scanning for files to upload"
+msgstr "Membaca file yang akan di-upload"
+
+#: ../../locales/../src/interface/statusbar.cpp:416
+msgid "Security information"
+msgstr "Informasi keamanan"
+
+#: resources.h:149
+msgid "Select &page:"
+msgstr "Pilih &halaman:"
+
+#: resources.h:91
+msgid "Select Entry:"
+msgstr "Pilih Entri:"
+
+#: resources.h:188
+msgid "Select Theme"
+msgstr "Pilih Tema"
+
+#: resources.h:413
+msgid ""
+"Select default action to perform if target file of a transfer already exists."
+msgstr "Pilih aksi default yang akan dilakukan jika berkas tujuan sudah ada."
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:163
+msgid "Select default editor"
+msgstr "Pilih editor default"
+
+#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:18
+msgid ""
+"Select default file exists action if the target file already exists. This "
+"selection is valid only for the current session."
+msgstr ""
+"Pilih aksi default yang akan dilakukan jika berkas tujuan sudah ada. Pilihan "
+"ini hanya valid untuk sesi ini saja."
+
+#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:16
+msgid ""
+"Select default file exists action only for the currently selected files in "
+"the queue."
+msgstr ""
+"Pilih aksi default yang akan dilakukan hanya jika untuk berkas yang terpilih "
+"pada antrian."
+
+#: ../../locales/../src/interface/updatewizard.cpp:243
+msgid "Select download location for package"
+msgstr "Pilih lokasi download untuk paket"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:357
+msgid "Select file containing private key"
+msgstr "Pilih berkas yang berisi kunci privat"
+
+#: ../../locales/../src/interface/export.cpp:30
+msgid "Select file for exported settings"
+msgstr "Pilih pengaturan untuk berkas yang akan diekspor"
+
+#: ../../locales/../src/interface/import.cpp:16
+msgid "Select file to import settings from"
+msgstr "Pilih pengaturan lokasi berkas yang akan diimpor"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:301
+msgid "Select filename for converted keyfile"
+msgstr "Pilih nama berkas untuk berkas kunci yang akan dikonversi"
+
+#: resources.h:441
+msgid "Select the categories to export:"
+msgstr "Pilih kategori yang akan diekspor:"
+
+#: resources.h:432
+msgid "Select the private data you would like to delete."
+msgstr "Pilih data privat yang hendak Anda hapus."
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:40
+#, c-format
+msgid "Selected %d directory."
+msgid_plural "Selected %d directories."
+msgstr[0] "Direktori yang dipilih %d."
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:47
+#, c-format
+msgid "Selected %d file. Total size: %s"
+msgid_plural "Selected %d files. Total size: %s"
+msgstr[0] "Berkas yang dipilih %d. Ukuran total: %s"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:45
+#, c-format
+msgid "Selected %d file. Total size: At least %s"
+msgid_plural "Selected %d files. Total size: At least %s"
+msgstr[0] "Berkas yang dipilih %d. Ukuran total: Paling tidak %s"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:57
+#, c-format
+msgid "Selected %s and %s. Total size: %s"
+msgstr "Terpilih %s dan %s. Ukuran total: %s"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:55
+#, c-format
+msgid "Selected %s and %s. Total size: At least %s"
+msgstr "Terpilih %s dan %s. Ukuran total: Paling tidak %s"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:183
+msgid "Selected editor does not exist"
+msgstr "Editor yang dipilih tidak ada"
+
+#: ../../locales/../src/interface/LocalListView.cpp:2043
+#: ../../locales/../src/interface/RemoteListView.cpp:2371
+msgid "Selected file already being edited"
+msgstr "Berkas yang dipilih sudah diedit"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2365
+msgid "Selected file already opened."
+msgstr "Berkas yang dipilih sudah terbuka."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2340
+msgid ""
+"Selected file cannot be opened.\n"
+"No default editor has been set or filetype association is missing or "
+"incorrect."
+msgstr ""
+"Berkas yang dipilih tidak bisa dibuka.\n"
+"Tidak ada editor default yang ditentukan atau asosiasi jenis berkas tidak "
+"benar."
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:118
+msgid "Selected file does not exist."
+msgstr "Berkas yang dipilih tidak ada."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:386
+msgid "Selected file is already loaded"
+msgstr "Berkas yang dipilih sudah dimuat"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2379
+msgid "Selected file still being edited"
+msgstr "Berkas yang dipilih masih diedit"
+
+#: ../../locales/../src/interface/filter.cpp:278
+msgid "Selected filter only works for local files."
+msgstr "Filter yang dipilih hanya bekerja untuk berkas lokal."
+
+#: ../../locales/../src/engine/engineprivate.cpp:329
+msgid "Selected port usually in use by a different protocol."
+msgstr "Port yang dipilih biasanya digunakan oleh protokol lain."
+
+#: resources.h:477
+msgid "Send FTP &keep-alive commands"
+msgstr "Kirim perintah FTP &keep-alive"
+
+#: resources.h:550
+msgid "Send custom command to the server otherwise not available"
+msgstr "Kirim perintah tertentu ke server jika tidak tersedia"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4275
+msgid "Sending keep-alive command"
+msgstr "Mengirimkan perintah keep-alive"
+
+#: resources.h:8 resources.h:31
+msgid "Serial number:"
+msgstr "Nomor seri:"
+
+#: ../../locales/../src/interface/queue.cpp:1125
+msgid "Server / Local file"
+msgstr "Server / Berkas lokal"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4131
+#, c-format
+msgid "Server does not support resume of files > %d GB."
+msgstr "Server tidak mendukung proses kelanjutan dari berkas > %d GB."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4127
+#, c-format
+msgid ""
+"Server does not support resume of files > %d GB. End transfer since "
+"filesizes match."
+msgstr ""
+"Server tidak mendukung proses kelanjutan dari berkas > %d GB. Mengakhiri "
+"transfer karena ukuran berkas sesuai."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2422
+msgid "Server does not support resume of files > 2GB."
+msgstr "Server tidak mendukung proses kelanjutan dari berkas > 2 GB."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2417
+msgid "Server does not support resume of files > 4GB."
+msgstr "Server tidak mendukung proses kelanjutan dari berkas > 4 GB."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4142
+#, c-format
+msgid ""
+"Server may not support resume of files > %d GB. End transfer since filesizes "
+"match."
+msgstr ""
+"Server mungkin tidak mendukung proses kelanjutan dari berkas > %d GB. "
+"Mengakhiri transfer karena ukuran berkas sesuai."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:872
+msgid ""
+"Server might require an account. Try specifying an account using the Site "
+"Manager"
+msgstr ""
+"Server mungkin membutuhkan akun. Harap tentukan sebuah akun menggunakan "
+"Manajemen Situs"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:581
+msgid ""
+"Server sent an additional login prompt. You need to use the interactive "
+"login type."
+msgstr ""
+"Server mengirimkan prompt login tambahan. Anda harus menggunakan jenis login "
+"interaktif."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:403
+#: ../../locales/../src/interface/netconfwizard.cpp:410
+#: ../../locales/../src/interface/netconfwizard.cpp:449
+#: ../../locales/../src/interface/netconfwizard.cpp:458
+#: ../../locales/../src/interface/netconfwizard.cpp:470
+#: ../../locales/../src/interface/netconfwizard.cpp:494
+#: ../../locales/../src/interface/netconfwizard.cpp:501
+#: ../../locales/../src/interface/netconfwizard.cpp:510
+#: ../../locales/../src/interface/netconfwizard.cpp:521
+msgid "Server sent invalid reply."
+msgstr "Server mengirimkan balasan yang tidak valid"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3712
+msgid "Server sent passive reply with unroutable address. Passive mode failed."
+msgstr ""
+"Server mengirimkan balasan pasif dengan alamat yang tidak ada rutenya. Mode "
+"pasif gagal."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3706
+msgid ""
+"Server sent passive reply with unroutable address. Using server address "
+"instead."
+msgstr ""
+"Server mengirimkan balasan pasif dengan alamat yang tidak ada rutenya. "
+"Menggunakan alamat server."
+
+#: resources.h:501
+msgid "Server to client MAC:"
+msgstr "Server ke MAC klien:"
+
+#: resources.h:499
+msgid "Server to client cipher:"
+msgstr "Server ke cipher klien:"
+
+#: resources.h:100 resources.h:112
+msgid "Server&type:"
+msgstr "Jenis &Server:"
+
+#: resources.h:16 resources.h:39
+msgid "Session details"
+msgstr "Detail sesi"
+
+#: resources.h:590
+msgid "Set &Priority"
+msgstr "Tentukan &Prioritas"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3566
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2417
+#, c-format
+msgid "Set permissions of '%s' to '%s'"
+msgstr "Menentukan hak akses dari '%s' menjadi '%s'"
+
+#: ../../locales/../src/engine/transfersocket.cpp:738
+msgid "SetSocketBufferSize called without socket"
+msgstr "SetSocketBufferSize dipanggil tanpa soket"
+
+#: resources.h:148
+msgid "Settings"
+msgstr "Pengaturan"
+
+#: resources.h:236
+msgid "Show &raw directory listing"
+msgstr "Tampilkan &daftar direktori"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:2239
+msgid "Show both directory trees and continue comparing?"
+msgstr ""
+"Tampilkan struktur pohon dari dua direktori dan melanjutkan perbandingan?"
+
+#: ../../locales/../src/interface/cmdline.cpp:6
+msgid "Shows this help dialog"
+msgstr "Tampilkan dialog bantuan ini"
+
+#: ../../locales/../src/interface/QueueView.cpp:2747
+msgid "Shutdown now"
+msgstr "Mematikan sistem sekarang"
+
+#: resources.h:449
+msgid "Site &Manager entries"
+msgstr "Daftar &Manajemen Situs"
+
+#: resources.h:90
+msgid "Site Manager"
+msgstr "Manajemen Situs"
+
+#: ../../locales/../src/interface/sitemanager.cpp:270
+msgid "Site Manager already open"
+msgstr "Manajemen Situs telah dibuka"
+
+#: ../../locales/../src/interface/sitemanager.cpp:2156
+#: ../../locales/../src/interface/sitemanager.cpp:2174
+#: ../../locales/../src/interface/sitemanager.cpp:2185
+msgid "Site does not exist."
+msgstr "Site tidak ada."
+
+#: ../../locales/../src/interface/sitemanager.cpp:2136
+msgid "Site path has to begin with 0 or 1."
+msgstr "Path site harus dimulai dengan 0 atau 1."
+
+#: ../../locales/../src/interface/queue.cpp:1128
+msgid "Size"
+msgstr "Ukuran"
+
+#: resources.h:218
+msgid "Size formatting"
+msgstr "Pemformatan ukuran"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:66
+#: ../../locales/../src/interface/fileexistsdlg.cpp:90
+#: ../../locales/../src/interface/fileexistsdlg.cpp:122
+#: ../../locales/../src/interface/fileexistsdlg.cpp:146
+msgid "Size unknown"
+msgstr "Ukuran tidak diketahui"
+
+#: resources.h:409 resources.h:427
+msgid "Sk&ip"
+msgstr "&Lewati"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2720
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2805
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:209
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:249
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:787
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:861
+#, c-format
+msgid "Skipping download of %s"
+msgstr "Lewati download %s"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2724
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2809
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:213
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:253
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:791
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:865
+#, c-format
+msgid "Skipping upload of %s"
+msgstr "Lewati upload %s"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1226
+msgid "Some files are still being edited or need to be uploaded."
+msgstr "Beberapa berkas masih diedit atau harus diupload."
+
+#: resources.h:46 resources.h:661
+msgid ""
+"Some misconfigured remote servers which are behind a router, may reply with "
+"their local IP address."
+msgstr ""
+"Beberapa server remote yang salah konfigurasi yang berada dibelakang router, "
+"mungkin membalas dengan alamat IP lokal mereka."
+
+#: resources.h:175
+msgid "Sort directories inline"
+msgstr "Urutkan direktori secara inline"
+
+#: ../../locales/../src/interface/filelistctrl.cpp:360
+msgid "Sort order cannot be changed if comparing directories."
+msgstr "Urutan pengurutan tidak bisa diganti jika membandingkan direktori."
+
+#: resources.h:172
+msgid "Sorting &mode:"
+msgstr "&Mode pengurutan:"
+
+#: ../../locales/../src/interface/RemoteTreeView.cpp:92
+msgid "Source and path of the drop operation are identical"
+msgstr "Sumber dan path dari operasi drop sama"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:312
+msgid "Source and target file may not be the same"
+msgstr "Berkas sumber dan target tidak boleh sama"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:133
+msgid "Source and target of the drop operation are identical"
+msgstr "Sumber dan target dari operasi drop sama"
+
+#: resources.h:71
+msgid "Source file:"
+msgstr "Berkas sumber:"
+
+#: resources.h:60
+msgid "Speed limits"
+msgstr "Batas kecepatan"
+
+#: ../../locales/../src/interface/cmdline.cpp:7
+msgid "Start with opened Site Manager"
+msgstr "Mulai dengan Manajemen Situs yang terbuka"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2100
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1616
+#, c-format
+msgid "Starting download of %s"
+msgstr "Mulai mendownload %s"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2104
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1620
+#, c-format
+msgid "Starting upload of %s"
+msgstr "Mulai upload %s"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:136
+msgid "State:"
+msgstr "Kondisi:"
+
+#: ../../locales/../src/interface/edithandler.cpp:884
+#: ../../locales/../src/interface/QueueView.cpp:425
+msgid "Status"
+msgstr "Status"
+
+#: ../../locales/../src/interface/StatusView.cpp:240
+#: ../../locales/../src/interface/StatusView.cpp:289
+msgid "Status:"
+msgstr "Status:"
+
+#: resources.h:587
+msgid "Stop and remove &all"
+msgstr "Stop dan hapus &semua"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:138
+msgid "Street:"
+msgstr "Jalan:"
+
+#: resources.h:12 resources.h:35
+msgid "Subject of certificate"
+msgstr "Subyek sertifikat"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:573
+msgid ""
+"Submit a bug report if this problem persists even with the latest version of "
+"FileZilla."
+msgstr ""
+"Kirimkan laporan kesalahan jika masalah ini muncul meski dengan versi "
+"terbaru FileZilla."
+
+#: ../../locales/../src/interface/queueview_successful.cpp:11
+msgid "Successful transfers"
+msgstr "Transfer berhasil"
+
+#: resources.h:689
+msgid "Summary of test results:"
+msgstr "Ringkasan dari hasil pengujian:"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:73
+#: ../../locales/../src/interface/quickconnectbar.cpp:107
+msgid "Syntax error"
+msgstr "Kesalahan sintaks"
+
+#: ../../locales/../src/interface/cmdline.cpp:57
+#: ../../locales/../src/interface/cmdline.cpp:63
+#: ../../locales/../src/interface/cmdline.cpp:69
+#: ../../locales/../src/interface/Mainfrm.cpp:2420
+msgid "Syntax error in command line"
+msgstr "Kesalahan sintaks pada perintah baris"
+
+#: ../../locales/../src/interface/filteredit.cpp:113
+msgid "System"
+msgstr "Sistem"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:437
+msgid "TLS/SSL connection established, waiting for welcome message..."
+msgstr "Koneksi TLS/SSL terjalin, menunggu ucapan selamat datang..."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:441
+msgid "TLS/SSL connection established."
+msgstr "Koneksi TLS/SSL terjalin."
+
+#: resources.h:69
+msgid "Target file already exists"
+msgstr "Berkas tujuan telah ada"
+
+#: resources.h:75
+msgid "Target file:"
+msgstr "Berkas target:"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1600
+msgid "Target filename already exists, really continue?"
+msgstr "Berkas tujuan telah ada, yakin melanjutkan?"
+
+#: resources.h:688
+msgid "Test results"
+msgstr "Hasil pengujian"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4148
+msgid "Testing resume capabilities of server"
+msgstr "Menguji kemampuan melanjutkan dari server"
+
+#: ../../locales/../src/interface/sitemanager.cpp:269
+msgid ""
+"The Site Manager is opened in another instance of FileZilla 3.\n"
+"Do you want to continue? Any changes made in the Site Manager won't be saved "
+"then."
+msgstr ""
+"Manajemen Situs telah dibuka pada FileZilla 3 lainnya.\n"
+"Apakah Anda ingin meneruskan? Semua perubahan pada Manajemen Situs tidak "
+"akan disimpan."
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:90
+msgid ""
+"The Site Manager is opened in another instance of FileZilla 3.\n"
+"Please close it or the data cannot be deleted."
+msgstr ""
+"Manajemen Situs telah dibuka pada FileZilla 3 lainnya.\n"
+"Harap menutupnya atau data tidak akan bisa dihapus."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:614
+#, c-format
+msgid "The address you entered was: %s"
+msgstr "Alamat yang Anda masukkan adalah: %s"
+
+#: ../../locales/../src/interface/statusbar.cpp:387
+msgid "The connection is encrypted. Click icon for details."
+msgstr "Koneksi terenkripsi. Klik ikon untuk lebih detail."
+
+#: ../../locales/../src/interface/optionspage_ftpproxy.cpp:89
+msgid "The custom login sequence cannot be empty."
+msgstr "Urutan login kustom tidak boleh kosong."
+
+#: ../../locales/../src/interface/filteredit.cpp:477
+#: ../../locales/../src/interface/filteredit.cpp:544
+#: ../../locales/../src/interface/filteredit.cpp:585
+msgid "The entered filter name already exists."
+msgstr "Nama filter yang dimasukkan sudah ada."
+
+#: ../../locales/../src/interface/optionspage_filetype.cpp:160
+#, c-format
+msgid "The extension '%s' does already exist in the list"
+msgstr "Ektensi '%s' sudah ada ada pada daftar"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:207
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:214
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"Please enter a new name:"
+msgstr ""
+"Berkas %s telah ada.\n"
+"Masukkan nama baru:"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:219
+#, c-format
+msgid "The file '%s' could not be loaded or does not contain a private key."
+msgstr "Berkas '%s' tidak bisa dimuat atau tidak mengandung kunci privat."
+
+#: ../../locales/../src/interface/LocalListView.cpp:2030
+#: ../../locales/../src/interface/LocalListView.cpp:2110
+#, c-format
+msgid ""
+"The file '%s' could not be opened:\n"
+"No program has been associated on your system with this file type."
+msgstr ""
+"Berkas '%s' tidak bisa dibuka:\n"
+"Tidak ada program yang diasosiasikan pada sistem Anda dengan berkas ini."
+
+#: ../../locales/../src/interface/LocalListView.cpp:2058
+#: ../../locales/../src/interface/LocalListView.cpp:2117
+#, c-format
+msgid ""
+"The file '%s' could not be opened:\n"
+"The associated command failed"
+msgstr ""
+"Berkas '%s' tidak bisa dibuka:\n"
+"Perintah yang diasosiasikan gagal"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:265
+#, c-format
+msgid ""
+"The file '%s' is not in a format supported by FileZilla.\n"
+"The file is also password protected. Password protected keyfiles are not "
+"supported by FileZilla yet.\n"
+"Would you like to convert it into a supported, unprotected format?"
+msgstr ""
+"Berkas '%s' tidak dalam format yang didukung oleh FileZilla.\n"
+"berkas juga terproteksi dengan kata sandi. Berkas kunci yang terproteksi "
+"belum didukung oleh FileZilla.\n"
+"Apakah Anda hendak mengkonversinya menjadi format yang didukung dan tanpa "
+"proteksi?"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:263
+#, c-format
+msgid ""
+"The file '%s' is not in a format supported by FileZilla.\n"
+"Would you like to convert it into a supported format?"
+msgstr ""
+"Berkas '%s' tidak dalam format yang didukung oleh FileZilla.\n"
+"Apakah Anda hendak mengkonversinya pada format yang didukung?"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:268
+#, c-format
+msgid ""
+"The file '%s' is password protected. Password protected keyfiles are not "
+"supported by FileZilla yet.\n"
+"Would you like to convert it into an unprotected file?"
+msgstr ""
+"Berkas '%s' diproteksi dengan kata sandi. Berkas kunci yang terproteksi "
+"belum didukung oleh FileZilla.\n"
+"Apakah Anda hendak mengkonversinya menjadi berkas tanpa proteksi?"
+
+#: ../../locales/../src/interface/import.cpp:90
+msgid ""
+"The file you have selected contains site manager data from a previous "
+"version of FileZilla.\n"
+"Due to differences in the storage format, only host, port, username and "
+"password will be imported.\n"
+"Continue with the import?"
+msgstr ""
+"Berkas yang Anda pilih berisi data manajemen situs dari versi FileZilla "
+"sebelumnya.\n"
+"Karena perbedaan format penyimpanan, hanya nama mesin, port, nama pengguna, "
+"dan kata sandi yang akan diimpor.\n"
+"Lanjutkan dengan proses impor?"
+
+#: ../../locales/../src/interface/listctrlex.cpp:643
+msgid "The filename column can neither be hidden nor moved."
+msgstr "Kolom nama berkas tidak bisa disembunyikan atau dipindahkan."
+
+#: ../../locales/../src/interface/listctrlex.cpp:693
+msgid "The filename column cannot be hidden."
+msgstr "Kolom nama berkas tidak bisa disembunyikan."
+
+#: resources.h:464
+msgid "The following files are currently being edited:"
+msgstr "Berkas-berkas berikut ini sedang diedit:"
+
+#: resources.h:234
+msgid ""
+"The higher the debug level, the more information will be displayed in the "
+"message log. Displaying debug information has a negative impact on "
+"performance."
+msgstr ""
+"Semakin tinggi level debug, lebih banyak informasi yang akan ditampilkan "
+"pada log. Menampilkan informasi debug memiliki dampak negatif pada performa."
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:77
+msgid ""
+"The lowest available port has to be less or equal than the highest available "
+"port."
+msgstr ""
+"Port terendah yang tersedia harus lebih rendah atau sama dengan port "
+"tertinggi yang tersedia."
+
+#: ../../locales/../src/interface/updatewizard.cpp:420
+msgid ""
+"The most recent version has been downloaded. Click on Finish to close "
+"FileZilla and to start the installation."
+msgstr ""
+"Versi terbaru sudah berhasil didownload. Klik pada Selesai untuk menutup "
+"FileZilla dan memulai installasi."
+
+#: ../../locales/../src/interface/updatewizard.cpp:422
+msgid ""
+"The most recent version has been downloaded. Please install like you did "
+"install this version."
+msgstr ""
+"Versi terbaru sudah berhasil didownload. Harap lakukan installasi seperti "
+"yang Anda lakukan pada versi ini."
+
+#: ../../locales/../src/interface/import.cpp:80
+msgid "The selected categories have been imported."
+msgstr "Kategori yang dipilih sudah berhasil diimpor"
+
+#: resources.h:448
+msgid ""
+"The selected file contains importable data for the following categories:"
+msgstr ""
+"Berkas yang terpilih berisi data yang dapat diimpor untuk kategori berikut:"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2379
+msgid ""
+"The selected file is still opened in some other program, please close it."
+msgstr "Berkas yang dipilih masih dibuka oleh program lain, harap ditutup."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2345
+msgid ""
+"The selected file would be executed directly.\n"
+"This can be dangerous and damage your system.\n"
+"Do you really want to continue?"
+msgstr ""
+"Berkas yang dipilih akan dieksekusi secara langsung.\n"
+"Ini bisa berbahaya dan merusak sistem Anda.\n"
+"Apakah Anda hendak melanjutkan?"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:571
+msgid "The server sent an unrecognized reply."
+msgstr "Server mengirimkan balasan yang tidak dikenali."
+
+#: resources.h:128
+msgid "The server uses following charset encoding for filenames:"
+msgstr "Server menggunakan enkoding charset berikut untuk nama berkas:"
+
+#: resources.h:2
+msgid ""
+"The server's certificate is unknown. Please carefully examine the "
+"certificate to make sure the server can be trusted."
+msgstr ""
+"Sertifikat server tidak diketahui. Harap periksa sertifikat untuk memastikan "
+"server dapat dipercayai."
+
+#: resources.h:316
+msgid ""
+"The server's host key does not match the key that has been cached. This "
+"means that either the administrator has changed the host key, or you are "
+"actually trying to connect to another computer pretending to be the server.\n"
+"If the host key change was not expected, please contact the server "
+"administrator."
+msgstr ""
+"Kunci mesin server tidak cocok dengan kunci yang ada pada cache. Hal ini "
+"berarti administrator telah mengganti kunci mesin, atau Anda mencoba "
+"terhubung pada komputer lain yang mencoba menjadi server.\n"
+"Jika perubahan kunci tidak diharapkan, harap hubungi administrator server."
+
+#: resources.h:304
+msgid ""
+"The server's host key is not cached in the registry. You have no guarantee "
+"that the server is the computer you think it is."
+msgstr ""
+"Kunci mesin server tidak disimpan pada registry. Anda tidak memiliki garansi "
+"bahwa server adalah komputer yang Anda harapkan."
+
+#: ../../locales/../src/interface/import.cpp:77
+msgid ""
+"The settings have been imported. You have to restart FileZilla for all "
+"settings to have effect."
+msgstr ""
+"Pengaturan sudah berhasil diimpor. Anda harus menjalankan ulang FileZilla "
+"agar efek pengaturan berjalan."
+
+#: ../../locales/../src/interface/QueueView.cpp:2735
+msgid "The system will soon reboot unless you click cancel."
+msgstr "Sistem akan segera reboot kecuali Anda menekan batal."
+
+#: ../../locales/../src/interface/QueueView.cpp:2733
+msgid "The system will soon shutdown unless you click cancel."
+msgstr "Sistem akan segera mati kecuali Anda menekan batal."
+
+#: resources.h:70
+msgid ""
+"The target file already exists.\n"
+"Please chose an action."
+msgstr ""
+"Berkas target telah ada.\n"
+"Harap pilih sebuah aksi."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:842
+msgid "The test did not succeed. Do you really want to save the settings?"
+msgstr "Pengujian tidak sukses. Apakah Anda hendak menyimpan perubahan?"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:120
+msgid "Themes"
+msgstr "Tema"
+
+#: ../../locales/../src/interface/filter.cpp:353
+msgid "This filter set cannot be removed."
+msgstr "Kumpulan filter ini tidak bisa dihapus."
+
+#: resources.h:666
+msgid ""
+"This only works if you are not behind a router, else your system would just "
+"return your internal address."
+msgstr ""
+"Ini hanya bekerja jika Anda tidak berada dibelakang router, atau sistem Anda "
+"hanya akan mengembalikan alamat internal Anda."
+
+#: resources.h:644
+msgid ""
+"This wizard will help you to properly configure any routers and firewalls "
+"you have and tests your configuration."
+msgstr ""
+"Panduan ini akan membantu mengkonfigurasi router dan firewall yang Anda "
+"miliki dan menguji konfigurasi Anda."
+
+#: resources.h:212
+msgid "Time formatting"
+msgstr "Pemformatan waktu"
+
+#: resources.h:57
+msgid "Time&out in seconds:"
+msgstr "Time&out dalam detik:"
+
+#: resources.h:56 ../../locales/../src/interface/QueueView.cpp:920
+#: ../../locales/../src/interface/QueueView.cpp:958
+msgid "Timeout"
+msgstr "Timeout"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1558
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1085
+#, c-format
+msgid ""
+"Timezone offsets: Server: %d seconds. Local: %d seconds. Difference: %d "
+"seconds."
+msgstr ""
+"Offset zona waktu: Server: %d detik. Lokal: %d detik. Perbedaan: %d detik."
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:134
+msgid "Title:"
+msgstr "Judul:"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:2237
+msgid "To compare directories, both file lists have to be aligned."
+msgstr "Untuk membandingkan direktori, kedua daftar berkas harus sejajar."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:2238
+msgid "To do this, the directory trees need to be both shown or both hidden."
+msgstr ""
+"Untuk melakukannya, struktur pohon direktori harus menampilkan berkas "
+"tersembunyi dan tidak"
+
+#: resources.h:480
+msgid ""
+"To support public key authentication, FileZilla needs to know the private "
+"keys to use."
+msgstr ""
+"Untuk mendukung authentikasi kunci publik, FileZilla harus tahu kunci privat "
+"yang hendak digunakan."
+
+#: resources.h:710 resources.h:711
+msgid "Toggles processing of the transfer queue"
+msgstr "Mengganti pemrosesan antrian pengiriman"
+
+#: resources.h:702 resources.h:703
+msgid "Toggles the display of the local directory tree"
+msgstr "Mengganti tampilan pohon directori lokal"
+
+#: resources.h:700 resources.h:701
+msgid "Toggles the display of the message log"
+msgstr "Mengganti tampilan pesan log"
+
+#: resources.h:704 resources.h:705
+msgid "Toggles the display of the remote directory tree"
+msgstr "Mengganti tampilan pohon direktori remote"
+
+#: resources.h:706 resources.h:707
+msgid "Toggles the display of the transfer queue"
+msgstr "Mengganti tampilan antrian pengiriman"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:607
+msgid "Too long header line"
+msgstr "Baris header terlalu panjang"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:668
+msgid "Too many redirects"
+msgstr "Terlalu banyak pengalihan"
+
+#: ../../locales/../src/interface/StatusView.cpp:234
+#: ../../locales/../src/interface/StatusView.cpp:281
+msgid "Trace:"
+msgstr "Jejak:"
+
+#: resources.h:540
+msgid "Transfer &type"
+msgstr "&Mode Transfer"
+
+#: resources.h:471
+msgid "Transfer Mode"
+msgstr "Mode Transfer"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:152
+msgid "Transfer aborted by user"
+msgstr "Transfer dibatalkan oleh pengguna"
+
+#: resources.h:120
+msgid "Transfer settings"
+msgstr "Pengaturan transfer"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:617
+msgid "Transferred data got tainted."
+msgstr "Data transfer rusak."
+
+#: ../../locales/../src/interface/QueueView.cpp:1295
+#: ../../locales/../src/interface/statuslinectrl.cpp:198
+msgid "Transferring"
+msgstr "Mentransfer"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:116
+msgid "Transfers"
+msgstr "Transfer"
+
+#: resources.h:161
+msgid "Treat files &without extension as ASCII file"
+msgstr "Anggap berkas &tanpa ekstensi sebagai berkas ASCII"
+
+#: resources.h:157
+msgid "Treat the &following filetypes as ASCII files:"
+msgstr "Anggap jenis berkas &berikut sebagai berkas ASCII:"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:891
+msgid "Trust changed Hostkey: "
+msgstr "Percayai kunci mesin yang berubah: "
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:889
+msgid "Trust new Hostkey: "
+msgstr "Percayai kunci mesin baru: "
+
+#: resources.h:322
+msgid "Trust the new key and carry on connecting?"
+msgstr "Percayai kunci baru dan lanjutkan dengan menghubungkan diri?"
+
+#: resources.h:21
+msgid "Trust this certificate and carry on connecting?"
+msgstr "Percayai sertifikat ini dan lanjutkan dengan menghubungkan diri?"
+
+#: resources.h:310
+msgid "Trust this host and carry on connecting?"
+msgstr "Percayai mesin ini dan lanjutkan dengan koneksi?"
+
+#: ../../locales/../src/interface/edithandler.cpp:883
+msgid "Type"
+msgstr "Jenis"
+
+#: resources.h:249
+msgid "Type of FTP Proxy:"
+msgstr "Jenis Proxy FTP:"
+
+#: resources.h:467
+msgid "U&pload"
+msgstr "U&pload"
+
+#: resources.h:63
+msgid "U&pload limit:"
+msgstr "Batasn U&pload:"
+
+#: resources.h:240
+msgid "U&se filetype associations if available"
+msgstr "Gunakan asosiasi jenis berkas jika tersedia"
+
+#: resources.h:213
+msgid "U&se system defaults"
+msgstr "&Gunakan default sistem"
+
+#: resources.h:251
+msgid "USER@&HOST"
+msgstr "PENGGUNA@HOST"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:133
+msgid "Unit:"
+msgstr "Unit:"
+
+#: ../../locales/../src/interface/edithandler.cpp:914
+#: ../../locales/../src/interface/edithandler.cpp:940
+msgid "Unknown"
+msgstr "Tidak diketahui"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:732
+msgid "Unknown FTP proxy type, cannot generate login sequence."
+msgstr "Jenis Proxy FTP tidak diketahui, tidak bisa menghasilkan urutan login."
+
+#: resources.h:1
+msgid "Unknown certificate"
+msgstr "Sertifikat tidak diketahui"
+
+#: resources.h:303
+msgid "Unknown host key"
+msgstr "Kunci mesin tidak diketahui"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:592
+#: ../../locales/../src/interface/netconfwizard.cpp:603
+msgid ""
+"Unless these problems get fixed, active mode FTP will not work and passive "
+"mode has to be used."
+msgstr ""
+"Kecuali masalah ini diperbaiki, mode aktif FTP tidak akan bekerja dan mode "
+"pasif harus digunakan."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:579
+msgid ""
+"Unless this problem gets fixed, active mode FTP will not work and passive "
+"mode has to be used."
+msgstr ""
+"Kecuali masalah ini diperbaiki, mode aktif FTP tidak akan bekerja dan mode "
+"pasif harus digunakan."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:652
+msgid "Unsupported redirect"
+msgstr "Pengalihan tidak didukung"
+
+#: resources.h:468
+msgid "Up&load and unedit"
+msgstr "Up&load dan batalkan pengeditan"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:126
+msgid "Update Check"
+msgstr "Pengujian Update"
+
+#: ../../locales/../src/interface/optionspage_updatecheck.cpp:60
+#: ../../locales/../src/interface/updatewizard.cpp:156
+#: ../../locales/../src/interface/updatewizard.cpp:169
+msgid "Update wizard"
+msgstr "Panduan update"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1783
+msgid "Updatecheck failed"
+msgstr "Pengujian update gagal"
+
+#: ../../locales/../src/interface/edithandler.cpp:905
+msgid "Upload failed"
+msgstr "Upload gagal"
+
+#: resources.h:635
+msgid "Upload selected directory"
+msgstr "Upload direktori yang dipilih"
+
+#: resources.h:560
+msgid "Upload selected files and directories"
+msgstr "Upload berkas dan direktori yang dipilih"
+
+#: resources.h:459
+msgid "Upload this file back to the server?"
+msgstr "Upload berkas ini kembali ke server?"
+
+#: resources.h:458
+msgid "Upload this file to the server?"
+msgstr "Upload berkas ini kembali ke server?"
+
+#: ../../locales/../src/interface/edithandler.cpp:899
+#: ../../locales/../src/interface/edithandler.cpp:931
+#: ../../locales/../src/interface/edithandler.cpp:1073
+msgid "Uploading"
+msgstr "Mengupload"
+
+#: ../../locales/../src/interface/edithandler.cpp:902
+#: ../../locales/../src/interface/edithandler.cpp:1075
+msgid "Uploading and pending removal"
+msgstr "Mengupload dan penghapusan tertunda"
+
+#: ../../locales/../src/interface/edithandler.cpp:934
+#: ../../locales/../src/interface/edithandler.cpp:1077
+msgid "Uploading and unediting"
+msgstr "Mengupload dan batalkan pengeditan"
+
+#: resources.h:402 resources.h:421
+msgid "Uploads"
+msgstr "Upload"
+
+#: resources.h:132
+msgid "Use &custom charset"
+msgstr "Gunakan charset &kustomisasi"
+
+#: resources.h:395
+msgid "Use &default"
+msgstr "Gunakan &default"
+
+#: resources.h:403
+msgid "Use d&efault"
+msgstr "Gunakan e&efault"
+
+#: resources.h:207
+msgid "Use system &defaults"
+msgstr "Gunakan &default sistem"
+
+#: resources.h:667
+msgid "Use the following IP address:"
+msgstr "Gunakan alamat IP berikut:"
+
+#: resources.h:677
+msgid "Use the following port range:"
+msgstr "Gunakan batas port berikut:"
+
+#: resources.h:662
+msgid "Use the server's external IP address instead"
+msgstr "Gunakan alamat eksternal server"
+
+#: resources.h:368 resources.h:668
+msgid ""
+"Use this if you're behind a router and have a static external IP address."
+msgstr ""
+"Gunakan ini jika Anda berada dibelakang router dan memiliki alamat IP "
+"eksternal statis."
+
+#: resources.h:671
+msgid ""
+"Use this option if you have a dynamic IP address. FileZilla will contact the "
+"above server once each session as soon as you use active mode for the first "
+"time. Only the version of FileZilla you're using is submitted to the server."
+msgstr ""
+"Gunakan opsi ini jika Anda memiliki alamat IP dinamis. FileZilla akan "
+"menghubungi server diatas sekali setiap sesinya setelah Anda menggunakan "
+"mode aktif untuk pertama kalinya. Hanya versi FileZilla yang Anda gunakan "
+"yang dikirim ke server."
+
+#: resources.h:142
+msgid "User:"
+msgstr "Pengguna:"
+
+#: resources.h:130
+msgid "Uses UTF-8 if the server supports it, else use local charset."
+msgstr ""
+"Menggunakan UTF-8 jika server mendukung, selain itu menggunakan charset "
+"lokal."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4200
+#, c-format
+msgid "Using proxy %s"
+msgstr "Menggunakan proxy %s"
+
+#: resources.h:134
+msgid ""
+"Using the wrong charset can result in filenames not displaying properly."
+msgstr ""
+"Menggunakan charset yang salah bisa berdampak pada nama berkas tidak "
+"ditampilkan dengan benar."
+
+#: resources.h:373
+msgid "Using this wizard you can check for available updates to FileZilla."
+msgstr ""
+"Dengan menggunakan panduan ini, Anda bisa menguji ketersediaan update "
+"FileZilla."
+
+#: resources.h:6 resources.h:29
+msgid "Valid from:"
+msgstr "Valid dari:"
+
+#: resources.h:7 resources.h:30
+msgid "Valid to:"
+msgstr "Valid hingga:"
+
+#: ../../locales/../src/interface/cmdline.cpp:12
+msgid "Verbose log messages from wxWidgets"
+msgstr "Pesan log detail dari wxWidgets"
+
+#: ../../locales/../src/engine/tlssocket.cpp:913
+msgid "Verifying certificate..."
+msgstr "Memverifikasi sertifikat..."
+
+#: resources.h:68
+msgid "Very high"
+msgstr "Sangat tinggi"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1332
+msgid "View hidden option set, but unsupported by server"
+msgstr "Opsi sudah ditentukan, tetapi tidak didukung oleh server"
+
+#: resources.h:505
+msgid "Visible columns"
+msgstr "Kolom yang tampak"
+
+#: resources.h:277
+msgid "W&rite"
+msgstr "T&ulis"
+
+#: ../../locales/../src/interface/QueueView.cpp:1574
+msgid "Waiting"
+msgstr "Menunggu"
+
+#: ../../locales/../src/interface/QueueView.cpp:1224
+msgid "Waiting for browsing connection"
+msgstr "Menunggu koneksi"
+
+#: ../../locales/../src/interface/QueueView.cpp:1245
+msgid "Waiting for password"
+msgstr "Menunggu kata sandi"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:192
+msgid "Waiting for transfer to be canceled"
+msgstr "Menunggu pengiriman dibatalkan"
+
+#: ../../locales/../src/engine/engineprivate.cpp:237
+msgid "Waiting to retry..."
+msgstr "Menunggu untuk mencoba kembali..."
+
+#: ../../locales/../src/interface/FileZilla.cpp:265
+msgid ""
+"Warning!\n"
+"\n"
+"A bug in Windows causes problems with FileZilla\n"
+"\n"
+"The bug occurs if you have\n"
+"- Windows Server 2003 or XP 64\n"
+"- Windows Firewall enabled\n"
+"- Application Layer Gateway service enabled\n"
+"See http://support.microsoft.com/kb/931130 for background information.\n"
+"\n"
+"Unless you either disable Windows Firewall or the Application Layer Gateway "
+"service,\n"
+"FileZilla will timeout on big transfers."
+msgstr ""
+"Peringatan!\n"
+"\n"
+"Sebuah kesalahan pada Windows menyebabkan masalah dengan FileZilla\n"
+"\n"
+"Kesalahan terjadi jika Anda memiliki\n"
+"- Windows Server 2003 atau XP 64\n"
+"- Windows Firewall aktif\n"
+"- Layanan Application Layer Gateway aktif\n"
+"Lihat http://support.microsoft.com/kb/931130 untuk informasinya.\n"
+"\n"
+"Kecuali Anda menonaktifkan Windows Firewall atau layanan Application Layer "
+"Gateway, \n"
+" FileZilla akan mengalami timeout pada transfer besar."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:960
+msgid "Warning, ignoring data connection from wrong IP."
+msgstr "Peringatan, mengabaikan koneksi data dari IP yang salah."
+
+#: ../../locales/../src/interface/updatewizard.cpp:169
+msgid ""
+"Warning, use nightly builds at your own risk.\n"
+"No support is given for nightly builds.\n"
+"Nightly builds may not work as expected and might even damage your system.\n"
+"\n"
+"Do you really want to check for nightly builds?"
+msgstr ""
+"Peringatan, gunakan build harian dengan resiko Anda sendiri.\n"
+"Tidak ada dukungan yang diberikan pada build harian.\n"
+"Build harian mungkin tidak bekerja sesuai harapan dan mungkin merusak sistem "
+"Anda.\n"
+"\n"
+"Apakah Anda yakin untuk menguji build harian?"
+
+#: resources.h:315
+msgid "Warning: Potential security breach!"
+msgstr "Peringatan: Kemungkinan masalah keamanan!"
+
+#: resources.h:383
+msgid "What's new:"
+msgstr "Apa yang baru:"
+
+#: resources.h:168
+msgid "Widescreen"
+msgstr "Layar lebar"
+
+#: resources.h:281
+msgid "Wr&ite"
+msgstr "Tu&lis"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:433
+#: ../../locales/../src/interface/netconfwizard.cpp:440
+msgid "Wrong external IP address"
+msgstr "Alamat IP eksternal salah"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:806
+msgid "Wrong lineendings"
+msgstr "Akhir baris salah"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:902
+msgid "Yes"
+msgstr "Ya"
+
+#: resources.h:389
+msgid ""
+"You are already using the most recent version of FileZilla. Please check "
+"again in future."
+msgstr ""
+"Anda sudah menggunakan versi terbaru FileZilla. Harap periksa kembali di "
+"masa depan."
+
+#: resources.h:284
+msgid ""
+"You can use an x at any position to keep the permission the original files "
+"have."
+msgstr ""
+"Anda dapat menggunakan x disegala posisi untuk mempertahankan hak akses "
+"berkas asli."
+
+#: ../../locales/../src/interface/import.cpp:29
+msgid "You cannot import settings from FileZilla's own settings directory."
+msgstr ""
+"Anda tidak bisa mengimpor pengaturan dari direktori pengaturan FileZilla."
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:229
+msgid "You did not enter a new name for the file. Overwrite the file instead?"
+msgstr "Anda tidak memasukkan nama baru untuk berkas ini. Timpa berkas ini?"
+
+#: ../../locales/../src/interface/sitemanager.cpp:819
+msgid "You have to enter a hostname."
+msgstr "Anda harus memasukkan nama mesin"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:149
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:90
+msgid "You have to enter a valid IP address."
+msgstr "Anda harus memasukkan alamat IP valid."
+
+#: ../../locales/../src/interface/sitemanager.cpp:880
+msgid "You have to enter an account name"
+msgstr "Anda harus memasukkan nama akun"
+
+#: ../../locales/../src/interface/sitemanager.cpp:871
+msgid "You have to specify a user name"
+msgstr "Anda harus memasukkan nama pengguna"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:618
+msgid ""
+"You likely have a router or firewall which errorneously modified the "
+"transferred data."
+msgstr ""
+"Tampaknya Anda memiliki router atau firewall yang memodifikasi data transfer "
+"dengan salah."
+
+#: ../../locales/../src/interface/optionspage_ftpproxy.cpp:82
+msgid "You need to enter a proxy host."
+msgstr "Anda harus memasukkan host proxy."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:565
+msgid ""
+"You should have no problems connecting to other servers, file transfers "
+"should work properly."
+msgstr ""
+"Anda seharusnya tidak memiliki masalah terhubung dengan server lain, "
+"transfer berkas seharusnya bekerja dengan baik."
+
+#: ../../locales/../src/interface/filteredit.cpp:137
+msgid "begins with"
+msgstr "diawali dengan"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:64
+#: ../../locales/../src/interface/fileexistsdlg.cpp:88
+#: ../../locales/../src/interface/fileexistsdlg.cpp:120
+#: ../../locales/../src/interface/fileexistsdlg.cpp:144
+msgid "bytes"
+msgstr "byte"
+
+#: ../../locales/../src/interface/filteredit.cpp:135
+msgid "contains"
+msgstr "berisi"
+
+#: ../../locales/../src/interface/filteredit.cpp:138
+msgid "ends with"
+msgstr "diakhiri dengan"
+
+#: ../../locales/../src/interface/filteredit.cpp:142
+msgid "equals"
+msgstr "sama"
+
+#: ../../locales/../src/interface/filelistctrl.cpp:411
+#: ../../locales/../src/interface/filelistctrl.cpp:429
+#: ../../locales/../src/interface/filelistctrl.cpp:453
+#: ../../locales/../src/interface/filelistctrl.cpp:469
+msgid "file"
+msgstr "berkas"
+
+#: ../../locales/../src/interface/edithandler.cpp:89
+msgid "fz3temp-lockfile"
+msgstr "fz3temp-lockfile"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:97
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:116
+msgid ""
+"fzputtygen could not be started.\n"
+"Please make sure this executable exists in the same directory as the main "
+"FileZilla executable."
+msgstr ""
+"fzputtygen tidak bisa dijalankan.\n"
+"Harap pastikan program ini ada pada direktori yang sama dengan program utama "
+"FileZilla."
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1541
+msgid "fzsftp could not be started"
+msgstr "fzsftp tidak bisa dijalankan"
+
+#: ../../locales/../src/interface/filteredit.cpp:141
+msgid "greater than"
+msgstr "lebih besar dari"
+
+#: ../../locales/../src/interface/filteredit.cpp:126
+msgid "group executable"
+msgstr "grup yang dapat dieksekusi"
+
+#: ../../locales/../src/interface/filteredit.cpp:124
+msgid "group readable"
+msgstr "grup yang hanya dapat dibaca"
+
+#: ../../locales/../src/interface/filteredit.cpp:125
+msgid "group writeable"
+msgstr "grup yang hanya dapat ditulisi"
+
+#: ../../locales/../src/interface/filteredit.cpp:136
+msgid "is equal to"
+msgstr "sama dengan"
+
+#: ../../locales/../src/interface/filteredit.cpp:132
+msgid "is set"
+msgstr "sudah ditentukan"
+
+#: ../../locales/../src/interface/filteredit.cpp:133
+msgid "is unset"
+msgstr "sudah dihilangkan"
+
+#: ../../locales/../src/interface/filteredit.cpp:143
+msgid "less than"
+msgstr "kurang dari"
+
+#: ../../locales/../src/interface/filteredit.cpp:139
+msgid "matches regex"
+msgstr "cocok dengan regex"
+
+#: ../../locales/../src/interface/filteredit.cpp:123
+msgid "owner executable"
+msgstr "dapat dieksekusi pemilik"
+
+#: ../../locales/../src/interface/filteredit.cpp:121
+msgid "owner readable"
+msgstr "dapat dibaca pemilik"
+
+#: ../../locales/../src/interface/filteredit.cpp:122
+msgid "owner writeable"
+msgstr "dapat ditulisi pemilik"
+
+#: resources.h:247
+msgid "png \"c:\\program files\\viewer\\viewer.exe\" -open"
+msgstr "png \"c:\\program files\\viewer\\viewer.exe\" -open"
+
+#: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:29
+msgid "unknown"
+msgstr "Tidak diketahui"
+
+#: ../../locales/../src/interface/filteredit.cpp:129
+msgid "world executable"
+msgstr "dapat dieksekusi oleh semua"
+
+#: ../../locales/../src/interface/filteredit.cpp:127
+msgid "world readable"
+msgstr "dapat dibaca oleh semua"
+
+#: ../../locales/../src/interface/filteredit.cpp:128
+msgid "world writeable"
+msgstr "dapat ditulisi oleh semua"

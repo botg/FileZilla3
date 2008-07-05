@@ -338,8 +338,11 @@ void CSiteManager::CreateControls(wxWindow* parent)
 
 	wxChoice *pChoice = XRCCTRL(*this, "ID_SERVERTYPE", wxChoice);
 	wxASSERT(pChoice);
-	for (int i = 0; i < SERVERTYPE_MAX; i++)
-		pChoice->Append(CServer::GetNameFromServerType((enum ServerType)i));
+	pChoice->Append(_T("Unix"));
+	pChoice->Append(_T("VMS"));
+	pChoice->Append(_T("MVS"));
+	pChoice->Append(_T("Dos"));
+	pChoice->Append(_T("VxWorks"));
 }
 
 void CSiteManager::OnOK(wxCommandEvent& event)
@@ -788,14 +791,18 @@ void CSiteManager::OnNewFolder(wxCommandEvent&event)
 
 static enum ServerType GetTypeFromName(const wxString& name)
 {
-	for (int i = 0; i < SERVERTYPE_MAX; i++)
-	{
-		enum ServerType type = (enum ServerType)i;
-		if (name == CServer::GetNameFromServerType(type))
-			return type;
-	}
-
-	return DEFAULT;
+	if (name == _T("Unix"))
+		return UNIX;
+	else if (name == _T("Dos"))
+		return DOS;
+	else if (name == _T("VMS"))
+		return VMS;
+	else if (name == _T("MVS"))
+		return MVS;
+	else if (name == _T("VxWorks"))
+		return VXWORKS;
+	else
+		return DEFAULT;
 }
 
 bool CSiteManager::Verify()
@@ -1268,7 +1275,7 @@ void CSiteManager::SetCtrlState()
 		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->SetValue(_T(""));
 		XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->SetValue(_T(""));
 
-		XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetSelection(0);
+		XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetStringSelection(_("Default"));
 		XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->SetValue(_T(""));
 		XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->SetValue(_T(""));
 		XRCCTRL(*this, "ID_TIMEZONE_HOURS", wxSpinCtrl)->SetValue(0);
@@ -1343,7 +1350,27 @@ void CSiteManager::SetCtrlState()
 		XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->SetValue(data->m_comments);
 		XRCCTRL(*this, "ID_COMMENTS", wxWindow)->Enable(!predefined);
 
-		XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetSelection(data->m_server.GetType());
+		switch (data->m_server.GetType())
+		{
+		case UNIX:
+			XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetStringSelection(_T("Unix"));
+			break;
+		case DOS:
+			XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetStringSelection(_T("Dos"));
+			break;
+		case MVS:
+			XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetStringSelection(_T("MVS"));
+			break;
+		case VMS:
+			XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetStringSelection(_T("VMS"));
+			break;
+		case VXWORKS:
+			XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetStringSelection(_T("VxWorks"));
+			break;
+		default:
+			XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetStringSelection(_("Default"));
+			break;
+		}
 		XRCCTRL(*this, "ID_SERVERTYPE", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->SetValue(data->m_localDir);
 		XRCCTRL(*this, "ID_LOCALDIR", wxWindow)->Enable(!predefined);
@@ -2106,8 +2133,8 @@ public:
 		}
 
 		m_lastSelection.clear();
-		m_theItemData = data;
-
+		m_theItemData = data;		
+	
 		return true;
 	}
 
@@ -2159,7 +2186,7 @@ CSiteManagerItemData* CSiteManager::GetSiteByPath(wxString sitePath)
 		wxFileName name(defaultsDir, _T("fzdefaults.xml"));
 		pDocument = file.Load(name);
 	}
-
+	
 	if (!pDocument)
 	{
 		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName().GetFullPath().c_str());

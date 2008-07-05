@@ -16,8 +16,6 @@ public:
 	bool SetPath(wxString &newPath, bool isFile);
 	bool SetSafePath(wxString path);
 
-	// If ChangePath returns false, the object will be left an
-	// undefined state
 	bool ChangePath(wxString subdir);
 	bool ChangePath(wxString &subdir, bool isFile);
 
@@ -60,9 +58,6 @@ protected:
 	typedef tSegmentList::iterator tSegmentIter;
 	typedef tSegmentList::const_iterator tConstSegmentIter;
 	tSegmentList m_Segments;
-
-	bool Segmentize(wxString str, tSegmentList& segments);
-	bool ExtractFile(wxString& dir, wxString& file);
 };
 
 #endif

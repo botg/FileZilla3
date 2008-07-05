@@ -60,9 +60,6 @@ public:
 	virtual bool GetNextFile(wxString& name, bool &dir, wxLongLong &size, wxDateTime& date, bool &hasTime);
 	virtual void FinishComparison();
 
-	virtual bool ItemIsDir(int index) const;
-	virtual wxLongLong ItemGetSize(int index) const;
-
 protected:
 	virtual wxString GetItemText(int item, unsigned int column);
 

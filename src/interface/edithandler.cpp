@@ -585,14 +585,6 @@ checkmodifications_remote:
 		dlg.SetLabel(XRCID("ID_FILENAME"), iter->name);
 
 		dlg.GetSizer()->Fit(&dlg);
-
-#ifdef __WXMSW__
-		// If mouse is captured, program
-		// could become unresponsive if showing
-		// dialog. Could happen during drag&drop.
-		ReleaseCapture();
-#endif
-
 		int res = dlg.ShowModal();
 
 		const bool remove = XRCCTRL(dlg, "ID_DELETE", wxCheckBox)->IsChecked();
@@ -617,8 +609,6 @@ checkmodifications_remote:
 			m_fileDataList[remote].erase(iter);
 			goto checkmodifications_remote;
 		}
-		else
-			iter->modificationTime = mtime;
 	}
 
 checkmodifications_local:
@@ -711,13 +701,6 @@ bool CEditHandler::UploadFile(enum CEditHandler::fileType type, const wxString& 
 
 void CEditHandler::OnTimerEvent(wxTimerEvent& event)
 {
-#ifdef __WXMSW__
-	// Don't check for changes if mouse is captured,
-	// e.g. if user is dragging a file
-	if (GetCapture())
-		return;
-#endif
-
 	CheckForModifications();
 }
 

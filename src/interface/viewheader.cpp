@@ -81,7 +81,6 @@ CViewHeader::CViewHeader(wxWindow* pParent, const wxString& label)
 {
 	m_alreadyInPaint = false;
 	m_pComboBox = new CComboBoxEx(this);
-	m_pLabel = new wxStaticText(this, wxID_ANY, label, wxDefaultPosition, wxDefaultSize);
 	wxSize size = GetSize();
 #ifdef __WXMSW__
 	size.SetHeight(m_pComboBox->GetBestSize().GetHeight());
@@ -96,7 +95,6 @@ CViewHeader::CViewHeader(wxWindow* pParent, const wxString& label)
 	m_pComboBox->Connect(wxID_ANY, wxEVT_LEFT_UP, (wxObjectEventFunction)(wxEventFunction)(wxMouseEventFunction)&CViewHeader::OnComboMouseEvent, 0, this);
 	m_bLeftMousePressed = false;
 #endif //__WXMSW__
-
 	SetLabel(label);
 }
 
@@ -111,13 +109,6 @@ void CViewHeader::OnSize(wxSizeEvent& event)
 	rect.SetWidth(rect.GetWidth() - 5);
 #endif
 	m_pComboBox->SetSize(rect);
-
-	rect.SetX(5);
-	rect.SetWidth(m_cbOffset - 5);
-	rect.SetY((rect.GetHeight() - m_labelHeight) / 2 - 1);
-	rect.SetHeight(m_labelHeight);
-	m_pLabel->SetSize(rect);
-
 	Refresh();
 }
 
@@ -247,11 +238,14 @@ void CViewHeader::OnPaint(wxPaintEvent& event)
 #else
 	dc.DrawLine(rect.GetLeft(), rect.GetBottom(), rect.GetRight(), rect.GetBottom());
 #endif
+
+	dc.SetFont(GetFont());
+	dc.DrawText(m_label, 5, (rect.GetHeight() - m_labelHeight) / 2 - 1);
 }
 
 void CViewHeader::SetLabel(const wxString& label)
 {
-	m_pLabel->SetLabel(label);
+	m_label = label;
 	int w;
 	GetTextExtent(label, &w, &m_labelHeight);
 	m_cbOffset = w + 10;
@@ -269,7 +263,7 @@ void CViewHeader::Reparent(CViewHeader** pViewHeader, wxWindow* parent)
 
 wxString CViewHeader::GetLabel() const
 {
-	return m_pLabel->GetLabel();
+	return m_label;
 }
 
 void CViewHeader::AddRecentDirectory(const wxString &directory)

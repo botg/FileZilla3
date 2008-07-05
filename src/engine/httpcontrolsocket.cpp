@@ -191,11 +191,73 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 			CFileExistsNotification *pFileExistsNotification = reinterpret_cast<CFileExistsNotification *>(pNotification);
 			switch (pFileExistsNotification->overwriteAction)
 			{
+			case CFileExistsNotification::overwrite:
+				SendNextCommand();
+				break;
+			case CFileExistsNotification::overwriteNewer:
+				if (!pFileExistsNotification->localTime.IsValid() || !pFileExistsNotification->remoteTime.IsValid())
+					SendNextCommand();
+				else if (pFileExistsNotification->download && pFileExistsNotification->localTime.IsEarlierThan(pFileExistsNotification->remoteTime))
+					SendNextCommand();
+				else if (!pFileExistsNotification->download && pFileExistsNotification->localTime.IsLaterThan(pFileExistsNotification->remoteTime))
+					SendNextCommand();
+				else
+				{
+					if (pData->download)
+					{
+						wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
+						LogMessage(Status, _("Skipping download of %s"), filename.c_str());
+					}
+					else
+					{
+						LogMessage(Status, _("Skipping upload of %s"), pData->localFile.c_str());
+					}
+					ResetOperation(FZ_REPLY_OK);
+				}
+				break;
 			case CFileExistsNotification::resume:
 				ResetOperation(FZ_REPLY_CRITICALERROR | FZ_REPLY_NOTSUPPORTED);
 				break;
+			case CFileExistsNotification::rename:
+				if (pData->download)
+				{
+					wxFileName fn = pData->localFile;
+					fn.SetFullName(pFileExistsNotification->newName);
+					pData->localFile = fn.GetFullPath();
+
+					wxStructStat buf;
+					int result;
+					result = wxStat(pData->localFile, &buf);
+					if (!result)
+						pData->localFileSize = buf.st_size;
+					else
+						pData->localFileSize = -1;
+
+					if (CheckOverwriteFile() == FZ_REPLY_OK)
+						SendNextCommand();
+				}
+				else
+				{
+					ResetOperation(FZ_REPLY_CRITICALERROR | FZ_REPLY_NOTSUPPORTED);
+					break;
+				}
+				break;
+			case CFileExistsNotification::skip:
+				if (pData->download)
+				{
+					wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
+					LogMessage(Status, _("Skipping download of %s"), filename.c_str());
+				}
+				else
+				{
+					LogMessage(Status, _("Skipping upload of %s"), pData->localFile.c_str());
+				}
+				ResetOperation(FZ_REPLY_OK);
+				break;
 			default:
-				return SetFileExistsAction(pFileExistsNotification);
+				LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Unknown file exists action: %d"), pFileExistsNotification->overwriteAction);
+				ResetOperation(FZ_REPLY_INTERNALERROR);
+				return false;
 			}
 		}
 		break;
@@ -216,7 +278,6 @@ void CHttpControlSocket::OnReceive()
 		m_recvBufferPos = 0;
 	}
 
-	/*XXX
 	unsigned int len = m_recvBufferLen - m_recvBufferPos;
 	Read(m_pRecvBuffer + m_recvBufferPos, len);
 	if (Error())
@@ -253,7 +314,7 @@ void CHttpControlSocket::OnReceive()
 		m_pHttpOpData->m_receivedData += m_recvBufferPos;
 		ProcessData(m_pRecvBuffer, m_recvBufferPos);
 		m_recvBufferPos = 0;
-	}*/
+	}
 }
 
 void CHttpControlSocket::OnConnect()
@@ -411,7 +472,7 @@ int CHttpControlSocket::FileTransferSend()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-int CHttpControlSocket::InternalConnect(wxString host, unsigned short port)
+int CHttpControlSocket::InternalConnect(const wxString& host, unsigned short port)
 {
 	LogMessage(Debug_Verbose, _T("CHttpControlSocket::InternalConnect()"));
 
@@ -420,11 +481,16 @@ int CHttpControlSocket::InternalConnect(wxString host, unsigned short port)
 	m_pCurOpData = pData;
 	pData->port = port;
 
-	// International domain names
-	host = ConvertDomainName(host);
-
 	if (!IsIpAddress(host))
-		LogMessage(Status, _("Resolving address of %s"), host.c_str());
+	{
+		LogMessage(Status, _("Resolving IP-Address for %s"), host.c_str());
+		CAsyncHostResolver *resolver = new CAsyncHostResolver(m_pEngine, ConvertDomainName(host));
+		m_pEngine->AddNewAsyncHostResolver(resolver);
+
+		resolver->Create();
+		resolver->Run();
+		return FZ_REPLY_WOULDBLOCK;
+	}
 
 	pData->host = host;
 	return DoInternalConnect();
@@ -452,13 +518,13 @@ int CHttpControlSocket::DoInternalConnect()
 	addr.Hostname(pData->host);
 	addr.Service(pData->port);
 
-/*XXX	bool res = wxSocketClient::Connect(addr, false);
+	bool res = wxSocketClient::Connect(addr, false);
 
 	if (res)
 		return FZ_REPLY_OK;
 	else if (LastError() != wxSOCKET_WOULDBLOCK)
 		return ResetOperation(FZ_REPLY_ERROR);
-*/
+
 	return FZ_REPLY_WOULDBLOCK;
 }
 
@@ -857,7 +923,7 @@ int CHttpControlSocket::ResetOperation(int nErrorCode)
 void CHttpControlSocket::OnClose()
 {
 	char tmp[1];
-/*xxx	for (Peek(tmp, 1); !Error() && LastCount(); Peek(tmp, 1))
+	for (Peek(tmp, 1); !Error() && LastCount(); Peek(tmp, 1))
 		OnReceive();
 
 	// HTTP socket isn't connected outside operations
@@ -893,7 +959,7 @@ void CHttpControlSocket::OnClose()
 		}
 	}
 
-	ProcessData(0, 0);*/
+	ProcessData(0, 0);
 }
 
 void CHttpControlSocket::ResetHttpData(CHttpOpData* pData)

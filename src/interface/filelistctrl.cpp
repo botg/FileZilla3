@@ -7,109 +7,11 @@
 #include "Options.h"
 #include "conditionaldialog.h"
 #include <algorithm>
-#include "filelist_statusbar.h"
-
-#ifndef __WXMSW__
-DECLARE_EVENT_TYPE(fz_EVT_FILELIST_FOCUSCHANGE, -1)
-DECLARE_EVENT_TYPE(fz_EVT_DEFERRED_MOUSEEVENT, -1)
-#ifndef FILELISTCTRL_INCLUDE_TEMPLATE_DEFINITION
-DEFINE_EVENT_TYPE(fz_EVT_FILELIST_FOCUSCHANGE)
-DEFINE_EVENT_TYPE(fz_EVT_DEFERRED_MOUSEEVENT)
-#endif
-#endif
 
 BEGIN_EVENT_TABLE_TEMPLATE1(CFileListCtrl, wxListCtrlEx, CFileData)
 EVT_LIST_COL_CLICK(wxID_ANY, CFileListCtrl<CFileData>::OnColumnClicked)
 EVT_LIST_COL_RIGHT_CLICK(wxID_ANY, CFileListCtrl<CFileData>::OnColumnRightClicked)
-EVT_LIST_ITEM_SELECTED(wxID_ANY, CFileListCtrl<CFileData>::OnItemSelected)
-EVT_LIST_ITEM_DESELECTED(wxID_ANY, CFileListCtrl<CFileData>::OnItemDeselected)
-#ifndef __WXMSW__
-EVT_LIST_ITEM_FOCUSED(wxID_ANY, CFileListCtrl<CFileData>::OnFocusChanged)
-EVT_COMMAND(wxID_ANY, fz_EVT_FILELIST_FOCUSCHANGE, CFileListCtrl<CFileData>::OnProcessFocusChange)
-EVT_LEFT_DOWN(CFileListCtrl<CFileData>::OnLeftDown)
-EVT_COMMAND(wxID_ANY, fz_EVT_DEFERRED_MOUSEEVENT, CFileListCtrl<CFileData>::OnProcessMouseEvent)
-#endif
 END_EVENT_TABLE()
-
-#ifdef __WXMSW__
-// wxWidgets does not handle LVN_ODSTATECHANGED, work around it
-
-template<class CFileData> std::map<HWND, char*> CFileListCtrl<CFileData>::m_hwnd_map;
-
-#pragma pack(push, 1)
-typedef struct fz_tagNMLVODSTATECHANGE
-{
-    NMHDR hdr;
-    int iFrom;
-    int iTo;
-    UINT uNewState;
-    UINT uOldState;
-} fzNMLVODSTATECHANGE;
-#pragma pack(pop)
-
-template<class CFileData> LRESULT CALLBACK CFileListCtrl<CFileData>::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	std::map<HWND, char*>::iterator iter = m_hwnd_map.find(hWnd);
-	if (iter == m_hwnd_map.end())
-	{
-		// This shouldn't happen
-        return 0;
-	}
-	CFileListCtrl<CFileData>* pFileListCtrl = (CFileListCtrl<CFileData>*)iter->second;
-
-	if (uMsg != WM_NOTIFY)
-        return CallWindowProc(pFileListCtrl->m_prevWndproc, hWnd, uMsg, wParam, lParam);
-
-	if (!pFileListCtrl->m_pFilelistStatusBar)
-		return CallWindowProc(pFileListCtrl->m_prevWndproc, hWnd, uMsg, wParam, lParam);
-
-	NMHDR* pNmhdr = (NMHDR*)lParam;
-	if (pNmhdr->code == LVN_ODSTATECHANGED)
-	{
-		if (pFileListCtrl->m_insideSetSelection)
-			return 0;
-
-		// A range of items go (de)selected
-		fzNMLVODSTATECHANGE* pNmOdStateChange = (fzNMLVODSTATECHANGE*)lParam;
-
-		if (!pFileListCtrl->m_pFilelistStatusBar)
-			return 0;
-
-		wxASSERT(pNmOdStateChange->iFrom <= pNmOdStateChange->iTo);
-		for (int i = pNmOdStateChange->iFrom; i <= pNmOdStateChange->iTo; i++)
-		{
-			const int index = pFileListCtrl->m_indexMapping[i];
-			const CFileData& data = pFileListCtrl->m_fileData[index];
-			if (data.flags == fill)
-				continue;
-
-			if (pFileListCtrl->m_hasParent && !i)
-				continue;
-
-			if (pFileListCtrl->ItemIsDir(index))
-				pFileListCtrl->m_pFilelistStatusBar->SelectDirectory();
-			else
-				pFileListCtrl->m_pFilelistStatusBar->SelectFile(pFileListCtrl->ItemGetSize(index));
-		}
-		return 0;
-	}
-	else if (pNmhdr->code == LVN_ITEMCHANGED)
-	{
-		if (pFileListCtrl->m_insideSetSelection)
-			return 0;
-
-		NMLISTVIEW* pNmListView = (NMLISTVIEW*)lParam;
-
-		// Item of -1 means change applied to all items
-		if (pNmListView->iItem == -1 && !(pNmListView->uNewState & LVIS_SELECTED))
-		{
-			pFileListCtrl->m_pFilelistStatusBar->UnselectAll();
-		}
-	}
-
-	return CallWindowProc(pFileListCtrl->m_prevWndproc, hWnd, uMsg, wParam, lParam);
-}
-#endif
 
 template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pParent, CState* pState, CQueueView* pQueue)
 	: wxListCtrlEx(pParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxLC_VIRTUAL | wxLC_REPORT | wxNO_BORDER | wxLC_EDIT_LABELS),
@@ -130,33 +32,12 @@ template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pPar
 #ifndef __WXMSW__
 	m_dropHighlightAttribute.SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
 #endif
-
-	m_pFilelistStatusBar = 0;
-
-	m_insideSetSelection = false;
-#ifdef __WXMSW__
-	// Subclass window
-	m_hwnd_map[(HWND)pParent->GetHandle()] = (char*)this;
-	m_prevWndproc = (WNDPROC)SetWindowLongPtr((HWND)pParent->GetHandle(), GWLP_WNDPROC, (LONG_PTR)WindowProc);
-#else
-	m_pending_focus_processing = 0;
-	m_focusItem = -1;
-#endif
 }
 
 template<class CFileData> CFileListCtrl<CFileData>::~CFileListCtrl()
 {
 #ifdef __WXMSW__
 	delete m_pHeaderImageList;
-
-	// Remove subclass
-	if (m_prevWndproc != 0)
-	{
-		SetWindowLongPtr((HWND)GetParent()->GetHandle(), GWLP_WNDPROC, (LONG_PTR)m_prevWndproc);
-		std::map<HWND, char*>::iterator iter = m_hwnd_map.find((HWND)GetParent()->GetHandle());
-		if (iter != m_hwnd_map.end())
-			m_hwnd_map.erase(iter);
-	}
 #endif
 }
 
@@ -168,6 +49,8 @@ template<class CFileData> void CFileListCtrl<CFileData>::InitHeaderImageList()
 
 	wxBitmap bmp;
 
+	bmp.LoadFile(wxGetApp().GetResourceDir() + _T("empty.png"), wxBITMAP_TYPE_PNG);
+	m_pHeaderImageList->Add(bmp);
 	bmp.LoadFile(wxGetApp().GetResourceDir() + _T("up.png"), wxBITMAP_TYPE_PNG);
 	m_pHeaderImageList->Add(bmp);
 	bmp.LoadFile(wxGetApp().GetResourceDir() + _T("down.png"), wxBITMAP_TYPE_PNG);
@@ -207,11 +90,22 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 #ifdef __WXMSW__
 		if (column != m_sortColumn && m_pHeaderImageList)
 		{
-			const int oldVisibleColumn = GetColumnVisibleIndex(m_sortColumn);
-			if (oldVisibleColumn != -1)
-				SetHeaderIconIndex(oldVisibleColumn, -1);
+			HWND hWnd = (HWND)GetHandle();
+			HWND header = (HWND)SendMessage(hWnd, LVM_GETHEADER, 0, 0);
+
+			wxChar buffer[100];
+			HDITEM item;
+			item.mask = HDI_TEXT | HDI_FORMAT;
+			item.pszText = buffer;
+			item.cchTextMax = 99;
+			SendMessage(header, HDM_GETITEM, m_sortColumn, (LPARAM)&item);
+			item.mask |= HDI_IMAGE;
+			item.fmt |= HDF_IMAGE | HDF_BITMAP_ON_RIGHT;
+			item.iImage = 0;
+			SendMessage(header, HDM_SETITEM, m_sortColumn, (LPARAM)&item);
 		}
 #endif
+		m_sortColumn = column;
 	}
 	else
 		column = m_sortColumn;
@@ -219,16 +113,23 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 	if (direction == -1)
 		direction = m_sortDirection;
 
-	int newVisibleColumn = GetColumnVisibleIndex(column);
-	if (newVisibleColumn == -1)
-	{
-		newVisibleColumn = 0;
-		column = 0;
-	}
-
 #ifdef __WXMSW__
 	if (m_pHeaderImageList)
-		SetHeaderIconIndex(newVisibleColumn, direction ? 1 : 0);
+	{
+		HWND hWnd = (HWND)GetHandle();
+		HWND header = (HWND)SendMessage(hWnd, LVM_GETHEADER, 0, 0);
+
+		wxChar buffer[100];
+		HDITEM item;
+		item.mask = HDI_TEXT | HDI_FORMAT;
+		item.pszText = buffer;
+		item.cchTextMax = 99;
+		SendMessage(header, HDM_GETITEM, column, (LPARAM)&item);
+		item.mask |= HDI_IMAGE;
+		item.fmt |= HDF_IMAGE | HDF_BITMAP_ON_RIGHT;
+		item.iImage = direction ? 2 : 1;
+		SendMessage(header, HDM_SETITEM, column, (LPARAM)&item);
+	}
 #endif
 
 	// Remember which files are selected
@@ -304,7 +205,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList_UpdateSelectio
 
 		int item = m_indexMapping[i];
 		if (selections[item] != selected)
-			SetSelection(i, selections[item]);
+			SetItemState(i, selections[item] ? wxLIST_STATE_SELECTED : 0, wxLIST_STATE_SELECTED);
 		if (focused)
 		{
 			if (item != focus)
@@ -345,7 +246,7 @@ template<class CFileData> CListViewSort::DirSortMode CFileListCtrl<CFileData>::G
 
 template<class CFileData> void CFileListCtrl<CFileData>::OnColumnClicked(wxListEvent &event)
 {
-	int col = m_pVisibleColumnMapping[event.GetColumn()];
+	int col = event.GetColumn();
 	if (col == -1)
 		return;
 
@@ -579,7 +480,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::ComparisonRestoreSelect
 		bool isSelected = GetItemState(i, wxLIST_STATE_SELECTED) == wxLIST_STATE_SELECTED;
 		bool shouldSelected = item == index;
 		if (isSelected != shouldSelected)
-			SetSelection(i, shouldSelected);
+			SetItemState(i, shouldSelected ? wxLIST_STATE_SELECTED : 0, wxLIST_STATE_SELECTED);
 
 		if (shouldSelected)
 		{
@@ -609,227 +510,9 @@ template<class CFileData> void CFileListCtrl<CFileData>::InitSort(int optionID)
 	if (sortInfo.Len() == 3)
 	{
 		m_sortColumn = sortInfo[2] - '0';
-		if (GetColumnVisibleIndex(m_sortColumn) == -1)
+		if (m_sortColumn < 0 || m_sortColumn > GetColumnCount())
 			m_sortColumn = 0;
 	}
 	else
 		m_sortColumn = 0;
 }
-
-template<class CFileData> void CFileListCtrl<CFileData>::OnItemSelected(wxListEvent& event)
-{
-#ifndef __WXMSW__
-	// On MSW this is done in the subclassed window proc
-	if (m_insideSetSelection)
-		return;
-	if (m_pending_focus_processing)
-		return;
-#endif
-
-	const int item = event.GetIndex();
-
-#ifndef __WXMSW__
-	if (m_selections[item])
-		return;
-	m_selections[item] = true;
-#endif
-
-	if (!m_pFilelistStatusBar)
-		return;
-
-	if (item < 0 || item >= (int)m_indexMapping.size())
-		return;
-
-	if (m_hasParent && !item)
-		return;
-
-	const int index = m_indexMapping[item];
-	const CFileData& data = m_fileData[index];
-	if (data.flags == fill)
-		return;
-
-	if (ItemIsDir(index))
-		m_pFilelistStatusBar->SelectDirectory();
-	else
-		m_pFilelistStatusBar->SelectFile(ItemGetSize(index));
-}
-
-template<class CFileData> void CFileListCtrl<CFileData>::OnItemDeselected(wxListEvent& event)
-{
-#ifndef __WXMSW__
-	// On MSW this is done in the subclassed window proc
-	if (m_insideSetSelection)
-		return;
-#endif
-
-	const int item = event.GetIndex();
-
-#ifndef __WXMSW__
-	if (!m_selections[item])
-		return;
-	m_selections[item] = false;
-#endif
-
-	if (!m_pFilelistStatusBar)
-		return;
-
-	if (item < 0 || item >= (int)m_indexMapping.size())
-		return;
-
-	if (m_hasParent && !item)
-		return;
-
-	const int index = m_indexMapping[item];
-	const CFileData& data = m_fileData[index];
-	if (data.flags == fill)
-		return;
-
-	if (ItemIsDir(index))
-		m_pFilelistStatusBar->UnselectDirectory();
-	else
-		m_pFilelistStatusBar->UnselectFile(ItemGetSize(index));
-}
-
-template<class CFileData> void CFileListCtrl<CFileData>::SetSelection(int item, bool select)
-{
-	m_insideSetSelection = true;
-	SetItemState(item, select ? wxLIST_STATE_SELECTED : 0, wxLIST_STATE_SELECTED);
-	m_insideSetSelection = false;
-#ifndef __WXMSW__
-	m_selections[item] = select;
-#endif
-}
-
-#ifndef __WXMSW__
-template<class CFileData> void CFileListCtrl<CFileData>::OnFocusChanged(wxListEvent& event)
-{
-	const int focusItem = event.GetIndex();
-
-	// Need to defer processing, as focus it set before selection by wxWidgets internally
-	wxCommandEvent evt;
-	evt.SetEventType(fz_EVT_FILELIST_FOCUSCHANGE);
-	evt.SetInt(m_focusItem);
-	evt.SetExtraLong((long)focusItem);
-	m_pending_focus_processing++;
-	AddPendingEvent(evt);
-
-	m_focusItem = focusItem;
-}
-
-template<class CFileData> void CFileListCtrl<CFileData>::SetItemCount(int count)
-{
-	m_selections.resize(count, false);
-	if (m_focusItem >= count)
-		m_focusItem = -1;
-	wxListCtrlEx::SetItemCount(count);
-}
-
-template<class CFileData> void CFileListCtrl<CFileData>::OnProcessFocusChange(wxCommandEvent& event)
-{
-	m_pending_focus_processing--;
-	int old_focus = event.GetInt();
-	int new_focus = (int)event.GetExtraLong();
-
-	if (old_focus >= GetItemCount())
-		return;
-
-	if (old_focus != -1)
-	{
-		bool selected = GetItemState(old_focus, wxLIST_STATE_SELECTED) == wxLIST_STATE_SELECTED;
-		if (!selected && m_selections[old_focus])
-		{
-			// Need to deselect all
-			if (m_pFilelistStatusBar)
-				m_pFilelistStatusBar->UnselectAll();
-			for (unsigned int i = 0; i < m_selections.size(); i++)
-				m_selections[i] = 0;
-		}
-	}
-
-	int min;
-	int max;
-	if (new_focus > old_focus)
-	{
-		min = old_focus;
-		max = new_focus;
-	}
-	else
-	{
-		min = new_focus;
-		max = old_focus;
-	}
-	if (min == -1)
-		min++;
-	if (max == -1)
-		return;
-
-	if (max >= GetItemCount())
-		return;
-
-	for (int i = min; i <= max; i++)
-	{
-		bool selected = GetItemState(i, wxLIST_STATE_SELECTED) == wxLIST_STATE_SELECTED;
-		if (selected == m_selections[i])
-			continue;
-
-		m_selections[i] = selected;
-
-		if (!m_pFilelistStatusBar)
-			continue;
-
-		if (m_hasParent && !i)
-			continue;
-
-		const int index = m_indexMapping[i];
-		const CFileData& data = m_fileData[index];
-		if (data.flags == fill)
-			continue;
-
-		if (selected)
-		{
-			if (ItemIsDir(index))
-				m_pFilelistStatusBar->SelectDirectory();
-			else
-				m_pFilelistStatusBar->SelectFile(ItemGetSize(index));
-		}
-		else
-		{
-			if (ItemIsDir(index))
-				m_pFilelistStatusBar->UnselectDirectory();
-			else
-				m_pFilelistStatusBar->UnselectFile(ItemGetSize(index));
-		}
-	}
-}
-
-template<class CFileData> void CFileListCtrl<CFileData>::OnLeftDown(wxMouseEvent& event)
-{
-	// Left clicks in the whitespace around the items deselect everything
-	// but does not change focus. Defer event.
-	event.Skip();
-	wxCommandEvent evt;
-	evt.SetEventType(fz_EVT_DEFERRED_MOUSEEVENT);
-	AddPendingEvent(evt);
-}
-
-template<class CFileData> void CFileListCtrl<CFileData>::OnProcessMouseEvent(wxCommandEvent& event)
-{
-	if (m_pending_focus_processing)
-		return;
-
-	if (m_focusItem >= GetItemCount())
-		return;
-	if (m_focusItem == -1)
-		return;
-
-	bool selected = GetItemState(m_focusItem, wxLIST_STATE_SELECTED) == wxLIST_STATE_SELECTED;
-	if (!selected && m_selections[m_focusItem])
-	{
-		// Need to deselect all
-		if (m_pFilelistStatusBar)
-			m_pFilelistStatusBar->UnselectAll();
-		for (unsigned int i = 0; i < m_selections.size(); i++)
-			m_selections[i] = 0;
-	}
-}
-#endif

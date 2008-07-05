@@ -50,9 +50,6 @@ protected:
 	virtual wxListItemAttr* OnGetItemAttr(long item) const;
 	virtual int OnGetItemImage(long item) const;
 
-	virtual bool ItemIsDir(int index) const;
-	virtual wxLongLong ItemGetSize(int index) const;
-
 protected:
 	bool IsItemValid(unsigned int item) const;
 	int GetItemIndex(unsigned int item) const;

@@ -18,19 +18,6 @@ static const t_protocolInfo protocolInfos[] = {
 	{ UNKNOWN, _T(""),      21,  false, _T("") }
 };
 
-static const wxString typeNames[SERVERTYPE_MAX] = {
-	wxTRANSLATE("Default (Autodetect)"),
-	_T("Unix"),
-	_T("VMS"),
-	_T("DOS"),
-	_T("MVS, OS/390, z/OS"),
-	_T("VxWorks"),
-	_T("z/VM"),
-	_T("HP NonStop"),
-	wxTRANSLATE("DOS-like with virtual paths"),
-	_T("Cygwin")
-};
-
 CServer::CServer()
 {
 	Initialize();
@@ -126,29 +113,7 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 		host = host.Left(pos);
 	}
 
-	if (host[0] == '[')
-	{
-		// Probably IPv6 address
-		pos = host.Find(']');
-		if (pos == -1)
-		{
-			error = _("Host starts with '[' but no closing bracket found.");
-			return false;
-		}
-		if (host[pos + 1])
-		{
-			if (host[pos + 1] != ':')
-			{
-				error = _("Invalid host, after closing bracket only colon and port may follow.");
-				return false;
-			}
-			pos++;
-		}
-		else
-			pos = -1;
-	}
-	else
-		pos = host.Find(':');
+	pos = host.Find(':');
 	if (pos != -1)
 	{
 		if (!pos)
@@ -742,10 +707,4 @@ bool CServer::ProtocolHasDataTypeConcept(const enum ServerProtocol protocol)
 		return true;
 
 	return false;
-}
-
-wxString CServer::GetNameFromServerType(enum ServerType type)
-{
-	wxASSERT(type != SERVERTYPE_MAX);
-	return wxGetTranslation(typeNames[type]);
 }

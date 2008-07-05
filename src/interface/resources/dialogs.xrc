@@ -812,22 +812,6 @@
                   <object class="sizeritem">
                     <flag>wxLEFT|wxRIGHT|wxTOP</flag>
                     <border>5</border>
-                    <object class="wxRadioButton" name="ID_ACTION7">
-                      <label>Overwrite if different size</label>
-                      <value>0</value>
-                    </object>
-                  </object>
-                  <object class="sizeritem">
-                    <flag>wxLEFT|wxRIGHT|wxTOP</flag>
-                    <border>5</border>
-                    <object class="wxRadioButton" name="ID_ACTION6">
-                      <label>Overwrite if different size or source newer</label>
-                      <value>0</value>
-                    </object>
-                  </object>
-                  <object class="sizeritem">
-                    <flag>wxLEFT|wxRIGHT|wxTOP</flag>
-                    <border>5</border>
                     <object class="wxRadioButton" name="ID_ACTION3">
                       <label>&amp;Resume</label>
                       <value>0</value>
@@ -860,7 +844,7 @@
                 </object>
               </object>
               <object class="sizeritem">
-                <flag>wxLEFT</flag>
+                <flag>wxLEFT|wxALIGN_CENTRE_HORIZONTAL</flag>
                 <border>5</border>
                 <object class="wxBoxSizer">
                   <orient>wxHORIZONTAL</orient>
@@ -1154,7 +1138,9 @@
                             </object>
                             <object class="sizeritem">
                               <object class="wxChoice" name="ID_SERVERTYPE">
-                                <content/>
+                                <content>
+                                  <item>Default</item>
+                                </content>
                                 <selection>0</selection>
                               </object>
                               <flag>wxALL</flag>
@@ -2082,7 +2068,7 @@
                   <orient>wxHORIZONTAL</orient>
                   <object class="sizeritem">
                     <object class="wxStaticText">
-                      <label>&amp;Number of days between update checks:</label>
+                      <label>Number of days between update checks:</label>
                     </object>
                     <flag>wxALIGN_CENTRE_VERTICAL</flag>
                   </object>
@@ -2111,14 +2097,6 @@
               </object>
               <cols>1</cols>
               <vgap>3</vgap>
-              <object class="spacer">
-                <size>0,10</size>
-              </object>
-              <object class="sizeritem">
-                <object class="wxCheckBox" name="ID_CHECKBETA">
-                  <label>Check for &amp;beta versions and release candidates</label>
-                </object>
-              </object>
               <object class="spacer">
                 <size>0,10</size>
               </object>
@@ -3859,22 +3837,6 @@
         <flag>wxTOP</flag>
         <border>5</border>
       </object>
-      <object class="spacer">
-        <size>0,20</size>
-      </object>
-      <object class="sizeritem">
-        <object class="wxStaticText" name="ID_NEWS_DESC">
-          <label>What's new:</label>
-        </object>
-      </object>
-      <object class="sizeritem">
-        <object class="wxTextCtrl" name="ID_NEWS">
-          <style>wxTE_MULTILINE|wxTE_READONLY</style>
-        </object>
-        <option>1</option>
-        <flag>wxGROW|wxTOP</flag>
-        <border>5</border>
-      </object>
     </object>
   </object>
   <object class="wxPanel" name="ID_CHECKFORUPDATE3">
@@ -4006,16 +3968,6 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxRadioButton" name="ID_DL_OVERWRITESIZE">
-                          <label>Overwrite if different size</label>
-                        </object>
-                      </object>
-                      <object class="sizeritem">
-                        <object class="wxRadioButton" name="ID_DL_OVERWRITESIZEORNEWER">
-                          <label>Overwrite if different size or source newer</label>
-                        </object>
-                      </object>
-                      <object class="sizeritem">
                         <object class="wxRadioButton" name="ID_DL_RESUME">
                           <label>&amp;Resume</label>
                         </object>
@@ -4066,16 +4018,6 @@
                       <object class="sizeritem">
                         <object class="wxRadioButton" name="ID_UL_OVERWRITEIFNEWER">
                           <label>Over&amp;write if source newer</label>
-                        </object>
-                      </object>
-                      <object class="sizeritem">
-                        <object class="wxRadioButton" name="ID_UL_OVERWRITESIZE">
-                          <label>Overwrite if different size</label>
-                        </object>
-                      </object>
-                      <object class="sizeritem">
-                        <object class="wxRadioButton" name="ID_UL_OVERWRITESIZEORNEWER">
-                          <label>Overwrite if different size or source newer</label>
                         </object>
                       </object>
                       <object class="sizeritem">
@@ -4181,16 +4123,6 @@
                     </object>
                   </object>
                   <object class="sizeritem">
-                    <object class="wxRadioButton" name="ID_DL_OVERWRITESIZE">
-                      <label>Overwrite if different size</label>
-                    </object>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxRadioButton" name="ID_DL_OVERWRITESIZEORNEWER">
-                      <label>Overwrite if different size or source newer</label>
-                    </object>
-                  </object>
-                  <object class="sizeritem">
                     <object class="wxRadioButton" name="ID_DL_RESUME">
                       <label>&amp;Resume</label>
                     </object>
@@ -4235,16 +4167,6 @@
                   <object class="sizeritem">
                     <object class="wxRadioButton" name="ID_UL_OVERWRITEIFNEWER">
                       <label>Over&amp;write if source newer</label>
-                    </object>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxRadioButton" name="ID_UL_OVERWRITESIZE">
-                      <label>Overwrite if different size</label>
-                    </object>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxRadioButton" name="ID_UL_OVERWRITESIZEORNEWER">
-                      <label>Overwrite if different size or source newer</label>
                     </object>
                   </object>
                   <object class="sizeritem">

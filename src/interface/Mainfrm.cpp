@@ -37,7 +37,6 @@
 #include "statusbar.h"
 #include "cmdline.h"
 #include "buildinfo.h"
-#include "filelist_statusbar.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -242,7 +241,7 @@ CMainFrame::CMainFrame()
 	m_pTopSplitter->SetMinimumPaneSize(50);
 
 	m_pBottomSplitter = new wxSplitterWindow(m_pTopSplitter, -1, wxDefaultPosition, wxDefaultSize, wxSP_NOBORDER  | wxSP_LIVE_UPDATE);
-	m_pBottomSplitter->SetMinimumPaneSize(55);
+	m_pBottomSplitter->SetMinimumPaneSize(50);
 	m_pBottomSplitter->SetSashGravity(1.0);
 
 	m_pViewSplitter = new wxSplitterWindow(m_pBottomSplitter, -1, wxDefaultPosition, wxDefaultSize, wxSP_NOBORDER  | wxSP_LIVE_UPDATE);
@@ -258,8 +257,6 @@ CMainFrame::CMainFrame()
 	m_pQueuePane = new CQueue(m_pBottomSplitter, this, m_pAsyncRequestQueue);
 	m_pQueueView = m_pQueuePane->GetQueueView();
 
-	bool show_filelist_statusbars = COptions::Get()->GetOptionVal(OPTION_FILELIST_STATUSBAR) != 0;
-
 	m_pLocalTreeViewPanel = new CView(m_pLocalSplitter);
 	m_pLocalListViewPanel = new CView(m_pLocalSplitter);
 	m_pLocalTreeView = new CLocalTreeView(m_pLocalTreeViewPanel, -1, m_pState, m_pQueueView);
@@ -267,24 +264,12 @@ CMainFrame::CMainFrame()
 	m_pLocalTreeViewPanel->SetWindow(m_pLocalTreeView);
 	m_pLocalListViewPanel->SetWindow(m_pLocalListView);
 
-	CFilelistStatusBar* pLocalFilelistStatusBar = new CFilelistStatusBar(m_pLocalListViewPanel);
-	if (!show_filelist_statusbars)
-		pLocalFilelistStatusBar->Hide();
-	m_pLocalListViewPanel->SetStatusBar(pLocalFilelistStatusBar);
-	m_pLocalListView->SetFilelistStatusBar(pLocalFilelistStatusBar);
-
 	m_pRemoteTreeViewPanel = new CView(m_pRemoteSplitter);
 	m_pRemoteListViewPanel = new CView(m_pRemoteSplitter);
 	m_pRemoteTreeView = new CRemoteTreeView(m_pRemoteTreeViewPanel, -1, m_pState, m_pQueueView);
 	m_pRemoteListView = new CRemoteListView(m_pRemoteListViewPanel, m_pState, m_pQueueView);
 	m_pRemoteTreeViewPanel->SetWindow(m_pRemoteTreeView);
 	m_pRemoteListViewPanel->SetWindow(m_pRemoteListView);
-
-	CFilelistStatusBar* pRemoteFilelistStatusBar = new CFilelistStatusBar(m_pRemoteListViewPanel);
-	if (!show_filelist_statusbars)
-		pRemoteFilelistStatusBar->Hide();
-	m_pRemoteListViewPanel->SetStatusBar(pRemoteFilelistStatusBar);
-	m_pRemoteListView->SetFilelistStatusBar(pRemoteFilelistStatusBar);
 
 	if (COptions::Get()->GetOptionVal(OPTION_SHOW_MESSAGELOG))
 		m_pTopSplitter->SplitHorizontally(m_pStatusView, m_pBottomSplitter, 100);
@@ -817,31 +802,6 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		}
 		wxLaunchDefaultBrowser(url);
 	}
-	else if (event.GetId() == XRCID("ID_MENU_VIEW_FILELISTSTATUSBAR"))
-	{
-		bool show = COptions::Get()->GetOptionVal(OPTION_FILELIST_STATUSBAR) == 0;
-		COptions::Get()->SetOption(OPTION_FILELIST_STATUSBAR, show ? 1 : 0);
-		if (m_pLocalListViewPanel)
-		{
-			wxStatusBar* pStatusBar = m_pLocalListViewPanel->GetStatusBar();
-			if (pStatusBar)
-			{
-				pStatusBar->Show(show);
-				wxSizeEvent evt;
-				m_pLocalListViewPanel->ProcessEvent(evt);
-			}
-		}
-		if (m_pRemoteListViewPanel)
-		{
-			wxStatusBar* pStatusBar = m_pRemoteListViewPanel->GetStatusBar();
-			if (pStatusBar)
-			{
-				pStatusBar->Show(show);
-				wxSizeEvent evt;
-				m_pRemoteListViewPanel->ProcessEvent(evt);
-			}
-		}
-	}
 	else
 	{
 		CSiteManagerItemData* pData = CSiteManager::GetSiteById(event.GetId());
@@ -1148,22 +1108,17 @@ void CMainFrame::OnSplitterSashPosChanged(wxSplitterEvent& event)
 
 		int delta = event.GetSashPosition() - m_pBottomSplitter->GetSashPosition();
 
-		const int layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
+		int newSize = m_pRemoteSplitter->GetClientSize().GetHeight() - m_pRemoteSplitter->GetSashPosition() + delta;
+		if (newSize < 0)
+			event.Veto();
+		else if (newSize < 20)
+			m_pRemoteSplitter->SetSashPosition(m_pRemoteSplitter->GetSashPosition() - 20 + newSize);
 
-		if (!layout)
-		{
-			int newSize = m_pRemoteSplitter->GetClientSize().GetHeight() - m_pRemoteSplitter->GetSashPosition() + delta;
-			if (newSize < 0)
-				event.Veto();
-			else if (newSize < 20)
-				m_pRemoteSplitter->SetSashPosition(m_pRemoteSplitter->GetSashPosition() - 20 + newSize);
-
-			newSize = m_pLocalSplitter->GetClientSize().GetHeight() - m_pLocalSplitter->GetSashPosition() + delta;
-			if (newSize < 0)
-				event.Veto();
-			else if (newSize < 20)
-				m_pLocalSplitter->SetSashPosition(m_pLocalSplitter->GetSashPosition() - 20 + newSize);
-		}
+		newSize = m_pLocalSplitter->GetClientSize().GetHeight() - m_pLocalSplitter->GetSashPosition() + delta;
+		if (newSize < 0)
+			event.Veto();
+		else if (newSize < 20)
+			m_pLocalSplitter->SetSashPosition(m_pLocalSplitter->GetSashPosition() - 20 + newSize);
 	}
 }
 
@@ -2359,7 +2314,6 @@ void CMainFrame::InitMenubarState()
 	m_pMenuBar->Check(XRCID("ID_VIEW_LOCALTREE"), m_pLocalSplitter && m_pLocalSplitter->IsSplit());
 	m_pMenuBar->Check(XRCID("ID_VIEW_REMOTETREE"), m_pRemoteSplitter && m_pRemoteSplitter->IsSplit());
 	m_pMenuBar->Check(XRCID("ID_VIEW_QUEUE"), m_pBottomSplitter && m_pBottomSplitter->IsSplit());
-	m_pMenuBar->Check(XRCID("ID_MENU_VIEW_FILELISTSTATUSBAR"), COptions::Get()->GetOptionVal(OPTION_FILELIST_STATUSBAR) != 0);
 }
 
 void CMainFrame::UpdateMenubarState()

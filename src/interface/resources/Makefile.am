@@ -5,7 +5,7 @@ CLEANFILES = filezilla.o
 resourcesdir = $(pkgdatadir)/resources
 
 dist_resources_DATA = defaultfilters.xml \
-		dialogs.xrc down.png dropdown.png \
+		dialogs.xrc down.png dropdown.png empty.png \
 		finished.wav \
 		leds.png menus.xrc netconfwizard.xrc \
 		quickconnectbar.xrc \

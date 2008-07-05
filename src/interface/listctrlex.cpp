@@ -4,9 +4,6 @@
 #include <wx/tokenzr.h>
 #include "Options.h"
 #include "dialogex.h"
-#ifdef __WXMSW__
-#include "commctrl.h"
-#endif
 
 DECLARE_EVENT_TYPE(fzEVT_POSTSCROLL, -1)
 DEFINE_EVENT_TYPE(fzEVT_POSTSCROLL)
@@ -186,31 +183,13 @@ void wxListCtrlEx::OnKeyDown(wxKeyEvent& event)
 	}
 
 #if defined(__WXMSW__) && wxUSE_UNICODE
-	if (code >= 300)
-	{
-		event.Skip();
-		return;
-	}
-
-	// Get the actual key
-	BYTE state[256];
-	GetKeyboardState(state);
-	wxChar buffer[1];
-	int res = ToUnicode(event.GetRawKeyCode(), 0, state, buffer, 1, 0);
-	if (res != 1)
-	{
-		event.Skip();
-		return;
-	}
-
-	wxChar key = buffer[0];
-
+	wxChar key = MapVirtualKey(event.GetUnicodeKey(), 2);
 	if (key < 32)
 	{
 		event.Skip();
 		return;
 	}
-	if (key == 32 && event.HasModifiers())
+	else if (key == 32 || event.HasModifiers())
 	{
 		event.Skip();
 		return;
@@ -350,7 +329,7 @@ void wxListCtrlEx::LoadColumnSettings(int widthsOptionId, int visibilityOptionId
 			bool *order_set = new bool[count];
 			memset(order_set, 0, sizeof(bool) * count);
 
-			unsigned int i = 0;
+			int i = 0;
 			while (tokens.HasMoreTokens())
 			{
 				if (!tokens.GetNextToken().ToULong(&order[i]))
@@ -448,7 +427,7 @@ void wxListCtrlEx::SaveColumnWidths(unsigned int optionId)
 	wxString widths;
 	for (unsigned int i = 0; i < count; i++)
 	{
-		int width = 0;
+		int width;
 
 		bool found = false;
 		for (int j = 0; j < GetColumnCount(); j++)
@@ -502,10 +481,6 @@ void wxListCtrlEx::MoveColumn(unsigned int col, unsigned int before)
 			info.order++;
 	}
 
-#ifdef __WXMSW__
-	int icon = -1;
-#endif
-
 	t_columnInfo& info = m_columnInfo[col];
 	if (info.shown)
 	{
@@ -518,10 +493,6 @@ void wxListCtrlEx::MoveColumn(unsigned int col, unsigned int before)
 			for (unsigned int j = i + 1; j < (unsigned int)GetColumnCount(); j++)
 				m_pVisibleColumnMapping[j - 1] = m_pVisibleColumnMapping[j];
 			info.width = GetColumnWidth(i);
-
-#ifdef __WXMSW__
-			icon = GetHeaderIconIndex(i);
-#endif
 			DeleteColumn(i);
 
 			break;
@@ -542,10 +513,6 @@ void wxListCtrlEx::MoveColumn(unsigned int col, unsigned int before)
 		m_pVisibleColumnMapping[pos] = col;
 
 		InsertColumn(pos, info.name, info.align, info.width);
-
-#ifdef __WXMSW__
-		SetHeaderIconIndex(pos, icon);
-#endif
 	}
 	m_columnInfo[col].order = before;
 }
@@ -640,7 +607,7 @@ protected:
 		{
 			wxCheckListBox* pListBox = XRCCTRL(*this, "ID_ACTIVE", wxCheckListBox);
 			pListBox->Check(0);
-			wxMessageBox(_("The filename column can neither be hidden nor moved."), _("Column properties"));
+			wxMessageBox(_("The filename column can neither be hidden nor moved."));
 		}
 	}
 };
@@ -702,62 +669,3 @@ void wxListCtrlEx::ShowColumnEditor()
 	// Generic wxListCtrl needs manual refresh
 	Refresh();
 }
-
-int wxListCtrlEx::GetColumnVisibleIndex(int col)
-{
-	if (!m_pVisibleColumnMapping)
-		return -1;
-
-	for (int i = 0; i < GetColumnCount(); i++)
-	{
-		if (m_pVisibleColumnMapping[i] == (unsigned int)col)
-			return i;
-	}
-
-	return -1;
-}
-
-#ifdef __WXMSW__
-int wxListCtrlEx::GetHeaderIconIndex(int col)
-{
-	if (col < 0 || col >= GetColumnCount())
-		return -1;
-
-	HWND hWnd = (HWND)GetHandle();
-	HWND header = (HWND)SendMessage(hWnd, LVM_GETHEADER, 0, 0);
-
-	HDITEM item;
-	item.mask = HDI_IMAGE | HDI_FORMAT;
-	SendMessage(header, HDM_GETITEM, col, (LPARAM)&item);
-
-	if (!(item.fmt & HDF_IMAGE))
-		return -1;
-
-	return item.iImage;
-}
-
-void wxListCtrlEx::SetHeaderIconIndex(int col, int icon)
-{
-	if (col < 0 || col >= GetColumnCount())
-		return;
-
-	HWND hWnd = (HWND)GetHandle();
-	HWND header = (HWND)SendMessage(hWnd, LVM_GETHEADER, 0, 0);
-
-	wxChar buffer[100];
-	HDITEM item;
-	item.mask = HDI_TEXT | HDI_FORMAT;
-	item.pszText = buffer;
-	item.cchTextMax = 99;
-	SendMessage(header, HDM_GETITEM, col, (LPARAM)&item);
-	item.mask |= HDI_IMAGE;
-	if (icon != -1)
-	{
-		item.fmt |= HDF_IMAGE | HDF_BITMAP_ON_RIGHT;
-		item.iImage = icon;
-	}
-	else
-		item.fmt &= ~(HDF_IMAGE | HDF_BITMAP_ON_RIGHT);
-	SendMessage(header, HDM_SETITEM, col, (LPARAM)&item);
-}
-#endif //__WXMSW__

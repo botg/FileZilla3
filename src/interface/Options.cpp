@@ -75,7 +75,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Update Check Interval", number, _T("7") },
 	{ "Last automatic update check", string, _T("") },
 	{ "Update Check New Version", string, _T("") },
-	{ "Update Check Check Beta", number, _T("0") },
+	{ "Update Check Package URL", string, _T("") },
 	{ "Show debug menu", number, _T("0") },
 	{ "File exists action download", number, _T("0") },
 	{ "File exists action upload", number, _T("0") },
@@ -115,8 +115,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Local filelist shown columns", string, _T("") },
 	{ "Remote filelist shown columns", string, _T("") },
 	{ "Local filelist column order", string, _T("") },
-	{ "Remote filelist column order", string, _T("") },
-	{ "Filelist status bar", number, _T("1") }
+	{ "Remote filelist column order", string, _T("") }
 };
 
 COptions::COptions()

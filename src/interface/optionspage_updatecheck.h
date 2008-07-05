@@ -13,7 +13,6 @@ public:
 
 protected:
 	void OnRunUpdateCheck(wxCommandEvent& event);
-	void OnCheckBeta(wxCommandEvent& event);
 
 	DECLARE_EVENT_TABLE();
 };

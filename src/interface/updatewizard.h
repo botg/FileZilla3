@@ -36,10 +36,7 @@ protected:
 
 	void SetTransferStatus(const CTransferStatus* pStatus);
 
-	void PrepareUpdateCheckPage();
 	void StartUpdateCheck();
-
-	int SendTransferCommand();
 
 	wxString GetDownloadDir();
 
@@ -64,9 +61,6 @@ protected:
 
 	bool m_loaded;
 
-	// Hold changelog of what's new
-	wxString m_news;
-
 	// Auto check related functions and variables
 	// ------------------------------------------
 
@@ -76,7 +70,6 @@ protected:
 
 	bool m_autoUpdateCheckRunning;
 	bool m_updateShown;
-	bool m_start_check;
 };
 
 #endif //FZ_MANUALUPDATECHECK

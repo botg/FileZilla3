@@ -156,8 +156,6 @@ public:
 		resume, // Overwrites if cannot be resumed
 		rename,
 		skip,
-		overwriteSize,	// Overwrite if source file is is different in size than target file
-		overwriteSizeOrNewer,	// Overwrite if source file is different in size or newer than target file
 
 		ACTION_COUNT
 	};

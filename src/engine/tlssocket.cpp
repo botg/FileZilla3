@@ -7,10 +7,10 @@
 #include <errno.h>
 
 BEGIN_EVENT_TABLE(CTlsSocket, wxEvtHandler)
-EVT_FZ_SOCKET(wxID_ANY, CTlsSocket::OnSocketEvent)
+EVT_SOCKET(wxID_ANY, CTlsSocket::OnSocketEvent)
 END_EVENT_TABLE()
 
-CTlsSocket::CTlsSocket(wxEvtHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner)
+CTlsSocket::CTlsSocket(wxEvtHandler* pEvtHandler, wxSocketBase* pSocket, CControlSocket* pOwner)
 	: CBackend(pEvtHandler), m_pOwner(pOwner)
 {
 	m_pSocket = pSocket;
@@ -24,7 +24,7 @@ CTlsSocket::CTlsSocket(wxEvtHandler* pEvtHandler, CSocket* pSocket, CControlSock
 	m_canWriteToSocket = true;
 	m_canCheckCloseSocket = false;
 
-	m_canTriggerRead = false;
+	m_canTriggerRead = true;
 	m_canTriggerWrite = true;
 
 	m_tlsState = noconn;
@@ -33,7 +33,6 @@ CTlsSocket::CTlsSocket(wxEvtHandler* pEvtHandler, CSocket* pSocket, CControlSock
 	m_lastCount = 0;
 	m_lastSuccessful = false;
 
-	m_lastWriteFailed = true;
 	m_lastWriteFailed = false;
 	m_writeSkip = 0;
 
@@ -243,15 +242,17 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 		return -1;
 	}
 
+	m_canReadFromSocket = false;
+
 	m_pSocketBackend->Read(data, len);
 	if (m_pSocketBackend->Error())
 	{
 		if (m_pSocketBackend->LastError() == wxSOCKET_WOULDBLOCK)
 		{
-			m_canReadFromSocket = false;
 			if (m_canCheckCloseSocket && !m_pSocketBackend->IsWaiting(CRateLimiter::inbound))
 			{
-				CSocketEvent evt(m_pSocketBackend->GetId(), CSocketEvent::close);
+				wxSocketEvent evt(m_pSocketBackend->GetId());
+				evt.m_event = wxSOCKET_LOST;
 				wxPostEvent(this, evt);
 			}
 
@@ -265,14 +266,15 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 
 	if (m_canCheckCloseSocket)
 	{
-		CSocketEvent evt(m_pSocketBackend->GetId(), CSocketEvent::close);
+		wxSocketEvent evt(m_pSocketBackend->GetId());
+		evt.m_event = wxSOCKET_LOST;
 		wxPostEvent(this, evt);
 	}
 
 	return m_pSocketBackend->LastCount();
 }
 
-void CTlsSocket::OnSocketEvent(CSocketEvent& event)
+void CTlsSocket::OnSocketEvent(wxSocketEvent& event)
 {
 	wxASSERT(m_pSocket);
 	if (!m_session)
@@ -281,15 +283,15 @@ void CTlsSocket::OnSocketEvent(CSocketEvent& event)
 	if (event.GetId() != m_pSocketBackend->GetId())
 		return;
 
-	switch (event.GetType())
+	switch (event.GetSocketEvent())
 	{
-	case CSocketEvent::read:
+	case wxSOCKET_INPUT:
 		OnRead();
 		break;
-	case CSocketEvent::write:
+	case wxSOCKET_OUTPUT:
 		OnSend();
 		break;
-	case CSocketEvent::close:
+	case wxSOCKET_LOST:
 		{
 			m_canCheckCloseSocket = true;
 			char tmp[100];
@@ -299,7 +301,7 @@ void CTlsSocket::OnSocketEvent(CSocketEvent& event)
 				int lastCount = m_pSocketBackend->LastCount();
 
 				if (lastCount)
-					m_pOwner->LogMessage(Debug_Verbose, _T("CTlsSocket::OnSocketEvent(): pending data, postponing close event"));
+					m_pOwner->LogMessage(Debug_Verbose, _T("CTlsSocket::OnSocketEvent(): pending data, postponing wxSOCKET_LOST"));
 				else
 					m_socketClosed = true;
 				OnRead();
@@ -308,10 +310,11 @@ void CTlsSocket::OnSocketEvent(CSocketEvent& event)
 					return;
 			}
 
-			m_pOwner->LogMessage(Debug_Info, _T("CTlsSocket::OnSocketEvent(): close event received"));
+			m_pOwner->LogMessage(Debug_Info, _T("CTlsSocket::OnSocketEvent(): wxSOCKET_LOST received"));
 
 			//Uninit();
-			CSocketEvent evt(GetId(), CSocketEvent::close);
+			wxSocketEvent evt(GetId());
+			evt.m_event = wxSOCKET_LOST;
 			wxPostEvent(m_pEvtHandler, evt);
 		}
 		break;
@@ -329,8 +332,7 @@ void CTlsSocket::OnRead()
 	if (!m_session)
 		return;
 
-	const int direction = gnutls_record_get_direction(m_session);
-	if (direction && !m_lastReadFailed)
+	if (gnutls_record_get_direction(m_session))
 		return;
 		
 	if (m_tlsState == handshake)
@@ -339,7 +341,7 @@ void CTlsSocket::OnRead()
 		ContinueShutdown();
 	else if (m_tlsState == conn)
 	{
-		CheckResumeFailedReadWrite();
+		CheckResumeFailedWrite();
 		TriggerEvents();
 	}
 }
@@ -353,8 +355,7 @@ void CTlsSocket::OnSend()
 	if (!m_session)
 		return;
 
-	const int direction = gnutls_record_get_direction(m_session);
-	if (!direction && !m_lastWriteFailed)
+	if (!gnutls_record_get_direction(m_session))
 		return;
 
 	if (m_tlsState == handshake)
@@ -363,7 +364,7 @@ void CTlsSocket::OnSend()
 		ContinueShutdown();
 	else if (m_tlsState == conn)
 	{
-		CheckResumeFailedReadWrite();
+		CheckResumeFailedWrite();
 		TriggerEvents();
 	}
 }
@@ -404,9 +405,9 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket /*=0*/)
 
 		m_tlsState = conn;
 
-		CSocketEvent evt(GetId(), CSocketEvent::connection);
+		wxSocketEvent evt(GetId());
+		evt.m_event = wxSOCKET_CONNECTION;
 		wxPostEvent(m_pEvtHandler, evt);
-		CheckResumeFailedReadWrite();
 		TriggerEvents();
 
 		if (m_shutdown_requested)
@@ -414,7 +415,8 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket /*=0*/)
 			Shutdown();
 			if (!Error() || LastError() != wxSOCKET_WOULDBLOCK)
 			{
-				CSocketEvent evt(GetId(), CSocketEvent::close);
+				wxSocketEvent evt(GetId());
+				evt.m_event = wxSOCKET_LOST;
 				wxPostEvent(m_pEvtHandler, evt);
 			}
 		}
@@ -431,11 +433,10 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket /*=0*/)
 
 void CTlsSocket::Read(void *buffer, unsigned int len)
 {
-	if (m_tlsState == handshake || m_tlsState == verifycert)
+	if (m_tlsState == handshake)
 	{
 		m_lastError = wxSOCKET_WOULDBLOCK;
 		m_lastSuccessful = false;
-		m_lastReadFailed = true;
 		return;
 	}
 	else if (m_tlsState != conn)
@@ -444,12 +445,8 @@ void CTlsSocket::Read(void *buffer, unsigned int len)
 		m_lastSuccessful = false;
 		return;
 	}
-	else if (m_lastReadFailed)
-	{
-		m_lastError = wxSOCKET_WOULDBLOCK;
-		m_lastSuccessful = false;
-		return;
-	}
+
+	m_canTriggerRead = true;
 
 	if (m_peekDataLen)
 	{
@@ -488,10 +485,7 @@ void CTlsSocket::Read(void *buffer, unsigned int len)
 	}
 
 	if (res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN)
-	{
 		m_lastError = wxSOCKET_WOULDBLOCK;
-		m_lastReadFailed = true;
-	}
 	else
 	{
 		Failure(res);
@@ -504,7 +498,7 @@ void CTlsSocket::Read(void *buffer, unsigned int len)
 
 void CTlsSocket::Write(const void *buffer, unsigned int len)
 {
-	if (m_tlsState == handshake || m_tlsState == verifycert)
+	if (m_tlsState == handshake)
 	{
 		m_lastError = wxSOCKET_WOULDBLOCK;
 		m_lastSuccessful = false;
@@ -576,20 +570,22 @@ void CTlsSocket::TriggerEvents()
 
 	if (m_canTriggerRead)
 	{
-		CSocketEvent evt(GetId(), CSocketEvent::read);
+		wxSocketEvent evt(GetId());
+		evt.m_event = wxSOCKET_INPUT;
 		wxPostEvent(m_pEvtHandler, evt);
 		m_canTriggerRead = false;
 	}
 
 	if (m_canTriggerWrite)
 	{
-		CSocketEvent evt(GetId(), CSocketEvent::write);
+		wxSocketEvent evt(GetId());
+		evt.m_event = wxSOCKET_OUTPUT;
 		wxPostEvent(m_pEvtHandler, evt);
 		m_canTriggerWrite = false;
 	}
 }
 
-void CTlsSocket::CheckResumeFailedReadWrite()
+void CTlsSocket::CheckResumeFailedWrite()
 {
 	if (m_lastWriteFailed)
 	{
@@ -609,36 +605,6 @@ void CTlsSocket::CheckResumeFailedReadWrite()
 
 		wxASSERT(GNUTLS_E_INVALID_REQUEST == gnutls_record_send(m_session, 0, 0));
 	}
-	if (m_lastReadFailed)
-	{
-		wxASSERT(!m_peekData);
-
-		m_peekDataLen = 65536;
-		m_peekData = new char[m_peekDataLen];
-		
-		int res = gnutls_record_recv(m_session, m_peekData, m_peekDataLen);
-		if (res < 0)
-		{
-			m_peekDataLen = 0;
-			delete [] m_peekData;
-			m_peekData = 0;
-			if (res != GNUTLS_E_INTERRUPTED && res != GNUTLS_E_AGAIN)
-				Failure(res);
-			return;
-		}
-
-		if (!res)
-		{
-			m_peekDataLen = 0;
-			delete [] m_peekData;
-			m_peekData = 0;
-		}
-		else
-			m_peekDataLen = res;
-
-		m_lastReadFailed = false;
-		m_canTriggerRead = true;
-	}
 }
 
 void CTlsSocket::Failure(int code)
@@ -647,7 +613,8 @@ void CTlsSocket::Failure(int code)
 		LogError(code);
 	Uninit();
 
-	CSocketEvent evt(GetId(), CSocketEvent::close);
+	wxSocketEvent evt(GetId());
+	evt.m_event = wxSOCKET_LOST;
 	wxPostEvent(m_pEvtHandler, evt);
 }
 
@@ -735,7 +702,8 @@ void CTlsSocket::ContinueShutdown()
 	{
 		m_tlsState = closed;
 
-		CSocketEvent evt(GetId(), CSocketEvent::close);
+		wxSocketEvent evt(GetId());
+		evt.m_event = wxSOCKET_LOST;
 		wxPostEvent(m_pEvtHandler, evt);
 
 		return;
@@ -757,11 +725,9 @@ void CTlsSocket::TrustCurrentCert(bool trusted)
 	{
 		m_tlsState = conn;
 
-		CSocketEvent evt(GetId(), CSocketEvent::connection);
+		wxSocketEvent evt(GetId());
+		evt.m_event = wxSOCKET_CONNECTION;
 		wxPostEvent(m_pEvtHandler, evt);
-		if (m_lastWriteFailed)
-			m_lastWriteFailed = false;
-		CheckResumeFailedReadWrite();
 		TriggerEvents();
 		return;
 	}

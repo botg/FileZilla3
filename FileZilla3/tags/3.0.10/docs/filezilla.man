@@ -1,0 +1,37 @@
+.TH filezilla 1 "April 2008" "" "FileZilla Manual"
+.SH NAME
+FileZilla \- FTP client
+.SH SYNOPSIS
+.B filezilla [<FTP URL>]
+.B filezilla -s 
+.B filezilla -c <site>
+.SH DESCRIPTION
+FileZilla is a powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP).
+.SH OPTIONS
+.IP "-s, --sitemanager"
+Start with Site Manager opened.
+.IP
+May not be used together with
+.B -c
+nor with URL parameter.
+.IP "-c, --site"
+Connect to the given site from the Site Manager.
+Site has to be given as complete path, with a slash as separation character. Any slash or backslash that is part of a segment has to be escaped with a backslash. Path has to be prefixed with 0 for user defined entries or 1 for default entries. Site path may not contain double quotation marks.
+.IP
+Example: 0/foo/bar/sl\\/ash connects to the user site sl/ash in the site directory foo/bar
+.IP
+May not be used together with
+.B -s
+nor with URL parameter.
+.SH ENVIRONMENT
+The
+.B FZ_DATADIR
+environment variable can be used to specify the directory containing FileZilla's data files.
+.SH SUPPORT
+Please visit http://filezilla-project.org/ for further information. Report bugs only if you are using the latest version available from the FileZilla website.
+.SH COPYRIGHT
+Copyright (C) 2004-2008  Tim Kosse
+.P
+FileZilla is distributed under the terms of the GNU General Public License version 2 or later.
+.SH "SEE ALSO"
+fzdefaults.xml(5)

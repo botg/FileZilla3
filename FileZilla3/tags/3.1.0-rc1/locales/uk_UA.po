@@ -1,0 +1,6081 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FileZilla\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-07-17 16:13+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Igor Chomko <igorchomko@gmail.com>\n"
+"Language-Team: Ihor Chomko <igorchomko@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Ukrainian\n"
+"X-Poedit-Country: UKRAINE\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Bookmarks: 948,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:52
+#: ../../locales/../src/interface/statuslinectrl.cpp:136
+msgid "%H:%M:%S elapsed"
+msgstr "%H:%M:%S минуло"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:56
+#: ../../locales/../src/interface/statuslinectrl.cpp:161
+msgid "%H:%M:%S left"
+msgstr "%H:%M:%S залишилось"
+
+#: resources.h:261
+#, no-c-format
+msgid ""
+"%a - Account (Lines containing this will be omitted if not using Account "
+"logontype)"
+msgstr ""
+"%a -Акаунт (Рядки,що вміщують його будуть оминатися у випадку,якщо не "
+"використовується логінування в Акаунт) "
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:53
+#: ../../locales/../src/interface/filelist_statusbar.cpp:64
+#: ../../locales/../src/interface/filelist_statusbar.cpp:76
+#, c-format
+msgid "%d directory"
+msgid_plural "%d directories"
+msgstr[0] "%d директорія"
+msgstr[1] "%d directories"
+msgstr[2] "%d directories"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:52
+#: ../../locales/../src/interface/filelist_statusbar.cpp:75
+#, c-format
+msgid "%d file"
+msgid_plural "%d files"
+msgstr[0] "%d файл"
+msgstr[1] "%d files"
+msgstr[2] "%d files"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:71
+#, c-format
+msgid "%d file. Total size: %s"
+msgid_plural "%d files. Total size: %s"
+msgstr[0] "%d файл. Загальний розмір: %s"
+msgstr[1] "%d files. Total size: %s"
+msgstr[2] "%d files. Total size: %s"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:69
+#, c-format
+msgid "%d file. Total size: At least %s"
+msgid_plural "%d files. Total size: At least %s"
+msgstr[0] "%d файл. Загальний розмір: Принаймні %s"
+msgstr[1] "%d files. Total size: At least %s"
+msgstr[2] "%d files. Total size: At least %s"
+
+#: ../../locales/../src/interface/QueueView.cpp:2235
+#, c-format
+msgid "%d files added to queue"
+msgstr "%d файли додані до черги"
+
+#: resources.h:258
+msgid "%h - Host"
+msgstr "%h - Хост"
+
+#: resources.h:260
+#, no-c-format
+msgid "%p - Password"
+msgstr "%p - Пароль"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:52
+#, c-format
+msgid "%s - Certificate expired!"
+msgstr "%s - Дія сертифікату вичерпана"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:36
+#, c-format
+msgid "%s - Not yet valid!"
+msgstr "%s - Все ще не дійсний!"
+
+#: resources.h:262
+#, no-c-format
+msgid "%s - Proxy user"
+msgstr "%s - Користувач проксі"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:81
+#, c-format
+msgid "%s and %s. Total size: %s"
+msgstr "%s і %s. Загальний розмір: %s"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:79
+#, c-format
+msgid "%s and %s. Total size: At least %s"
+msgstr "%s і %s. Загальний розмір: Принаймні %s"
+
+#: ../../locales/../src/interface/LocalListView.cpp:477
+#: ../../locales/../src/interface/LocalListView.cpp:494
+#, c-format
+msgid "%s byte"
+msgid_plural "%s bytes"
+msgstr[0] "%s байт"
+msgstr[1] "%s bytes"
+msgstr[2] "%s bytes"
+
+#: ../../locales/../src/interface/updatewizard.cpp:693
+#, c-format
+msgid "%s bytes"
+msgstr "%s байт"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:153
+#: ../../locales/../src/interface/updatewizard.cpp:677
+#, c-format
+msgid "%s bytes (%d B/s)"
+msgstr "%s байт (%d Б/с)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:151
+#: ../../locales/../src/interface/updatewizard.cpp:675
+#, c-format
+msgid "%s bytes (%d.%d KB/s)"
+msgstr "%s байт(%d.%d KБ/с)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:149
+#: ../../locales/../src/interface/updatewizard.cpp:673
+#, c-format
+msgid "%s bytes (%d.%d MB/s)"
+msgstr "%sбайт (%d.%d MБ/с)"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:171
+#, c-format
+msgid "%s bytes (? B/s)"
+msgstr "%sбайт (? Б/с)"
+
+#: ../../locales/../src/interface/FileZilla.cpp:754
+#, c-format
+msgid ""
+"%s could not be found. Without this component of FileZilla, SFTP will not "
+"work.\n"
+"\n"
+"Please download FileZilla again. If this problem persists, please submit a "
+"bug report."
+msgstr ""
+"%s Неможливо знайти. Без цього компоненту FileZilla  SFTP не працюватиме.\n"
+"\n"
+"Завантажте FileZilla повторно. Якщо ця проблема повториться - повідомте,"
+"будь- ласка, про неполадку."
+
+#: ../../locales/../src/interface/FileZilla.cpp:848
+#, c-format
+msgid ""
+"%s could not be found. Without this component of FileZilla, SFTP will not "
+"work.\n"
+"\n"
+"Possible solutions:\n"
+"- Make sure %s is in a directory listed in your PATH environment variable.\n"
+"- Set the full path to %s in the FZ_FZSFTP environment variable."
+msgstr ""
+"%s Неможливо знайти. Без цього компоненту FileZilla SFTP не працюватиме.\n"
+"\n"
+"Можливі рішення:\n"
+"- Переконайтеся,що %s знаходиться у відповідній  директорії вашого  "
+"маршрутного імені змінної конфігурації.\n"
+"- Встановіть  повний маршрут до %s у змінній конфігурації  FZ_FZSFTP."
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:69
+#, c-format
+msgid "%s with %d bits"
+msgstr "%s with %d біти"
+
+#: resources.h:259
+#, no-c-format
+msgid "%u - Username"
+msgstr "%u -Ім'я користувача"
+
+#: resources.h:263
+#, no-c-format
+msgid "%w - Proxy password"
+msgstr "%w - Пароль проксі"
+
+#: resources.h:585
+msgid "&About..."
+msgstr "&Про..."
+
+#: resources.h:111
+msgid "&Account:"
+msgstr "&Акаунт:"
+
+#: resources.h:125 resources.h:491 resources.h:681
+msgid "&Active"
+msgstr "&Активний"
+
+#: resources.h:589 resources.h:603
+msgid "&Add files to queue"
+msgstr "&Додати файли до черги"
+
+#: resources.h:500
+msgid "&Add keyfile..."
+msgstr "&Додати файл ключа..."
+
+#: resources.h:648 resources.h:664
+msgid "&Add to queue"
+msgstr "&Додати до черги"
+
+#: resources.h:22
+msgid "&Always trust certificate in future sessions."
+msgstr "&У майбутніх сесіях завжди довіряти сертифікату."
+
+#: resources.h:313
+msgid "&Always trust this host, add this key to the cache"
+msgstr "&Завжди довіряти цьому хосту,додати вказаний ключ у каше"
+
+#: resources.h:243
+msgid "&Always use default editor"
+msgstr "&Завжди використовувати редактор за замовчуванням"
+
+#: resources.h:87
+msgid "&Always use this action"
+msgstr "&Завжди виконувати цю дію"
+
+#: resources.h:398 resources.h:421
+msgid "&Ask for action"
+msgstr "&Запитувати перед виконанням"
+
+#: resources.h:368
+msgid "&Ask your operating system for the external IP address"
+msgstr "&Здійснювати запит в операційної системи щодо завнішньої ІР адреси"
+
+#: resources.h:155 resources.h:569
+msgid "&Auto"
+msgstr "&Автоматично"
+
+#: resources.h:131
+msgid "&Autodetect"
+msgstr "&Автовизначення"
+
+#: resources.h:645
+msgid "&Automatically remove successful transfers"
+msgstr "&Автоматично видаляти успішну передачу даних"
+
+#: resources.h:157 resources.h:571
+msgid "&Binary"
+msgstr "&Бінарний"
+
+#: resources.h:223
+msgid "&Binary prefixes using SI symbols. (e.g. 1 KB = 1024 bytes)"
+msgstr ""
+"&Бінарні префікси з використанням символів SI.(наприклад 1 КБ = 1024 байти)"
+
+#: resources.h:117 resources.h:240
+msgid "&Browse..."
+msgstr "&Перегляд..."
+
+#: resources.h:65
+msgid "&Burst tolerance:"
+msgstr "&Стійкість пакету:"
+
+#: resources.h:149 resources.h:153 resources.h:270 resources.h:327
+msgid "&Cancel"
+msgstr "&Скасувати"
+
+#: resources.h:379
+msgid "&Check for beta versions of FileZilla"
+msgstr "&Перевірте на наявність бета версії  FileZilla"
+
+#: resources.h:552
+msgid "&Clear private data..."
+msgstr "&Очистити особисті дані..."
+
+#: resources.h:625
+msgid "&Close FileZilla"
+msgstr "&Завершити FileZilla"
+
+#: resources.h:137
+msgid "&Connect"
+msgstr "&З'єднати"
+
+#: resources.h:348
+msgid "&Copy"
+msgstr "&Копіювати"
+
+#: resources.h:542
+msgid "&Copy current connection to Site Manager..."
+msgstr "&Скопіювати діюче з'єднання до Менеджера Сайту..."
+
+#: resources.h:634
+msgid "&Copy to clipboard"
+msgstr "&Скопіювати до буферу обміну"
+
+#: resources.h:637
+msgid "&Crash"
+msgstr "&Аварійна відмова"
+
+#: resources.h:595 resources.h:606 resources.h:650 resources.h:666
+msgid "&Create directory"
+msgstr "&Створити директорію"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:588
+msgid "&Debug"
+msgstr "&Відлагодити"
+
+#: resources.h:230
+msgid "&Debug information in message log:"
+msgstr "&Відлагодити інформацію в журналі повідомлень:"
+
+#: resources.h:239
+msgid "&Default editor:"
+msgstr "&Редактор за замовчуванням:"
+
+#: resources.h:567 resources.h:617
+msgid "&Default file exists action..."
+msgstr "&Дія за замовчуванням щодо існуючого файлу..."
+
+#: resources.h:187
+msgid "&Delay between failed login attempts:"
+msgstr "&Затримка між невдалими спробами входу:"
+
+#: resources.h:97 resources.h:330 resources.h:346 resources.h:597
+#: resources.h:668
+msgid "&Delete"
+msgstr "&Видалити"
+
+#: resources.h:556
+msgid "&Directory comparison"
+msgstr "&Порівняння директорій"
+
+#: resources.h:478
+msgid "&Discard local file then download and edit file anew"
+msgstr ""
+"&Проігнорувати локальний файл з подальшим його завантаженням та поновленям "
+"редагуванням"
+
+#: resources.h:576
+msgid "&Disconnect"
+msgstr "&Від'єднати"
+
+#: resources.h:626
+msgid "&Disconnect from server"
+msgstr "&Від'єднати від сервера"
+
+#: resources.h:221
+msgid "&Display size in bytes"
+msgstr "&Показати розмір в байтах"
+
+#: ../../locales/../src/interface/conditionaldialog.cpp:25
+msgid "&Don't show this dialog again."
+msgstr "&Даний діалог більше не показувати."
+
+#: resources.h:373
+msgid "&Don't use external IP address on local connections."
+msgstr "&Не використовувати зовнішню ІР адресу при локальному з'єднанні"
+
+#: resources.h:601 resources.h:646
+msgid "&Download"
+msgstr "&Завантажити"
+
+#: resources.h:548 resources.h:593
+msgid "&Edit"
+msgstr "&Редагувати"
+
+#: resources.h:332
+msgid "&Edit filters..."
+msgstr "&Редагувати фільтри..."
+
+#: resources.h:557 resources.h:659
+msgid "&Enable"
+msgstr "&Розблокувати"
+
+#: resources.h:201
+msgid "&Enable automatic update check"
+msgstr "&Розблокувати автоматичну перевірку оновлень"
+
+#: resources.h:135
+msgid "&Encoding:"
+msgstr "&Кодування:"
+
+#: resources.h:633
+msgid "&Enter custom command..."
+msgstr "&Введіть клієнтську команду..."
+
+#: resources.h:276
+msgid "&Execute"
+msgstr "&Виконати"
+
+#: resources.h:452
+msgid "&Export Site Manager entries"
+msgstr "&Експортувати введені дані до Менеджера Сайту"
+
+#: resources.h:543
+msgid "&Export..."
+msgstr "&Експорт..."
+
+#: resources.h:48
+msgid "&Fall back to active mode"
+msgstr "&Повернутись до активного стану"
+
+#: resources.h:539
+msgid "&File"
+msgstr "&Файл"
+
+#: resources.h:612 resources.h:656
+msgid "&File Attributes..."
+msgstr "&Атрибути файлу..."
+
+#: resources.h:329
+msgid "&Filter sets:"
+msgstr "&Установки фільтру:"
+
+#: resources.h:344
+msgid "&Filters:"
+msgstr "&Фільтри:"
+
+#: ../../locales/../src/interface/edithandler.cpp:651
+msgid "&Finish editing"
+msgstr "&Завершити редагування"
+
+#: resources.h:470
+msgid "&Finish editing and delete local file"
+msgstr "&Завершити редагування і видалити локальний файл"
+
+#: resources.h:371
+msgid "&Get external IP address from the following URL:"
+msgstr "&Отримати зовнішню ІР адресу з такого URL:"
+
+#: resources.h:583
+msgid "&Getting help..."
+msgstr "&Отримання допомоги..."
+
+#: resources.h:532
+msgid "&HTTP/1.1 using CONNECT method"
+msgstr ""
+
+#: resources.h:580
+msgid "&Help"
+msgstr "&Допомога"
+
+#: resources.h:619
+msgid "&Highest"
+msgstr "&Найвищий"
+
+#: resources.h:366
+msgid "&Highest available port:"
+msgstr "&Найвищий доступний порт:"
+
+#: resources.h:100 resources.h:719
+msgid "&Host:"
+msgstr "&Хост:"
+
+#: resources.h:222
+msgid "&IEC binary prefixes (e.g. 1 KiB = 1024 bytes)"
+msgstr "&Бінарні префікси ІЕС (наприклад 1 KiБ = 1024 байт)"
+
+#: resources.h:210
+msgid "&ISO 8601 (example: 2007-09-15)"
+msgstr "&ISO 8601 (приклад: 2007-09-15)"
+
+#: resources.h:544
+msgid "&Import..."
+msgstr "&Імпорт..."
+
+#: resources.h:245
+msgid "&Inherit system's filetype associations"
+msgstr "&Зберегти асоціації типів файлів"
+
+#: resources.h:167
+msgid "&Layout of file and directory panes:"
+msgstr "&Розташування файлів та панелей директорії:"
+
+#: resources.h:363
+msgid "&Limit local ports used by FileZilla"
+msgstr "&Обмежити локальні порти,що використовуються FileZill-ою"
+
+#: resources.h:127
+msgid "&Limit number of simultaneous connections"
+msgstr "&Обмежити кількість одночасних з'єднань"
+
+#: resources.h:562
+msgid "&Local directory tree"
+msgstr "&Локальне дерево директорій"
+
+#: resources.h:103
+msgid "&Logontype:"
+msgstr "&Тип входження:"
+
+#: resources.h:622
+msgid "&Low"
+msgstr "&Низький"
+
+#: resources.h:128
+msgid "&Maximum number of connections:"
+msgstr "&Максимальна кількість з'єднань:"
+
+#: resources.h:185
+msgid "&Maximum number of retries:"
+msgstr "&Максимальна кількість спроб:"
+
+#: resources.h:561
+msgid "&Message log"
+msgstr "&Журнал повідомлень"
+
+#: resources.h:551
+msgid "&Network configuration wizard..."
+msgstr "&Майстер налаштування мережі..."
+
+#: resources.h:345
+msgid "&New"
+msgstr "&Нове"
+
+#: resources.h:94
+msgid "&New Site"
+msgstr "&Новий сайт"
+
+#: ../../locales/../src/interface/updatewizard.cpp:828
+msgid "&New version available!"
+msgstr "&Доступна нова версія!"
+
+#: resources.h:472
+msgid "&No"
+msgstr "&Ні"
+
+#: resources.h:252 resources.h:531
+msgid "&None"
+msgstr "&Жодного"
+
+#: resources.h:621
+msgid "&Normal"
+msgstr "&Звичайний"
+
+#: resources.h:202
+msgid "&Number of days between update checks:"
+msgstr "&Кількість днів між перевірками оновлень:"
+
+#: resources.h:285
+msgid "&Numeric value:"
+msgstr "&Числове значення:"
+
+#: resources.h:138 resources.h:148
+msgid "&OK"
+msgstr "&ДОБРЕ"
+
+#: resources.h:255
+msgid "&OPEN"
+msgstr "&ВІДКРИТИ"
+
+#: resources.h:591
+msgid "&Open"
+msgstr "&Відкрити"
+
+#: resources.h:80 resources.h:399 resources.h:422
+msgid "&Overwrite"
+msgstr "&Переписати"
+
+#: resources.h:126
+msgid "&Passive"
+msgstr "&Пасивний"
+
+#: resources.h:146
+msgid "&Password:"
+msgstr "&Пароль:"
+
+#: resources.h:629
+msgid "&Play sound"
+msgstr "&Відтворити звук"
+
+#: resources.h:101 resources.h:723
+msgid "&Port:"
+msgstr "&Порт:"
+
+#: resources.h:572
+msgid "&Preserve timestamps of transferred files"
+msgstr "&Зберегти часові позначки переданих файлів"
+
+#: resources.h:461
+msgid "&Queue"
+msgstr "&Черга"
+
+#: resources.h:725
+msgid "&Quickconnect"
+msgstr "&Швидке з'єднання"
+
+#: resources.h:274
+msgid "&Read"
+msgstr "&Читати"
+
+#: resources.h:575
+msgid "&Reconnect"
+msgstr "&Відновити з'єднання"
+
+#: resources.h:554
+msgid "&Refresh"
+msgstr "&Поновити"
+
+#: resources.h:147
+msgid "&Remember password for this session"
+msgstr "&Запам'ятати пароль для даного з'єднання"
+
+#: resources.h:161
+msgid "&Remove"
+msgstr "&Забрати"
+
+#: resources.h:501
+msgid "&Remove key"
+msgstr "&Забрати ключ"
+
+#: resources.h:616
+msgid "&Remove selected"
+msgstr "&Забрати вибране"
+
+#: resources.h:96 resources.h:347 resources.h:599 resources.h:610
+#: resources.h:654 resources.h:670
+msgid "&Rename"
+msgstr "&Перейменувати"
+
+#: resources.h:477
+msgid "&Reopen local file"
+msgstr "&Перевідкрити локальний файл"
+
+#: resources.h:584
+msgid "&Report a bug..."
+msgstr "&Повідомити про недолік..."
+
+#: resources.h:718
+msgid "&Restart Wizard"
+msgstr "&Перезавантажити майстра"
+
+#: resources.h:84 resources.h:403 resources.h:426
+msgid "&Resume"
+msgstr "&Відновити"
+
+#: resources.h:627
+msgid "&Run command..."
+msgstr "&Команда на виконання..."
+
+#: resources.h:183
+msgid "&Run configuration wizard now..."
+msgstr "&Запустити майстра налаштувань..."
+
+#: resources.h:204
+msgid "&Run update check now..."
+msgstr "&Виконати перевірку оновлень..."
+
+#: resources.h:254
+msgid "&SITE"
+msgstr "&САЙТ"
+
+#: resources.h:533
+msgid "&SOCKS 5"
+msgstr ""
+
+#: resources.h:331
+msgid "&Save as..."
+msgstr "&Зберегти як..."
+
+#: resources.h:198
+msgid "&Select language:"
+msgstr "&Вибрати мову:"
+
+#: resources.h:524
+msgid "&Select the columns that should be displayed:"
+msgstr "&Вибрати стовпці для:"
+
+#: resources.h:573
+msgid "&Server"
+msgstr "&Сервер"
+
+#: resources.h:460
+msgid "&Settings"
+msgstr "&Установки"
+
+#: resources.h:549
+msgid "&Settings..."
+msgstr "&Установки..."
+
+#: resources.h:229
+msgid "&Show debug menu"
+msgstr "&Показати меню відлагоджування"
+
+#: resources.h:628
+msgid "&Show message"
+msgstr "&Показати повідомлення"
+
+#: resources.h:227
+msgid "&Show timestamps in message log"
+msgstr "&Показати часові позначки в журналі повідомлень"
+
+#: resources.h:540
+msgid "&Site Manager..."
+msgstr "&Сайт Менеджер..."
+
+#: resources.h:86
+msgid "&Skip"
+msgstr "&Оминути"
+
+#: resources.h:172
+msgid "&Swap local and remote panes"
+msgstr "&Обміняти локальні та віддалені панелі"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:228
+msgid "&Test"
+msgstr "&Тест"
+
+#: resources.h:191
+msgid "&Theme:"
+msgstr "&Тема:"
+
+#: resources.h:565
+msgid "&Transfer"
+msgstr "&Передача"
+
+#: resources.h:123
+msgid "&Transfer mode:"
+msgstr "&Спосіб передачі:"
+
+#: resources.h:564
+msgid "&Transfer queue"
+msgstr "&Почерговість передачі"
+
+#: resources.h:164
+msgid "&Treat dotfiles as ASCII files"
+msgstr "&Трактувати файли з розширенням .dot як файли ASCII"
+
+#: resources.h:484
+msgid "&Unedit"
+msgstr "&Відмінити редагування"
+
+#: resources.h:325
+msgid "&Update cached key for this host"
+msgstr "&Обновити кешований ключ для даного хосту"
+
+#: resources.h:587 resources.h:662
+msgid "&Upload"
+msgstr "&Завантажити на сервер"
+
+#: resources.h:369
+msgid "&Use the following IP address:"
+msgstr "&Використовувати наступні ІР адреси:"
+
+#: resources.h:47
+msgid "&Use the server's external IP address instead"
+msgstr "&Використати натомість зовнішню ІР адресу"
+
+#: resources.h:225
+msgid "&Use thousands separator"
+msgstr "&Використати розділювач тисячних"
+
+#: resources.h:109
+msgid "&User:"
+msgstr "&Користувач:"
+
+#: resources.h:721
+msgid "&Username:"
+msgstr "&Ім'я користувача:"
+
+#: ../../locales/../src/interface/updatewizard.cpp:824
+#, c-format
+msgid "&Version %s"
+msgstr "&Версія %s"
+
+#: resources.h:553
+msgid "&View"
+msgstr "&Переглянути"
+
+#: resources.h:605
+msgid "&View / Edit"
+msgstr "&Переглянути / Редагувати"
+
+#: resources.h:275
+msgid "&Write"
+msgstr "&Писати"
+
+#: resources.h:471
+msgid "&Yes"
+msgstr "&Так"
+
+#: ../../locales/../src/interface/state.cpp:107
+#, c-format
+msgid "'%s' does not exist or cannot be accessed."
+msgstr "'%s'не існує або нема доступу."
+
+#: ../../locales/../src/interface/sitemanager.cpp:829
+msgid "'Account' logontype not supported by selected protocol"
+msgstr "'Акаунт' за типом входження не підтримується вибраним протоколом"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:666
+msgid ""
+"'quote' is usually a local command used by commandline clients to send the "
+"arguments following 'quote' to the server. You might want to enter the raw "
+"command without the leading 'quote'."
+msgstr ""
+"'quote' зазвичай є локальною командою,що використовується командною лінійкою "
+"клієнта для відправки аргументів даного 'quote' на сервер.Можливо ви "
+"забажаєте ввести просту команду  ( the raw command), не використовуючи "
+"'quote'."
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:86
+#: ../../locales/../src/interface/filelist_statusbar.cpp:95
+#, c-format
+msgid "(%d object filtered)"
+msgid_plural "(%d objects filtered)"
+msgstr[0] "(%d фільтрований об'єкт )"
+msgstr[1] "(%d objects filtered)"
+msgstr[2] "(%d objects filtered)"
+
+#: resources.h:53 resources.h:55
+msgid "(0 for no limit)"
+msgstr "(0 для безліміту)"
+
+#: resources.h:186
+msgid "(0-99)"
+msgstr "(0-99)"
+
+#: resources.h:188
+msgid "(0-999 seconds)"
+msgstr "(0-999 секунд)"
+
+#: resources.h:51
+msgid "(1-10)"
+msgstr "(1-10)"
+
+#: resources.h:58
+msgid "(5-9999, 0 to disable)"
+msgstr "(5-9999, 0 щоб заблокувати)"
+
+#: resources.h:203
+msgid "(At least 7 days)"
+msgstr "(Щонайменше 7 днів)"
+
+#: resources.h:218
+msgid "(example: %H:%M)"
+msgstr "(приклад: %H:%M)"
+
+#: resources.h:212
+msgid "(example: %Y-%m-%d)"
+msgstr "(приклад: %Y-%m-%d)"
+
+#: resources.h:62 resources.h:64
+msgid "(in KB/s)"
+msgstr "(в KБ/с)"
+
+#: ../../locales/../src/interface/updatewizard.cpp:685
+msgid ", %H:%M:%S left"
+msgstr ", %H:%M:%S залишилось"
+
+#: ../../locales/../src/interface/updatewizard.cpp:689
+msgid ", --:--:-- left"
+msgstr ", --:--:-- залишилось"
+
+#: resources.h:706
+msgid "-"
+msgstr "-"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:165
+#: ../../locales/../src/interface/statuslinectrl.cpp:170
+msgid "--:--:-- left"
+msgstr "--:--:-- залишилось"
+
+#: ../../locales/../src/interface/cmdline.cpp:69
+msgid "-c cannot be used together with an FTP URL."
+msgstr "-c не може використовуватись з FTP URL."
+
+#: ../../locales/../src/interface/cmdline.cpp:57
+msgid "-s and -c cannot be present at the same time."
+msgstr "-s та -c не можуть співіснувати одночасно."
+
+#: ../../locales/../src/interface/cmdline.cpp:63
+msgid "-s cannot be used together with an FTP URL."
+msgstr "-s не можна використовувати разом з FTP URL."
+
+#: resources.h:231
+msgid "0 - None"
+msgstr "0 - Жодного"
+
+#: resources.h:232
+msgid "1 - Warning"
+msgstr "1 - Попередження"
+
+#: resources.h:233
+msgid "2 - Info"
+msgstr "2 - Інформація"
+
+#: resources.h:234
+msgid "3 - Verbose"
+msgstr "3 - Багатошаровий"
+
+#: resources.h:235
+msgid "4 - Debug"
+msgstr "4 - Відлагодити"
+
+#: ../../locales/../src/engine/directorylistingparser.cpp:1591
+msgid ";1"
+msgstr ";1"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:122
+msgid "A default editor needs to be set."
+msgstr "Потрібно встановити редактор за замовчуванням."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:147
+#: ../../locales/../src/interface/RemoteTreeView.cpp:106
+msgid "A directory cannot be dragged into one if its subdirectories."
+msgstr "Директорію неможливо перетягнути до однієї з її піддиректорій ."
+
+#: resources.h:678
+msgid ""
+"A few servers don't allow passive mode or are misconfigured. In such cases "
+"you would have to use active mode. In active mode, FileZilla opens a port "
+"and asks the server to connect to it."
+msgstr ""
+"Рідкісні сервери не дозволяють пасивного режиму або ж вони неправильно "
+"сконфігуровані.В таких випадках вам необхідно використати активний режим.А "
+"активному режимі  FileZilla  відкриває порт і просить сервер про з'єднання."
+
+#: resources.h:466
+msgid "A file previously opened has been changed:"
+msgstr "Попередньо відкритий файл було змінено:"
+
+#: ../../locales/../src/interface/LocalListView.cpp:2041
+msgid ""
+"A file with that name is already being edited. Discard old file and download "
+"the new file?"
+msgstr ""
+"Файл з цим іменем було редаговано.Проігнорувати старий файл і завантажити "
+"новий?"
+
+#: ../../locales/../src/interface/LocalListView.cpp:2037
+#: ../../locales/../src/interface/RemoteListView.cpp:2371
+msgid "A file with that name is already being transferred."
+msgstr "Файл з цим іменем знаходиться у процесі завантаження"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2376
+msgid ""
+"A file with that name is still being edited. Please close it and try again."
+msgstr "Файл з цим іменем знаходиться в процесі редагування"
+
+#: ../../locales/../src/interface/FileZilla.cpp:734
+msgid ""
+"A local filename could not be decoded.\n"
+"Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
+"correctly.\n"
+"Unless you fix this problem, files might be missing in the file listings.\n"
+"No further warning will be displayed this session."
+msgstr ""
+"Локальне ім'я файлу неможливо декодувати.\n"
+"Переконайтеся,що переключення режиму  LC_CTYPE (або LC_ALL) встановлено "
+"правильно.\n"
+"Якщо ви не полагодите цієї проблеми,файли будуть відсутні у списках файлів.\n"
+"Більше попереджень упродовж цього з'єднання не буде.  "
+
+#: resources.h:381
+msgid "A newer version of FileZilla is available:"
+msgstr "В наявності нова версія FileZilla: "
+
+#: ../../locales/../src/interface/Mainfrm.cpp:725
+msgid ""
+"A proper server always shows all files, but some broken servers hide files "
+"from the user. Use this option to force the server to show all files."
+msgstr ""
+"Правильно налаштований сервер завжди показує всі файли,натомість деякі "
+"неправильно налаштовані будуть ховати файли від користувача.Використовуйте "
+"дану опцію щоб змусити сервер показувати усі файли."
+
+#: resources.h:496
+msgid ""
+"A proper server does not require this. Contact the server administrator if "
+"you need this."
+msgstr ""
+"Правильно налаштований сервер цього не вимагає. Якщо у вас виникла у цьому "
+"потреба контактуйте з адміністратором сервера."
+
+#: resources.h:156 resources.h:570
+msgid "A&SCII"
+msgstr "A&SCII"
+
+#: resources.h:160
+msgid "A&dd"
+msgstr "До&дати"
+
+#: resources.h:439
+msgid "A&llow resume of ASCII files"
+msgstr "До&зволити поновлення  файлів ASCII"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:108
+msgid "A&pply only to downloads"
+msgstr "За&стосувати лише для завантажень"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:164
+msgid "A&pply only to uploads"
+msgstr "За&стосувати лише для відвантажень"
+
+#: resources.h:288
+msgid "A&pply to all files and directories"
+msgstr "За&стосувати до всіх файлів та директорій"
+
+#: resources.h:408 resources.h:430
+msgid "A&sk for action"
+msgstr "За&питати про дію"
+
+#: resources.h:293
+msgid "About FileZilla"
+msgstr "Про FileZilla"
+
+#: resources.h:108 ../../locales/../src/interface/sitemanager.cpp:826
+#: ../../locales/../src/interface/sitemanager.cpp:876
+#: ../../locales/../src/interface/sitemanager.cpp:1070
+#: ../../locales/../src/interface/sitemanager.cpp:1071
+#: ../../locales/../src/interface/sitemanager.cpp:1109
+#: ../../locales/../src/interface/sitemanager.cpp:1332
+msgid "Account"
+msgstr "Акаунт"
+
+#: resources.h:624
+msgid "Action after queue &completion"
+msgstr "Дія після &завершення черги "
+
+#: resources.h:483
+msgid "Action on selected file:"
+msgstr "Дія над вибраним файлом"
+
+#: resources.h:476
+msgid "Action to perform:"
+msgstr "Дія до виконання:"
+
+#: resources.h:79
+msgid "Action:"
+msgstr "Дія"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:114
+msgid "Active mode"
+msgstr "Активний режим"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:601
+msgid ""
+"Active mode FTP test failed. FileZilla does not know the correct external IP "
+"address."
+msgstr ""
+" FTP тест активного режиму показав збій.FileZilla не знає правильної "
+"завнішньої ІР адреси."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:588
+msgid ""
+"Active mode FTP test failed. FileZilla does not know the correct external IP "
+"address. In addition to that, your router has modified the sent address."
+msgstr ""
+" FTP тест активного режиму показав збій.FileZilla не знає правильної "
+"зовнішньої ІР адреси."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:576
+msgid ""
+"Active mode FTP test failed. FileZilla knows the correct external IP "
+"address, but your router or firewall has misleadingly modified the sent "
+"address."
+msgstr ""
+"FTP тест активного режиму показав збій. FileZilla  знає правильну зовнішню "
+"ІР адресу,однак ваш маршрутизатор або файєрвол помилково змінили відправлену "
+"адресу."
+
+#: resources.h:374
+msgid "Active mode IP"
+msgstr "ІР активного режиму"
+
+#: resources.h:354
+msgid "Add &more"
+msgstr "Додати &більше"
+
+#: resources.h:649 resources.h:665
+msgid "Add selected directory to the transfer queue"
+msgstr "Додати вибрану директорію до черги передачі"
+
+#: resources.h:590 resources.h:604
+msgid "Add selected files and folders to the transfer queue"
+msgstr "Додати вибрані файли і папки до черги передачі"
+
+#: ../../locales/../src/engine/proxy.cpp:434
+msgid "Addrss type not supported"
+msgstr ""
+
+#: resources.h:119
+msgid "Adjust server timezone offset:"
+msgstr "Узгодити налаштування часового поясу за сервером"
+
+#: resources.h:113
+msgid "Advanced"
+msgstr "Для досвідчених"
+
+#: resources.h:378
+msgid "Advanced options:"
+msgstr "Розширені опції:"
+
+#: resources.h:506
+msgid "Algorithm:"
+msgstr "Алгоритм:"
+
+#: resources.h:707
+msgid "All ports in the given range have to be between 1024 and 65535."
+msgstr ""
+"Усі порти в заданому діапазоні повинні знаходитись в межах від 1024 до 65535."
+
+#: resources.h:492
+msgid "Allow &fall back to other transfer mode on failure"
+msgstr "Дозволити &звернутися до іншого режиму передачі при виникненні збою"
+
+#: resources.h:682
+msgid "Allow fallback to other transfer mode on failure"
+msgstr "Дозволити звернутися до іншого режиму передачі при виникненні збою"
+
+#: resources.h:502
+msgid ""
+"Alternatively you can use the Pageant tool from PuTTY to manage your keys, "
+"FileZilla does recognize Pageant."
+msgstr ""
+"Ви можете використати у якості альтернативи інструмент Pageant з PuTTY щоб "
+"управляти своїми ключами. FileZilla розпізнає Pageant.  "
+
+#: resources.h:503
+msgid ""
+"Alternatively you can use your system's SSH agent. To do so, make sure the "
+"SSH&AUTH&SOCK environment variable is set."
+msgstr ""
+"У якості альтернативи, ви можете використати  свого системного агента  SSH."
+"Для цього переконайтеся,що переключення режимів SSH&AUTH&SOCK встановлені."
+
+#: ../../locales/../src/interface/updatewizard.cpp:868
+msgid ""
+"Alternatively, visit http://filezilla-project.org to download the most "
+"recent version."
+msgstr ""
+"Щоб завантажити найновішу версію,в якості альтернативи, відвідайте http://"
+"filezilla-project.org ."
+
+#: ../../locales/../src/interface/sitemanager.cpp:1843
+msgid ""
+"An item with the same name as the dragged item already exists at the target "
+"location."
+msgstr ""
+"Елемент, що перетягується,  позначений схожим іменем з елементом,що вже "
+"існує у вказаній позиції."
+
+#: resources.h:104 ../../locales/../src/interface/sitemanager.cpp:867
+#: ../../locales/../src/interface/sitemanager.cpp:1069
+#: ../../locales/../src/interface/sitemanager.cpp:1265
+#: ../../locales/../src/interface/sitemanager.cpp:1335
+msgid "Anonymous"
+msgstr "Анонімний"
+
+#: resources.h:352
+msgid "Any of the following"
+msgstr "Будь-що з наступного"
+
+#: resources.h:290
+msgid "App&ly to directories only"
+msgstr "За&стосувати лише для директорій"
+
+#: resources.h:342
+msgid "Apply"
+msgstr "Застосувати"
+
+#: resources.h:88
+msgid "Apply to &current queue only"
+msgstr "Застосувати лише до &поточної  черги "
+
+#: resources.h:289
+msgid "Apply to &files only"
+msgstr "Застосувати лише до &файлів"
+
+#: ../../locales/../src/interface/filteredit.cpp:108
+#: ../../locales/../src/interface/updatewizard.cpp:237
+msgid "Archive"
+msgstr "Архів"
+
+#: resources.h:106 ../../locales/../src/interface/sitemanager.cpp:1105
+#: ../../locales/../src/interface/sitemanager.cpp:1326
+msgid "Ask for password"
+msgstr "Запит на пароль"
+
+#: resources.h:703
+msgid "Ask operating system for a port."
+msgstr "Запит операційної системи про порт"
+
+#: resources.h:693
+msgid "Ask your operating system for the external IP address"
+msgstr "Запит своєї операційної системи про зовнішню ІР адресу"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:151
+msgid "Associated program not found:"
+msgstr "Допоміжної програми не знайдено"
+
+#: ../../locales/../src/interface/filteredit.cpp:698
+msgid "At least one filter condition is incomplete"
+msgstr "Принаймні одна умова фільтрації не повна"
+
+#: resources.h:712
+msgid "At this point, all required information has been gathered."
+msgstr "На цьому етапі усю необхідну інформацію зібрано"
+
+#: ../../locales/../src/interface/filteredit.cpp:107
+msgid "Attribute"
+msgstr "Атрибут"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:580
+msgid "Authentication failed."
+msgstr "Автентичність не опізнано"
+
+#: resources.h:192
+msgid "Author:"
+msgstr "Автор:"
+
+#: resources.h:158
+msgid "Automatic file type classification"
+msgstr "Автоматичне класифікування типу файлів"
+
+#: resources.h:200
+msgid "Automatic update check"
+msgstr "Автоматична перевірка оновлень"
+
+#: resources.h:196
+msgid "Available sizes"
+msgstr "Наявні розміри"
+
+#: resources.h:115
+msgid "B&ypass proxy"
+msgstr "Про&міжний проксі"
+
+#: ../../locales/../src/interface/edithandler.cpp:928
+#: ../../locales/../src/interface/edithandler.cpp:954
+msgid "Being edited"
+msgstr "В процесі редагування"
+
+#: resources.h:171
+msgid "Blackboard"
+msgstr "Панель оголошень"
+
+#: ../../locales/../src/interface/state.cpp:281
+msgid "Break current connection?"
+msgstr "Розірвати дане з'єднання?"
+
+#: resources.h:301
+msgid "Build date:"
+msgstr "Дата створення:"
+
+#: resources.h:298
+msgid "Build information"
+msgstr "Інформація по конструкції"
+
+#: resources.h:364
+msgid ""
+"By default uses any available local port to establish transfers in active "
+"mode. If you want to limit FileZilla to use only a small range of ports, "
+"please enter the port range below."
+msgstr ""
+"По замовчуванню використовує довільний наявний локальний порт для "
+"встановлення передачі в активному режимі.Якщо ви бажаєте обмежити FileZilla "
+"до використання лише невеликого діапазону портів,вкажіть,будь-ласка,діапазон "
+"портів нижче."
+
+#: resources.h:574
+msgid "C&ancel current operation"
+msgstr "Від&мінити дану операцію"
+
+#: resources.h:380
+msgid "C&heck for nightly builds of FileZilla"
+msgstr "Пе&ревірити нічні зборки FileZilla"
+
+#: resources.h:635
+msgid "C&lear all"
+msgstr "О&чистити  усе"
+
+#: resources.h:211
+msgid "C&ustom"
+msgstr "К&лієнтський"
+
+#: resources.h:246
+msgid "C&ustom filetype associations:"
+msgstr "К&лієнтські асоціації типів файлів:"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1344
+msgid "CSftpControlSocket::ChangeDirSend()"
+msgstr "CSftpControlSocket::ChangeDirSend()"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1337
+msgid "CSftpControlSocket::ChangeDirSubcommandResult()"
+msgstr "CSftpControlSocket::ChangeDirSubcommandResult()"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1479
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1152
+msgid "Calculating timezone offset of server..."
+msgstr "Обчислення зсуву часового поясу відносно сервера..."
+
+#: ../../locales/../src/engine/transfersocket.cpp:746
+msgid "Can't read from file"
+msgstr "Не можу прочитати з файлу"
+
+#: ../../locales/../src/engine/transfersocket.cpp:725
+#: ../../locales/../src/engine/transfersocket.cpp:798
+msgid "Can't write data to file."
+msgstr "Не можу записати дані в файл."
+
+#: ../../locales/../src/engine/transfersocket.cpp:723
+#: ../../locales/../src/engine/transfersocket.cpp:796
+#, c-format
+msgid "Can't write data to file: %s"
+msgstr "Не можу записати дані в файл: %s"
+
+#: resources.h:24 resources.h:91 resources.h:292 resources.h:315
+#: resources.h:341 resources.h:361 resources.h:418 resources.h:449
+#: resources.h:456 resources.h:464 resources.h:480 resources.h:528
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: resources.h:740
+msgid "Cancel current operation"
+msgstr "Скасувати дану операцію"
+
+#: resources.h:741
+msgid "Cancels the current operation"
+msgstr "Скасовує дану операцію"
+
+#: ../../locales/../src/interface/state.cpp:119
+#, c-format
+msgid "Cannot access '%s', no media inserted or drive not ready."
+msgstr "Нема доступу '%s', не встановлені носії або диск не готовий."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:644
+msgid "Cannot add server to Site Manager"
+msgstr "Неможливо додати сервер до Сайт Менеджера"
+
+#: ../../locales/../src/interface/listingcomparison.cpp:74
+msgid ""
+"Cannot compare directories, different filters for local and remote "
+"directories are enabled"
+msgstr ""
+"Неможливо порівняти директорії,увімкнені різні фільтри та віддалені "
+"директорії"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2475
+msgid "Cannot compare directories, not connected to a server."
+msgstr "Неможливо порівняти директорії,нема підключення до серверу."
+
+#: ../../locales/../src/interface/filteredit.cpp:471
+msgid "Cannot create new filter"
+msgstr "Неможливо створити новий фільтр"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2338
+#: ../../locales/../src/interface/RemoteListView.cpp:2345
+msgid "Cannot edit file"
+msgstr "Неможливо редагувати файл"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:349
+msgid ""
+"Cannot establish FTP connection to an SFTP server. Please select proper "
+"protocol."
+msgstr ""
+"Неможливо встановити з'єднання з SFTP сервером.Виберіть,будь-ласка,властивий "
+"протокол."
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:30
+msgid "Cannot load Quickconnect bar from resource file"
+msgstr "Неможливо завантажити панель Швидкого завантаження вихідного файлу"
+
+#: ../../locales/../src/interface/import.cpp:37
+msgid "Cannot load file, not a valid XML file."
+msgstr "Неможливо завантажити файл,недійсний XML файл."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:386
+msgid "Cannot load keyfile"
+msgstr "Неможливо завантажити контрольний файл"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:571
+msgid "Cannot load main menu from resource file"
+msgstr "Неможливо завантажити головне меню з вихідного файлу"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1043
+msgid "Cannot load toolbar from resource file"
+msgstr "Неможливо завантажити панель інструментів з вихідного файлу"
+
+#: ../../locales/../src/interface/sitemanager.cpp:968
+msgid "Cannot rename entry"
+msgstr "Неможливо перейменувати компонент"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1585
+msgid "Cannot rename file"
+msgstr "Неможливо перейменувати файл"
+
+#: ../../locales/../src/interface/filter.cpp:318
+msgid "Cannot save filterset"
+msgstr "Неможливо зберегти налаштування фільтру"
+
+#: ../../locales/../src/interface/filter.cpp:278
+msgid "Cannot select filter"
+msgstr "Неможливо вибрати фільтр"
+
+#: ../../locales/../src/interface/edithandler.cpp:888
+msgid "Cannot show dialog"
+msgstr "Неможливо показати діалог"
+
+#: ../../locales/../src/interface/LocalListView.cpp:2037
+#: ../../locales/../src/interface/RemoteListView.cpp:2371
+msgid "Cannot view / edit selected file"
+msgstr "Неможливо переглядати / редагувати обрані файли"
+
+#: resources.h:443
+msgid "Categories"
+msgstr "Категорії"
+
+#: ../../locales/../src/interface/statusbar.cpp:418
+msgid "Certificate and session data are not available yet."
+msgstr "Сертифікату і даних по з'єднанню ще немає."
+
+#: resources.h:25
+msgid "Certificate details"
+msgstr "Подробиці сертифікату"
+
+#: resources.h:14 resources.h:37
+msgid "Certificate issuer"
+msgstr "Видавець сертифікату"
+
+#: resources.h:145
+msgid "Challenge:"
+msgstr "Виклик:"
+
+#: resources.h:271
+msgid "Change file attributes"
+msgstr "Змінити атрибути"
+
+#: resources.h:613 resources.h:657
+msgid "Change the file permissions."
+msgstr "Змінити дозволи для файлу."
+
+#: ../../locales/../src/interface/FileZilla.cpp:734
+msgid "Character encoding issue"
+msgstr "Подача кодування символів"
+
+#: resources.h:129
+msgid "Charset"
+msgstr "Сукупність символів"
+
+#: resources.h:205
+msgid "Check for &beta versions and release candidates"
+msgstr "Перевірте на наявність бета версії  FileZilla"
+
+#: resources.h:581
+msgid "Check for &updates..."
+msgstr "Перевірити &оновлення..."
+
+#: resources.h:582
+msgid "Check for newer versions of FileZilla"
+msgstr "Перевірити наявність новішої версії FileZilla"
+
+#: ../../locales/../src/interface/updatewizard.cpp:68
+msgid "Check for updates"
+msgstr "Перевірити оновлення"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:761
+msgid "Checking for correct external IP address"
+msgstr "Перевірка правильності зовнішньої ІР адреси"
+
+#: resources.h:376
+msgid "Checking for updates"
+msgstr "Перевірка оновлень"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1200
+msgid "Choose the default local directory"
+msgstr "Виберіть локальну директорію по замовчуванню"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:765
+msgid "Chunk data improperly terminated"
+msgstr "Чанк- дата завершено неправильно "
+
+#: resources.h:17 resources.h:40
+msgid "Cipher:"
+msgstr "Шифр:"
+
+#: resources.h:168
+msgid "Classic"
+msgstr "Класичний"
+
+#: resources.h:446
+msgid "Clear &Site Manager entries"
+msgstr "Очистити &вміст Сайт Менеджера"
+
+#: resources.h:636
+msgid "Clear &layout cache"
+msgstr "Очистити &каше формату"
+
+#: resources.h:444
+msgid "Clear &quickconnect history"
+msgstr "Очистити &історію Швидкого з'єднання"
+
+#: resources.h:445
+msgid "Clear &reconnect information"
+msgstr "Очистити &інформацію повторних з'єднань"
+
+#: resources.h:447
+msgid "Clear &transfer queue"
+msgstr "Очистити &чергу передач"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:128
+msgid "Clear history"
+msgstr "Очистити історію"
+
+#: resources.h:441 ../../locales/../src/interface/clearprivatedata.cpp:34
+#: ../../locales/../src/interface/clearprivatedata.cpp:40
+#: ../../locales/../src/interface/clearprivatedata.cpp:46
+#: ../../locales/../src/interface/clearprivatedata.cpp:68
+#: ../../locales/../src/interface/clearprivatedata.cpp:90
+msgid "Clear private data"
+msgstr "Очистити особисті дані"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:127
+msgid "Clear quickconnect bar"
+msgstr "Очистити панель Швидкого З'єднання"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:568
+msgid "Click on Finish to save your configuration."
+msgstr "Щоб зберегти свою конфігурацію натисніть кнопку Завершити."
+
+#: ../../locales/../src/interface/updatewizard.cpp:867
+msgid "Click on next to download the new version."
+msgstr "Щоб завантажити нову версію натисніть кнопку Далі "
+
+#: resources.h:515
+msgid "Client to server MAC:"
+msgstr "Клієнт для МАС сервера:"
+
+#: resources.h:513
+msgid "Client to server cipher:"
+msgstr "Клієнт для серверного шифру:"
+
+#: resources.h:547 ../../locales/../src/interface/Mainfrm.cpp:1206
+#: ../../locales/../src/interface/Mainfrm.cpp:1229
+msgid "Close FileZilla"
+msgstr "Закрити FileZilla"
+
+#: ../../locales/../src/interface/cmdline.cpp:10
+msgid "Close all running instances of FileZilla"
+msgstr "Закрити всі діючі екземпляри FileZilla"
+
+#: resources.h:112
+msgid "Co&mments:"
+msgstr "Ко&ментарі:"
+
+#: ../../locales/../src/interface/listctrlex.cpp:643
+msgid "Column properties"
+msgstr "Властивості стовпців"
+
+#: resources.h:522
+msgid "Column setup"
+msgstr "Встановлення стовпців"
+
+#: resources.h:241
+msgid "Command and its arguments should be properly quoted."
+msgstr "Команда та її аргументи мають бути правильно залапковані "
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:136
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:150
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:167
+msgid "Command failed"
+msgstr "Команда безрезультатна"
+
+#: ../../locales/../src/engine/proxy.cpp:431
+#, fuzzy
+msgid "Command not supported"
+msgstr "Команда не підтримується даним протоколом"
+
+#: ../../locales/../src/engine/engineprivate.cpp:176
+msgid "Command not supported by this protocol"
+msgstr "Команда не підтримується даним протоколом"
+
+#: ../../locales/../src/interface/StatusView.cpp:228
+#: ../../locales/../src/interface/StatusView.cpp:270
+msgid "Command:"
+msgstr "Команда:"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:40
+msgid "Comment"
+msgstr "Коментар"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:131
+msgid "Common name:"
+msgstr "Прозивне ім'я"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:426
+#: ../../locales/../src/interface/netconfwizard.cpp:441
+msgid "Communication tainted by router or firewall"
+msgstr "Зв'язок блокується маршрутизатором або файєрволом"
+
+#: resources.h:559 resources.h:661
+msgid "Compare &modification time"
+msgstr "Порівняти &час модифікації"
+
+#: resources.h:558 resources.h:660
+msgid "Compare file&size"
+msgstr "Порівняти розмір &файлу"
+
+#: resources.h:180
+msgid "Comparison &threshold (in minutes):"
+msgstr "Порівняння &порогової величини (в хвилинах):"
+
+#: ../../locales/../src/interface/optionspage_interface.cpp:42
+msgid "Comparison threshold needs to be between 0 and 1440 minutes."
+msgstr ""
+"Порівняння порогової величини повинно бути у проміжку поміж 0 та 1440 хвилин "
+
+#: resources.h:299
+msgid "Compiled for:"
+msgstr "Зібрано для:"
+
+#: resources.h:300
+msgid "Compiled on:"
+msgstr "Зібрано на:"
+
+#: resources.h:302
+msgid "Compiled with:"
+msgstr "Зібрано з:"
+
+#: resources.h:303
+msgid "Compiler flags:"
+msgstr "Ознаки компілятора:"
+
+#: ../../locales/../src/interface/filteredit.cpp:109
+msgid "Compressed"
+msgstr "Стиснуто"
+
+#: resources.h:49
+msgid "Concurrent transfers"
+msgstr "Поточні передачі"
+
+#: resources.h:356
+msgid "Conditions are c&ase sensitive"
+msgstr "Умови чутливі  до роз&міру літер"
+
+#: resources.h:711
+msgid "Configuration test"
+msgstr "Тестування конфігурації"
+
+#: resources.h:685
+msgid "Configure passive mode"
+msgstr "Сконфігурувати пасивний режим"
+
+#: resources.h:701
+msgid "Configure port range"
+msgstr "Сконфігурувати діапазон портів"
+
+#: ../../locales/../src/engine/local_filesys.cpp:122
+#: ../../locales/../src/interface/RemoteListView.cpp:1366
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1042
+msgid "Confirmation needed"
+msgstr "Необхідне підтвердження"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:564
+msgid "Congratulations, your configuration seems to be working."
+msgstr "Вітаємо! Ваша конфігурація  працездатна."
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:126
+msgid "Connect bypassing proxy settings"
+msgstr "Під'єднати налаштування обхідного проксі"
+
+#: ../../locales/../src/interface/cmdline.cpp:8
+msgid "Connect to specified Site Manager site"
+msgstr "Під'єднати до сайту вказаного Сайт Менеджером"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:937
+msgid "Connected"
+msgstr "З'єднано"
+
+#: ../../locales/../src/interface/QueueView.cpp:1258
+msgid "Connecting"
+msgstr "Під'єднуюсь"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:207
+#: ../../locales/../src/interface/statuslinectrl.cpp:195
+#, c-format
+msgid "Connecting to %s"
+msgstr "Під'єднуюсь до %s"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:1081
+#, c-format
+msgid "Connecting to %s through proxy"
+msgstr "Під'єднуюсь до %s через проксі"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:949
+#: ../../locales/../src/engine/proxy.cpp:175
+#, c-format
+msgid "Connecting to %s..."
+msgstr "Під'єднання до %s... "
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:444
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:344
+#, c-format
+msgid "Connecting to %s:%d..."
+msgstr "Під'єднуюсь до %s:%d..."
+
+#: ../../locales/../src/interface/updatewizard.cpp:283
+#: ../../locales/../src/interface/updatewizard.cpp:783
+msgid "Connecting to server"
+msgstr "Під'єднуюсь до серверу"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:112
+msgid "Connection"
+msgstr "Під'єднання"
+
+#: ../../locales/../src/interface/QueueView.cpp:924
+msgid "Connection attempt failed"
+msgstr "Невдала спроба під'єднання"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:954
+#: ../../locales/../src/engine/proxy.cpp:179
+#, c-format
+msgid "Connection attempt failed with \"%s\", trying next address."
+msgstr ""
+"Невдала спроба під'єднання з  \"%s\",роблю спробу за наступною адресою."
+
+#: ../../locales/../src/engine/ControlSocket.cpp:959
+#, c-format
+msgid "Connection attempt failed with \"%s\"."
+msgstr "Невдала спроба під'єднання з  \"%s\"."
+
+#: ../../locales/../src/engine/ControlSocket.cpp:125
+#: ../../locales/../src/engine/engineprivate.cpp:314
+msgid "Connection attempt interrupted by user"
+msgstr "Спробу під'єднання перервано користувачем"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:543
+msgid "Connection closed"
+msgstr "З'єднання завершено"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:1049
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:256
+msgid "Connection closed by server"
+msgstr "З'єднання завершено сервером"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:400
+msgid "Connection established, initializing TLS..."
+msgstr "З'єднання встановлено,ініціюється TLS..."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:265
+msgid "Connection established, sending HTTP request"
+msgstr "З'єднання встановлено, відсилається запит HTTP "
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:429
+msgid "Connection established, waiting for welcome message..."
+msgstr "З'єднання встановлено,очікуємо на вітальне повідомлення..."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:338
+msgid "Connection lost"
+msgstr "З'єднання втрачено"
+
+#: ../../locales/../src/engine/proxy.cpp:416
+#, fuzzy
+msgid "Connection not allowed by ruleset"
+msgstr "З'єднання завершено сервером"
+
+#: ../../locales/../src/engine/proxy.cpp:425
+#, fuzzy
+msgid "Connection refused"
+msgstr "З'єднання завершено"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:617
+msgid "Connection timed out"
+msgstr "Час з 'єднання вичерпано"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:1064
+msgid "Connection timed out."
+msgstr "Час з 'єднання вичерпано."
+
+#: ../../locales/../src/engine/proxy.cpp:190
+msgid "Connection with proxy established, performing handshake..."
+msgstr "З'єднання з проксі встановлено,обмінюємось вітаннями..."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:560
+msgid "Connection with server got closed prematurely."
+msgstr "З'єднання з сервером закрилось дочасно."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:552
+msgid "Connection with the test server failed."
+msgstr "З'єднання з тестовим сервером невдале."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:270
+msgid "Convert keyfile"
+msgstr "Конвертувати файл ключа"
+
+#: resources.h:98
+msgid "Cop&y"
+msgstr "Копі&ювати"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1479
+#, c-format
+msgid "Copy (%d) of %s"
+msgstr "Копія (%d) з %s"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1456
+#, c-format
+msgid "Copy of %s"
+msgstr "Копія з %s"
+
+#: ../../locales/../src/engine/transfersocket.cpp:228
+#, c-format
+msgid "Could not accept connection: %s"
+msgstr "Неможливо прийняти з'єднання:%s "
+
+#: ../../locales/../src/engine/ControlSocket.cpp:127
+msgid "Could not connect to server"
+msgstr "Неможливо під'єднатися до серверу"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:1114
+#, c-format
+msgid "Could not connect to server: %s"
+msgstr "Неможливо під'єднатися до сервера: %s"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:730
+msgid "Could not convert command to server encoding"
+msgstr "Неможливо сконвертувати команду до серверного кодування"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:312
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:322
+msgid "Could not convert private key"
+msgstr "Неможливо сконвертувати приватний ключ"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2232
+#: ../../locales/../src/interface/RemoteTreeView.cpp:813
+msgid ""
+"Could not determine the target of the Drag&Drop operation.\n"
+"Either the shell extension is not installed properly or you didn't drop the "
+"files into an Explorer window."
+msgstr ""
+"Неможливо визначити місцепризначення оперції Перетягнути&Скинути.\n"
+"Або неправильно встановлено розширення оболонки,або ви не помістили файли у "
+"вікно Провідника."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4074
+msgid "Could not establish connection to server"
+msgstr "Неможливо встановити з'єднання з сервером"
+
+#: ../../locales/../src/interface/FileZilla.cpp:447
+msgid ""
+"Could not find the resource files for FileZilla, closing FileZilla.\n"
+"You can set the data directory of FileZilla using the '--datadir "
+"<custompath>' commandline option or by setting the FZ_DATADIR environment "
+"variable."
+msgstr ""
+"Неможливо знайти вихідні файли FileZilla, закриваю FileZilla.\n"
+"Ви можете встановити директорію даних FileZilla, використовуючи варіант "
+"командної лінійки '--datadir <custompath>' або,  встановивши зміну режиму "
+"FZ_DATADIR ."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:710
+msgid "Could not generate custom login sequence."
+msgstr "Неможливо згенерувати користувацьку послідовність логінування."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:150
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:167
+msgid "Could not get reply from fzputtygen."
+msgstr "Неможливо отримати відповідь від fzputtygen."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2338
+msgid "Could not get temporary directory to download file into."
+msgstr "Неможливо отримати тимчасову директорію для завантаження файлів"
+
+#: ../../locales/../src/interface/Options.cpp:140
+#, c-format
+msgid ""
+"Could not load \"%s\", make sure the file is valid.\n"
+"For this session, default settings will be used and any changes to the "
+"settings are not persistent."
+msgstr ""
+"Неможливо завантажити \"%s\", упевніться,що файл дійсний.\n"
+"Для цього з'єднання будуть використані установки по замовчуванню і будь-які "
+"зміни в установках не будуть постійними."
+
+#: ../../locales/../src/interface/wrapengine.cpp:924
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed."
+msgstr ""
+"Неможливо завантажити \"%s\", упевніться,що файл дійсний і до нього є доступ."
+
+#: ../../locales/../src/interface/filter.cpp:164
+#: ../../locales/../src/interface/filter.cpp:758
+#: ../../locales/../src/interface/sitemanager.cpp:646
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"Any changes made in the Site Manager could not be saved."
+msgstr ""
+"Неможливо завантажити \"%s\", упевніться,що файл дійсний і до нього є "
+"доступ.\n"
+"Будь-які зміни, зроблені в Сайт Менеджері, не можуть бути збереженими."
+
+#: ../../locales/../src/interface/import.cpp:111
+#: ../../locales/../src/interface/import.cpp:294
+#: ../../locales/../src/interface/sitemanager.cpp:529
+#: ../../locales/../src/interface/sitemanager.cpp:1646
+#: ../../locales/../src/interface/sitemanager.cpp:2165
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"Any changes made in the Site Manager will not be saved."
+msgstr ""
+"Неможливо завантажити \"%s\", упевніться,що файл дійсний і до нього є "
+"доступ.\n"
+"Будь-які зміни, зроблені в Сайт Менеджері, не будуть збережені."
+
+#: ../../locales/../src/interface/QueueView.cpp:1694
+#: ../../locales/../src/interface/QueueView.cpp:1721
+#, c-format
+msgid ""
+"Could not load \"%s\", please make sure the file is valid and can be "
+"accessed.\n"
+"The queue will not be saved."
+msgstr ""
+"Неможливо завантажити \"%s\", упевніться,що файл дійсний і до нього є "
+"доступ.\n"
+"Чергу не буде збережено.."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:220
+msgid "Could not load keyfile"
+msgstr "Неможливо завантажити файл ключа"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:297
+msgid "Could not load private key"
+msgstr "Неможливо завантажити приватний ключ"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:70
+msgid "Could not parse server address:"
+msgstr "Неможливо визначити адресу сервера :"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:245
+#, c-format
+msgid "Could not read from socket: %s"
+msgstr "Неможливо читати з гнізда проксі: %s"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2550
+#, c-format
+msgid "Could not seek to offset %s within file"
+msgstr "Неможливо знайти початковий номер %s у файлі"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2481
+msgid "Could not seek to the end of the file"
+msgstr "Неможливо знайти кінець файлу"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:136
+msgid "Could not send command to fzputtygen."
+msgstr "Неможливо надіслати команду до fzputtygen."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2570
+msgid "Could not spawn IO thread"
+msgstr "Неможливо викликати нитку IO "
+
+#: ../../locales/../src/engine/ControlSocket.cpp:1096
+#, c-format
+msgid "Could not start proxy handshake: %s"
+msgstr "Неможливо розпочати обмін вітаннями з проксі: %s"
+
+#: ../../locales/../src/interface/QueueView.cpp:963
+#: ../../locales/../src/interface/QueueView.cpp:968
+msgid "Could not start transfer"
+msgstr "Неможливо розпочати передачу"
+
+#: ../../locales/../src/interface/sitemanager.cpp:672
+#, c-format
+msgid ""
+"Could not write \"%s\", any changes to the Site Manager could not be saved: %"
+"s"
+msgstr ""
+"Неможливо вписати \"%s\",будь-які зміни в Сайт Менеджері не можуть бути "
+"збереженими: %s"
+
+#: ../../locales/../src/interface/QueueView.cpp:1704
+#: ../../locales/../src/interface/QueueView.cpp:1740
+#, c-format
+msgid "Could not write \"%s\", the queue could not be saved."
+msgstr "Неможливо вписати \"%s\", черга не може бути збереженою."
+
+#: ../../locales/../src/interface/wrapengine.cpp:1075
+#, c-format
+msgid "Could not write \"%s\": %s"
+msgstr "Неможливо вписати \"%s\": %s"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:322
+#, c-format
+msgid "Could not write keyfile: %s"
+msgstr "Неможливо вписати файл ключа: %s"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:910
+#: ../../locales/../src/engine/ControlSocket.cpp:1012
+#, c-format
+msgid "Could not write to socket: %s"
+msgstr "Неможливо записати в гніздо: \"%s"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:135
+msgid "Country:"
+msgstr "Країна:"
+
+#: resources.h:638
+msgid "Crashes FileZilla instantly. Only used to debug the exception handler"
+msgstr ""
+"Призводить FileZilla до аварії миттєво. Використовується лише для "
+"відлагодження обробника винятків"
+
+#: resources.h:596 resources.h:607 resources.h:651 resources.h:667
+msgid "Create a new subdirectory in the current directory"
+msgstr "Створити нову піддиректорію в даній директорії"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1184
+#: ../../locales/../src/interface/LocalTreeView.cpp:1297
+#: ../../locales/../src/interface/RemoteListView.cpp:1302
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1209
+msgid "Create directory"
+msgstr "Створити директорію"
+
+#: ../../locales/../src/interface/QueueView.cpp:1331
+msgid "Creating directory"
+msgstr "Створення директорії"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3126
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1929
+#, c-format
+msgid "Creating directory '%s'..."
+msgstr "Створення директорії '%s'..."
+
+#: ../../locales/../src/engine/ControlSocket.cpp:114
+msgid "Critical error"
+msgstr "Критична помилка"
+
+#: ../../locales/../src/interface/statusbar.cpp:323
+msgid "Current transfer type is set to ASCII."
+msgstr "Поточний тип передачі встановлено в ASCII."
+
+#: ../../locales/../src/interface/statusbar.cpp:333
+msgid "Current transfer type is set to automatic detection."
+msgstr "Тип поточної передачі встановлено за параметром автовизначення."
+
+#: ../../locales/../src/interface/statusbar.cpp:328
+msgid "Current transfer type is set to binary."
+msgstr "Тип поточної передачі встановлено за бінарним параметром."
+
+#: resources.h:217 resources.h:256
+msgid "Cus&tom"
+msgstr "Клієнт&ський"
+
+#: ../../locales/../src/interface/filter.cpp:113
+msgid "Custom filter set"
+msgstr "Втановлено клієнтський фільтр"
+
+#: resources.h:224
+msgid "D&ecimal prefixes using SI symbols (e.g. 1 KB = 1000 bytes)"
+msgstr ""
+"Де&сятиричні префікси, що використовують  SI символи (наприклад 1 KБ = 1000 "
+"байт)"
+
+#: resources.h:124
+msgid "D&efault"
+msgstr "По &замовчуванню"
+
+#: resources.h:608 resources.h:652
+msgid "D&elete"
+msgstr "Ви&далити"
+
+#: resources.h:335
+msgid "D&isable all"
+msgstr "Бло&кувати все"
+
+#: resources.h:139
+msgid "D&iscard"
+msgstr "Від&мовити"
+
+#: ../../locales/../src/engine/server.cpp:30
+msgid "DOS-like with virtual paths"
+msgstr "DOS- подібний з віртуальними шляхами"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2350
+msgid "Dangerous filetype"
+msgstr "Небезпечний тип файлу"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:41
+msgid "Data"
+msgstr "Дані"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:979
+#: ../../locales/../src/interface/netconfwizard.cpp:1045
+msgid "Data socket closed too early."
+msgstr "Гніздо даних закрилось дочасно."
+
+#: resources.h:208
+msgid "Date formatting"
+msgstr "Форматування даних"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:124
+msgid "Date/time format"
+msgstr "Формат дати/часу"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:77
+#: ../../locales/../src/interface/fileexistsdlg.cpp:101
+#: ../../locales/../src/interface/fileexistsdlg.cpp:133
+#: ../../locales/../src/interface/fileexistsdlg.cpp:157
+msgid "Date/time unknown"
+msgstr "Дата/час невідомі"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:132
+msgid "Debug"
+msgstr "Відлагодити"
+
+#: resources.h:228
+msgid "Debugging settings"
+msgstr "Установки відлагодження"
+
+#: resources.h:116
+msgid "Default &local directory:"
+msgstr "Локальна &директорія по замовчуванню:"
+
+#: ../../locales/../src/engine/server.cpp:22
+msgid "Default (Autodetect)"
+msgstr "По замовчуванню (Автовизначення)"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:112
+msgid "Default editor not properly quoted."
+msgstr "Редактор по замовчуванню неправильно взятий в лапки."
+
+#: resources.h:394
+msgid "Default file exists action"
+msgstr "Дія щодо file exists по замовчуванню"
+
+#: resources.h:118
+msgid "Default r&emote directory:"
+msgstr "Віддалена ди&ректорія по замовчуванню:"
+
+#: ../../locales/../src/interface/sitemanager.cpp:893
+msgid ""
+"Default remote path cannot be parsed. Make sure it is valid and is supported "
+"by the selected servertype."
+msgstr ""
+"Віддалений шлях не піддається аналізу. Переконайтеся,що він дійсний і "
+"підтримується вибраним типом серверу. "
+
+#: ../../locales/../src/interface/optionspage_language.cpp:21
+msgid "Default system language"
+msgstr "Мова системи по замовчуванню"
+
+#: resources.h:679
+msgid "Default transfer mode:"
+msgstr "Режим передачі по замовчуванню:"
+
+#: resources.h:154
+msgid "Default transfer type:"
+msgstr "Тип передачі по замовчуванню:"
+
+#: resources.h:372 resources.h:698
+msgid "Default: http://ip.filezilla-project.org/ip.php"
+msgstr "По замовчуванню: http://ip.filezilla-project.org/ip.php"
+
+#: ../../locales/../src/interface/optionspage_connection.cpp:40
+msgid ""
+"Delay between failed connection attempts has to be between 1 and 999 seconds."
+msgstr ""
+"Затримка між невдалими спробами з'єднання повинна бути у проміжку між 1 та "
+"999 секундами."
+
+#: ../../locales/../src/engine/engineprivate.cpp:610
+msgid "Delaying connection due to previously failed connection attempt..."
+msgstr ""
+"Затримка з'єднання пов'язана з попередньо невдалою спробою з'єднання..."
+
+#: ../../locales/../src/interface/sitemanager.cpp:1001
+msgid "Delete Site Manager entry"
+msgstr "Видалити введені дані з Сайт Менеджера"
+
+#: resources.h:653 resources.h:669
+msgid "Delete selected directory"
+msgstr "Видалити обрану директорію"
+
+#: resources.h:598 resources.h:609
+msgid "Delete selected files and directories"
+msgstr "Видалити обрані файли і директорії"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:1004
+msgid "Desktop"
+msgstr "Робочий стіл"
+
+#: resources.h:3 resources.h:26 resources.h:307
+msgid "Details"
+msgstr "Подробиці"
+
+#: resources.h:319
+msgid "Details for new key:"
+msgstr "Подробиці стосовно нового ключа:"
+
+#: resources.h:359
+msgid "Dire&ctories"
+msgstr "Дире&кторії"
+
+#: ../../locales/../src/interface/queue.cpp:1126
+msgid "Direction"
+msgstr "Напрямок"
+
+#: resources.h:178 resources.h:658 resources.h:748 resources.h:749
+#: ../../locales/../src/interface/filelistctrl.cpp:359
+#: ../../locales/../src/interface/Mainfrm.cpp:2241
+msgid "Directory comparison"
+msgstr "Порівняння директорій"
+
+#: ../../locales/../src/interface/listingcomparison.cpp:74
+#: ../../locales/../src/interface/listingcomparison.cpp:82
+#: ../../locales/../src/interface/listingcomparison.cpp:88
+msgid "Directory comparison failed"
+msgstr "Невдале порівняння директорій"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:131
+msgid "Directory listing aborted by user"
+msgstr "Список директорій припинено користувачем"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2034
+msgid "Directory listing failed"
+msgstr "Невдалий список директорій"
+
+#: resources.h:328
+msgid "Directory listing filters"
+msgstr "Фільтри списку директорій"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:135
+msgid "Directory listing successful"
+msgstr "Вдалий список директорій"
+
+#: resources.h:338
+msgid "Disa&ble all"
+msgstr "За&блокувати всеl"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:727
+msgid ""
+"Disable this option again if you will not be able to see the correct "
+"directory contents anymore."
+msgstr ""
+"Заблокувати дану опцію ще раз, якщо  вміст директорії припинить бути видимим"
+
+#: resources.h:742
+msgid "Disconnect from server"
+msgstr "Від'єднати від сервера"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:71
+#: ../../locales/../src/engine/ControlSocket.cpp:911
+#: ../../locales/../src/engine/ControlSocket.cpp:1014
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:247
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:845
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:847
+#: ../../locales/../src/interface/QueueView.cpp:922
+#: ../../locales/../src/interface/QueueView.cpp:960
+msgid "Disconnected from server"
+msgstr "Від'єднано від сервера"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:1051
+#, c-format
+msgid "Disconnected from server: %s"
+msgstr "Від'єднано від сервера: %s"
+
+#: ../../locales/../src/interface/QueueView.cpp:1233
+#: ../../locales/../src/interface/statuslinectrl.cpp:189
+msgid "Disconnecting from previous server"
+msgstr "Від'єднання від попереднього сервера"
+
+#: resources.h:743
+msgid "Disconnects from the currently visible server"
+msgstr "Від'єднання від поточного видимого сервера"
+
+#: resources.h:586
+msgid "Display about dialog"
+msgstr "Показати діалог Про"
+
+#: resources.h:632
+msgid "Do &nothing"
+msgstr "Не робити &нічого"
+
+#: ../../locales/../src/interface/optionspage_updatecheck.cpp:60
+#: ../../locales/../src/interface/updatewizard.cpp:156
+msgid ""
+"Do you really want to check for beta versions?\n"
+"Unless you want to test new features, keep using stable versions."
+msgstr ""
+"Ви дійсно бажаєте перевірити бета версії?\n"
+"За винятком,якщо ви бажаєте протестувати нові елементи,продовжуйте "
+"користуватися стабільною версією."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1209
+#: ../../locales/../src/interface/Mainfrm.cpp:1233
+msgid "Do you really want to close FileZilla?"
+msgstr "Ви дійсно бажаєте закрити FileZilla?"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:34
+msgid ""
+"Do you really want to delete all Site Manager entries and the transfer queue?"
+msgstr ""
+"Ви дійсно бажаєте видалити усі введення в Сайт Менеджер та чергу передачі?"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:46
+msgid "Do you really want to delete all Site Manager entries?"
+msgstr "Ви дійсно бажаєте видалити усі введення в Сайт Менеджер?"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1003
+msgid "Do you really want to delete selected entry?"
+msgstr "Ви дійсно бажаєте видалити вибране введення?"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:40
+msgid "Do you really want to delete the transfer queue?"
+msgstr "Ви дійсно бажаєте видалити чергу передач?"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:667
+#, c-format
+msgid "Do you really want to send '%s' to the server?"
+msgstr "Ви дійсно бажаєте надіслати '%s' до сервера?"
+
+#: resources.h:700
+msgid "Don't use external IP address on &local connections."
+msgstr "Не використовувати зовнішню ІР адресу при &локальних з'єднаннях."
+
+#: resources.h:165
+msgid "Dotfiles are filenames starting with a dot, e.g. .htaccess"
+msgstr ""
+"Дот файли є файлами чиї імена РОЗПОЧИНАЮТЬСЯ з розширенням крапка ,"
+"наприклад: .htaccess"
+
+#: resources.h:61
+msgid "Download &limit:"
+msgstr "Завантажити &обмеження:"
+
+#: resources.h:647
+msgid "Download selected directory"
+msgstr "Завантажити обрану директорію"
+
+#: resources.h:602
+msgid "Download selected files and directories"
+msgstr "Завантажити обрані файли і директорії"
+
+#: ../../locales/../src/interface/edithandler.cpp:913
+msgid "Downloading"
+msgstr "Завантаження"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:282
+#: ../../locales/../src/interface/updatewizard.cpp:276
+#, c-format
+msgid "Downloading %s"
+msgstr "Завантаження %s"
+
+#: resources.h:396 resources.h:420
+msgid "Downloads"
+msgstr "Завантаження"
+
+#: ../../locales/../src/interface/LocalListView.cpp:100
+#: ../../locales/../src/interface/LocalTreeView.cpp:90
+#: ../../locales/../src/interface/QueueView.cpp:72
+#: ../../locales/../src/interface/RemoteListView.cpp:94
+#: ../../locales/../src/interface/RemoteTreeView.cpp:79
+msgid ""
+"Drag&drop between different instances of FileZilla has not been implemented "
+"yet."
+msgstr ""
+"Функцію Перетягнути&Скинути між різними елементами  у FileZill-і ще не "
+"реалізовано."
+
+#: ../../locales/../src/interface/LocalListView.cpp:106
+#: ../../locales/../src/interface/LocalTreeView.cpp:96
+#: ../../locales/../src/interface/QueueView.cpp:83
+#: ../../locales/../src/interface/RemoteListView.cpp:100
+#: ../../locales/../src/interface/RemoteTreeView.cpp:85
+msgid "Drag&drop between different servers has not been implemented yet."
+msgstr ""
+"Функцію Перетягнути&Скинути між різними серверами у FileZill-і ще не "
+"реалізовано."
+
+#: ../../locales/../src/interface/filteredit.cpp:477
+#: ../../locales/../src/interface/filteredit.cpp:544
+#: ../../locales/../src/interface/filteredit.cpp:585
+msgid "Duplicate filter name"
+msgstr "Дублювання імені фільтру"
+
+#: resources.h:334
+msgid "E&nable all"
+msgstr "Роз&блокувати все"
+
+#: resources.h:280
+msgid "E&xecute"
+msgstr "Ви&конати"
+
+#: resources.h:546
+msgid "E&xit"
+msgstr "Ви&йти"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:139
+msgid "E-Mail:"
+msgstr "Електронна пошта:"
+
+#: ../../locales/../src/interface/filteredit.cpp:683
+msgid "Each filter needs at least one condition."
+msgstr "Кожен фільтр потребує щонайменше однієї умови."
+
+#: resources.h:343
+msgid "Edit filters"
+msgstr "Редагувати фільтри"
+
+#: resources.h:594
+msgid ""
+"Edit the file with the configured editor and upload changes to the server."
+msgstr ""
+"Редагувати файл з відконфігурованим редактором і відвантажити зміни на "
+"сервер."
+
+#: resources.h:194
+msgid "Email:"
+msgstr "Електронна пошта:"
+
+#: ../../locales/../src/interface/QueueView.cpp:2025
+msgid "Empty command"
+msgstr "Порожня команда"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:147
+msgid "Empty command."
+msgstr "Порожня команда."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2036
+msgid "Empty directory listing"
+msgstr "Порожній список директорій"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:91
+msgid "Empty directory."
+msgstr "Порожня  директорія"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:140
+msgid "Empty file extension."
+msgstr "Порожні розширення файлу."
+
+#: ../../locales/../src/interface/filteredit.cpp:535
+#: ../../locales/../src/interface/filteredit.cpp:579
+msgid "Empty filter names are not allowed."
+msgstr "Порожні імена  фільтрів не дозволяються."
+
+#: ../../locales/../src/interface/filteredit.cpp:535
+#: ../../locales/../src/interface/filteredit.cpp:579
+msgid "Empty name"
+msgstr "Порожнє іім'я"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:115
+msgid "Empty quoted string."
+msgstr "Пуста залапкована послідовність."
+
+#: resources.h:337
+msgid "En&able all"
+msgstr "Роз&блокувати все"
+
+#: ../../locales/../src/interface/filteredit.cpp:110
+msgid "Encrypted"
+msgstr "Закодовано"
+
+#: resources.h:512
+msgid "Encryption"
+msgstr "Кодування"
+
+#: resources.h:504
+msgid "Encryption details"
+msgstr "Подробиці кодування"
+
+#: ../../locales/../src/interface/filelistctrl.cpp:361
+msgid "End comparison and change sorting order?"
+msgstr "Завершити порівняння та змінити порядок сортування"
+
+#: resources.h:577
+msgid "Enter &custom command..."
+msgstr "Введіть &користувацьку команду ..."
+
+#: ../../locales/../src/interface/QueueView.cpp:2014
+msgid "Enter command"
+msgstr "Введіть команду"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:655
+msgid "Enter custom command"
+msgstr "Введіть користувацьку команду"
+
+#: ../../locales/../src/interface/filteredit.cpp:464
+#: ../../locales/../src/interface/filteredit.cpp:523
+#: ../../locales/../src/interface/filteredit.cpp:572
+msgid "Enter filter name"
+msgstr "Введіть ім'я файлу"
+
+#: ../../locales/../src/interface/filter.cpp:311
+msgid "Enter name for filterset"
+msgstr "Введіть команду для установок фільтру"
+
+#: resources.h:140
+msgid "Enter password"
+msgstr "Введіть пароль"
+
+#: resources.h:720
+msgid ""
+"Enter the address of the server.\n"
+"To specify the server protocol, prepend the host with the protocol "
+"identifier. If no protocol is specified, the default protocol (ftp://) will "
+"be used.\n"
+"You can also enter complete URLs in the form protocol://user:pass@host:port "
+"here, the values in the other fields will be overwritten then."
+msgstr ""
+"Введіть адресу сервера.\n"
+"Задля уточнення протоколу сервера,у якості префікса хоста, встановіть "
+"ідентифікатор протоколу. Якщо протокол не уточнено,тоді буде "
+"використовуватись протокол (ftp://)по замовчуванню.\n"
+"Ви також можете ввести повні адреси URL у формі протоколу://user:pass@host:"
+"port here, тоді значення інших полів буде переписано."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:276
+#, c-format
+msgid ""
+"Enter the password for the file '%s'.\n"
+"Please note that the converted file will not be password protected."
+msgstr ""
+"Введіть пароль для файлу '%s'.\n"
+"Будь-ласка, майте на увазі,що конвертований файл не буде захищений паролем."
+
+#: resources.h:724
+msgid ""
+"Enter the port on which the server listens.\n"
+"The default for FTP is 21, the default for SFTP is 22."
+msgstr ""
+"Введіть порт через який сервер слухає.\n"
+"По замовчуванню для FTP таким є 21, по замовчуванню для SFTP таким є 22."
+
+#: ../../locales/../src/interface/export.cpp:26
+msgid "Error exporting settings"
+msgstr "Помилка експорту установок"
+
+#: ../../locales/../src/interface/import.cpp:29
+#: ../../locales/../src/interface/import.cpp:37
+#: ../../locales/../src/interface/import.cpp:100
+msgid "Error importing"
+msgstr "Помилка імпорту"
+
+#: ../../locales/../src/interface/filter.cpp:165
+#: ../../locales/../src/interface/filter.cpp:759
+#: ../../locales/../src/interface/import.cpp:112
+#: ../../locales/../src/interface/import.cpp:295
+#: ../../locales/../src/interface/Options.cpp:141
+#: ../../locales/../src/interface/QueueView.cpp:1695
+#: ../../locales/../src/interface/QueueView.cpp:1722
+#: ../../locales/../src/interface/sitemanager.cpp:530
+#: ../../locales/../src/interface/sitemanager.cpp:647
+#: ../../locales/../src/interface/sitemanager.cpp:1647
+#: ../../locales/../src/interface/sitemanager.cpp:2166
+#: ../../locales/../src/interface/wrapengine.cpp:925
+msgid "Error loading xml file"
+msgstr "Помилка завантаження файлу xml "
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:97
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:116
+msgid "Error starting program"
+msgstr "Помилка запуску програми"
+
+#: ../../locales/../src/interface/QueueView.cpp:1705
+#: ../../locales/../src/interface/QueueView.cpp:1741
+#: ../../locales/../src/interface/sitemanager.cpp:673
+#: ../../locales/../src/interface/wrapengine.cpp:1076
+msgid "Error writing xml file"
+msgstr "Помилка запису файлу xml"
+
+#: ../../locales/../src/interface/StatusView.cpp:226
+#: ../../locales/../src/interface/StatusView.cpp:266
+msgid "Error:"
+msgstr "Помилка:"
+
+#: resources.h:248
+msgid "Example:"
+msgstr "Приклад:"
+
+#: resources.h:284
+msgid "Exe&cute"
+msgstr "Вико&нати"
+
+#: ../../locales/../src/interface/updatewizard.cpp:235
+msgid "Executable"
+msgstr "Виконуваний"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1788
+msgid "Executable contains no version info, cannot check for updates."
+msgstr ""
+"У виконуваному відсутня інформація про версію,неможливо перевірити оновлення."
+
+#: resources.h:169
+msgid "Explorer"
+msgstr "Провідник"
+
+#: resources.h:454
+msgid "Export &Queue"
+msgstr "Експорт &Черги"
+
+#: resources.h:453
+msgid "Export &Settings"
+msgstr "Експорт &Установок"
+
+#: resources.h:450
+msgid "Export settings"
+msgstr "Експорт установок"
+
+#: resources.h:349
+msgid "F&ilter name:"
+msgstr "І&м'я фільтру:"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:113
+#: ../../locales/../src/interface/sitemanager.cpp:1263
+msgid "FTP"
+msgstr "FTP"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:50
+msgid "FTP Engine not initialized, can't connect"
+msgstr "Двигун FTP не ініціалізується, неможливо з'єднатись"
+
+#: resources.h:494
+msgid "FTP Keep-alive"
+msgstr "Дежурний  FTP "
+
+#: resources.h:250 ../../locales/../src/interface/settingsdialog.cpp:116
+msgid "FTP Proxy"
+msgstr "FTP Проксі"
+
+#: ../../locales/../src/interface/cmdline.cpp:14
+msgid "FTP URL"
+msgstr "FTP URL-адреса"
+
+#: resources.h:676
+msgid ""
+"FTP uses secondary connections for data transfers. These additional "
+"connections can be established in two ways."
+msgstr ""
+"Для передачі даних FTP використовує вторинне з'єднання. Такі додаткові "
+"з'єднання можна встановити двома шляхами."
+
+#: ../../locales/../src/engine/server.cpp:17
+msgid "FTPES - FTP over explicit TLS/SSL"
+msgstr "FTPES - FTP через визначений TLS/SSL"
+
+#: ../../locales/../src/engine/server.cpp:16
+msgid "FTPS - FTP over implicit TLS/SSL"
+msgstr "FTPS - FTP через не явний TLS/SSL"
+
+#: ../../locales/../src/interface/LocalListView.cpp:611
+#: ../../locales/../src/interface/LocalListView.cpp:1299
+#: ../../locales/../src/interface/LocalTreeView.cpp:874
+#: ../../locales/../src/interface/viewheader.cpp:501
+msgid "Failed to change directory"
+msgstr "Відмова зміни директорії"
+
+#: ../../locales/../src/interface/FileZilla.cpp:222
+#: ../../locales/../src/interface/FileZilla.cpp:230
+#: ../../locales/../src/interface/FileZilla.cpp:232
+#: ../../locales/../src/interface/optionspage_language.cpp:103
+msgid "Failed to change language"
+msgstr "Відмова зміни мови"
+
+#: ../../locales/../src/interface/updatewizard.cpp:306
+msgid "Failed to check for newer version of FileZilla."
+msgstr "Відмова перевірки новішої версії FileZilla."
+
+#: ../../locales/../src/interface/sitemanager.cpp:1843
+msgid "Failed to copy or move sites"
+msgstr "Відмова копіювати або переміщувати сайти"
+
+#: ../../locales/../src/interface/xmlfunctions.cpp:377
+msgid "Failed to create backup copy of xml file"
+msgstr "Відмова створення резервної копії xml файлу"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:787
+msgid "Failed to create listen socket, aborting"
+msgstr "Відмова створення гнізда слухання,аварійне завершення"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4050
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4054
+msgid "Failed to create listening socket for active mode transfer"
+msgstr "Відмова створення гнізда слухання для передачі в активному режимі"
+
+#: ../../locales/../src/interface/updatewizard.cpp:308
+msgid "Failed to download the latest version of FileZilla."
+msgstr "Відмова завантаження останньої версії FileZilla."
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:631
+msgid "Failed to get 'My Documents' path"
+msgstr "Відмова витягнути шлях  'Мої документи' "
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:617
+msgid "Failed to get desktop path"
+msgstr "Відмова витягнути шлях до Робочого столу"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:944
+msgid "Failed to get peer address of control connection, connection closed."
+msgstr ""
+"Відмова витягнути шлях до однорідної адреси контрольного з'єднання,аварійне "
+"завершення."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:952
+msgid "Failed to get peer address of data connection, connection closed."
+msgstr ""
+"Відмова витягнути  однорідну адресу даних з'єднання,аварійне завершення."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:230
+msgid "Failed to initialize FTP engine"
+msgstr "Відмова ініціалізації FTP двигуна"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:409
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:779
+msgid "Failed to initialize TLS."
+msgstr "Відмова ініціалізації TLS."
+
+#: ../../locales/../src/interface/settingsdialog.cpp:163
+msgid "Failed to load panels, invalid resource files?"
+msgstr "Відмова завантаження панелей, не дійсні вихідні файли?"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:296
+#, c-format
+msgid "Failed to load private key: %s"
+msgstr "Відмова завантаження приватного ключа: %s"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2470
+#, c-format
+msgid "Failed to open \"%s\" for appending / writing"
+msgstr "Відмова відкрити \"%s\" для додавання / запису"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2534
+#, c-format
+msgid "Failed to open \"%s\" for reading"
+msgstr "Відмова відкрити \"%s\" для читання"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2513
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:322
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:381
+#, c-format
+msgid "Failed to open \"%s\" for writing"
+msgstr "Відмова відкрити \"%s\"для запису"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:1008
+msgid "Failed to receive data"
+msgstr "Відмова отримання даних"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:133
+msgid "Failed to retrieve directory listing"
+msgstr "Відмова видобути список директорій"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:715
+msgid "Failed to retrieve external ip address, aborting"
+msgstr "Відмова видобути зовнішню ІР адресу,аварійне завершення"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3748
+msgid "Failed to retrieve external ip address, using local address"
+msgstr ""
+"Відмова видобути зовнішню ІР адресу, використовуючи локальну "
+"адресу                "
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3770
+msgid "Failed to retrieve local ip address."
+msgstr "Відмова видобути локальну ІР адресу."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:684
+msgid "Failed to retrieve local ip address. Aborting"
+msgstr "Відмова видобути локальну ІР адресу.Аварійне завершення"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:612
+msgid "Failed to retrieve the external IP address."
+msgstr "Відмова видобути зовнішню ІР адресу."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:307
+msgid "Failed to send command."
+msgstr "Відмова надіслати команду."
+
+#: ../../locales/../src/interface/FileZilla.cpp:230
+#, c-format
+msgid "Failed to set language to %s (%s), using default system language"
+msgstr ""
+"Відмова встановити мову на %s (%s), використовуючи мову системи по "
+"замовчуванню."
+
+#: ../../locales/../src/interface/FileZilla.cpp:215
+#, c-format
+msgid ""
+"Failed to set language to %s (%s), using default system language (%s, %s)."
+msgstr ""
+"Відмова встановити мову на %s (%s), використовуючи мову системи по "
+"замовчуванню (%s, %s)."
+
+#: ../../locales/../src/interface/FileZilla.cpp:199
+#, c-format
+msgid "Failed to set language to %s (%s), using default system language."
+msgstr ""
+"Відмова встановити мову на %s (%s), використовуючи мову системи по "
+"замовчуванню."
+
+#: ../../locales/../src/interface/FileZilla.cpp:232
+#: ../../locales/../src/interface/optionspage_language.cpp:103
+#, c-format
+msgid "Failed to set language to %s, using default system language"
+msgstr ""
+"Відмова встановити мову на %s, використовуючи мову системи по замовчуванню."
+
+#: ../../locales/../src/interface/FileZilla.cpp:211
+#, c-format
+msgid "Failed to set language to %s, using default system language (%s, %s)."
+msgstr ""
+"Відмова встановити мову на %s, використовуючи мову системи по замовчуванню (%"
+"s, %s)."
+
+#: ../../locales/../src/interface/FileZilla.cpp:196
+#, c-format
+msgid "Failed to set language to %s, using default system language."
+msgstr ""
+"Відмова встановити мову на %s, використовуючи мову системи по замовчуванню."
+
+#: ../../locales/../src/interface/optionspage.cpp:193
+msgid "Failed to validate settings"
+msgstr "Відмова перевірки достовірності налаштувань"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:497
+#, c-format
+msgid "Failed to write to file %s"
+msgstr "Відмова запису у файл %s"
+
+#: ../../locales/../src/interface/xmlfunctions.cpp:391
+msgid "Failed to write xml file"
+msgstr "Відмова запису xml файлу"
+
+#: ../../locales/../src/interface/queueview_failed.cpp:15
+msgid "Failed transfers"
+msgstr "Відмова передачі"
+
+#: resources.h:691
+msgid "Fall back to active mode"
+msgstr "Повернутись до активного режиму"
+
+#: resources.h:358
+msgid "Fil&es"
+msgstr "Фай&ли"
+
+#: ../../locales/../src/interface/filelistctrl.cpp:414
+#: ../../locales/../src/interface/filelistctrl.cpp:432
+#: ../../locales/../src/interface/filelistctrl.cpp:442
+msgid "File"
+msgstr "Файл"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:120
+msgid "File Types"
+msgstr "Типи файлів"
+
+#: ../../locales/../src/interface/import.cpp:100
+msgid "File does not contain any importable data."
+msgstr "У файлі відсутні будь-які  дані, гідні імпортування."
+
+#: ../../locales/../src/interface/settingsdialog.cpp:127
+msgid "File editing"
+msgstr "Редагування файлу"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1600
+msgid "File exists"
+msgstr "Файл існує"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:121
+msgid "File exists action"
+msgstr "Дія стосовно наявного файлу"
+
+#: resources.h:465
+msgid "File has changed"
+msgstr "Файл змінився"
+
+#: ../../locales/../src/interface/FileZilla.cpp:755
+#: ../../locales/../src/interface/FileZilla.cpp:849
+#: ../../locales/../src/interface/optionspage_edit.cpp:183
+msgid "File not found"
+msgstr "Файл не знайдено"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:156
+msgid "File transfer successful"
+msgstr "Файл передано успішно"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1208
+msgid "File transfers still in progress."
+msgstr "Передачі файлу усе ще виконуються."
+
+#: ../../locales/../src/interface/FileZilla.cpp:448
+#: ../../locales/../src/interface/quickconnectbar.cpp:50
+msgid "FileZilla Error"
+msgstr "Помилка FilеZilla "
+
+#: resources.h:713
+msgid ""
+"FileZilla can now test your configuration to ensure everything is configured "
+"properly."
+msgstr ""
+"FileZilla тепер може відтестувати вашу конфігурацію,щоб переконатися у її "
+"правильностії."
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:107
+msgid "FileZilla does not support the HTTP protocol"
+msgstr "FileZilla не підтримує протокол HTTP"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1573
+msgid "FileZilla needs to be restarted for the language change to take effect."
+msgstr ""
+"FileZilla потребує перезавантаження для того, щоб зміни у виборі мови набули "
+"чинності."
+
+#: resources.h:560
+msgid "Filelist status &bars"
+msgstr "Секції статусу списку &файлів"
+
+#: resources.h:173
+msgid "Filelists"
+msgstr "Списки файлів"
+
+#: ../../locales/../src/interface/edithandler.cpp:899
+#: ../../locales/../src/interface/filteredit.cpp:101
+#: ../../locales/../src/interface/LocalListView.cpp:258
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:39
+#: ../../locales/../src/interface/RemoteListView.cpp:349
+msgid "Filename"
+msgstr "Ім'я файлу"
+
+#: resources.h:555
+msgid "Filename &filters..."
+msgstr "Фільтри &імені файлу..."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2925
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2183
+#, c-format
+msgid "Filename cannot be constructed for directory %s and filename %s"
+msgstr "Для директорії %s та файлу %s  імені  створити неможливо "
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1585
+msgid "Filename invalid"
+msgstr "Ім'я файлу не дійсне"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:241
+msgid "Filename unchanged"
+msgstr "Ім'я файлу не змінено"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1394
+msgid "Filenames may not contain any of the following characters: / * ? < > |"
+msgstr ""
+"Імена файлу не можуть вміщувати будь-які з наступних сиволів: / * ? < > |"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1369
+msgid ""
+"Filenames may not contain any of the following characters: / \\ : * ? \" < > "
+"|"
+msgstr ""
+"Імена файлу не можуть вміщувати будь-які з наступних символів: / \\ : * ? \" "
+"< > |"
+
+#: resources.h:481
+msgid "Files currently being edited"
+msgstr "Файли зараз редагуються"
+
+#: ../../locales/../src/interface/filteredit.cpp:102
+#: ../../locales/../src/interface/LocalListView.cpp:259
+#: ../../locales/../src/interface/RemoteListView.cpp:350
+msgid "Filesize"
+msgstr "Розмір файлу"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:125
+msgid "Filesize format"
+msgstr "Формат розміру файла"
+
+#: ../../locales/../src/interface/LocalListView.cpp:260
+#: ../../locales/../src/interface/RemoteListView.cpp:351
+msgid "Filetype"
+msgstr "Тип файлу"
+
+#: resources.h:244
+msgid "Filetype associations"
+msgstr "Асоціації типу файла"
+
+#: resources.h:350
+msgid "Filter &out all files that:"
+msgstr "Фільт&рувати усі файли,що:"
+
+#: resources.h:357
+msgid "Filter applies to:"
+msgstr "Фільтр застосовується до:"
+
+#: ../../locales/../src/interface/filteredit.cpp:729
+msgid "Filter name already exists"
+msgstr "Ім'я фільтру вже існує"
+
+#: ../../locales/../src/interface/filter.cpp:325
+msgid "Filter set already exists"
+msgstr "Встановлений фільтр вже існує"
+
+#: resources.h:746 resources.h:747
+msgid "Filter the directory listings"
+msgstr "Фільтрувати списки директорій"
+
+#: ../../locales/../src/interface/filteredit.cpp:683
+#: ../../locales/../src/interface/filteredit.cpp:698
+#: ../../locales/../src/interface/filteredit.cpp:709
+#: ../../locales/../src/interface/filteredit.cpp:720
+#: ../../locales/../src/interface/filteredit.cpp:729
+msgid "Filter validation failed"
+msgstr "Відмова перевірки достовірності фільтру"
+
+#: resources.h:10 resources.h:33
+msgid "Fingerprint (MD5):"
+msgstr "Ключ шифру (MD5):"
+
+#: resources.h:11 resources.h:34
+msgid "Fingerprint (SHA-1):"
+msgstr "Ключ шифру(SHA-1):"
+
+#: resources.h:310 resources.h:322
+msgid "Fingerprint:"
+msgstr "Ключ шифру:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:42
+msgid "Firewall and router configuration wizard"
+msgstr "Майстер конфігурування файєрволу та маршрутизатора"
+
+#: ../../locales/../src/interface/filelistctrl.cpp:437
+msgid "Folder"
+msgstr "Папка"
+
+#: resources.h:182
+msgid ""
+"For more detailed information about what these options do, please run the "
+"network configuration wizard."
+msgstr ""
+"Щоб отримати детальнішу інформацію про те,що дані опції роблять,запустіть "
+"майстра конфігурування мережі."
+
+#: resources.h:708
+msgid "For reliability you should specify a range of at least 10 ports."
+msgstr ""
+"Задля надійності вам необхідно  вказати діапазон ,щонайменше, 10 портів."
+
+#: resources.h:133
+msgid "Force &UTF-8"
+msgstr "Примусити  &UTF-8"
+
+#: resources.h:579
+msgid "Force showing &hidden files"
+msgstr "Примусити показ &прихованих файлів"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:722
+msgid "Force showing hidden files"
+msgstr "Примусити показ прихованих файлів"
+
+#: resources.h:257
+msgid "Format specifications:"
+msgstr "Специфікації формату:"
+
+#: resources.h:247
+msgid "Format: Extension followed by properly quoted command and arguments."
+msgstr ""
+"Формат: Розширення,після якого ідуть правильно залапковані команда і "
+"аргументи."
+
+#: resources.h:99
+msgid "General"
+msgstr "Загальне"
+
+#: ../../locales/../src/engine/proxy.cpp:413
+msgid "General SOCKS server failure"
+msgstr ""
+
+#: resources.h:529
+msgid "Generic Proxy"
+msgstr ""
+
+#: ../../locales/../src/interface/settingsdialog.cpp:118
+msgid "Generic proxy"
+msgstr ""
+
+#: resources.h:697
+msgid "Get external IP address from the following URL:"
+msgstr "Отримати зовнішню ІР адресу з наступного URL:"
+
+#: ../../locales/../src/interface/filter.cpp:325
+msgid "Given filterset name already exists, overwrite filter set?"
+msgstr ""
+"Ім'я установки даного фільтру вже існує,переписати налаштування фільтру?"
+
+#: resources.h:277
+msgid "Group permissions"
+msgstr "Дозволи для груп"
+
+#: resources.h:620
+msgid "H&igh"
+msgstr "Ви&сокий"
+
+#: resources.h:508
+msgid "Hash:"
+msgstr "Хешований:"
+
+#: ../../locales/../src/interface/filteredit.cpp:111
+msgid "Hidden"
+msgstr "Прихований"
+
+#: resources.h:67 ../../locales/../src/interface/queue.cpp:853
+#: ../../locales/../src/interface/queue.cpp:934
+msgid "High"
+msgstr "Високий"
+
+#: ../../locales/../src/interface/queue.cpp:855
+#: ../../locales/../src/interface/queue.cpp:936
+msgid "Highest"
+msgstr "Найвищий"
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:74
+msgid "Highest available port has to be a number between 1024 and 65535."
+msgstr "Найвищий наявний порт повинен стояти під номером  поміж 1024 та 65535."
+
+#: resources.h:339
+msgid ""
+"Hold the shift key to toggle the filter state on both sides simultanously."
+msgstr ""
+"Утримуйте клавішу shift щоб перемкнути стан фільтру з обох сторін одночасно."
+
+#: resources.h:296
+msgid "Homepage:"
+msgstr ""
+"Домашня сторінка:\n"
+"\n"
+"Автор українського перекладу:© Ігор ЧОМКО "
+
+#: resources.h:510
+msgid "Host key fingerprint:"
+msgstr "Головний ключ шифрування хосту:"
+
+#: resources.h:316
+msgid "Host key mismatch"
+msgstr "Ключ хоста не співпадає"
+
+#: ../../locales/../src/engine/server.cpp:135
+msgid "Host starts with '[' but no closing bracket found."
+msgstr "Хост стартує з  '[',однак заключної дужки не знайдено."
+
+#: ../../locales/../src/engine/proxy.cpp:422
+#, fuzzy
+msgid "Host unreachable"
+msgstr "світове читання"
+
+#: resources.h:4 resources.h:27 resources.h:143 resources.h:308
+#: resources.h:320
+msgid "Host:"
+msgstr "Хост:"
+
+#: resources.h:120
+msgid "Hours,"
+msgstr "Години,"
+
+#: resources.h:216
+msgid "I&SO 8601 (example: 15:47)"
+msgstr "I&SO 8601 (приклад: 15:47)"
+
+#: resources.h:59
+msgid ""
+"If no data can be sent or received during this time, the connection will be "
+"closed and FileZilla will try to reconnect."
+msgstr ""
+"Якщо жодних даних неможливо ані відіслати ані прийняти упродовж цього часу "
+"тоді з'єднання буде припинено і FileZilla намагатиметься підключитися "
+"повторно."
+
+#: resources.h:237
+msgid "If reporting bugs, please provide logs with \"Verbose\" logging level."
+msgstr ""
+"Якщо з'явиться повідомлення про дефект, тоді для логів встановіть "
+"\"Багатошаровий\" рівень логування    ."
+
+#: resources.h:688
+msgid ""
+"If the automatic test at the end of this wizard succeeds, but you cannot "
+"transfer files to a particular server, the server might be misconfigured and "
+"you should try active mode. You can set the transfer mode on a per-server "
+"basis in the Site Manager."
+msgstr ""
+"Якщо автоматичне тестування в кінці роботи цього майстра досягло успіху,"
+"проте вам не вдається передати файли до конкретного сервера,тоді,можливо, "
+"цей сервер неправильно сконфігуровано,а,отже,вам необхідно спробувати "
+"скористатися активним режимом.Ви можете встановити спосіб передачі в Сайт "
+"Менеджері на основі одного сервера."
+
+#: resources.h:683
+msgid ""
+"If the fallback option is enabled, you will be able to connect to "
+"misconfigured servers which reject the selected transfer mode."
+msgstr ""
+"Якщо включена опція нейтралізації несправності,тоді ви матимете змогу "
+"під'єднатися до тих неправильно сконфігурованих серверів,що не сприймають "
+"обраний спосіб передачі."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:620
+msgid ""
+"If this problem persists, please contact your router or firewall "
+"manufacturer for a solution."
+msgstr ""
+"Якщо дана проблема не зникає, тоді зверніться до виробника вашого "
+"маршрутизатора або файєрволу у пошуку рішення."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:578
+msgid "If this problem stays, please contact your router manufacturer."
+msgstr ""
+"Якщо дана проблема не зникає, тоді зверніться до виробника вашого "
+"маршрутизатора."
+
+#: resources.h:416 resources.h:438
+msgid ""
+"If using 'overwrite if newer', your system time has to be synchronized with "
+"the server. If the time differs (e.g. different timezone), specify a "
+"timezone offset in the site manager."
+msgstr ""
+"При використанні  'переписати якщо новіший',необхідно синхронізувати ваш "
+"системний час з серверним ."
+
+#: resources.h:179
+msgid ""
+"If using timestamp based comparison, consider two files equal if their "
+"timestamp differerence does not exceed this threshold."
+msgstr ""
+"При використанні порівняння на основі часової позначки,розглядайте два файли "
+"як одинакові, при умові, що їхня часова позначка не перевищує цієї порогової "
+"величини."
+
+#: resources.h:199
+msgid "If you change the language, you should restart FileZilla."
+msgstr "При заміні мови вам необхідно перезапустити FileZilla."
+
+#: resources.h:714
+msgid ""
+"If you click on test, FileZilla will connect to probe.filezilla-project.org "
+"and will perform some simple tests."
+msgstr ""
+"Якщо ви натисните кнопку тест, FileZilla з'єднається з probe.filezilla-"
+"project.org і виконає кілька простих тестів."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1232
+msgid "If you close FileZilla, your changes will be lost."
+msgstr "Якщо ви закриєте FileZilla,ваші зміни будуть втрачені."
+
+#: resources.h:162
+msgid ""
+"If you enter the wrong filetypes, those files may get corrupted when "
+"transferred."
+msgstr ""
+"При введенні неправильного типу файлів,при передачі, ці файли можуть  "
+"пошкодитися."
+
+#: resources.h:715
+msgid "If you get any errors, your configuration is not correct."
+msgstr ""
+"При виникненні будь-якої помилки,майте на увазі,що ваша конфігурація не "
+"коректна."
+
+#: resources.h:493
+msgid ""
+"If you have problems to retrieve directory listings or to transfer files, "
+"try to change the default transfer mode."
+msgstr ""
+"Якщо у вас виникають проблеми з отриманням списку директорій або передачею "
+"файлів,постарайтеся змінити спосіб передачі по замовчуванню."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:566
+msgid ""
+"If you keep having problems with a specific server, the server itself or a "
+"remote router or firewall might be misconfigured. In this case try to toggle "
+"passive mode and contact the server administrator for help."
+msgstr ""
+"Якщо проблеми з певним сервером не зникають,тоді або сам сервер,або "
+"віддалений маршрутизатор,або файєрвол можуть бути неправильно сконфігуровані."
+"В такому випадку спробуйте переключити пасивний спосіб і сконтактуйте з "
+"адміністратором сервера."
+
+#: resources.h:674
+msgid ""
+"If you sucessfully complete the wizard and the final test succeeds, any "
+"firewalls and routers you have should be configured properly."
+msgstr ""
+"Якщо робота майстра була успішною і кінцевий тест також,тоді правильно "
+"сконфігуруйте свій файєрвол і маршрутизатор."
+
+#: resources.h:710
+msgid ""
+"If you use a firewall, make sure FileZilla is allowed to accept connection "
+"on all given ports."
+msgstr ""
+"Якщо ви користуєтесь файєрволом, переконайтесь, що  FileZilla має дозвіл на "
+"отримання з'єднання по всіх наявних портах."
+
+#: resources.h:709
+msgid ""
+"If you use a router, make sure all these ports are forwarded to the machine "
+"you're running FileZilla on."
+msgstr ""
+"Якщо ви користуєтесь маршрутизатором, перконайтесь, що усі ці порти "
+"скеровані до апарату на якому встановлена ваша копія FileZilla."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:591
+msgid ""
+"If your router keeps changing the IP address, please contact your router "
+"manufacturer."
+msgstr ""
+"Якщо ваш маршрутизатор постійно змінює ІР адреси,зверніться до вашого "
+"виробника маршрутизатора."
+
+#: ../../locales/../src/interface/import.cpp:91
+msgid "Import data from older version"
+msgstr "Імпортувати дані зі старої версії"
+
+#: resources.h:457
+msgid "Import settings"
+msgstr "Імпортувати установки"
+
+#: ../../locales/../src/interface/import.cpp:77
+#: ../../locales/../src/interface/import.cpp:80
+msgid "Import successful"
+msgstr "Імпорт успішний"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:137
+#: ../../locales/../src/interface/optionspage_edit.cpp:144
+msgid "Improperly quoted association."
+msgstr "Неправильно залапковані асоціації."
+
+#: resources.h:702
+msgid ""
+"In active mode, FileZilla has to listen on a port for data transfers. You "
+"have to specify which ports FileZilla will use."
+msgstr ""
+"В активному режимі  FileZill - і необхідно слухати порт передачі даних.Вам "
+"необхідно вказати який порт  FileZilla використовуватиме."
+
+#: resources.h:704
+msgid ""
+"In case you have a router, you will have to forward all available ports, as "
+"FileZilla has no influence on the ports your system chooses."
+msgstr ""
+"У випадку,якщо у вас маршрутизатор,вам потрібно вказати всі наявні порти, "
+"оскільки  FileZilla не в стані вплинути на порти, що обираються вашою "
+"системою."
+
+#: resources.h:393
+msgid ""
+"In case you prefer automatic updates, you can enable automatic update checks "
+"in the settings dialog."
+msgstr ""
+"Якщо ви надаєте перевагу автоматичним оновленням, ви можете розблокувати "
+"автоматичні перевірки оновлень у вікні налаштувань."
+
+#: resources.h:367 resources.h:692
+msgid ""
+"In order to use active mode, FileZilla needs to know your external IP "
+"address."
+msgstr "Щоб використати активний режим, FileZilla мусить знати вашу ІР адресу."
+
+#: resources.h:677
+msgid ""
+"In passive mode, which is recommended for most users, FileZilla asks the "
+"server for a port and connects to the given port. Not much configuration has "
+"to be done for this."
+msgstr ""
+"У пасивному режимі,який ми рекомендуємо для більшості користувачів, "
+"FileZilla запитує у сервера порт і під'єднується до нього.Це не вимагає "
+"великого конфігурування."
+
+#: ../../locales/../src/interface/QueueView.cpp:918
+msgid "Incorrect password"
+msgstr "Неправильний пароль"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:769
+msgid "Initializing TLS..."
+msgstr "Ініціалазація TLS..."
+
+#: resources.h:107 ../../locales/../src/interface/sitemanager.cpp:1107
+#: ../../locales/../src/interface/sitemanager.cpp:1329
+msgid "Interactive"
+msgstr "Інтерактивний"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:122
+msgid "Interface"
+msgstr "Інтерфейс"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:161
+#: ../../locales/../src/interface/QueueView.cpp:883
+#: ../../locales/../src/interface/QueueView.cpp:1386
+msgid "Interrupted by user"
+msgstr "Перервано користувачем"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:683
+msgid "Invalid Content-Length"
+msgstr "Недійсна довжина змісту"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:554
+msgid "Invalid HTTP Response"
+msgstr "Недійсний відгук HTTP"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:483
+#: ../../locales/../src/engine/ControlSocket.cpp:543
+msgid ""
+"Invalid character sequence received, disabling UTF-8. Select UTF-8 option in "
+"site manager to force UTF-8."
+msgstr ""
+"Отримано недійсну послідовність знаків,блокування UTF-8. В Сайт Менеджері "
+"виберіть  опцію UTF-8,щоб примусити  UTF-8."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:807
+msgid "Invalid chunk size"
+msgstr "Недійсний розмір чанку"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:353
+#: ../../locales/../src/interface/netconfwizard.cpp:363
+#: ../../locales/../src/interface/netconfwizard.cpp:372
+msgid "Invalid data received"
+msgstr "Отримано недійсні дані"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:45
+#: ../../locales/../src/interface/verifycertdialog.cpp:61
+msgid "Invalid date"
+msgstr "Недійсні дані"
+
+#: ../../locales/../src/interface/LocalListView.cpp:1369
+#: ../../locales/../src/interface/LocalListView.cpp:1394
+msgid "Invalid filename"
+msgstr "Недійсне ім'я файлу"
+
+#: ../../locales/../src/engine/server.cpp:142
+msgid "Invalid host, after closing bracket only colon and port may follow."
+msgstr ""
+"Недійсний хост.Після заключної дужки може слідувати лише кома або "
+"перенесення."
+
+#: ../../locales/../src/engine/server.cpp:163
+#: ../../locales/../src/engine/server.cpp:176
+msgid "Invalid port given. The port has to be a value from 1 to 65535."
+msgstr ""
+"Недійсний заданий порт. Значення порту повинно становити від 1 до  65535."
+
+#: ../../locales/../src/engine/server.cpp:60
+msgid ""
+"Invalid protocol specified. Valid protocols are:\n"
+"ftp:// for normal FTP,\n"
+"sftp:// for SSH file transfer protocol,\n"
+"ftps:// for FTP over SSL (implicit) and\n"
+"ftpes:// for FTP over SSL (explicit)."
+msgstr ""
+"Вказано недійсний протокол. Дійсними протоколами є:\n"
+"ftp://для звичайного FTP,\n"
+"sftp://  для протоколу файлу передачіl SSH,\n"
+"ftps:// для FTP через SSL (не явний) і\n"
+"ftpes://для FTP через SSL (явний)."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:564
+msgid "Invalid response code"
+msgstr "Недійсний код відгуку"
+
+#: ../../locales/../src/interface/sitemanager.cpp:2136
+#: ../../locales/../src/interface/sitemanager.cpp:2156
+#: ../../locales/../src/interface/sitemanager.cpp:2174
+#: ../../locales/../src/interface/sitemanager.cpp:2185
+msgid "Invalid site path"
+msgstr "Недійсний шлях до сайту"
+
+#: ../../locales/../src/interface/filteredit.cpp:709
+msgid "Invalid size in condition"
+msgstr "Недійсний розмір в умовах"
+
+#: ../../locales/../src/engine/server.cpp:105
+msgid "Invalid username given."
+msgstr "Подано недійсне ім'я користувача."
+
+#: resources.h:176
+msgid "Keep directories on top"
+msgstr "Директорії тримати зверху"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:726
+msgid ""
+"Keep in mind that not all servers support this feature and may return "
+"incorrect listings if this option is enabled. Although FileZilla performs "
+"some tests to check if the server supports this feature, the test may fail."
+msgstr ""
+"Майте на увазі,що не всі сервери підтримують цей елемент і,якщо дана опція "
+"розблокована, вони можуть повертати неправильні списки. І хоч FileZilla "
+"виконує деякі тести з метою перевірки серверної підтримки даного елементу,"
+"тест може бути невдалим."
+
+#: resources.h:505
+msgid "Key exchange"
+msgstr "Обмін ключами"
+
+#: resources.h:623
+msgid "L&owest"
+msgstr "Най&нижчий"
+
+#: resources.h:197 ../../locales/../src/interface/settingsdialog.cpp:126
+msgid "Language"
+msgstr "Мова"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1573
+msgid "Language changed"
+msgstr "Зміна мови"
+
+#: ../../locales/../src/interface/LocalListView.cpp:261
+#: ../../locales/../src/interface/RemoteListView.cpp:352
+msgid "Last modified"
+msgstr "Востаннє модифіковано"
+
+#: resources.h:166
+msgid "Layout"
+msgstr "Формат"
+
+#: resources.h:52
+msgid "Limit for concurrent &downloads:"
+msgstr "Обмеження для одночасних  &завантажень:"
+
+#: resources.h:54
+msgid "Limit for concurrent &uploads:"
+msgstr "Обмеження для одночасних &відвантажень:"
+
+#: resources.h:362
+msgid "Limit local ports"
+msgstr "Обмежити локальні порти"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:750
+msgid "Line length exceeded"
+msgstr "Перевищено довжину лінійки"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:267
+msgid "Listen socket closed"
+msgstr "Гніздо слухання закрито"
+
+#: ../../locales/../src/interface/StatusView.cpp:237
+#: ../../locales/../src/interface/StatusView.cpp:285
+msgid "Listing:"
+msgstr "Список:"
+
+#: resources.h:365
+msgid "Lo&west available port:"
+msgstr "Най&нижчийt доступний порт:"
+
+#: ../../locales/../src/interface/edithandler.cpp:944
+msgid "Local"
+msgstr "Локальний"
+
+#: resources.h:333
+msgid "Local filters:"
+msgstr "Локальні фільтри:"
+
+#: ../../locales/../src/interface/viewheader.cpp:328
+msgid "Local site:"
+msgstr "Локальний сайт:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:137
+msgid "Locality:"
+msgstr "Розташування:"
+
+#: resources.h:226 ../../locales/../src/interface/settingsdialog.cpp:131
+msgid "Logging"
+msgstr "Логування"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:822
+msgid ""
+"Login data contains non-ASCII characters and server might not be UTF-8 "
+"aware. Cannot fall back to local charset since using proxy."
+msgstr ""
+"Дані логування містять нон-ASCII знаки і,можливо, сервер не сприймає "
+"кодування UTF-8. Неможливо повернутись до локальних установок кодування "
+"знаків."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:829
+msgid ""
+"Login data contains non-ASCII characters and server might not be UTF-8 "
+"aware. Trying local charset."
+msgstr ""
+"Дані логування містять нон-ASCII знаки і,можливо, сервер не сприймає "
+"кодування UTF-8. Спроба використати локальні установки кодування знаків."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:858
+msgid "Login sequence fully executed yet not logged in. Aborting."
+msgstr ""
+"Послідовність логування виконана повністю, проте залогування  не відбулось. "
+"Аварійне завершення"
+
+#: ../../locales/../src/interface/queue.cpp:848
+#: ../../locales/../src/interface/queue.cpp:929
+msgid "Low"
+msgstr "Низький"
+
+#: ../../locales/../src/interface/queue.cpp:846
+#: ../../locales/../src/interface/queue.cpp:927
+msgid "Lowest"
+msgstr "Найнижчий"
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:68
+msgid "Lowest available port has to be a number between 1024 and 65535."
+msgstr " Найнижче значення порту повинно становити число між 1 та  65535"
+
+#: resources.h:19 resources.h:42
+msgid "MAC:"
+msgstr "MAC:"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:738
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:750
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:765
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:807
+#, c-format
+msgid "Malformed chunk data: %s"
+msgstr "Погано сформовані дані чанку: %s"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:683
+#, c-format
+msgid "Malformed header: %s"
+msgstr "Погано сформований заголовок: %s"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:524
+msgid "Malformed reply, server not sending proper lineendings"
+msgstr ""
+"Погано сформована відповідь,сервер не надсилає правильних закінчень лінійки"
+
+#: resources.h:351
+msgid "Match all of the following"
+msgstr "Звірити все з наступного"
+
+#: resources.h:50
+msgid "Maximum simultaneous &transfers:"
+msgstr "Максимум одночасних &передач:"
+
+#: resources.h:121
+msgid "Minutes"
+msgstr "Хвилини"
+
+#: resources.h:526
+msgid "Move &down"
+msgstr "Перемістити &вниз"
+
+#: resources.h:525
+msgid "Move &up"
+msgstr "Перемістити &вверх"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:1023
+msgid "My Computer"
+msgstr "Мій Комп'ютер"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:1013
+msgid "My Documents"
+msgstr "Мої Документи"
+
+#: ../../locales/../src/interface/sitemanager.cpp:517
+#: ../../locales/../src/interface/sitemanager.cpp:519
+#: ../../locales/../src/interface/sitemanager.cpp:1687
+msgid "My Sites"
+msgstr "Мої Сайти"
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:206
+#: ../../locales/../src/interface/optionspage_themes.cpp:208
+msgid "N/a"
+msgstr "Не акцептовано"
+
+#: ../../locales/../src/interface/sitemanager.cpp:968
+msgid "Name already exists"
+msgstr "Ім'я вже існує"
+
+#: resources.h:142
+msgid "Name:"
+msgstr "Ім'я:"
+
+#: ../../locales/../src/interface/filteredit.cpp:720
+msgid "Need to enter filter name"
+msgstr "Потрібно ввести ім'я фільтру"
+
+#: ../../locales/../src/interface/sitemanager.cpp:861
+msgid "Need to specify a character encoding"
+msgstr "Потрібно вказати  спосіб кодування знаків"
+
+#: ../../locales/../src/engine/proxy.cpp:419
+#, fuzzy
+msgid "Network unreachable"
+msgstr "світове читання"
+
+#: resources.h:95
+msgid "New &Folder"
+msgstr "Нова &Папка"
+
+#: ../../locales/../src/interface/LocalTreeView.cpp:1300
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1223
+msgid "New directory"
+msgstr "Нова директорія"
+
+#: ../../locales/../src/interface/filteredit.cpp:459
+msgid "New filter"
+msgstr "Новий фільтр"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1316
+#: ../../locales/../src/interface/sitemanager.cpp:754
+#: ../../locales/../src/interface/sitemanager.cpp:777
+msgid "New folder"
+msgstr "Нова папка"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1942
+#: ../../locales/../src/interface/sitemanager.cpp:1965
+msgid "New site"
+msgstr "Новий сайт"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:783
+msgid "No"
+msgstr "Ні"
+
+#: ../../locales/../src/interface/export.cpp:26
+msgid "No category to export selected"
+msgstr "Не обрано категорії для експортування"
+
+#: ../../locales/../src/interface/QueueView.cpp:2025
+msgid "No command given, aborting."
+msgstr "Відсутня команда, аварійне завершення."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3715
+msgid "No external IP address set, trying default."
+msgstr "Не встановлено зовнішньої IP адреси,проба адреси по замовчуванню."
+
+#: ../../locales/../src/interface/edithandler.cpp:888
+msgid "No files are currently being edited."
+msgstr "Ніякі файли зараз не редагуються."
+
+#: ../../locales/../src/interface/filteredit.cpp:471
+msgid "No filter name given"
+msgstr "Не задано імені фільтру"
+
+#: ../../locales/../src/engine/server.cpp:45
+#: ../../locales/../src/engine/server.cpp:156
+#: ../../locales/../src/engine/server.cpp:186
+msgid "No host given, please enter a host."
+msgstr "Не вказаний хост,введіть ім'я хосту,будь-ласка."
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:98
+msgid "No images available"
+msgstr "Відсутні зображення"
+
+#: ../../locales/../src/interface/QueueView.cpp:2682
+msgid "No more files in the queue!"
+msgstr "Чергу файлів вичерпано повністю!"
+
+#: ../../locales/../src/interface/filter.cpp:318
+msgid "No name for the filterset given."
+msgstr "Не задано імені установок фільтру."
+
+#: ../../locales/../src/engine/transfersocket.cpp:225
+msgid "No pending connection"
+msgstr " Очікуваного зв'язку немає"
+
+#: ../../locales/../src/interface/sitemanager.cpp:1653
+#: ../../locales/../src/interface/sitemanager.cpp:1665
+#: ../../locales/../src/interface/sitemanager.cpp:1696
+msgid "No sites available"
+msgstr "Сайти відсутні"
+
+#: ../../locales/../src/engine/proxy.cpp:387
+msgid "No supported SOCKS5 auth method"
+msgstr ""
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:67
+msgid "None"
+msgstr "Жодного"
+
+#: resources.h:353
+msgid "None of the following"
+msgstr "Жодного з наступного"
+
+#: resources.h:66 resources.h:105 ../../locales/../src/interface/queue.cpp:851
+#: ../../locales/../src/interface/queue.cpp:932
+#: ../../locales/../src/interface/sitemanager.cpp:1070
+#: ../../locales/../src/interface/sitemanager.cpp:1103
+#: ../../locales/../src/interface/sitemanager.cpp:1323
+msgid "Normal"
+msgstr "Звичайний"
+
+#: ../../locales/../src/interface/queueview_failed.cpp:330
+msgid "Not all items could be requeued for viewing / editing."
+msgstr ""
+"Не всі елементи можна повторно поставити в чергу для перегляду/редагування"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2032
+msgid "Not connected to any server"
+msgstr "Нема під'єднання до жодного серверу"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:644
+msgid "Not connected to any server."
+msgstr "Нема під'єднання до жодного серверу."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:724
+msgid "Note that this feature is only supported using the FTP protocol."
+msgstr ""
+"Зауважте,що даний елемент підтримується лише при використанні FTP протоколу "
+
+#: resources.h:267
+msgid "Note: This only works with plain, unencrypted FTP connections."
+msgstr "Примітка:Це працює лише чистим,не кодованими FTP з'єднаннями."
+
+#: resources.h:538
+msgid "Note: Using a generic proxy forces passive mode on FTP connections."
+msgstr ""
+
+#: ../../locales/../src/interface/optionspage_connection.cpp:34
+msgid "Number of retries has to be between 0 and 99."
+msgstr "Кількість повторів повинна знаходитись у проміжку між 0 та 99."
+
+#: resources.h:487
+msgid "O&pen file"
+msgstr "Від&крити файл"
+
+#: resources.h:409 resources.h:431
+msgid "O&verwrite"
+msgstr "Пере&писати"
+
+#: resources.h:23 resources.h:44 resources.h:90 resources.h:152
+#: resources.h:269 resources.h:291 resources.h:304 resources.h:314
+#: resources.h:326 resources.h:340 resources.h:360 resources.h:417
+#: resources.h:448 resources.h:455 resources.h:463 resources.h:479
+#: resources.h:488 resources.h:521 resources.h:527
+msgid "OK"
+msgstr "Добре"
+
+#: resources.h:684
+msgid ""
+"On the following pages, the selected transfer mode will be configured, as "
+"well as the fallback mode if enabled."
+msgstr ""
+"На наступних сторінках  буде сконфігуровано обраний режим передач і режим "
+"нейтралізації неполадок, у випадку його включення."
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:793
+msgid "Once"
+msgstr "Один раз"
+
+#: resources.h:207
+msgid ""
+"Only the versions of FileZilla and the operating system you are using will "
+"be submitted to the server."
+msgstr ""
+"На сервер буде передано лише версії FileZilla та операційну систему якими ви "
+"користуєтесь."
+
+#: resources.h:726 resources.h:727
+msgid "Open the Site Manager"
+msgstr "Відкрити Сайт Менеджер"
+
+#: resources.h:592
+msgid "Open the file."
+msgstr "Відкрити цей файл."
+
+#: resources.h:550
+msgid "Open the settings dialog of FileZilla"
+msgstr "Відкрити діалог установок FileZilla"
+
+#: ../../locales/../src/interface/LocalListView.cpp:2028
+#: ../../locales/../src/interface/LocalListView.cpp:2056
+#: ../../locales/../src/interface/LocalListView.cpp:2120
+#: ../../locales/../src/interface/LocalListView.cpp:2127
+msgid "Opening failed"
+msgstr "Невдале відкриття"
+
+#: resources.h:541
+msgid "Opens the Site Manager"
+msgstr "Відкриває Сайт Менеджер"
+
+#: ../../locales/../src/interface/FileZilla.cpp:282
+msgid "Operating system problem detected"
+msgstr "Відмічено проблему в операційній системі"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:132
+msgid "Organization:"
+msgstr "Організація:"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:147
+msgid "Other:"
+msgstr "Інше:"
+
+#: resources.h:400 resources.h:423
+msgid "Ov&erwrite if source newer"
+msgstr "Пе&реписати якщо джерело новіше"
+
+#: resources.h:410 resources.h:432
+msgid "Over&write if source newer"
+msgstr "Пере&писати якщо джерело новіше"
+
+#: resources.h:181
+msgid "Overview"
+msgstr "Переглянути"
+
+#: resources.h:81
+msgid "Overwrite &if source newer"
+msgstr "Переписати &якщо джерело новіше"
+
+#: resources.h:82 resources.h:401 resources.h:411 resources.h:424
+#: resources.h:433
+msgid "Overwrite if different size"
+msgstr "Переписати якщо розмір відрізняється"
+
+#: resources.h:83 resources.h:402 resources.h:412 resources.h:425
+#: resources.h:434
+msgid "Overwrite if different size or source newer"
+msgstr "Переписати якщо розмір відрізняється або джерело новіше"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:354
+msgid "Owner / Group"
+msgstr "Власник / Група"
+
+#: resources.h:273
+msgid "Owner permissions"
+msgstr "Дозволи власника"
+
+#: resources.h:264 resources.h:534
+#, no-c-format
+msgid "P&roxy host:"
+msgstr "Про&ксі хості:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:488
+msgid "PORT command tainted by router or firewall."
+msgstr "Команда ПОРТА заблокована маршрутизатором або файєрволом.."
+
+#: resources.h:490
+msgid "Pa&ssive (recommended)"
+msgstr "Па&сивний (рекомендовано)"
+
+#: ../../locales/../src/interface/updatewizard.cpp:239
+msgid "Package"
+msgstr "Пакет"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:2423
+msgid "Parameter not a valid URL"
+msgstr "Значення параметру недійсної URL адреси"
+
+#: resources.h:110 resources.h:722
+msgid "Pass&word:"
+msgstr "Па&роль:"
+
+#: resources.h:680
+msgid "Passive (recommended)"
+msgstr "Пасивний (рекомендовано)"
+
+#: resources.h:45 ../../locales/../src/interface/settingsdialog.cpp:115
+msgid "Passive mode"
+msgstr "Пасивний режим"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:584
+#: ../../locales/../src/interface/netconfwizard.cpp:597
+#: ../../locales/../src/interface/netconfwizard.cpp:608
+msgid "Passive mode has been set as default transfer mode."
+msgstr "Пасивний режим було встановлено як режим передачі по замовчуванню"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:278
+msgid "Password required"
+msgstr "Вимагається пароль"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3012
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2225
+#, c-format
+msgid "Path cannot be constructed for directory %s and subdir %s"
+msgstr "Для директорії %s та піддиректорії %s  шлях  створити неможливо "
+
+#: ../../locales/../src/interface/edithandler.cpp:925
+#: ../../locales/../src/interface/edithandler.cpp:1048
+#: ../../locales/../src/interface/edithandler.cpp:1136
+msgid "Pending removal"
+msgstr "Очікування ліквідовано"
+
+#: ../../locales/../src/interface/filteredit.cpp:120
+msgid "Permission"
+msgstr "Дозвіл"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:353
+msgid "Permissions"
+msgstr "Дозволи"
+
+#: resources.h:390
+msgid ""
+"Please check http://filezilla-project.org for the most recent version of "
+"FileZilla."
+msgstr ""
+"Перевірте,будь-ласка:  http://filezilla-project.org на наявність найновішої "
+"версії FileZilla."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:553
+msgid ""
+"Please check on http://filezilla-project.org/probe.php that the server is "
+"running and carefully check your settings again."
+msgstr ""
+"Перевірте,будь-ласка: http://filezilla-project.org/probe.php чи сервер "
+"працює і ще раз уважно перевірте свої установки."
+
+#: ../../locales/../src/interface/updatewizard.cpp:847
+msgid ""
+"Please check the package manager of your system for an updated package or "
+"visit http://filezilla-project.org to download the source code of FileZilla."
+msgstr ""
+"Перевірте,будь-ласка,менеджера пакетів вашої системи на предмет наявності "
+"оновленого пакету  або відвідайте http://filezilla-project.org щоб "
+"завантажити вихідні коди FileZilla."
+
+#: resources.h:686
+msgid ""
+"Please configure any firewalls and routers so that FileZilla can establish "
+"outgoing connection to arbitrary ports."
+msgstr ""
+"Сконфігуруйте,будь-ласка,усі файєрволи та маршрутизатори так,щоб дати змогу "
+"FileZill-і встановити вихідний зв'язок по довільному порту."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:619
+msgid "Please disable settings like 'DMZ mode' or 'Game mode' on your router."
+msgstr ""
+"Заблокуйте,будь-ласка, у вашому маршрутизаторі такі установки,як 'режим DMZ "
+"' або 'Ігровий режим '."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:561
+msgid ""
+"Please ensure you have a stable internet connection and check on http://"
+"filezilla-project.org/probe.php that the server is running."
+msgstr ""
+"Переконайтеся,що у вас стале інтернет з'єднання і через http://filezilla-"
+"project.org/probe.php перевірте чи сервер працює."
+
+#: ../../locales/../src/interface/optionspage_dateformatting.cpp:70
+msgid "Please enter a custom date format."
+msgstr "Введіть,будь-ласка,користувацький формат даних."
+
+#: ../../locales/../src/interface/optionspage_dateformatting.cpp:73
+msgid "Please enter a custom time format."
+msgstr "Введіть,будь-ласка,користувацький формат часу."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:68
+msgid "Please enter a download speedlimit greater or equal to 0 KB/s."
+msgstr ""
+"Введіть,будь-ласка,обмеження швидкості завантаження більше або рівне  0 KБ/с."
+
+#: ../../locales/../src/interface/filteredit.cpp:464
+msgid "Please enter a name for the new filter."
+msgstr "Введіть ім'я для нового фільтру."
+
+#: ../../locales/../src/interface/filteredit.cpp:572
+msgid "Please enter a new name for the copied filter."
+msgstr "Введіть нове  ім'я для скопійованого  фільтру."
+
+#: ../../locales/../src/interface/filteredit.cpp:523
+msgid "Please enter a new name for the filter."
+msgstr "Введіть нове ім'я для  фільтру."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:56
+msgid ""
+"Please enter a number between 0 and 10 for the number of concurrent "
+"downloads."
+msgstr ""
+"Введіть,будь-ласка,число між 0 і 10 для позначення кількості одночасних "
+"завантажень."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:60
+msgid ""
+"Please enter a number between 0 and 10 for the number of concurrent uploads."
+msgstr ""
+"Введіть,будь-ласка,число між 0 і 10 для позначення кількості одночасних "
+"відвантажень."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:52
+msgid ""
+"Please enter a number between 1 and 10 for the number of concurrent "
+"transfers."
+msgstr ""
+"Введіть,будь-ласка,число між 0 і 10 для позначення кількості одночасних "
+"передач."
+
+#: resources.h:141
+msgid "Please enter a password for this server:"
+msgstr "Введіть,будь-ласка,пароль для даного серверу:"
+
+#: ../../locales/../src/interface/QueueView.cpp:2014
+msgid ""
+"Please enter a path and executable to run.\n"
+"E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
+"You can also optionally specify program arguments."
+msgstr ""
+"Введіть,будь-ласка,шлях до файлу виконання.\n"
+"Зразок: c:\\somePath\\file.exe під управлінням MS Windows або /somePath/file "
+"під управлінням  Unix.\n"
+"Також ви можете вибірково уточнити аргументи програми."
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:64
+msgid ""
+"Please enter a timeout between 5 and 9999 seconds or 0 to disable timeouts."
+msgstr ""
+"Введіть,будь-ласка,обмеженя часу в проміжку між 5 і 9999 секунд або 0 для "
+"блокування обмеження часу.."
+
+#: ../../locales/../src/interface/filter.cpp:311
+msgid "Please enter a unique name for this filter set"
+msgstr "Введіть,будь-ласка,унікальне ім'я для цих установок фільтру"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:182
+msgid "Please enter a valid portrange."
+msgstr "Введіть,будь-ласка,дійсний діапазан портів."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:161
+msgid "Please enter an URL where to get your external address from"
+msgstr "Please enter an URL where to get your external address from"
+
+#: ../../locales/../src/interface/optionspage_updatecheck.cpp:40
+msgid "Please enter an update interval of at least 7 days"
+msgstr "Введіть,будь-ласка,інтервал оновлень на щонайменше 10 днів"
+
+#: ../../locales/../src/interface/optionspage_transfer.cpp:72
+msgid "Please enter an upload speedlimit greater or equal to 0 KB/s."
+msgstr ""
+"Введіть,будь-ласка,обмеження швидкості відвантаження більше або рівне  0 KБ/"
+"с."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:655
+msgid ""
+"Please enter raw FTP command.\n"
+"Using raw ftp commands will clear the directory cache."
+msgstr ""
+"Введіть,будь-ласка, пряму FTP  команду.\n"
+"Використання прямих  ftp команд очистить каше директорії."
+
+#: ../../locales/../src/interface/LocalListView.cpp:1184
+#: ../../locales/../src/interface/LocalTreeView.cpp:1297
+#: ../../locales/../src/interface/RemoteListView.cpp:1302
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1209
+msgid "Please enter the name of the directory which should be created:"
+msgstr "Введіть,будь-ласка,ім'я директорії,яку необхідно створити:"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:142
+msgid "Please enter your external IP address"
+msgstr "Введіть,будь-ласка,зовнішню ІР адресу"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:589
+#: ../../locales/../src/interface/netconfwizard.cpp:602
+msgid ""
+"Please enter your external IP address on the active mode page of this "
+"wizard. In case you have a dynamic address or don't know your external "
+"address, use the external resolver option."
+msgstr ""
+"Введіть,будь-ласка, вашу зовнішню ІР адресу на сторінці активного режиму "
+"цього майстра.У випадку, якщо ваша адреса динамічна або у вас нема "
+"зовнішньої адреси,скористайтеся опцією зовнішнього перетворювача."
+
+#: resources.h:673
+msgid ""
+"Please follow the instructions carefully, as wrong configuration will "
+"prevent successful FTP connections."
+msgstr ""
+"Виконуйте,будь-ласка,ретельно усі інструкції, оскільки неправильне "
+"конфігурування стане на перешкоді успішним FTP з'єднанням."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:613
+msgid ""
+"Please make sure FileZilla is allowed to establish outgoing connections and "
+"make sure you typed the address of the address resolver correctly."
+msgstr ""
+"Переконайтесь,що FileZilla має дозвіл на встановлення вихідного з'єднання, а "
+"токож переконайтеся,що ви надрукували адресу  перетворювача адрес правильно. "
+
+#: ../../locales/../src/interface/FileZilla.cpp:221
+msgid "Please make sure the requested locale is installed on your system."
+msgstr "Переконайтесь,що запитуваний локаль встановлено у вашу систему"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:572
+msgid ""
+"Please make sure you are running the latest version of FileZilla. Visit "
+"http://filezilla-project.org for details."
+msgstr ""
+"Переконайтесь,що ви користуєтесь останньою версією FileZilla. Відвідайте "
+"http://filezilla-project.org щоб дізнатися про подробиці."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:590
+msgid ""
+"Please make sure your router is using the latest available firmware. "
+"Furthermore, your router has to be configured properly. You will have to use "
+"manual port forwarding. Don't run your router in the so called 'DMZ mode' or "
+"'game mode'."
+msgstr ""
+"Переконайтесь,що ваш маршрутизатор використовує останнє наявне програмне "
+"забезпечення виробника. Більше того,необхідно правильно сконфігурувати ваш "
+"маршрутизатор.Вам доведеться використати ручний порт відправки.Не запускайте "
+"свого маршрутизатора в, так званому,  'режимі DMZ' або 'ігровому режимі'."
+
+#: resources.h:687
+msgid ""
+"Please note that FileZilla has no influence on the port the server chooses. "
+"So the server might choose a port which your firewall thinks is only used by "
+"trojans or other malware. This might raise a false alarm you can safely "
+"discard."
+msgstr ""
+"Майте на увазі, що FileZilla не має впливу на порт,обраний сервером. Таким "
+"чином сервер може вибрати  порт,який ваш файєрвол може розцінити як такий,що "
+"використовується троянами або іншими шкідливими програмами.Це може викликати "
+"хибну тривогу,яку ви можете безпечно відмінити. "
+
+#: ../../locales/../src/interface/Mainfrm.cpp:778
+msgid ""
+"Please note that preserving timestamps on uploads on FTP, FTPS and FTPES "
+"servers only works if they support the MFMT command."
+msgstr ""
+"Майте на увазі, що збереження часових позначок при відвантаженнях на  FTP, "
+"FTPS та FTPES, сервери спрацьовують лише у випадку, якщо вони підтримують "
+"команду MFMT."
+
+#: resources.h:189
+msgid ""
+"Please note that some servers might ban you if you try to reconnect too "
+"often or in too short intervals."
+msgstr ""
+"Майте на увазі, що деякі сервери можуть заблокувати вам доступ,якщо ви "
+"намагаєтесь або занадто часто перепід'єднатись або через занадто короткі "
+"проміжки часу."
+
+#: resources.h:213 resources.h:219
+#, no-c-format
+msgid ""
+"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"details"
+msgstr ""
+"Дізнатися про подробиці ви можете тут: http://wiki.filezilla-project.org/"
+"Date_and_Time_formatting "
+
+#: ../../locales/../src/interface/netconfwizard.cpp:567
+msgid ""
+"Please run this wizard again should you change your network environment or "
+"in case you suddenly encounter problems with servers that did work "
+"previously."
+msgstr ""
+"Якщо ви змінили середовище своєї мережі або у випадку,якщо ви зіткнулися з "
+"проблемами на  тих серверах,що раніше працювали - перезапустіть  майстра.  "
+
+#: resources.h:462
+msgid "Please select the categories you would like to import."
+msgstr "Виберіть,будь-ласка, категорії які ви бажаєте імпортувати."
+
+#: resources.h:675
+msgid "Please select the default transfer mode you would like to use."
+msgstr ""
+"Виберіть,будь-ласка,той режим передачі по замовчуванню яким ви бажаєте "
+"користуватися"
+
+#: ../../locales/../src/interface/chmoddialog.cpp:38
+#, c-format
+msgid "Please select the new attributes for the directory \"%s\"."
+msgstr "Виберіть,будь-ласка, нові атрибути для  директорії \"%s\"."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:27
+#, c-format
+msgid "Please select the new attributes for the file \"%s\"."
+msgstr "Виберіть,будь-ласка, нові атрибути для файлу \"%s\"."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:41
+msgid "Please select the new attributes for the selected directories."
+msgstr "Виберіть,будь-ласка, нові атрибути для обраних директорій."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:44
+msgid ""
+"Please select the new attributes for the selected files and directories."
+msgstr "Виберіть,будь-ласка, нові атрибути для обраних файлів і директорій."
+
+#: ../../locales/../src/interface/chmoddialog.cpp:30
+msgid "Please select the new attributes for the selected files."
+msgstr "Виберіть,будь-ласка, нові атрибути для обраних файлів."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:577
+msgid ""
+"Please update your firewall and make sure your router is using the latest "
+"available firmware. Furthermore, your router has to be configured properly. "
+"You will have to use manual port forwarding. Don't run your router in the so "
+"called 'DMZ mode' or 'game mode'. Things like protocol inspection or "
+"protocol specific 'fixups' have to be disabled"
+msgstr ""
+"Обновіть,будь-ласка, ваш файєрвол і переконайтеся, що ваш маршрутизатор  "
+"використовує останнє наявне програмне забезпечення виробника. Більше того,"
+"необхідно правильно сконфігурувати ваш маршрутизатор.Вам доведеться "
+"використати ручний порт відправки.Не запускайте свого маршрутизатора в,так "
+"званому,  'режимі DMZ' або 'ігровому режимі'.Такі речі як протокол інспекцій "
+"чи протокол специфічних  'полагоджень' повинні бути відключеними."
+
+#: resources.h:392
+msgid ""
+"Please visit http://filezilla-project.org for more information about "
+"FileZilla."
+msgstr ""
+"Задля отримання ширшої інформації стосовно FileZilla, відвідайте  http://"
+"filezilla-project.org."
+
+#: ../../locales/../src/interface/updatewizard.cpp:845
+#: ../../locales/../src/interface/updatewizard.cpp:861
+msgid ""
+"Please visit http://filezilla-project.org to download the most recent "
+"version."
+msgstr ""
+"Щоб завантажити найновішу версію FileZilla, відвідайте  http://filezilla-"
+"project.org."
+
+#: ../../locales/../src/interface/sitemanager.cpp:1516
+#: ../../locales/../src/interface/sitemanager.cpp:1686
+msgid "Predefined Sites"
+msgstr "Попередньо вказані Сайти"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:777
+msgid "Preserving file timestamps"
+msgstr "Збереження файлу часових позначок"
+
+#: ../../locales/../src/interface/optionspage_themes.cpp:247
+msgid "Preview:"
+msgstr "Попередній перегляд:"
+
+#: ../../locales/../src/engine/tlssocket.cpp:817
+msgid "Primary connection and data connection certificates don't match."
+msgstr "Первинне з'єднання та сертифікати передачі даних не співпадають."
+
+#: resources.h:175
+msgid "Prioritize directories (default)"
+msgstr "Визначення пріоритетних директорій (по замовчуванню)"
+
+#: ../../locales/../src/interface/queue.cpp:1129
+msgid "Priority"
+msgstr "Пріоритетність "
+
+#: resources.h:206
+msgid "Privacy policy:"
+msgstr "Політика приватності:"
+
+#: resources.h:499
+msgid "Private &keys:"
+msgstr "Приватні &ключі:"
+
+#: resources.h:266 resources.h:537
+msgid "Pro&xy password:"
+msgstr "Пароль проксі:"
+
+#: resources.h:566 resources.h:614
+msgid "Process &Queue"
+msgstr "Опрацювати &Чергу"
+
+#: resources.h:535
+#, fuzzy
+msgid "Proxy &port:"
+msgstr "Про&ксі хості:"
+
+#: resources.h:265 resources.h:536
+msgid "Proxy &user:"
+msgstr " Користувач  &проксі:"
+
+#: ../../locales/../src/engine/proxy.cpp:398
+#, fuzzy
+msgid "Proxy authentication failed"
+msgstr "Автентичність не опізнано"
+
+#: ../../locales/../src/engine/transfersocket.cpp:136
+#: ../../locales/../src/engine/transfersocket.cpp:150
+#, c-format
+msgid "Proxy handshake failed: %s"
+msgstr "Невдалий обмін вітаннями з проксі: %s"
+
+#: ../../locales/../src/engine/proxy.cpp:311
+#, c-format
+msgid "Proxy reply: %s"
+msgstr "Відповідь проксі: %s"
+
+#: ../../locales/../src/engine/proxy.cpp:441
+#, fuzzy, c-format
+msgid "Proxy request failed: %s"
+msgstr "Невдалий обмін вітаннями з проксі: %s"
+
+#: ../../locales/../src/engine/proxy.cpp:463
+msgid "Proxy request failed: Unknown address type in CONNECT reply"
+msgstr ""
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4196
+msgid "Proxy set but proxy host or port invalid"
+msgstr "Проксі встановлено однак проксі хост або порт не дійсні."
+
+#: resources.h:497
+msgid "Public Key Authentication"
+msgstr "Ключ публічної автентифікації"
+
+#: resources.h:9 resources.h:32
+msgid "Public key algorithm:"
+msgstr "Алгоритм публічного ключа:"
+
+#: resources.h:281
+msgid "Public permissions"
+msgstr "Публічні допуски"
+
+#: ../../locales/../src/interface/QueueView.cpp:2737
+msgid "Queue has been fully processed"
+msgstr "Черга опрацьована не повністю"
+
+#: ../../locales/../src/interface/statusbar.cpp:287
+#, c-format
+msgid "Queue: %s%d %c"
+msgstr "Черга: %s%d %c"
+
+#: ../../locales/../src/interface/statusbar.cpp:360
+#, c-format
+msgid "Queue: %s%d MiB"
+msgstr "Черга: %s%d MiB"
+
+#: ../../locales/../src/interface/statusbar.cpp:280
+#: ../../locales/../src/interface/statusbar.cpp:361
+#, c-format
+msgid "Queue: %s%d bytes"
+msgstr "Черга: %s%d байт"
+
+#: ../../locales/../src/interface/statusbar.cpp:253
+#: ../../locales/../src/interface/statusbar.cpp:359
+msgid "Queue: empty"
+msgstr "Черга: пусто"
+
+#: ../../locales/../src/interface/QueueView.cpp:399
+msgid "Queued files"
+msgstr "Файли в черзі"
+
+#: resources.h:630
+msgid "R&eboot system"
+msgstr "Пере&завантажити систему"
+
+#: resources.h:563
+msgid "R&emote directory tree"
+msgstr "Від&далене дерево директорій"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:664
+msgid "Raw FTP command"
+msgstr "Проста команда FTP "
+
+#: resources.h:278
+msgid "Re&ad"
+msgstr "Чи&тати"
+
+#: resources.h:85 resources.h:404 resources.h:427
+msgid "Re&name"
+msgstr "Пере&йменувати"
+
+#: resources.h:282
+msgid "Rea&d"
+msgstr "Чи&тати"
+
+#: ../../locales/../src/interface/filteredit.cpp:112
+msgid "Read-only"
+msgstr "Лише-читати"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1088
+msgid "Really cancel current operation?"
+msgstr "Дійсно скасувати дану операцію?"
+
+#: ../../locales/../src/engine/local_filesys.cpp:122
+#: ../../locales/../src/interface/RemoteListView.cpp:1366
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1042
+msgid "Really delete all selected files and/or directories?"
+msgstr "Дійсно видалити усі вибрані файли та/або директорії?"
+
+#: ../../locales/../src/interface/queueview_failed.cpp:17
+msgid "Reason"
+msgstr "Причина"
+
+#: ../../locales/../src/interface/QueueView.cpp:2745
+msgid "Reboot now"
+msgstr "Перезавантажити зараз"
+
+#: resources.h:287
+msgid "Rec&urse into subdirectories"
+msgstr "Про&ектувати в піддиректорії"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:992
+#: ../../locales/../src/interface/netconfwizard.cpp:1001
+#: ../../locales/../src/interface/netconfwizard.cpp:1025
+msgid "Received data tainted"
+msgstr "Отримані дані заблоковано"
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:68
+msgid ""
+"Reconnect information cannot be cleared while connected to a server.\n"
+"If you continue, your connection will be disconnected."
+msgstr ""
+"Перепід'єднана інформація не може бути очищена підчас з'єднання з сервером.\n"
+"У випадку продовження,ваш зв'язок буде перервано."
+
+#: resources.h:184
+msgid "Reconnection settings"
+msgstr "Установки перепід'єднання"
+
+#: resources.h:744 resources.h:745
+msgid "Reconnects to the last used server"
+msgstr "Перепід'єднання до останнього використовуваного серверу"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:629
+msgid "Redirection to invalid address"
+msgstr "Перескерування до недійсної адреси"
+
+#: resources.h:736 resources.h:737
+msgid "Refresh the file and folder lists"
+msgstr "Поновити списки файлу та папки"
+
+#: ../../locales/../src/interface/edithandler.cpp:909
+msgid "Remote"
+msgstr "Віддалений"
+
+#: ../../locales/../src/engine/tlssocket.cpp:769
+msgid "Remote certificate not trusted."
+msgstr "Не довіряти віддаленому сертифікату."
+
+#: ../../locales/../src/interface/queue.cpp:1127
+msgid "Remote file"
+msgstr "Віддалений файл"
+
+#: resources.h:336
+msgid "Remote filters:"
+msgstr "Віддалені фільтри:"
+
+#: ../../locales/../src/interface/viewheader.cpp:528
+msgid "Remote site:"
+msgstr "Віддалений сайт:"
+
+#: resources.h:639 resources.h:642
+msgid "Remove &all"
+msgstr "Видалити &все"
+
+#: resources.h:355 resources.h:640 resources.h:643
+msgid "Remove &selected"
+msgstr "Видалити &обране"
+
+#: resources.h:414 resources.h:436
+msgid "Rena&me"
+msgstr "Пере&йменувати"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:229
+msgid "Rename file"
+msgstr "Перейменувати файл"
+
+#: resources.h:655 resources.h:671
+msgid "Rename selected directory"
+msgstr "Перейменувати обрану директорію"
+
+#: resources.h:600 resources.h:611
+msgid "Rename selected files and directories"
+msgstr "Перейменувати обрані файли і директорії"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3348
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2427
+#, c-format
+msgid "Renaming '%s' to '%s'"
+msgstr "Перейменування '%s' в '%s'"
+
+#: resources.h:413 resources.h:435
+msgid "Res&ume"
+msgstr "По&новити"
+
+#: resources.h:641 resources.h:644
+msgid "Reset and requeue selected files"
+msgstr "Перевстановити і поновити в черзі обрані файли"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:1107
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:426
+#, c-format
+msgid "Resolving address of %s"
+msgstr "Приймається рішення стосовно адреси для %s"
+
+#: ../../locales/../src/interface/updatewizard.cpp:928
+msgid "Resolving hostname"
+msgstr "Приймається рішення стосовно імені хоста"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:395
+#: ../../locales/../src/interface/StatusView.cpp:231
+#: ../../locales/../src/interface/StatusView.cpp:274
+msgid "Response:"
+msgstr "Відповідь:"
+
+#: resources.h:440
+msgid ""
+"Resuming ASCII files can cause problems if server uses a different line "
+"ending format than the client."
+msgstr ""
+"Поновлення файлів ASCII може створити проблеми,якщо сервер використовує "
+"інший формат завершення лінійки ніж клієнт."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1205
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:858
+msgid "Retrieving directory listing..."
+msgstr "Видобування списку директорій..."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3733
+#: ../../locales/../src/interface/netconfwizard.cpp:703
+#, c-format
+msgid "Retrieving external IP address from %s"
+msgstr "Видобування зовнішньої ІР адреси з %s"
+
+#: resources.h:545
+msgid "S&how files currently being edited..."
+msgstr "По&казати файли, що зараз редагуються..."
+
+#: resources.h:631
+msgid "S&hutdown system"
+msgstr "Ви&мкнення системи"
+
+#: resources.h:405 resources.h:428
+msgid "S&kip"
+msgstr "О&минути"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:117
+msgid "SFTP"
+msgstr "SFTP"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:842
+msgid "Save settings?"
+msgstr "Зберегти налаштування?"
+
+#: ../../locales/../src/interface/QueueView.cpp:1615
+msgid "Scanning for files to add to queue"
+msgstr "Сканування файлів,що додаються до черги"
+
+#: ../../locales/../src/interface/QueueView.cpp:1617
+msgid "Scanning for files to upload"
+msgstr "Сканування файлів до відвантаження"
+
+#: ../../locales/../src/interface/statusbar.cpp:418
+msgid "Security information"
+msgstr "Інформація безпеки"
+
+#: resources.h:151
+msgid "Select &page:"
+msgstr "Обрати &сторінку:"
+
+#: resources.h:93
+msgid "Select Entry:"
+msgstr "Обрати Введення:"
+
+#: resources.h:190
+msgid "Select Theme"
+msgstr "Обрати тему"
+
+#: resources.h:419
+msgid ""
+"Select default action to perform if target file of a transfer already exists."
+msgstr "Обрати дію для випадку, якщо пошукуваний файл передачі вже існує."
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:163
+msgid "Select default editor"
+msgstr "Вибери редактора по замовленню"
+
+#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:18
+msgid ""
+"Select default file exists action if the target file already exists. This "
+"selection is valid only for the current session."
+msgstr ""
+"Вибери існуючий файл по замовленню - у випадку,якщо пошукований файл - вже "
+"існує. Цей вибір істотний - у випадку -лише даного з'єднання."
+
+#: ../../locales/../src/interface/defaultfileexistsdlg.cpp:16
+msgid ""
+"Select default file exists action only for the currently selected files in "
+"the queue."
+msgstr "Вибери існуючий файл по замовленню  для наданих файлів у черзі."
+
+#: ../../locales/../src/interface/updatewizard.cpp:243
+msgid "Select download location for package"
+msgstr "Вибери позицію завантаження цього пакету"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:357
+msgid "Select file containing private key"
+msgstr "Вибери файл,що зберігає приватний ключ"
+
+#: ../../locales/../src/interface/export.cpp:30
+msgid "Select file for exported settings"
+msgstr "Вибери файл для експортованих налаштувань"
+
+#: ../../locales/../src/interface/import.cpp:16
+msgid "Select file to import settings from"
+msgstr "Вибери файл для імпортування налаштувань з -..."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:301
+msgid "Select filename for converted keyfile"
+msgstr "Обери назву імені файлу для конвертованого ключового імені файлу."
+
+#: resources.h:451
+msgid "Select the categories to export:"
+msgstr "Обери категорію для відправки:"
+
+#: resources.h:442
+msgid "Select the private data you would like to delete."
+msgstr "Обери свої приватні дані для знищення."
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:41
+#, c-format
+msgid "Selected %d directory."
+msgid_plural "Selected %d directories."
+msgstr[0] "Обрана %d директорія."
+msgstr[1] "Selected %d directories."
+msgstr[2] "Selected %d directories."
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:48
+#, c-format
+msgid "Selected %d file. Total size: %s"
+msgid_plural "Selected %d files. Total size: %s"
+msgstr[0] "Обраний %d файл. Загальний розмір: %s"
+msgstr[1] "Selected %d files. Total size: %s"
+msgstr[2] "Selected %d files. Total size: %s"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:46
+#, c-format
+msgid "Selected %d file. Total size: At least %s"
+msgid_plural "Selected %d files. Total size: At least %s"
+msgstr[0] "Обраний %d файл. Загальний розмір: Принаймні %s"
+msgstr[1] "Selected %d files. Total size: At least %s"
+msgstr[2] "Selected %d files. Total size: At least %s"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:58
+#, c-format
+msgid "Selected %s and %s. Total size: %s"
+msgstr "Обраний %s і %s. Загальний розмір: %s"
+
+#: ../../locales/../src/interface/filelist_statusbar.cpp:56
+#, c-format
+msgid "Selected %s and %s. Total size: At least %s"
+msgstr "Обраний %s і %s. Загальний розмір: Принаймні %s"
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:183
+msgid "Selected editor does not exist"
+msgstr "Обраний редактор не існує"
+
+#: resources.h:473 ../../locales/../src/interface/LocalListView.cpp:2041
+msgid "Selected file already being edited"
+msgstr "Обраний файл в роботі"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2376
+msgid "Selected file already opened."
+msgstr "Обраний файл уже відкрито."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2345
+msgid ""
+"Selected file cannot be opened.\n"
+"No default editor has been set or filetype association is missing or "
+"incorrect."
+msgstr ""
+"Обрані файли неможливо відкрити.\n"
+"Не встановлено редактора по замовчуванню, або не вистарчає чи неправильні "
+"асоціації типів файлів."
+
+#: ../../locales/../src/interface/optionspage_edit.cpp:118
+msgid "Selected file does not exist."
+msgstr "Обраний файл не існує."
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:386
+msgid "Selected file is already loaded"
+msgstr "Обраний файл уже завантажений"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2404
+msgid "Selected file still being edited"
+msgstr "Обраний файл усе ще редагується"
+
+#: ../../locales/../src/interface/filter.cpp:278
+msgid "Selected filter only works for local files."
+msgstr "Обраний фільтр працює лише з локальними файлами."
+
+#: ../../locales/../src/engine/engineprivate.cpp:275
+msgid "Selected port usually in use by a different protocol."
+msgstr "Обраний порт зазвичай використовується іншим протоколом."
+
+#: resources.h:495
+msgid "Send FTP &keep-alive commands"
+msgstr "Надіслати FTP команди &keep-alive "
+
+#: resources.h:578
+msgid "Send custom command to the server otherwise not available"
+msgstr "Надіслати клієнтську команду на  сервер"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4277
+msgid "Sending keep-alive command"
+msgstr "Відправка команди  keep-alive"
+
+#: resources.h:8 resources.h:31
+msgid "Serial number:"
+msgstr "Серійний номерr:"
+
+#: ../../locales/../src/interface/queue.cpp:1125
+msgid "Server / Local file"
+msgstr "Сервер / Локальний файл"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4132
+#, c-format
+msgid "Server does not support resume of files > %d GB."
+msgstr "Сервер не підтримує поновлення файлів > %d GB."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4128
+#, c-format
+msgid ""
+"Server does not support resume of files > %d GB. End transfer since "
+"filesizes match."
+msgstr ""
+"Сервер не підтримує поновлення файлів> %d GB. Завершити передачу,оскільки "
+"розміри файлів співпадають."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2399
+msgid "Server does not support resume of files > 2GB."
+msgstr "Сервер не підтримує поновлення файлів > 2GB."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2394
+msgid "Server does not support resume of files > 4GB."
+msgstr "Сервер не підтримує поновлення файлів > 4GB."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4143
+#, c-format
+msgid ""
+"Server may not support resume of files > %d GB. End transfer since filesizes "
+"match."
+msgstr ""
+"Сервер може не підтримати поновлення файлів > %d GB. Завершити передачу,"
+"оскільки розміри файлів співпадають."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:860
+msgid ""
+"Server might require an account. Try specifying an account using the Site "
+"Manager"
+msgstr ""
+"Сервер може потребувати акаунту. Спробуйте уточнити акаунт,використовуючи "
+"Сайт Менеджер"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:582
+msgid ""
+"Server sent an additional login prompt. You need to use the interactive "
+"login type."
+msgstr ""
+"Сервер надіслав додаткову підказку логінування.Вам потрібно скористатися "
+"інтерактивним типом логінування."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:403
+#: ../../locales/../src/interface/netconfwizard.cpp:410
+#: ../../locales/../src/interface/netconfwizard.cpp:449
+#: ../../locales/../src/interface/netconfwizard.cpp:458
+#: ../../locales/../src/interface/netconfwizard.cpp:470
+#: ../../locales/../src/interface/netconfwizard.cpp:494
+#: ../../locales/../src/interface/netconfwizard.cpp:501
+#: ../../locales/../src/interface/netconfwizard.cpp:510
+#: ../../locales/../src/interface/netconfwizard.cpp:521
+msgid "Server sent invalid reply."
+msgstr "Сервер надіслав недійсну відповідь."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3681
+msgid "Server sent passive reply with unroutable address. Passive mode failed."
+msgstr ""
+"Сервер надіслав пасивну відповідь з відсутньою адресою маршруту.Пасивний "
+"режим недійсний."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3675
+msgid ""
+"Server sent passive reply with unroutable address. Using server address "
+"instead."
+msgstr ""
+"Сервер надіслав пасивну відповідь з відсутньою адресою маршруту. Натомість "
+"використовується адреса сервера."
+
+#: resources.h:519
+msgid "Server to client MAC:"
+msgstr "Сервер до клієнта  MAC:"
+
+#: resources.h:517
+msgid "Server to client cipher:"
+msgstr "Сервер до клієнтських символів:"
+
+#: resources.h:102 resources.h:114
+msgid "Server&type:"
+msgstr "Типr&сервера:"
+
+#: resources.h:16 resources.h:39
+msgid "Session details"
+msgstr "Подробиці з'єднання"
+
+#: resources.h:618
+msgid "Set &Priority"
+msgstr "Встановити &пріоритет "
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3506
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2305
+#, c-format
+msgid "Set permissions of '%s' to '%s'"
+msgstr "Встановити дозволи '%s' до '%s'"
+
+#: ../../locales/../src/engine/transfersocket.cpp:864
+msgid "SetSocketBufferSize called without socket"
+msgstr "Встановлений розмір  буферу - каже мене - нема..."
+
+#: resources.h:150
+msgid "Settings"
+msgstr "Налаштування"
+
+#: resources.h:238
+msgid "Show &raw directory listing"
+msgstr "Показати список &сирих (простих) директорій "
+
+#: ../../locales/../src/interface/Mainfrm.cpp:2244
+msgid "Show both directory trees and continue comparing?"
+msgstr "Показати обидва дерева директорій і продовжити порівняння?"
+
+#: ../../locales/../src/interface/cmdline.cpp:6
+msgid "Shows this help dialog"
+msgstr "Та каже, що показує допомогу"
+
+#: ../../locales/../src/interface/QueueView.cpp:2747
+msgid "Shutdown now"
+msgstr "Вимкнути негайно"
+
+#: resources.h:459
+msgid "Site &Manager entries"
+msgstr "Введені дані &в Сайт Менеджер"
+
+#: resources.h:92
+msgid "Site Manager"
+msgstr "Сайт Менеджер "
+
+#: ../../locales/../src/interface/sitemanager.cpp:270
+msgid "Site Manager already open"
+msgstr "Сайт Менеджер вже відчинений"
+
+#: ../../locales/../src/interface/sitemanager.cpp:2156
+#: ../../locales/../src/interface/sitemanager.cpp:2174
+#: ../../locales/../src/interface/sitemanager.cpp:2185
+msgid "Site does not exist."
+msgstr "Сайт не існує"
+
+#: ../../locales/../src/interface/sitemanager.cpp:2136
+msgid "Site path has to begin with 0 or 1."
+msgstr "Шлях сайту має розпочинатися з 0 або 1"
+
+#: ../../locales/../src/interface/queue.cpp:1128
+msgid "Size"
+msgstr "Розмір"
+
+#: resources.h:220
+msgid "Size formatting"
+msgstr "Форматування розміру"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:68
+#: ../../locales/../src/interface/fileexistsdlg.cpp:92
+#: ../../locales/../src/interface/fileexistsdlg.cpp:124
+#: ../../locales/../src/interface/fileexistsdlg.cpp:148
+msgid "Size unknown"
+msgstr "Розмір невідомий"
+
+#: resources.h:415 resources.h:437
+msgid "Sk&ip"
+msgstr "Обій&ди"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:1179
+#: ../../locales/../src/engine/ControlSocket.cpp:1198
+#: ../../locales/../src/engine/ControlSocket.cpp:1223
+#: ../../locales/../src/engine/ControlSocket.cpp:1296
+#, c-format
+msgid "Skipping download of %s"
+msgstr "Оминаємо завантаження %s"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:1183
+#: ../../locales/../src/engine/ControlSocket.cpp:1202
+#: ../../locales/../src/engine/ControlSocket.cpp:1227
+#: ../../locales/../src/engine/ControlSocket.cpp:1300
+#, c-format
+msgid "Skipping upload of %s"
+msgstr "Оминаємо відвантаження %s"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1231
+msgid "Some files are still being edited or need to be uploaded."
+msgstr "Деякі файли усе ще редагуються або потребують оновлення."
+
+#: resources.h:46 resources.h:689
+msgid ""
+"Some misconfigured remote servers which are behind a router, may reply with "
+"their local IP address."
+msgstr ""
+"Деякі, неправильно сконфігуровані, віддалені сервери позаду свого  "
+"маршрутизатора, при відповіді,  можуть видати свою локальну ІР адресу"
+
+#: resources.h:177
+msgid "Sort directories inline"
+msgstr "Сортувати директорії inline"
+
+#: ../../locales/../src/interface/filelistctrl.cpp:360
+msgid "Sort order cannot be changed if comparing directories."
+msgstr "Послідовність сортування неможливо змінити при порівнянні директорій."
+
+#: resources.h:174
+msgid "Sorting &mode:"
+msgstr "Спосіб &сортування:"
+
+#: ../../locales/../src/interface/RemoteTreeView.cpp:92
+msgid "Source and path of the drop operation are identical"
+msgstr "Джерело і шлях операції drop ідентичні"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:312
+msgid "Source and target file may not be the same"
+msgstr "Вихідний і віддалений файли не можуть бути тими самими "
+
+#: ../../locales/../src/interface/RemoteListView.cpp:133
+msgid "Source and target of the drop operation are identical"
+msgstr "Вихідний і віддалений файли операції drop ідентичні"
+
+#: resources.h:71
+msgid "Source file:"
+msgstr "Вихідний файл:"
+
+#: resources.h:60
+msgid "Speed limits"
+msgstr "Обмеження швидкості"
+
+#: ../../locales/../src/interface/cmdline.cpp:7
+msgid "Start with opened Site Manager"
+msgstr "Розпочати з відкритим Менеджером Сайту"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2076
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1505
+#, c-format
+msgid "Starting download of %s"
+msgstr "Розпочинаємо завантаження %s"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2080
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1509
+#, c-format
+msgid "Starting upload of %s"
+msgstr "Розпочинаємо відвантаження %s"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:136
+msgid "State:"
+msgstr "Стан:"
+
+#: ../../locales/../src/interface/edithandler.cpp:901
+#: ../../locales/../src/interface/QueueView.cpp:425
+msgid "Status"
+msgstr "Статус"
+
+#: ../../locales/../src/interface/StatusView.cpp:240
+#: ../../locales/../src/interface/StatusView.cpp:289
+msgid "Status:"
+msgstr "Статус:"
+
+#: resources.h:615
+msgid "Stop and remove &all"
+msgstr "Зупинити і видалити &все"
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:138
+msgid "Street:"
+msgstr "Вулиця:"
+
+#: resources.h:12 resources.h:35
+msgid "Subject of certificate"
+msgstr "Предмет сертифікації"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:573
+msgid ""
+"Submit a bug report if this problem persists even with the latest version of "
+"FileZilla."
+msgstr ""
+"Якщо ця проблема зберігається навіть в останній версії FileZilla, напишіть "
+"повідомлення про недоліки ."
+
+#: ../../locales/../src/interface/queueview_successful.cpp:11
+msgid "Successful transfers"
+msgstr "Успішні передачі"
+
+#: resources.h:717
+msgid "Summary of test results:"
+msgstr "Підсумок результатів тесту:"
+
+#: ../../locales/../src/interface/quickconnectbar.cpp:73
+#: ../../locales/../src/interface/quickconnectbar.cpp:107
+msgid "Syntax error"
+msgstr "Помилка синтаксису"
+
+#: ../../locales/../src/interface/cmdline.cpp:57
+#: ../../locales/../src/interface/cmdline.cpp:63
+#: ../../locales/../src/interface/cmdline.cpp:69
+#: ../../locales/../src/interface/Mainfrm.cpp:2425
+msgid "Syntax error in command line"
+msgstr "Помилка синтаксису у командній лінійці"
+
+#: ../../locales/../src/interface/filteredit.cpp:113
+msgid "System"
+msgstr "Система"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:421
+msgid "TLS/SSL connection established, waiting for welcome message..."
+msgstr "Встановлено зв'зок TLS/SSL,очікування вітального повідомлення..."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:425
+msgid "TLS/SSL connection established."
+msgstr "Встановлено зв'зок TLS/SSL."
+
+#: ../../locales/../src/engine/proxy.cpp:428
+msgid "TTL expired"
+msgstr ""
+
+#: resources.h:69
+msgid "Target file already exists"
+msgstr "Віддалений файл уже існує"
+
+#: resources.h:75
+msgid "Target file:"
+msgstr "Віддалений файл:"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:1600
+msgid "Target filename already exists, really continue?"
+msgstr "Ім'я віддаленого файлу вже існує,продовжувати далі?"
+
+#: resources.h:716
+msgid "Test results"
+msgstr "Результати тестування"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4149
+msgid "Testing resume capabilities of server"
+msgstr "Спроможність сервера до відновлення тестування."
+
+#: ../../locales/../src/interface/sitemanager.cpp:269
+msgid ""
+"The Site Manager is opened in another instance of FileZilla 3.\n"
+"Do you want to continue? Any changes made in the Site Manager won't be saved "
+"then."
+msgstr ""
+"Цей Сайт Менеджер відкритий в іншій версії FileZilla 3.\n"
+"Бажаєте продовжити? Будь-які зміни проведені в цьому Сайт Менеджері,у цьому "
+"випадку, не будуть збереженими."
+
+#: ../../locales/../src/interface/clearprivatedata.cpp:90
+msgid ""
+"The Site Manager is opened in another instance of FileZilla 3.\n"
+"Please close it or the data cannot be deleted."
+msgstr ""
+"Цей Сайт Менеджер відкритий в іншій версії FileZilla 3.\n"
+"Закрийте його,будь-ласка,інакше ці дані неможливо буде видалити."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:614
+#, c-format
+msgid "The address you entered was: %s"
+msgstr "Введена вами адреса була: %s"
+
+#: ../../locales/../src/interface/statusbar.cpp:389
+msgid "The connection is encrypted. Click icon for details."
+msgstr "З'єднання криптоване.Клацніть на іконку задля отримання подробиць."
+
+#: ../../locales/../src/interface/optionspage_ftpproxy.cpp:89
+msgid "The custom login sequence cannot be empty."
+msgstr "Клієнтська послідовність логінування не може бути пустою."
+
+#: ../../locales/../src/interface/filteredit.cpp:477
+#: ../../locales/../src/interface/filteredit.cpp:544
+#: ../../locales/../src/interface/filteredit.cpp:585
+msgid "The entered filter name already exists."
+msgstr "Введене ім'я фільтру вже існує."
+
+#: ../../locales/../src/interface/optionspage_filetype.cpp:160
+#, c-format
+msgid "The extension '%s' does already exist in the list"
+msgstr "Розширення '%s' таки існує в цьому списку"
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:219
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:226
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"Please enter a new name:"
+msgstr ""
+"Файл %s вже існує.\n"
+"Введіть,будь-ласка,нове ім'я:"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:219
+#, c-format
+msgid "The file '%s' could not be loaded or does not contain a private key."
+msgstr "Файл '%s' не підлягає завантаженню або не вміщує приватного ключа."
+
+#: ../../locales/../src/interface/LocalListView.cpp:2028
+#: ../../locales/../src/interface/LocalListView.cpp:2120
+#, c-format
+msgid ""
+"The file '%s' could not be opened:\n"
+"No program has been associated on your system with this file type."
+msgstr ""
+"Файл '%s' не підлягає відкриванню:\n"
+"У вашій системі жодна програма не асоціюється з даним типом файлів."
+
+#: ../../locales/../src/interface/LocalListView.cpp:2056
+#: ../../locales/../src/interface/LocalListView.cpp:2127
+#, c-format
+msgid ""
+"The file '%s' could not be opened:\n"
+"The associated command failed"
+msgstr ""
+"Файл '%s' не підлягає відкриванню:\n"
+"Помилкова асоційована команда "
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:265
+#, c-format
+msgid ""
+"The file '%s' is not in a format supported by FileZilla.\n"
+"The file is also password protected. Password protected keyfiles are not "
+"supported by FileZilla yet.\n"
+"Would you like to convert it into a supported, unprotected format?"
+msgstr ""
+"Файл '%s' не того формату який підтримує FileZilla.\n"
+"Крім того цей файл захищено паролем. Захищені паролем файли ключів FileZilla "
+"наразі не підтримує.\n"
+"Бажаєте конвертувати його у підтримуваний, проте не захищений формат?"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:263
+#, c-format
+msgid ""
+"The file '%s' is not in a format supported by FileZilla.\n"
+"Would you like to convert it into a supported format?"
+msgstr ""
+"Файл '%s' не у тому форматі,що підтримується  FileZilla.\n"
+"Бажаєте переконвертувати його у підтримуваний формат?"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:268
+#, c-format
+msgid ""
+"The file '%s' is password protected. Password protected keyfiles are not "
+"supported by FileZilla yet.\n"
+"Would you like to convert it into an unprotected file?"
+msgstr ""
+"Файл '%s' захищено паролем. Наразі  FileZilla не підтримує захищені паролем "
+"ключі файлів.\n"
+"Не бажаєте переконвертувати його у незахищений файл?"
+
+#: ../../locales/../src/interface/import.cpp:90
+msgid ""
+"The file you have selected contains site manager data from a previous "
+"version of FileZilla.\n"
+"Due to differences in the storage format, only host, port, username and "
+"password will be imported.\n"
+"Continue with the import?"
+msgstr ""
+"Обраний вами файл вміщує дані Сайт Менеджера згідно попередньої версії "
+"FileZilla.\n"
+"У відповідності до формату накопичення лише хост,порт,ім'я користувача і "
+"пароль будуть імпортованими.\n"
+"Продовжити імпорт?"
+
+#: ../../locales/../src/interface/listctrlex.cpp:643
+msgid "The filename column can neither be hidden nor moved."
+msgstr "Стовпець імен файлів не можна, ані приховати, ані перемістити."
+
+#: ../../locales/../src/interface/listctrlex.cpp:693
+msgid "The filename column cannot be hidden."
+msgstr "Стовпець імен файлів неможливо  приховати."
+
+#: resources.h:482
+msgid "The following files are currently being edited:"
+msgstr "Дані файли зараз редагуються:"
+
+#: resources.h:236
+msgid ""
+"The higher the debug level, the more information will be displayed in the "
+"message log. Displaying debug information has a negative impact on "
+"performance."
+msgstr ""
+"Чим вищий рівень відлагодження,тим більше інформації буде відображено в  "
+"журналі повідомлень . Відображення відлагоджувальної  інформації має "
+"негативний вплив на продуктивність."
+
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:77
+msgid ""
+"The lowest available port has to be less or equal than the highest available "
+"port."
+msgstr ""
+"Найнижчий наявний порт повинен бути меншим або рівним найвищому наявному "
+"порту."
+
+#: ../../locales/../src/interface/updatewizard.cpp:420
+msgid ""
+"The most recent version has been downloaded. Click on Finish to close "
+"FileZilla and to start the installation."
+msgstr ""
+"Останню версію завантажено.Натисніть кнопку Завершено щоб закрити FileZilla "
+"і розпочати установку."
+
+#: ../../locales/../src/interface/updatewizard.cpp:422
+msgid ""
+"The most recent version has been downloaded. Please install like you did "
+"install this version."
+msgstr ""
+"Останню версію завантажено. Проведіть,будь-ласка,інсталяцію так як ви це "
+"робили з наявною у вас версією."
+
+#: ../../locales/../src/interface/import.cpp:80
+msgid "The selected categories have been imported."
+msgstr "Обрані категорії імпортовано."
+
+#: resources.h:458
+msgid ""
+"The selected file contains importable data for the following categories:"
+msgstr "Обраний файл вміщує  імпортабельні дані для наступних категорій:"
+
+#: resources.h:474
+msgid "The selected file is already being edited:"
+msgstr "Обраний файл уже знаходиться в процесі редагування:"
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2404
+msgid ""
+"The selected file is still opened in some other program, please close it."
+msgstr ""
+"Обраний файл усе ще відкритий у якійсь іншій програм.Закрийте її,будь-ласка."
+
+#: ../../locales/../src/interface/RemoteListView.cpp:2350
+msgid ""
+"The selected file would be executed directly.\n"
+"This can be dangerous and damage your system.\n"
+"Do you really want to continue?"
+msgstr ""
+"Обраний файл буде виконано напряму.\n"
+"Це може становити небезпеку і пошкодити вашу систему.\n"
+"Ви дійсно бажаєте продовжити?"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:571
+msgid "The server sent an unrecognized reply."
+msgstr "Сервер надіслав неопізнану відповідь."
+
+#: resources.h:130
+msgid "The server uses following charset encoding for filenames:"
+msgstr "The server uses following charset encoding for filenames:"
+
+#: resources.h:2
+msgid ""
+"The server's certificate is unknown. Please carefully examine the "
+"certificate to make sure the server can be trusted."
+msgstr ""
+"Невідомий сертифікат сервера. Для того щоб довіряти серверу ретельно "
+"перевірте сертифікат."
+
+#: resources.h:318
+msgid ""
+"The server's host key does not match the key that has been cached. This "
+"means that either the administrator has changed the host key, or you are "
+"actually trying to connect to another computer pretending to be the server.\n"
+"If the host key change was not expected, please contact the server "
+"administrator."
+msgstr ""
+"Ключ хоста сервера не співпадає з кешованим ключем. Це означає,що або "
+"адміністратор змінив ключ хоста,або ви насправді намагаєтесь з'єднатись з "
+"іншим комп'ютером,який представляє себе як сервер..\n"
+"Якщо зміна ключа хоста не була очікуваною,сконтактуєтеся,будь-ласка,з "
+"адміністратором серверу."
+
+#: resources.h:306
+msgid ""
+"The server's host key is not cached in the registry. You have no guarantee "
+"that the server is the computer you think it is."
+msgstr ""
+"Ключ хоста сервера не кешовано в реєстрі. У вас немає гарантії того,що даний "
+"сервер являє собою той комп'ютер який ви мали на увазі."
+
+#: ../../locales/../src/interface/import.cpp:77
+msgid ""
+"The settings have been imported. You have to restart FileZilla for all "
+"settings to have effect."
+msgstr ""
+"Налаштування імпортовано. Для того щоб всі налаштування вступили в дію вам "
+"необхідно перезавантажити FileZilla."
+
+#: ../../locales/../src/interface/QueueView.cpp:2735
+msgid "The system will soon reboot unless you click cancel."
+msgstr ""
+"Система незабаром перезавантажиться.Для відміни натисніть кнопку Скасувати."
+
+#: ../../locales/../src/interface/QueueView.cpp:2733
+msgid "The system will soon shutdown unless you click cancel."
+msgstr "Система незабаром вимкнеться.Для відміни натисніть кнопку Скасувати."
+
+#: resources.h:70
+msgid ""
+"The target file already exists.\n"
+"Please chose an action."
+msgstr ""
+"Пошукуваний файл вже існує.\n"
+"Оберіть,будь-ласка,дію."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:842
+msgid "The test did not succeed. Do you really want to save the settings?"
+msgstr "Тест не досяг успіху. Ви дійсно бажаєте зберегти налаштування?"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:123
+msgid "Themes"
+msgstr "Теми"
+
+#: ../../locales/../src/interface/filter.cpp:353
+msgid "This filter set cannot be removed."
+msgstr "Встановлений фільтр неможливо перемістити."
+
+#: resources.h:694
+msgid ""
+"This only works if you are not behind a router, else your system would just "
+"return your internal address."
+msgstr ""
+"Це спрацьовує лише у випадку,якщо ви не в позиції позаду маршрутизатора,а "
+"також якщо ваша система лише повертає внутрішню адресу."
+
+#: resources.h:672
+msgid ""
+"This wizard will help you to properly configure any routers and firewalls "
+"you have and tests your configuration."
+msgstr ""
+"Цей майстер допоможе вам правильно сконфігурувати будь-який ваш "
+"маршрутизатор чи файєрвол та протестувати вашу конфігурацію."
+
+#: resources.h:214
+msgid "Time formatting"
+msgstr "Форматування часу"
+
+#: resources.h:57
+msgid "Time&out in seconds:"
+msgstr "Time&out за мить:"
+
+#: resources.h:56 ../../locales/../src/interface/QueueView.cpp:920
+#: ../../locales/../src/interface/QueueView.cpp:958
+msgid "Timeout"
+msgstr "Час вичерпано"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1534
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:974
+#, c-format
+msgid ""
+"Timezone offsets: Server: %d seconds. Local: %d seconds. Difference: %d "
+"seconds."
+msgstr ""
+"Зсув часового поясу: Сервер: %d секунд.Місцевий: %d секунд. Різниця: %d "
+"секунд."
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:134
+msgid "Title:"
+msgstr "Назва:"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:2242
+msgid "To compare directories, both file lists have to be aligned."
+msgstr ""
+"Для того щоб порівняти директорії,обидва списки файлів необхідно вирівняти."
+
+#: ../../locales/../src/interface/Mainfrm.cpp:2243
+msgid "To do this, the directory trees need to be both shown or both hidden."
+msgstr ""
+"Для того щоб це зробити, необхідно щоб обидва дерева директорій були або "
+"показані,або приховані."
+
+#: resources.h:498
+msgid ""
+"To support public key authentication, FileZilla needs to know the private "
+"keys to use."
+msgstr ""
+"Для підтримки автентифікації публічного ключа FileZilla мусить знати який "
+"приватний ключ використовувати."
+
+#: resources.h:738 resources.h:739
+msgid "Toggles processing of the transfer queue"
+msgstr "Переключає обробку черги передачі"
+
+#: resources.h:730 resources.h:731
+msgid "Toggles the display of the local directory tree"
+msgstr "Переключає відображення локального дерева директорії"
+
+#: resources.h:728 resources.h:729
+msgid "Toggles the display of the message log"
+msgstr "Переключає відображення  журналу повідомлень"
+
+#: resources.h:732 resources.h:733
+msgid "Toggles the display of the remote directory tree"
+msgstr "Переключає відображення віддаленого дерева директорії"
+
+#: resources.h:734 resources.h:735
+msgid "Toggles the display of the transfer queue"
+msgstr "Переключає відображення черги передачі"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:536
+msgid "Too long header line"
+msgstr "Занадто довга лінійка хедеру"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:597
+msgid "Too many redirects"
+msgstr "Занадто багато перенаправлень"
+
+#: ../../locales/../src/interface/StatusView.cpp:234
+#: ../../locales/../src/interface/StatusView.cpp:281
+msgid "Trace:"
+msgstr "Відстежити:"
+
+#: resources.h:568
+msgid "Transfer &type"
+msgstr "Тип &передачі"
+
+#: resources.h:489
+msgid "Transfer Mode"
+msgstr "Спосіб Передачі"
+
+#: ../../locales/../src/engine/ControlSocket.cpp:154
+msgid "Transfer aborted by user"
+msgstr "Передача припинена користувачем"
+
+#: resources.h:122
+msgid "Transfer settings"
+msgstr "Налаштування передачі"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:617
+msgid "Transferred data got tainted."
+msgstr "Передані дані знечистились ."
+
+#: ../../locales/../src/interface/QueueView.cpp:1295
+#: ../../locales/../src/interface/statuslinectrl.cpp:198
+msgid "Transferring"
+msgstr "Передача"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:119
+msgid "Transfers"
+msgstr "Передачі"
+
+#: resources.h:163
+msgid "Treat files &without extension as ASCII file"
+msgstr "Трактувати файли &без розширення як файли ASCII"
+
+#: resources.h:159
+msgid "Treat the &following filetypes as ASCII files:"
+msgstr "Траактувати &наступні типи файлів як файли ASCII:"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:780
+msgid "Trust changed Hostkey: "
+msgstr "Довіряти зміненому ключу хоста: "
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:778
+msgid "Trust new Hostkey: "
+msgstr "Довіряти новому ключу хоста: "
+
+#: resources.h:324
+msgid "Trust the new key and carry on connecting?"
+msgstr "Довіряти новому ключеві і продовжити з'єднання?"
+
+#: resources.h:21
+msgid "Trust this certificate and carry on connecting?"
+msgstr "Довіряти цьому сертифікату і продовжити з'єднання?"
+
+#: resources.h:312
+msgid "Trust this host and carry on connecting?"
+msgstr "Довіряти цьому хосту і продовжити з'єднання?"
+
+#: ../../locales/../src/interface/edithandler.cpp:900
+msgid "Type"
+msgstr "Тип"
+
+#: resources.h:251
+msgid "Type of FTP Proxy:"
+msgstr "Тип FTP Проксі:"
+
+#: resources.h:530
+#, fuzzy
+msgid "Type of generic proxy:"
+msgstr "Тип FTP Проксі:"
+
+#: resources.h:485
+msgid "U&pload"
+msgstr "Від&вантажити"
+
+#: resources.h:63
+msgid "U&pload limit:"
+msgstr "Обмеження Від&вантаження :"
+
+#: resources.h:242
+msgid "U&se filetype associations if available"
+msgstr "При наявності ви&користовувати асоціації типів файлів"
+
+#: resources.h:215
+msgid "U&se system defaults"
+msgstr "Ви&користовувати системні замовчування"
+
+#: resources.h:253
+msgid "USER@&HOST"
+msgstr "ХОСТ@&КОРИСТУВАЧА"
+
+#: ../../locales/../src/engine/proxy.cpp:437
+#, c-format
+msgid "Unassigned error code %d"
+msgstr ""
+
+#: ../../locales/../src/interface/verifycertdialog.cpp:133
+msgid "Unit:"
+msgstr "Модуль"
+
+#: ../../locales/../src/interface/edithandler.cpp:931
+#: ../../locales/../src/interface/edithandler.cpp:957
+msgid "Unknown"
+msgstr "Невідомо"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:716
+msgid "Unknown FTP proxy type, cannot generate login sequence."
+msgstr ""
+"Невідомий тип FTP проксі, неможливо згенерувати послідовність логінування."
+
+#: ../../locales/../src/engine/proxy.cpp:367
+#, c-format
+msgid "Unknown SOCKS protocol version: %d"
+msgstr ""
+
+#: resources.h:1
+msgid "Unknown certificate"
+msgstr "Невідомий сертифікат"
+
+#: resources.h:305
+msgid "Unknown host key"
+msgstr "Невідомий ключ хоста"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:592
+#: ../../locales/../src/interface/netconfwizard.cpp:603
+msgid ""
+"Unless these problems get fixed, active mode FTP will not work and passive "
+"mode has to be used."
+msgstr ""
+"Якщо ці проблеми не будуть усунуті, активний режим  FTP не працюватиме і "
+"необхідно використати пасивний режим."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:579
+msgid ""
+"Unless this problem gets fixed, active mode FTP will not work and passive "
+"mode has to be used."
+msgstr ""
+"Якщо ця проблема не буде усунута, активний режим  FTP не працюватиме і "
+"необхідно використати пасивний режим."
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:581
+msgid "Unsupported redirect"
+msgstr "Непідтримуване перескерування"
+
+#: resources.h:486
+msgid "Up&load and unedit"
+msgstr "Від&вантажити і не редагувати"
+
+#: ../../locales/../src/interface/settingsdialog.cpp:129
+msgid "Update Check"
+msgstr "Перевірка оновлення"
+
+#: ../../locales/../src/interface/optionspage_updatecheck.cpp:60
+#: ../../locales/../src/interface/updatewizard.cpp:156
+#: ../../locales/../src/interface/updatewizard.cpp:169
+msgid "Update wizard"
+msgstr "Майстер оновлення"
+
+#: ../../locales/../src/interface/Mainfrm.cpp:1788
+msgid "Updatecheck failed"
+msgstr "Перевірка оновлення невдала"
+
+#: ../../locales/../src/interface/edithandler.cpp:922
+msgid "Upload failed"
+msgstr "Невдале відвантаження"
+
+#: resources.h:663
+msgid "Upload selected directory"
+msgstr "Відвантажити обрану директорію"
+
+#: resources.h:588
+msgid "Upload selected files and directories"
+msgstr "Відвантажити обрані файли і директорії"
+
+#: resources.h:469
+msgid "Upload this file back to the server?"
+msgstr "Відвантажити даний файл назад на сервер?"
+
+#: resources.h:468
+msgid "Upload this file to the server?"
+msgstr "Відвантажити даний файл на сервер?"
+
+#: ../../locales/../src/interface/edithandler.cpp:916
+#: ../../locales/../src/interface/edithandler.cpp:948
+#: ../../locales/../src/interface/edithandler.cpp:1090
+msgid "Uploading"
+msgstr "Відвантаження"
+
+#: ../../locales/../src/interface/edithandler.cpp:919
+#: ../../locales/../src/interface/edithandler.cpp:1092
+msgid "Uploading and pending removal"
+msgstr "Відвантаження та очікування видалення"
+
+#: ../../locales/../src/interface/edithandler.cpp:951
+#: ../../locales/../src/interface/edithandler.cpp:1094
+msgid "Uploading and unediting"
+msgstr "Відвантаження і відсутність редагування"
+
+#: resources.h:406 resources.h:429
+msgid "Uploads"
+msgstr "Відвантаження"
+
+#: resources.h:134
+msgid "Use &custom charset"
+msgstr "Використати &користувацький набір шрифтів"
+
+#: resources.h:397
+msgid "Use &default"
+msgstr "Використати &по замовчуванню"
+
+#: resources.h:407
+msgid "Use d&efault"
+msgstr "Використати по&замовчуванню"
+
+#: resources.h:209
+msgid "Use system &defaults"
+msgstr "Використати системні &замовчування"
+
+#: resources.h:695
+msgid "Use the following IP address:"
+msgstr "Використати наступну ІР адресу:"
+
+#: resources.h:705
+msgid "Use the following port range:"
+msgstr "Використати наступний діапазон порту:"
+
+#: resources.h:690
+msgid "Use the server's external IP address instead"
+msgstr "Використати натомість зовнішню  ІР адресу сервера"
+
+#: resources.h:370 resources.h:696
+msgid ""
+"Use this if you're behind a router and have a static external IP address."
+msgstr ""
+"Викристати це,якщо ви знаходитеся позаду маршрутизатора і володієте "
+"статичною ІР адресою."
+
+#: resources.h:699
+msgid ""
+"Use this option if you have a dynamic IP address. FileZilla will contact the "
+"above server once each session as soon as you use active mode for the first "
+"time. Only the version of FileZilla you're using is submitted to the server."
+msgstr ""
+"Скористайтеся цією опцією,якщо у вас динамічна ІР адреса. FileZilla  "
+"з'єднається з вищезгаданим сервером один раз під-час кожної сесії,якщо ви "
+"використовуєте активний режим вперше. На сервер передається лише версія "
+"FileZilla."
+
+#: resources.h:144
+msgid "User:"
+msgstr "Користувач:"
+
+#: resources.h:132
+msgid "Uses UTF-8 if the server supports it, else use local charset."
+msgstr ""
+"Використовує UTF-8 за умови підтримки сервером, а також локальний набір "
+"шрифтів."
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4201
+#, c-format
+msgid "Using proxy %s"
+msgstr "Використання проксі %s"
+
+#: resources.h:136
+msgid ""
+"Using the wrong charset can result in filenames not displaying properly."
+msgstr ""
+"Використання неправильного набору шрифтів може спричинити неправильне "
+"відображення імен файлів."
+
+#: resources.h:375
+msgid "Using this wizard you can check for available updates to FileZilla."
+msgstr ""
+"Користуючись даним майстром, ви можете перевірити наявність поновлень для  "
+"FileZilla."
+
+#: resources.h:6 resources.h:29
+msgid "Valid from:"
+msgstr "Дійсний від:"
+
+#: resources.h:7 resources.h:30
+msgid "Valid to:"
+msgstr "Дійсний до:"
+
+#: ../../locales/../src/interface/cmdline.cpp:12
+msgid "Verbose log messages from wxWidgets"
+msgstr "Багатошарові журнали повідомлень від wxWidgets"
+
+#: ../../locales/../src/engine/tlssocket.cpp:947
+msgid "Verifying certificate..."
+msgstr "Перевірка сертифікату..."
+
+#: resources.h:68
+msgid "Very high"
+msgstr "Дуже високий"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1308
+msgid "View hidden option set, but unsupported by server"
+msgstr "Переглянути прихований набір опцій,проте не підтримуваних сервером"
+
+#: resources.h:523
+msgid "Visible columns"
+msgstr "Видимі стовпці"
+
+#: resources.h:279
+msgid "W&rite"
+msgstr "Пи&сати"
+
+#: ../../locales/../src/interface/QueueView.cpp:1574
+msgid "Waiting"
+msgstr "Очікування"
+
+#: ../../locales/../src/interface/QueueView.cpp:1224
+msgid "Waiting for browsing connection"
+msgstr "Очікування на перегляд зв'язку"
+
+#: ../../locales/../src/interface/QueueView.cpp:1245
+msgid "Waiting for password"
+msgstr "Очікування на пароль"
+
+#: ../../locales/../src/interface/statuslinectrl.cpp:192
+msgid "Waiting for transfer to be canceled"
+msgstr "Очікування на відміну передачі"
+
+#: ../../locales/../src/engine/engineprivate.cpp:196
+msgid "Waiting to retry..."
+msgstr "Очікування на повторну спробу..."
+
+#: ../../locales/../src/interface/FileZilla.cpp:273
+msgid ""
+"Warning!\n"
+"\n"
+"A bug in Windows causes problems with FileZilla\n"
+"\n"
+"The bug occurs if you have\n"
+"- Windows Server 2003 or XP 64\n"
+"- Windows Firewall enabled\n"
+"- Application Layer Gateway service enabled\n"
+"See http://support.microsoft.com/kb/931130 for background information.\n"
+"\n"
+"Unless you either disable Windows Firewall or the Application Layer Gateway "
+"service,\n"
+"FileZilla will timeout on big transfers."
+msgstr ""
+"Попередження!\n"
+"\n"
+"Недолік у Windows створює проблеми для FileZilla\n"
+"\n"
+"Недолік проявляється,якщо у вас \n"
+"- Windows Server 2003 або XP 64\n"
+"- увімкнений Windows файєрвол\n"
+"- увімкнений сервіс Application Layer Gateway \n"
+"Дивіться http://support.microsoft.com/kb/931130 for background information.\n"
+"\n"
+"Якщо ви не відключите Windows Firewall або сервіс the Application Layer "
+"Gateway,\n"
+"FileZilla вимикатиметься при великих передачах."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:960
+msgid "Warning, ignoring data connection from wrong IP."
+msgstr "Попередження,ігнорування з'єднання даних з неправильної ІР."
+
+#: ../../locales/../src/interface/updatewizard.cpp:169
+msgid ""
+"Warning, use nightly builds at your own risk.\n"
+"No support is given for nightly builds.\n"
+"Nightly builds may not work as expected and might even damage your system.\n"
+"\n"
+"Do you really want to check for nightly builds?"
+msgstr ""
+"Попередження! Використовуйте нічні збірки на свій власний ризик.\n"
+"Для нічних збірок підтримка не надається.\n"
+"Нічні збірки можуть працювати не так як очікувалось і навіть можуть "
+"пошкодити вашу систему.\n"
+"\n"
+"Ви дійсно бажаєте перевірити нічні збірки?"
+
+#: resources.h:317
+msgid "Warning: Potential security breach!"
+msgstr "Попередження:Потенційна загроза безпеці!"
+
+#: resources.h:385
+msgid "What's new:"
+msgstr "Що нового:"
+
+#: resources.h:170
+msgid "Widescreen"
+msgstr "Широкий екран"
+
+#: resources.h:283
+msgid "Wr&ite"
+msgstr "Пи&сати"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:433
+#: ../../locales/../src/interface/netconfwizard.cpp:440
+msgid "Wrong external IP address"
+msgstr "Неправильна зовнішня ІР адреса"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:738
+msgid "Wrong lineendings"
+msgstr "Неправильні закінчення лінійок"
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:791
+msgid "Yes"
+msgstr "Так"
+
+#: resources.h:391
+msgid ""
+"You are already using the most recent version of FileZilla. Please check "
+"again in future."
+msgstr ""
+"Ви уже користуєтесь найостаннішою версією FileZilla.Здійсніть чергову "
+"перевірку у майбутньому. ."
+
+#: resources.h:286
+msgid ""
+"You can use an x at any position to keep the permission the original files "
+"have."
+msgstr ""
+"Ви можете використати значок x у будь-якій позиції щоб зберегти дозвіл яким "
+"володіють оригінальні файли."
+
+#: ../../locales/../src/interface/import.cpp:29
+msgid "You cannot import settings from FileZilla's own settings directory."
+msgstr "Ви не можете імпортувати власні налаштування директорії FileZilla."
+
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:241
+msgid "You did not enter a new name for the file. Overwrite the file instead?"
+msgstr ""
+"Ви не ввели нове ім'я для цього файлу.Чи переписати цей файл натомість?"
+
+#: ../../locales/../src/interface/sitemanager.cpp:819
+msgid "You have to enter a hostname."
+msgstr "Вам необхідно ввести ім'я хосту."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:149
+#: ../../locales/../src/interface/optionspage_connection_active.cpp:90
+msgid "You have to enter a valid IP address."
+msgstr "Вам необхідно ввести дійсну ІР адресу."
+
+#: ../../locales/../src/interface/sitemanager.cpp:880
+msgid "You have to enter an account name"
+msgstr "Вам необхідно ввести ім'я акаунту"
+
+#: ../../locales/../src/interface/sitemanager.cpp:871
+msgid "You have to specify a user name"
+msgstr "Вам необхідно вказати ім'я користувача"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:618
+msgid ""
+"You likely have a router or firewall which errorneously modified the "
+"transferred data."
+msgstr ""
+"Схоже ваш маршрутизатор або файєрвол помилково модифікували передані дані."
+
+#: ../../locales/../src/interface/optionspage_ftpproxy.cpp:82
+#: ../../locales/../src/interface/optionspage_proxy.cpp:70
+msgid "You need to enter a proxy host."
+msgstr "Вам необхідно ввести хост проксі."
+
+#: ../../locales/../src/interface/optionspage_proxy.cpp:75
+#, fuzzy
+msgid "You need to enter a proxy port in the range from 1 to 65535"
+msgstr "Вам необхідно ввести хост проксі."
+
+#: ../../locales/../src/interface/netconfwizard.cpp:565
+msgid ""
+"You should have no problems connecting to other servers, file transfers "
+"should work properly."
+msgstr ""
+"У вас не повинно виникнути проблем у з'єднанні з іншими серверами.Передачі "
+"файлів повинні працювати правильно."
+
+#: ../../locales/../src/interface/filteredit.cpp:137
+msgid "begins with"
+msgstr "починається з"
+
+#: ../../locales/../src/interface/fileexistsdlg.cpp:66
+#: ../../locales/../src/interface/fileexistsdlg.cpp:90
+#: ../../locales/../src/interface/fileexistsdlg.cpp:122
+#: ../../locales/../src/interface/fileexistsdlg.cpp:146
+msgid "bytes"
+msgstr "байти"
+
+#: ../../locales/../src/interface/filteredit.cpp:135
+msgid "contains"
+msgstr "вміщує"
+
+#: ../../locales/../src/interface/filteredit.cpp:138
+msgid "ends with"
+msgstr "завершується з"
+
+#: ../../locales/../src/interface/filteredit.cpp:142
+msgid "equals"
+msgstr "урівнює"
+
+#: ../../locales/../src/interface/filelistctrl.cpp:411
+#: ../../locales/../src/interface/filelistctrl.cpp:429
+#: ../../locales/../src/interface/filelistctrl.cpp:453
+#: ../../locales/../src/interface/filelistctrl.cpp:469
+msgid "file"
+msgstr "файл"
+
+#: ../../locales/../src/interface/edithandler.cpp:89
+msgid "fz3temp-lockfile"
+msgstr "fz3temp-lockfile"
+
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:97
+#: ../../locales/../src/interface/optionspage_connection_sftp.cpp:116
+msgid ""
+"fzputtygen could not be started.\n"
+"Please make sure this executable exists in the same directory as the main "
+"FileZilla executable."
+msgstr ""
+"fzputtygen неможливо запустити.\n"
+"Переконайтеся,будь-ласка,що він знаходиться у тій самій директорії,що і "
+"головний виконуючий файл FileZilla ."
+
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1430
+msgid "fzsftp could not be started"
+msgstr "fzsftp неможливо запустити"
+
+#: ../../locales/../src/interface/filteredit.cpp:141
+msgid "greater than"
+msgstr "більше ніж"
+
+#: ../../locales/../src/interface/filteredit.cpp:126
+msgid "group executable"
+msgstr "групове виконання"
+
+#: ../../locales/../src/interface/filteredit.cpp:124
+msgid "group readable"
+msgstr "групове читання"
+
+#: ../../locales/../src/interface/filteredit.cpp:125
+msgid "group writeable"
+msgstr "груповий запис"
+
+#: ../../locales/../src/interface/filteredit.cpp:136
+msgid "is equal to"
+msgstr "є рівним"
+
+#: ../../locales/../src/interface/filteredit.cpp:132
+msgid "is set"
+msgstr "встановлено"
+
+#: ../../locales/../src/interface/filteredit.cpp:133
+msgid "is unset"
+msgstr "не встановлено"
+
+#: ../../locales/../src/interface/filteredit.cpp:143
+msgid "less than"
+msgstr "менше ніж"
+
+#: ../../locales/../src/interface/filteredit.cpp:139
+msgid "matches regex"
+msgstr "співпадає з regex"
+
+#: ../../locales/../src/interface/filteredit.cpp:123
+msgid "owner executable"
+msgstr "виконання власника"
+
+#: ../../locales/../src/interface/filteredit.cpp:121
+msgid "owner readable"
+msgstr "читання власника"
+
+#: ../../locales/../src/interface/filteredit.cpp:122
+msgid "owner writeable"
+msgstr "запис власника"
+
+#: resources.h:249
+msgid "png \"c:\\program files\\viewer\\viewer.exe\" -open"
+msgstr "png \"c:\\program files\\viewer\\viewer.exe\" -open"
+
+#: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:29
+msgid "unknown"
+msgstr "невідомо"
+
+#: ../../locales/../src/interface/filteredit.cpp:129
+msgid "world executable"
+msgstr "світове виконання"
+
+#: ../../locales/../src/interface/filteredit.cpp:127
+msgid "world readable"
+msgstr "світове читання"
+
+#: ../../locales/../src/interface/filteredit.cpp:128
+msgid "world writeable"
+msgstr "світовий запис"
+
+#~ msgid "Error %d writing to socket"
+#~ msgstr "Помилка %d запису в гніздо"
+
+#~ msgid "Invalid hostname or host not found"
+#~ msgstr "Недійсне ім'я хосту або хост не знайдений"
+
+#~ msgid "Default"
+#~ msgstr "По замовчуванню"

@@ -437,11 +437,14 @@ regular_dir:
 	return true;
 }
 
-wxString FormatSize(const wxLongLong& size, bool add_bytes_suffix, int format, bool thousands_separator, int num_decimal_places)
+wxString FormatSize(const wxLongLong& size, bool add_bytes_suffix = false)
 {
+	COptions* const pOptions = COptions::Get();
+	const int format = pOptions->GetOptionVal(OPTION_SIZE_FORMAT);
+
 	if (!format)
 	{
-		if (!thousands_separator)
+		if (!pOptions->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP))
 			return size.ToString();
 
 #ifdef __WXMSW__
@@ -486,8 +489,6 @@ wxString FormatSize(const wxLongLong& size, bool add_bytes_suffix, int format, b
 		}
 	}
 
-	wxString places;
-
 	int divider;
 	if (format == 3)
 		divider = 1000;
@@ -501,95 +502,18 @@ wxString FormatSize(const wxLongLong& size, bool add_bytes_suffix, int format, b
 	int p = 0;
 
 	wxLongLong r = size;
-	int remainder = 0;
-	bool clipped = false;
 	while (r > divider && p < 6)
 	{
 		const wxLongLong rr = r / divider;
-		if (remainder != 0)
-			clipped = true;
-		remainder = (r - rr * divider).GetLo();
+		if (rr * divider != r)
+			r2 = true;
 		r = rr;
 		p++;
 	}
-	if (!num_decimal_places)
-	{
-		if (remainder != 0 || clipped)
-			r++;
-	}
-	else if (p) // Don't add decimal places on exact bytes
-	{
-		if (format != 3)
-		{
-			// Binary, need to convert 1024 into range from 1-1000
-			if (clipped)
-			{
-				remainder++;
-				clipped = false;
-			}
-			remainder = ceil((double)remainder * 1000 / 1024);
-		}
-
-		int max;
-		switch (num_decimal_places)
-		{
-		case 1:
-			max = 9;
-			divider = 100;
-			break;
-		case 2:
-			max = 99;
-			divider = 10;
-			break;
-		case 3:
-			max = 999;
-			break;
-		}
-
-		if (num_decimal_places != 3)
-		{
-			if (remainder % divider)
-				clipped = true;
-			remainder /= divider;
-		}
-
-		if (clipped)
-			remainder++;
-		if (remainder > max)
-		{
-			r++;
-			remainder = 0;
-		}
-
-		places.Printf(_T("%d"), remainder);
-		const int len = places.Len();
-		for (int i = len; i < num_decimal_places; i++)
-			places = _T("0") + places;
-	}
+	if (r2)
+		r++;
 
 	wxString result = r.ToString();
-	if (places != _T(""))
-	{
-#ifdef __WXMSW__
-		wxChar sep[5];
-		int count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL , sep, 5);
-		if (!count)
-		{
-			sep[0] = '.';
-			sep[1] = 0;
-		}
-#else
-		wxChar sep;
-		char* chr = nl_langinfo(RADIXCHAR);
-		if (!chr || !*chr)
-			sep = 0;
-		else
-			sep = chr[0];
-#endif
-
-		result += sep;
-		result += places;
-	}
 	result += ' ';
 	if (!p)
 		return result + _T("B");
@@ -604,16 +528,6 @@ wxString FormatSize(const wxLongLong& size, bool add_bytes_suffix, int format, b
 	result += 'B';
 
 	return result;
-}
-
-wxString FormatSize(const wxLongLong& size, bool add_bytes_suffix = false)
-{
-	COptions* const pOptions = COptions::Get();
-	const int format = pOptions->GetOptionVal(OPTION_SIZE_FORMAT);
-	const bool thousands_separator = pOptions->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
-	const int num_decimal_places = pOptions->GetOptionVal(OPTION_SIZE_DECIMALPLACES);
-
-	return FormatSize(size, add_bytes_suffix, format, thousands_separator, num_decimal_places);
 }
 
 // See comment to OnGetItemText
@@ -2175,7 +2089,7 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 		return;
 	}
 
-	CEditHandler::fileState state = pEditHandler->GetFileState(fn.GetFullPath());
+	CEditHandler::fileState state = pEditHandler->GetFileState(CEditHandler::local, fn.GetFullPath());
 	switch (state)
 	{
 	case CEditHandler::upload:
@@ -2190,15 +2104,14 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 				wxBell();
 				return;
 			}
-			pEditHandler->StartEditing(fn.GetFullPath());
+			pEditHandler->StartEditing(CEditHandler::local, fn.GetFullPath());
 			return;
 		}
 	default:
 		break;
 	}
 
-	wxString file = fn.GetFullPath();
-	if (!pEditHandler->AddFile(CEditHandler::local, file, path, *pServer))
+	if (!pEditHandler->AddFile(CEditHandler::local, fn.GetFullPath(), path, *pServer))
 	{
 		wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
 		return;

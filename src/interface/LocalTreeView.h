@@ -20,11 +20,6 @@ public:
 	CLocalTreeView(wxWindow* parent, wxWindowID id, CState *pState, CQueueView *pQueueView);
 	virtual ~CLocalTreeView();
 
-#ifdef __WXMSW__
-	// React to changed drive letters
-	void OnDevicechange(WPARAM wParam, LPARAM lParam);
-#endif
-
 protected:
 	virtual void OnStateChange(enum t_statechange_notifications notification, const wxString& data);
 
@@ -70,12 +65,6 @@ protected:
 	void OnBeginLabelEdit(wxTreeEvent& event);
 	void OnEndLabelEdit(wxTreeEvent& event);
 	void OnChar(wxKeyEvent& event);
-
-#ifdef __WXMSW__
-	// React to changed drive letters
-	wxTreeItemId AddDrive(wxChar letter);
-	void RemoveDrive(wxChar letter);
-#endif
 
 	wxString GetDirFromItem(wxTreeItemId item);
 

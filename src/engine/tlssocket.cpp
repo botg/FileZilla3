@@ -51,14 +51,13 @@ CTlsSocket::~CTlsSocket()
 bool CTlsSocket::Init()
 {
 	// This function initializes GnuTLS
-	m_initialized = true;
 	int res = gnutls_global_init();
 	if (res)
 	{
 		LogError(res);
-		Uninit();
 		return false;
 	}
+	m_initialized = true;
 
 	res = gnutls_certificate_allocate_credentials(&m_certCredentials);
 	if (res < 0)

@@ -121,8 +121,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Local filelist column order", string, _T("") },
 	{ "Remote filelist column order", string, _T("") },
 	{ "Filelist status bar", number, _T("1") },
-	{ "Filter toggle state", number, _T("0") },
-	{ "Size decimal places", number, _T("0") }
+	{ "Filter toggle state", number, _T("0") }
 };
 
 struct t_default_option
@@ -467,10 +466,6 @@ int COptions::Validate(unsigned int nID, int value)
 	case OPTION_COMPARISON_THRESHOLD:
 		if (value < 0 || value > 1440)
 			value = 1;
-		break;
-	case OPTION_SIZE_DECIMALPLACES:
-		if (value < 0 || value > 3)
-			value = 0;
 		break;
 	}
 	return value;

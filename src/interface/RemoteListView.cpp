@@ -2379,9 +2379,6 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 		return;
 	}
 
-	const CServerPath path = m_pDirectoryListing->path;
-	const CServer server = *m_pState->GetServer();
-
 	bool dangerous = false;
 	if (!pEditHandler->CanOpen(CEditHandler::remote, entry.name, dangerous))
 	{
@@ -2396,9 +2393,15 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 			wxBell();
 			return;
 		}
+
+		if (!m_pState->IsRemoteConnected() || !m_pDirectoryListing)
+		{
+			wxBell();
+			return;
+		}
 	}
 
-	CEditHandler::fileState state = pEditHandler->GetFileState(entry.name, path, server);
+	CEditHandler::fileState state = pEditHandler->GetFileState(CEditHandler::remote, entry.name);
 	switch (state)
 	{
 	case CEditHandler::download:
@@ -2431,16 +2434,22 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 
 			if (XRCCTRL(dlg, "ID_REOPEN", wxRadioButton)->GetValue())
 			{
-				pEditHandler->StartEditing(entry.name, path, server);
+				pEditHandler->StartEditing(CEditHandler::remote, entry.name);
 				return;
 			}
 			else
 			{
-				if (!pEditHandler->Remove(entry.name, path, server))
+				if (!pEditHandler->Remove(CEditHandler::remote, entry.name))
 				{
 					wxMessageBox(_("The selected file is still opened in some other program, please close it."), _("Selected file still being edited"), wxICON_EXCLAMATION);
 					return;
 				}
+			}
+
+			if (!m_pState->IsRemoteConnected() || !m_pDirectoryListing)
+			{
+				wxBell();
+				return;
 			}
 		}
 		break;
@@ -2448,15 +2457,15 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 		break;
 	}
 
-	wxString file = entry.name;
-	if (!pEditHandler->AddFile(CEditHandler::remote, file, path, server))
+	if (!pEditHandler->AddFile(CEditHandler::remote, entry.name, m_pDirectoryListing->path, *m_pState->GetServer()))
 	{
 		wxFAIL;
 		wxBell();
 		return;
 	}
 
-	m_pQueue->QueueFile(false, true, file, entry.name, path, server, entry.size, CEditHandler::remote);
+	wxFileName fn = wxFileName(localDir, entry.name);
+	m_pQueue->QueueFile(false, true, fn.GetFullPath(), entry.name, m_pDirectoryListing->path, *m_pState->GetServer(), entry.size, CEditHandler::remote);
 	m_pQueue->QueueFile_Finish(true);
 }
 

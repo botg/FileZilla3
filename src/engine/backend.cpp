@@ -50,7 +50,6 @@ int CSocketBackend::Read(void *buffer, unsigned int len, int& error)
 	wxLongLong max = GetAvailableBytes(CRateLimiter::inbound);
 	if (max == 0)
 	{
-		Wait(CRateLimiter::inbound);
 		error = EAGAIN;
 		return -1;
 	}

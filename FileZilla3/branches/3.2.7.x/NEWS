@@ -10,6 +10,16 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.2.7.2 (2009-09-21)
+
+- Fix handling of remote directory names with leading or trailing spaces
+- *nix: Fix memory leaks in D-Bus session management and power management inhibitor client code
+- Increase default size of SO_RCVBUF (TCP advertised window) to fix performance issues on high-latency connections
+- MSW: Fix displaying list of shares on local network resources
+- MSW: Remote file editing no longer gets confused if two filenames only differ in character case
+- Fix dialog line wrapping issues
+- Ensure width of site manager is large enough to fit all tabs
+
 3.2.7.1 (2009-08-23)
 
 - Fix crash if adding new filters

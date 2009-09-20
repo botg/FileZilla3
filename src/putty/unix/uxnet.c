@@ -568,11 +568,6 @@ static int try_connect(Actual_Socket sock)
 	setsockopt(s, SOL_SOCKET, SO_KEEPALIVE, (void *) &b, sizeof(b));
     }
 
-    {
-	int size_read = 4194304;
-	setsockopt(s, SOL_SOCKET, SO_RCVBUF, (const char*)&size_read, sizeof(size_read));
-    }
-
     /*
      * Bind to local address.
      */

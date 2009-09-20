@@ -6,10 +6,7 @@
 
 #include "state.h"
 #ifdef __WXMAC__
-	// >= 10.5 Required for Power Management
-	#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-		#include <IOKit/pwr_mgt/IOPMLib.h>
-	#endif
+#include <IOKit/pwr_mgt/IOPMLib.h>
 #endif
 
 class CMainFrame;
@@ -23,7 +20,6 @@ public:
 	static void Create(CMainFrame* pMainFrame);
 	static void Destroy();
 
-	static bool IsSupported();
 protected:
 	CPowerManagement(CMainFrame* pMainFrame);
 	virtual ~CPowerManagement();
@@ -42,10 +38,7 @@ protected:
 #ifdef WITH_LIBDBUS
 	CPowerManagementInhibitor *m_inhibitor;
 #elif defined(__WXMAC__)
-	#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-		// >= 10.5 Required for Power Management
-		IOPMAssertionID m_assertionID;
-	#endif
+	IOPMAssertionID m_assertionID;
 #endif
 };
 

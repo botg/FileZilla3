@@ -160,7 +160,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent& event)
 	const wxString bytes = FormatBytes(m_pStatus->currentOffset);
 	if (elapsedSeconds)
 	{
-		wxFileOffset rate = GetSpeed(elapsedSeconds);
+		wxFileOffset rate = (m_pStatus->currentOffset - m_pStatus->startOffset) / elapsedSeconds;
 
         if (rate > (1000*1000))
 			dc.DrawText(wxString::Format(_("%s bytes (%d.%d MB/s)"), bytes.c_str(), (int)(rate / 1000 / 1000), (int)((rate / 1000 / 100) % 10)), m_fieldOffsets[3], h);
@@ -218,8 +218,6 @@ void CStatusLineCtrl::SetTransferStatus(const CTransferStatus* pStatus)
 
 		if (m_transferStatusTimer.IsRunning())
 			m_transferStatusTimer.Stop();
-
-		m_past_data_index = -1;
 	}
 	else
 	{
@@ -332,36 +330,17 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height)
 	dc.DrawText(text, x + PROGRESSBAR_WIDTH / 2 - w / 2, y + height / 2 - h / 2);
 }
 
-wxFileOffset CStatusLineCtrl::GetSpeed(int elapsedSeconds)
+wxLongLong CStatusLineCtrl::GetSpeed() const
 {
 	if (!m_pStatus)
 		return -1;
 
-	if (elapsedSeconds <= 0)
+	wxTimeSpan elapsed = wxDateTime::Now().Subtract(m_pStatus->started);
+	int elapsedSeconds = elapsed.GetSeconds().GetLo(); // Assume GetHi is always 0
+	if (elapsedSeconds > 0)
+		return (m_pStatus->currentOffset - m_pStatus->startOffset) / elapsedSeconds;
+	else
 		return -1;
-
-	if (m_past_data_index < 9)
-	{
-
-		if (m_past_data_index == -1 || m_past_data[m_past_data_index].elapsed < elapsedSeconds)
-		{
-			m_past_data_index++;
-			m_past_data[m_past_data_index].elapsed = elapsedSeconds;
-			m_past_data[m_past_data_index].offset = m_pStatus->currentOffset - m_pStatus->startOffset;
-		}
-	}
-
-	_past_data forget = {0};
-	for (int i = m_past_data_index; i >= 0; i--)
-	{
-		if (m_past_data[i].elapsed < elapsedSeconds)
-		{
-			forget = m_past_data[i];
-			break;
-		}
-	}
-
-	return (m_pStatus->currentOffset - m_pStatus->startOffset - forget.offset) / (elapsedSeconds - forget.elapsed);
 }
 
 bool CStatusLineCtrl::Show(bool show /*=true*/)

@@ -8,7 +8,6 @@
 #include "Options.h"
 #include "window_state_manager.h"
 #include "queue.h"
-#include "ipcmutex.h"
 
 class CSearchFileData : public CGenericFileData
 {
@@ -38,10 +37,6 @@ protected:
 	virtual int OnGetItemImage(long item) const;
 
 	void InitDateFormat();
-
-#ifdef __WXMSW__
-	virtual int GetOverlayIndex(int item);
-#endif
 
 private:
 	virtual bool CanStartComparison(wxString* pError) { return false; }
@@ -587,10 +582,13 @@ bool CSearchDialog::Load()
 	m_pWindowStateManager->Restore(OPTION_SEARCH_SIZE, wxSize(750, 500));
 
 	Layout();
-
-	LoadConditions();
-	EditFilter(m_search_filter);
-	XRCCTRL(*this, "ID_CASE", wxCheckBox)->SetValue(m_search_filter.matchCase);
+	CFilter filter;
+	CFilterCondition cond;
+	cond.condition = 0;
+	cond.type = filter_name;
+	filter.filters.push_back(cond);
+	EditFilter(filter);
+	XRCCTRL(*this, "ID_CASE", wxCheckBox)->SetValue(filter.matchCase);
 
 	return true;
 }
@@ -606,8 +604,6 @@ void CSearchDialog::Run()
 	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_IDLE, false);
 
 	ShowModal();
-
-	SaveConditions();
 
 	m_pState->UnregisterHandler(this, STATECHANGE_REMOTE_IDLE);
 	m_pState->UnregisterHandler(this, STATECHANGE_REMOTE_DIR);
@@ -1088,62 +1084,4 @@ void CSearchDialog::OnCharHook(wxKeyEvent& event)
 	}
 
 	event.Skip();
-}
-
-#ifdef __WXMSW__
-int CSearchDialogFileList::GetOverlayIndex(int item)
-{
-	if (item < 0 || item >= (int)m_indexMapping.size())
-		return -1;
-	int index = m_indexMapping[item];
-
-	if (m_fileData[index].entry.link)
-		return GetLinkOverlayIndex();
-
-	return 0;
-}
-#endif
-
-void CSearchDialog::LoadConditions()
-{
-	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
-
-	CXmlFile file;
-	
-	TiXmlElement* pDocument = file.Load(_T("search"));
-	if (!pDocument)
-	{
-		wxMessageBox(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
-		return;
-	}
-
-	TiXmlElement* pFilter = pDocument->FirstChildElement("Filter");
-	if (!pFilter)
-		return;
-
-	if (!CFilterManager::LoadFilter(pFilter, m_search_filter))
-		m_search_filter = CFilter();
-}
-
-void CSearchDialog::SaveConditions()
-{
-	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
-
-	CXmlFile file;
-	
-	TiXmlElement* pDocument = file.Load(_T("search"));
-	if (!pDocument)
-	{
-		wxMessageBox(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
-		return;
-	}
-
-	TiXmlElement* pFilter;
-	while ((pFilter = pDocument->FirstChildElement("Filter")))
-		pDocument->RemoveChild(pFilter);
-	pFilter = pDocument->LinkEndChild(new TiXmlElement("Filter"))->ToElement();
-
-	CFilterDialog::SaveFilter(pFilter, m_search_filter);
-
-	file.Save();
 }

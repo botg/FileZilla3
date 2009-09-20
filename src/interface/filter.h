@@ -66,7 +66,6 @@ public:
 	std::vector<bool> remote;
 };
 
-class TiXmlElement;
 class CFilterManager
 {
 public:
@@ -85,8 +84,6 @@ public:
 	std::list<CFilter> GetActiveFilters(bool local);
 
 	static bool CompileRegexes(CFilter& filter);
-
-	static bool LoadFilter(TiXmlElement* pElement, CFilter& filter);
 
 protected:
 	static bool CompileRegexes();
@@ -110,8 +107,6 @@ public:
 	virtual ~CFilterDialog() { }
 
 	bool Create(CMainFrame* parent);
-
-	static void SaveFilter(TiXmlElement* pElement, const CFilter& filter);
 
 protected:
 

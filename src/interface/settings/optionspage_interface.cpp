@@ -4,7 +4,6 @@
 #include "optionspage.h"
 #include "optionspage_interface.h"
 #include "../Mainfrm.h"
-#include "../power_management.h"
 
 BEGIN_EVENT_TABLE(COptionsPageInterface, COptionsPage)
 EVT_CHECKBOX(XRCID("ID_FILEPANESWAP"), COptionsPageInterface::OnLayoutChange)
@@ -27,8 +26,9 @@ bool COptionsPageInterface::LoadPage()
 
 	SetCheckFromOption(XRCID("ID_PREVENT_IDLESLEEP"), OPTION_PREVENT_IDLESLEEP, failure);
 
-	if (!CPowerManagement::IsSupported())
-		XRCCTRL(*this, "ID_PREVENT_IDLESLEEP", wxCheckBox)->Hide();
+#if defined(__WXGTK__) && !defined(WITH_LIBDBUS)
+	XRCCTRL(*this, "ID_PREVENT_IDLESLEEP", wxCheckBox)->Hide();
+#endif
 
 	return !failure;
 }

@@ -26,9 +26,6 @@ struct t_Option
 
 static const t_Option options[OPTIONS_NUM] =
 {
-	// Note: A few options are versioned due to a changed
-	// option syntax or past, unhealthy defaults
-
 	// Engine settings
 	{ "Use Pasv mode", number, _T("1"), false },
 	{ "Limit local ports", number, _T("0"), false },
@@ -52,9 +49,9 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Speedlimit burst tolerance", number, _T("0"), false },
 	{ "View hidden files", number, _T("0"), false },
 	{ "Preserve timestamps", number, _T("0"), false },
-	{ "Socket recv buffer size (v2)", number, _T("4194304"), false }, // Make it large enough by default
+	{ "Socket recv buffer size", number, _T("131072"), false }, // Make it large enough by default
 														 // to enable a large TCP window scale
-	{ "Socket send buffer size (v2)", number, _T("262144"), false },
+	{ "Socket send buffer size", number, _T("131072"), false },
 	{ "FTP Keep-alive commands", number, _T("0"), false },
 	{ "FTP Proxy type", number, _T("0"), false },
 	{ "FTP Proxy host", string, _T(""), false },
@@ -144,9 +141,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Search sort order", string, _T(""), false },
 	{ "Edit track local", number, _T("1"), false },
 	{ "Prevent idle sleep", number, _T("1"), false },
-	{ "Filteredit window size", string, _T(""), false },
-	{ "Enable invalid char filter", number, _T("1"), false },
-	{ "Invalid char replace", string, _T("_"), false },
+	{ "Filteredit window size", string, _T(""), false }
 };
 
 struct t_default_option
@@ -517,11 +512,6 @@ int COptions::Validate(unsigned int nID, int value)
 
 wxString COptions::Validate(unsigned int nID, wxString value)
 {
-	if (nID == OPTION_INVALID_CHAR_REPLACE)
-	{
-		if (value.Len() > 1)
-			value = _T("_");
-	}
 	return value;
 }
 

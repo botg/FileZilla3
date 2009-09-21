@@ -14,6 +14,7 @@ Legend:
 
 - Fix handling of remote directory names with leading or trailing spaces
 - *nix: Fix memory leaks in D-Bus session management and power management inhibitor client code
+- *nix: Fall back to org.gnome.SessionManager if org.freedesktop.PowerManagment does not exit to inhibit idle sleep during transfers
 - Increase default size of SO_RCVBUF (TCP advertised window) to fix performance issues on high-latency connections
 - MSW: Fix displaying list of shares on local network resources
 - MSW: Remote file editing no longer gets confused if two filenames only differ in character case

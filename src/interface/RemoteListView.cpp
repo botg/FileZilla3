@@ -405,7 +405,7 @@ int CRemoteListView::OnGetItemImage(long item) const
 	if (icon != -2)
 		return icon;
 
-	icon = pThis->GetIconIndex(file, (*m_pDirectoryListing)[index].name, false, (*m_pDirectoryListing)[index].dir);
+	icon = pThis->GetIconIndex(file, (*m_pDirectoryListing)[index].name, false);
 	return icon;
 }
 
@@ -453,16 +453,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(const CSharedPointer<const CD
 		const CDirentry& entry = (*pDirectoryListing)[i];
 		CGenericFileData data;
 		data.flags = normal;
-		if (entry.dir)
-		{
-			data.icon = m_dirIcon;
-#ifndef __WXMSW__
-			if (entry.link)
-				data.icon += 3;
-#endif
-		}
-		else
-			data.icon = -2;
+		data.icon = entry.dir ? m_dirIcon : -2;
 		m_fileData.push_back(data);
 
 		if (filter.FilenameFiltered(entry.name, path, entry.dir, entry.size, false, 0))
@@ -789,16 +780,7 @@ void CRemoteListView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 			const CDirentry& entry = (*m_pDirectoryListing)[i];
 			CGenericFileData data;
 			data.flags = normal;
-			if (entry.dir)
-			{
-				data.icon = m_dirIcon;
-#ifndef __WXMSW__
-				if (entry.link)
-					data.icon += 3;
-#endif
-			}
-			else
-				data.icon = -2;
+			data.icon = entry.dir ? m_dirIcon : -2;
 			m_fileData.push_back(data);
 
 			if (filter.FilenameFiltered(entry.name, path, entry.dir, entry.size, false, 0))
@@ -1533,7 +1515,7 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 			if (!idle)
 				continue;
 			CLocalPath local_path(local_parent);
-			local_path.AddSegment(CQueueView::ReplaceInvalidCharacters(name));
+			local_path.AddSegment(name);
 			CServerPath remotePath = m_pDirectoryListing->path;
 			if (remotePath.AddSegment(name))
 			{
@@ -1543,7 +1525,7 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 		}
 		else
 		{
-			m_pQueue->QueueFile(queueOnly, true, local_parent.GetPath() + CQueueView::ReplaceInvalidCharacters(name), name, m_pDirectoryListing->path, *pServer, entry.size);
+			m_pQueue->QueueFile(queueOnly, true, local_parent.GetPath() + name, name, m_pDirectoryListing->path, *pServer, entry.size);
 			added = true;
 		}
 	}
@@ -3133,19 +3115,3 @@ void CRemoteListView::OnMenuGeturl(wxCommandEvent& event)
 	wxTheClipboard->Flush();
 	wxTheClipboard->Close();
 }
-
-#ifdef __WXMSW__
-int CRemoteListView::GetOverlayIndex(int item)
-{
-	int index = GetItemIndex(item);
-	if (index == -1)
-		return 0;
-	if ((unsigned int)index >= m_pDirectoryListing->GetCount())
-		return 0;
-
-	if ((*m_pDirectoryListing)[index].link)
-		return GetLinkOverlayIndex();
-
-	return 0;
-}
-#endif

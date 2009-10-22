@@ -193,9 +193,6 @@
         <help>Check for newer versions of FileZilla</help>
       </object>
       <object class="separator"/>
-      <object class="wxMenuItem" name="ID_MENU_HELP_WELCOME">
-        <label>Show &amp;welcome dialog...</label>
-      </object>
       <object class="wxMenuItem" name="ID_MENU_HELP_GETTINGHELP">
         <label>&amp;Getting help...</label>
       </object>
@@ -480,11 +477,6 @@
       <label>&amp;Add to queue</label>
       <bitmap stock_id="ART_UPLOADADD"/>
       <help>Add selected directory to the transfer queue</help>
-    </object>
-    <object class="separator"/>
-    <object class="wxMenuItem" name="ID_OPEN">
-      <label>&amp;Open</label>
-      <help>Open directory in system's file manager</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="ID_MKDIR">

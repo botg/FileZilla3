@@ -738,6 +738,7 @@ int CFtpControlSocket::LogonParseResponse()
 			{
 				DoClose(code == 5 ? FZ_REPLY_CRITICALERROR : 0);
 				return FZ_REPLY_DISCONNECTED;
+				return false;
 			}
 		}
 		else

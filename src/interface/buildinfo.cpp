@@ -92,7 +92,7 @@ wxString CBuildInfo::GetBuildType()
 	return _T("");
 }
 
-wxLongLong CBuildInfo::ConvertToVersionNumber(const wxChar* version)
+wxULongLong CBuildInfo::ConvertToVersionNumber(const wxChar* version)
 {
 	// Crude conversion from version string into number for easy comparison
 	// Supported version formats:
@@ -116,10 +116,8 @@ wxLongLong CBuildInfo::ConvertToVersionNumber(const wxChar* version)
 	// And these can be compared easily
 
 	wxASSERT(*version >= '0' && *version <= '9');
-	if (*version < '0' || *version > '9')
-		return -1;
 
-	wxLongLong v = 0;
+	wxULongLong v = 0;
 	int segment = 0;
 
 	int shifts = 0;

@@ -652,10 +652,10 @@ void CUpdateWizard::OnEngineEvent(wxEvent& event)
 
 void CUpdateWizard::ParseData()
 {
-	const wxLongLong ownVersionNumber = CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion());
+	const wxULongLong ownVersionNumber = CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion());
 
 	wxString newVersion;
-	wxLongLong newVersionNumber = -1;
+	wxULongLong newVersionNumber = 0;
 	wxString newUrl;
 	wxString newChecksum;
 
@@ -741,8 +741,7 @@ void CUpdateWizard::ParseData()
 		}
 		else
 		{
-			wxLongLong v = CBuildInfo::ConvertToVersionNumber(versionOrDate);
-			if (v <= ownVersionNumber)
+			if (CBuildInfo::ConvertToVersionNumber(versionOrDate) <= ownVersionNumber)
 				continue;
 		}
 
@@ -978,8 +977,7 @@ void CUpdateWizard::DisplayUpdateAvailability(bool showDialog, bool forceMenu /*
 	if (newVersion == _T(""))
 		return;
 
-	wxLongLong v = CBuildInfo::ConvertToVersionNumber(newVersion);
-	if (v <= CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion()))
+	if (CBuildInfo::ConvertToVersionNumber(newVersion) <= CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion()))
 	{
 		pOptions->SetOption(OPTION_UPDATECHECK_NEWVERSION, _T(""));
 		return;

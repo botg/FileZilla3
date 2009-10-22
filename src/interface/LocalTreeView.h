@@ -73,7 +73,6 @@ protected:
 	void OnBeginLabelEdit(wxTreeEvent& event);
 	void OnEndLabelEdit(wxTreeEvent& event);
 	void OnChar(wxKeyEvent& event);
-	void OnMenuOpen(wxCommandEvent& event);
 
 #ifdef __WXMSW__
 	// React to changed drive letters

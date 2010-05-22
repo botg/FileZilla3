@@ -11,6 +11,7 @@
 #ifdef __WXMSW__
 #include "commctrl.h"
 #endif
+#include <wx/dcclient.h>
 
 std::map<int, struct CSiteManager::_menu_data> CSiteManager::m_idMap;
 

@@ -47,7 +47,7 @@ public:
 	void SetLabelEditBlock(bool block);
 
 #ifndef __WXMSW__
-	wxScrolledWindow* GetMainWindow();
+	wxWindow* GetMainWindow();
 #endif
 protected:
 	virtual void OnPostScroll();

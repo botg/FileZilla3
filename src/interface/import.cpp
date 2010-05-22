@@ -145,9 +145,9 @@ wxString CImportDialog::DecodeLegacyPassword(wxString pass)
 			pass[i + 1] < '0' || pass[i + 1] > '9' ||
 			pass[i + 2] < '0' || pass[i + 2] > '9')
 			return _T("");
-		int number = (pass[i] - '0') * 100 +
-						(pass[i + 1] - '0') * 10 +
-						pass[i + 2] - '0';
+		int number = (pass[i].GetValue() - '0') * 100 +
+						(pass[i + 1].GetValue() - '0') * 10 +
+						pass[i + 2].GetValue() - '0';
 		wxChar c = number ^ key[(i / 3 + pos) % strlen(key)];
 		output += c;
 	}

@@ -3332,7 +3332,8 @@ wxString CQueueView::ReplaceInvalidCharacters(const wxString& filename)
 
 	wxString result;
 
-	wxChar* buf = result.GetWriteBuf(filename.Len() + 1);
+	wxStringBuffer sbuf(result, filename.Len() + 1);
+	wxChar* buf = sbuf;
 
 	const wxChar* p = filename.c_str();
 	while (*p)
@@ -3367,8 +3368,6 @@ wxString CQueueView::ReplaceInvalidCharacters(const wxString& filename)
 		p++;
 	}
 	*buf = 0;
-
-	result.UngetWriteBuf();
 
 	return result;
 }

@@ -206,12 +206,12 @@ void CQuickconnectBar::OnKeyboardNavigation(wxNavigationKeyEvent& event)
 	if (event.GetDirection() && event.GetEventObject() == XRCCTRL(*this, "ID_QUICKCONNECT_DROPDOWN", wxButton))
 	{
 		event.SetEventObject(this);
-		GetParent()->ProcessEvent(event);
+		GetParent()->GetEventHandler()->ProcessEvent(event);
 	}
 	else if (!event.GetDirection() && event.GetEventObject() == m_pHost)
 	{
 		event.SetEventObject(this);
-		GetParent()->ProcessEvent(event);
+		GetParent()->GetEventHandler()->ProcessEvent(event);
 	}
 	else
 		event.Skip();

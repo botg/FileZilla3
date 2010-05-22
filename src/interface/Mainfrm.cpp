@@ -738,7 +738,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			// Do a crude approach: Drop everything unexpected...
 			for (unsigned int i = 0; i < version.Len(); i++)
 			{
-				wxChar& c = version[i];
+				wxUniChar c = version[i];
 				if ((version[i] >= '0' && version[i] <= '9') ||
 					(version[i] >= 'a' && version[i] <= 'z') ||
 					(version[i] >= 'A' && version[i] <= 'Z') ||
@@ -763,7 +763,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			{
 				pStatusBar->Show(show);
 				wxSizeEvent evt;
-				controls->pLocalListViewPanel->ProcessEvent(evt);
+				controls->pLocalListViewPanel->GetEventHandler()->ProcessEvent(evt);
 			}
 		}
 		if (controls && controls->pRemoteListViewPanel)
@@ -773,7 +773,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			{
 				pStatusBar->Show(show);
 				wxSizeEvent evt;
-				controls->pRemoteListViewPanel->ProcessEvent(evt);
+				controls->pRemoteListViewPanel->GetEventHandler()->ProcessEvent(evt);
 			}
 		}
 	}

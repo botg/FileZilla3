@@ -1255,7 +1255,7 @@ void CSocket::SetEventHandler(CSocketEventHandler* pEvtHandler)
 	}
 }
 
-#define ERRORDECL(c, desc) { c, _T(#c), wxTRANSLATE(desc) },
+#define ERRORDECL(c, desc) { c, _T(#c), _T(wxTRANSLATE(desc)) },
 
 struct Error_table
 {

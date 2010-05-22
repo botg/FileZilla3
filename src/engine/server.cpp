@@ -13,9 +13,9 @@ static const t_protocolInfo protocolInfos[] = {
 	{ FTP,     _T("ftp"),   21,  false, _T("FTP - File Transfer Protocol") },
 	{ SFTP,    _T("sftp"),  22,  false, _T("SFTP - SSH File Transfer Protocol") },
 	{ HTTP,    _T("http"),  80,  false, _T("HTTP - Hypertext Transfer Protocol") },
-	{ HTTPS,   _T("https"), 443, true, wxTRANSLATE("HTTPS - HTTP over TLS") },
-	{ FTPS,    _T("ftps"),  990, true,  wxTRANSLATE("FTPS - FTP over implicit TLS/SSL") },
-	{ FTPES,   _T("ftpes"), 21,  true,  wxTRANSLATE("FTPES - FTP over explicit TLS/SSL") },
+	{ HTTPS,   _T("https"), 443, true, _T(wxTRANSLATE("HTTPS - HTTP over TLS")) },
+	{ FTPS,    _T("ftps"),  990, true,  _T(wxTRANSLATE("FTPS - FTP over implicit TLS/SSL")) },
+	{ FTPES,   _T("ftpes"), 21,  true,  _T(wxTRANSLATE("FTPES - FTP over explicit TLS/SSL")) },
 	{ UNKNOWN, _T(""),      21,  false, _T("") }
 };
 

@@ -115,7 +115,8 @@ bool CLocalPath::SetPath(const wxString& path, wxString* file /*=0*/)
 		return false;
 	}
 
-	wxChar* out = m_path.GetWriteBuf(path.Len() + 2);
+	wxStringBuffer outbuf(m_path, path.Len() + 2);
+	wxChar* out = outbuf;
 	*out++ = '/';
 	segments.push_back(out);
 #endif
@@ -204,7 +205,6 @@ bool CLocalPath::SetPath(const wxString& path, wxString* file /*=0*/)
 
 	*out = 0;
 
-	m_path.UngetWriteBuf();
 	return true;
 }
 

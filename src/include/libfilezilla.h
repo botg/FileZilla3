@@ -21,6 +21,7 @@
 #include <wx/datetime.h>
 #include <wx/event.h>
 #include <wx/string.h>
+#include <wx/intl.h>
 
 #include <list>
 #include <vector>

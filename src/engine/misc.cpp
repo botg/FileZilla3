@@ -362,9 +362,9 @@ void MakeLowerAscii(wxString& str)
 {
 	for (size_t i = 0; i < str.Len(); i++)
 	{
-		wxChar& c = str[i];
+		wxUniCharRef c = str[i];
 		if (c >= 'A' && c <= 'Z')
-			c += 32;
+			c = wxChar(c) + 32;
 	}
 }
 

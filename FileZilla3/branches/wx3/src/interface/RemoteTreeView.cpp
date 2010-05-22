@@ -346,7 +346,7 @@ void CRemoteTreeView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 	SetItemImages(parent, false);
 
 #ifndef __WXMSW__
-	m_freezeCount--;
+	Thaw();
 #endif
 	if (!modified)
 		SafeSelectItem(parent);

@@ -22,6 +22,7 @@
 #include "shellapi.h"
 #include "commctrl.h"
 #endif
+#include <wx/dcclient.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

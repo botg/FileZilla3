@@ -2,6 +2,7 @@
 #include "StatusView.h"
 #include <wx/wupdlock.h>
 #include "Options.h"
+#include <wx/dcclient.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -76,7 +77,7 @@ public:
 		navEvent.SetDirection(!event.ShiftDown());
 		navEvent.SetFromTab(true);
 		navEvent.ResumePropagation(1);
-		parent->ProcessEvent(navEvent);
+		parent->GetEventHandler()->ProcessEvent(navEvent);
 	}
 #endif
 };

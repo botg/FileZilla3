@@ -8,6 +8,7 @@
 #ifdef __WXGTK__
 #include "cursor_resetter.h"
 #endif
+#include <wx/dcclient.h>
 
 static const int statbarWidths[3] = {
 	-3, 0, 35
@@ -155,11 +156,8 @@ void wxStatusBarEx::OnSize(wxSizeEvent& event)
 void wxStatusBarEx::SetStatusText(const wxString& text, int number /*=0*/)
 {
 	// Basically identical to the wx one, but not calling Update
-	wxString oldText = m_statusStrings[number];
-	if (oldText != text)
+	if (m_panes[number].SetText(text))
 	{
-		m_statusStrings[number] = text;
-
 		wxRect rect;
 		GetFieldRect(number, rect);
 

@@ -7,6 +7,7 @@
 #endif //__WXMSW__
 
 #include <wx/combobox.h>
+#include <wx/dcclient.h>
 
 #ifdef __WXMSW__
 const int border_offset = 0;
@@ -64,7 +65,7 @@ protected:
 		navEvent.SetDirection(!event.ShiftDown());
 		navEvent.SetFromTab(true);
 		navEvent.ResumePropagation(1);
-		m_parent->ProcessEvent(navEvent);
+		m_parent->GetEventHandler()->ProcessEvent(navEvent);
 	}
 
 	void OnChar(wxKeyEvent& event)

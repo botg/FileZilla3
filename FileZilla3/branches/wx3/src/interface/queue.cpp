@@ -1392,7 +1392,7 @@ void CQueueViewBase::RefreshItem(const CQueueItem* pItem)
 void CQueueViewBase::OnNavigationKey(wxNavigationKeyEvent& event)
 {
 	event.SetEventObject(m_pQueue);
-	m_pQueue->ProcessEvent(event);
+	m_pQueue->GetEventHandler()->ProcessEvent(event);
 }
 
 void CQueueViewBase::OnChar(wxKeyEvent& event)

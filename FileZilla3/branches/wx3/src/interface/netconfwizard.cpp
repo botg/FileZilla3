@@ -771,7 +771,7 @@ void CNetConfWizard::SendNextCommand()
 			wxString hexIP = ip;
 			for (unsigned int i = 0; i < hexIP.Length(); i++)
 			{
-				wxChar& c = hexIP[i];
+				wxUniCharRef c = hexIP[i];
 				if (c == '.')
 					c = '-';
 				else

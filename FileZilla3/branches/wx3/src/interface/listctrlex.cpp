@@ -52,12 +52,12 @@ wxListCtrlEx::~wxListCtrlEx()
 }
 
 #ifndef __WXMSW__
-wxScrolledWindow* wxListCtrlEx::GetMainWindow()
+wxWindow* wxListCtrlEx::GetMainWindow()
 {
 #ifdef __WXMAC__
-	return (wxScrolledWindow*)m_genericImpl->m_mainWin;
+	return (wxWindow*)m_genericImpl->m_mainWin;
 #else
-	return (wxScrolledWindow*)m_mainWin;
+	return (wxWindow*)m_mainWin;
 #endif
 }
 #endif
@@ -115,7 +115,7 @@ void wxListCtrlEx::ScrollTopItem(int item)
 	delta *= rect.GetHeight();
 	ScrollList(0, delta);
 #else
-	GetMainWindow()->Scroll(0, item);
+	Scroll(0, item);
 	EnsureVisible(item);
 #endif
 }
@@ -1004,7 +1004,7 @@ void wxListCtrlEx::OnHeaderMouse( wxMouseEvent &event )
 	if (!skip)
 	{
 		skip = true;
-		((wxWindow*)m_headerWin)->ProcessEvent(event);
+		((wxWindow*)m_headerWin)->GetEventHandler()->ProcessEvent(event);
 		((wxWindow*)m_headerWin)->wxWindowBase::SetCursor(wxNullCursor);
 		skip = false;
 	}

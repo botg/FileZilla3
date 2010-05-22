@@ -2,6 +2,9 @@
 #include <wx/aui/aui.h>
 #include "aui_notebook_ex.h"
 #include <wx/dcmirror.h>
+#ifdef __WXGTK__
+#include <wx/gtk/dc.h>
+#endif
 
 wxColor wxAuiStepColour(const wxColor& c, int ialpha);
 
@@ -10,6 +13,55 @@ wxColor wxAuiStepColour(const wxColor& c, int ialpha);
 #else
 #define TABCOLOUR wxSYS_COLOUR_WINDOWFRAME
 #endif
+
+// Local copy due to visibily=hidden
+unsigned char wxAuiBlendColour(unsigned char fg, unsigned char bg, double alpha)
+{
+	double result = bg + (alpha * (fg - bg));
+	if (result < 0.0)
+		result = 0.0;
+	if (result > 255)
+		result = 255;
+	return (unsigned char)result;
+}
+
+// Local copy due to visibily=hidden
+wxColor wxAuiStepColour(const wxColor& c, int ialpha)
+{
+	if (ialpha == 100)
+		return c;
+
+	unsigned char r = c.Red(),
+				  g = c.Green(),
+				  b = c.Blue();
+	unsigned char bg;
+
+	// ialpha is 0..200 where 0 is completely black
+	// and 200 is completely white and 100 is the same
+	// convert that to normal alpha 0.0 - 1.0
+	ialpha = wxMin(ialpha, 200);
+	ialpha = wxMax(ialpha, 0);
+	double alpha = ((double)(ialpha - 100.0))/100.0;
+
+	if (ialpha > 100)
+	{
+		// blend with white
+		bg = 255;
+		alpha = 1.0 - alpha;  // 0 = transparent fg; 1 = opaque fg
+	}
+	else
+	{
+		// blend with black
+		bg = 0;
+		alpha = 1.0 + alpha;  // 0 = transparent fg; 1 = opaque fg
+	}
+
+	r = wxAuiBlendColour(r, bg, alpha);
+	g = wxAuiBlendColour(g, bg, alpha);
+	b = wxAuiBlendColour(b, bg, alpha);
+
+	return wxColour(r, g, b);
+}
 
 // Special DC to filter some calls.
 // We can (mis)use wxMirrorDC since it already
@@ -185,7 +237,7 @@ public:
 	}
 
 #ifdef __WXGTK__
-	virtual GdkWindow* GetGDKWindow() const { return m_original_dc->GetGDKWindow(); }
+	virtual GdkWindow* GetGDKWindow() const { return ((wxGTKDCImpl*)m_original_dc->GetImpl())->GetGDKWindow(); }
 #endif
 protected:
 	int m_gradient_called;

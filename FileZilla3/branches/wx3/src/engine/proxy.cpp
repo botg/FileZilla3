@@ -109,14 +109,13 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 		}
 		else
 		{
-			challenge = 0;
 			challenge_len = 0;
 		}
 
 		// Bit oversized, but be on the safe side
 		m_pSendBuffer = new char[70 + strlen(host_raw) * 2 + 2*5 + challenge_len + 23];
 
-		if (!challenge)
+		if (!challenge_len)
 		{
 			m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%d HTTP/1.1\r\nHost: %s:%d\r\nUser-Agent: FileZilla\r\n\r\n",
 				(const char*)host_raw, port,
@@ -169,11 +168,11 @@ void CProxySocket::OnSocketEvent(CSocketEvent& event)
 	case CSocketEvent::hostaddress:
 		{
 			const wxString& address = event.GetData();
-			m_pOwner->LogMessage(Status, _("Connecting to %s..."), address.c_str()); 
+			m_pOwner->LogMessage(Status, _("Connecting to %s..."), address.wx_str());
 		}
 	case CSocketEvent::connection_next:
 		if (event.GetError())
-			m_pOwner->LogMessage(Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()).c_str()); 
+			m_pOwner->LogMessage(Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()).wx_str());
 		break;
 	case CSocketEvent::connection:
 		if (event.GetError())
@@ -306,7 +305,7 @@ void CProxySocket::OnReceive()
 			wxASSERT(end);
 			*end = 0;
 			wxString reply(m_pRecvBuffer, wxConvUTF8);
-			m_pOwner->LogMessage(Response, _("Proxy reply: %s"), reply.c_str());
+			m_pOwner->LogMessage(Response, _("Proxy reply: %s"), reply.wx_str());
 
 			if (reply.Left(10) != _T("HTTP/1.1 2") && reply.Left(10) != _T("HTTP/1.0 2"))
 			{
@@ -455,7 +454,7 @@ void CProxySocket::OnReceive()
 						break;
 					}
 
-					m_pOwner->LogMessage(Debug_Warning, _("Proxy request failed: %s"), error.c_str());
+					m_pOwner->LogMessage(Debug_Warning, _("Proxy request failed: %s"), error.wx_str());
 					m_proxyState = noconn;
 					CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED);
 					CSocketEventDispatcher::Get().SendEvent(evt);
@@ -546,7 +545,7 @@ void CProxySocket::OnReceive()
 							unsigned char *buf = (unsigned char*)m_pSendBuffer + 4;
 							int i = 0;
 							memset(buf, 0, 4);
-							for (const wxChar* p = m_host.c_str(); *p; p++)
+							for (const wxStringCharType* p = m_host.wx_str(); *p; p++)
 							{
 								const wxChar& c = *p;
 								if (c == '.')

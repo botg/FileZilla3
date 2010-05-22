@@ -218,7 +218,7 @@ void CFtpControlSocket::OnReceive()
 		{
 			if (error != EAGAIN)
 			{
-				LogMessage(::Error, _("Could not read from socket: %s"), CSocket::GetErrorDescription(error).c_str());
+				LogMessage(::Error, _("Could not read from socket: %s"), CSocket::GetErrorDescription(error).wx_str());
 				if (GetCurrentCommandId() != cmd_connect)
 					LogMessage(::Error, _("Disconnected from server"));
 				DoClose();
@@ -530,7 +530,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 			pData->loginSequence.push_back(cmd);
 		}
 		// User@host
-		t_loginCommand cmd = {false, false, user, wxString::Format(_T("USER %s@%s"), server.GetUser().c_str(), server.FormatHost().c_str())};
+		t_loginCommand cmd = {false, false, user, wxString::Format(_T("USER %s@%s"), server.GetUser().wx_str(), server.FormatHost().wx_str())};
 		pData->loginSequence.push_back(cmd);
 
 		// Password
@@ -2016,7 +2016,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 	case cwd_pwd_cwd:
 		if (code != 2 && code != 3)
 		{
-			LogMessage(Debug_Warning, _T("PWD failed, assuming path is '%s'."), pData->path.GetPath().c_str());
+			LogMessage(Debug_Warning, _T("PWD failed, assuming path is '%s'."), pData->path.GetPath().wx_str());
 			m_CurrentPath = pData->path;
 
 			if (pData->target.IsEmpty())
@@ -2084,7 +2084,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 			{
 				if (!assumedPath.IsEmpty())
 				{
-					LogMessage(Debug_Warning, _T("PWD failed, assuming path is '%s'."), assumedPath.GetPath().c_str());
+					LogMessage(Debug_Warning, _T("PWD failed, assuming path is '%s'."), assumedPath.GetPath().wx_str());
 					m_CurrentPath = assumedPath;
 
 					if (pData->target.IsEmpty())
@@ -2206,11 +2206,11 @@ int CFtpControlSocket::FileTransfer(const wxString localFile, const CServerPath 
 	if (download)
 	{
 		wxString filename = remotePath.FormatFilename(remoteFile);
-		LogMessage(Status, _("Starting download of %s"), filename.c_str());
+		LogMessage(Status, _("Starting download of %s"), filename.wx_str());
 	}
 	else
 	{
-		LogMessage(Status, _("Starting upload of %s"), localFile.c_str());
+		LogMessage(Status, _("Starting upload of %s"), localFile.wx_str());
 	}
 	if (m_pCurOpData)
 	{
@@ -2288,7 +2288,7 @@ int CFtpControlSocket::FileTransferParseResponse()
 					CServerCapabilities::SetCapability(*m_pCurrentServer, size_command, yes);
 				wxString str = m_Response.Mid(4);
 				wxFileOffset size = 0;
-				const wxChar *buf = str.c_str();
+				const wxStringCharType *buf = str.wx_str();
 				while (*buf)
 				{
 					if (*buf < '0' || *buf > '9')
@@ -2596,7 +2596,7 @@ int CFtpControlSocket::FileTransferSend()
 					if (!pFile->Open(pData->localFile, wxFile::write_append))
 					{
 						delete pFile;
-						LogMessage(::Error, _("Failed to open \"%s\" for appending/writing"), pData->localFile.c_str());
+						LogMessage(::Error, _("Failed to open \"%s\" for appending/writing"), pData->localFile.wx_str());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
@@ -2637,7 +2637,7 @@ int CFtpControlSocket::FileTransferSend()
 					if (!pFile->Open(pData->localFile, wxFile::write))
 					{
 						delete pFile;
-						LogMessage(::Error, _("Failed to open \"%s\" for writing"), pData->localFile.c_str());
+						LogMessage(::Error, _("Failed to open \"%s\" for writing"), pData->localFile.wx_str());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
@@ -2658,7 +2658,7 @@ int CFtpControlSocket::FileTransferSend()
 				if (!pFile->Open(pData->localFile, wxFile::read))
 				{
 					delete pFile;
-					LogMessage(::Error, _("Failed to open \"%s\" for reading"), pData->localFile.c_str());
+					LogMessage(::Error, _("Failed to open \"%s\" for reading"), pData->localFile.wx_str());
 					ResetOperation(FZ_REPLY_ERROR);
 					return FZ_REPLY_ERROR;
 				}
@@ -2674,7 +2674,7 @@ int CFtpControlSocket::FileTransferSend()
 						if (pFile->Seek(startOffset, wxFromStart) == wxInvalidOffset)
 						{
 							delete pFile;
-							LogMessage(::Error, _("Could not seek to offset %s within file"), wxLongLong(startOffset).ToString().c_str());
+							LogMessage(::Error, _("Could not seek to offset %s within file"), wxLongLong(startOffset).ToString().wx_str());
 							ResetOperation(FZ_REPLY_ERROR);
 							return FZ_REPLY_ERROR;
 						}
@@ -3076,7 +3076,7 @@ int CFtpControlSocket::DeleteSend()
 	wxString filename = pData->path.FormatFilename(file, pData->omitPath);
 	if (filename == _T(""))
 	{
-		LogMessage(::Error, _("Filename cannot be constructed for directory %s and filename %s"), pData->path.GetPath().c_str(), file.c_str());
+		LogMessage(::Error, _("Filename cannot be constructed for directory %s and filename %s"), pData->path.GetPath().wx_str(), file.wx_str());
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -3163,7 +3163,7 @@ int CFtpControlSocket::RemoveDir(const CServerPath& path, const wxString& subDir
 
 	if (!pData->fullPath.AddSegment(subDir))
 	{
-		LogMessage(::Error, _("Path cannot be constructed for directory %s and subdir %s"), path.GetPath().c_str(), subDir.c_str());
+		LogMessage(::Error, _("Path cannot be constructed for directory %s and subdir %s"), path.GetPath().wx_str(), subDir.wx_str());
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -3278,7 +3278,7 @@ int CFtpControlSocket::Mkdir(const CServerPath& path)
 	 */
 
 	if (!m_pCurOpData)
-		LogMessage(Status, _("Creating directory '%s'..."), path.GetPath().c_str());
+		LogMessage(Status, _("Creating directory '%s'..."), path.GetPath().wx_str());
 
 	CMkdirOpData *pData = new CMkdirOpData;
 	pData->path = path;
@@ -3509,7 +3509,7 @@ int CFtpControlSocket::Rename(const CRenameCommand& command)
 		return FZ_REPLY_ERROR;
 	}
 
-	LogMessage(Status, _("Renaming '%s' to '%s'"), command.GetFromPath().FormatFilename(command.GetFromFile()).c_str(), command.GetToPath().FormatFilename(command.GetToFile()).c_str());
+	LogMessage(Status, _("Renaming '%s' to '%s'"), command.GetFromPath().FormatFilename(command.GetFromFile()).wx_str(), command.GetToPath().FormatFilename(command.GetToFile()).wx_str());
 
 	CFtpRenameOpData *pData = new CFtpRenameOpData(command);
 	pData->opState = rename_rnfrom;
@@ -3661,7 +3661,7 @@ int CFtpControlSocket::Chmod(const CChmodCommand& command)
 		return FZ_REPLY_ERROR;
 	}
 
-	LogMessage(Status, _("Set permissions of '%s' to '%s'"), command.GetPath().FormatFilename(command.GetFile()).c_str(), command.GetPermission().c_str());
+	LogMessage(Status, _("Set permissions of '%s' to '%s'"), command.GetPath().FormatFilename(command.GetFile()).wx_str(), command.GetPermission().wx_str());
 
 	CFtpChmodOpData *pData = new CFtpChmodOpData(command);
 	pData->opState = chmod_chmod;
@@ -3831,13 +3831,13 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 		if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || pData->bTriedActive)
 		{
 			LogMessage(Status, _("Server sent passive reply with unroutable address. Using server address instead."));
-			LogMessage(Debug_Info, _T("  Reply: %s, peer: %s"), pData->host.c_str(), peerIP.c_str());
+			LogMessage(Debug_Info, _T("  Reply: %s, peer: %s"), pData->host.wx_str(), peerIP.wx_str());
 			pData->host = peerIP;
 		}
 		else
 		{
 			LogMessage(Status, _("Server sent passive reply with unroutable address. Passive mode failed."));
-			LogMessage(Debug_Info, _T("  Reply: %s, peer: %s"), pData->host.c_str(), peerIP.c_str());
+			LogMessage(Debug_Info, _T("  Reply: %s, peer: %s"), pData->host.wx_str(), peerIP.wx_str());
 			return false;
 		}
 	}
@@ -3894,7 +3894,7 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 
 				wxString resolverAddress = m_pEngine->GetOptions()->GetOption(OPTION_EXTERNALIPRESOLVER);
 
-				LogMessage(::Debug_Info, _("Retrieving external IP address from %s"), resolverAddress.c_str());
+				LogMessage(::Debug_Info, _("Retrieving external IP address from %s"), resolverAddress.wx_str());
 
 				m_pIPResolver = new CExternalIPResolver(this);
 				m_pIPResolver->GetExternalIP(resolverAddress, CSocket::ipv4);
@@ -4365,7 +4365,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 			return FZ_REPLY_ERROR;
 		}
 
-		LogMessage(Status, _("Using proxy %s"), m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_HOST).c_str());
+		LogMessage(Status, _("Using proxy %s"), m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_HOST).wx_str());
 	}
 	else
 	{

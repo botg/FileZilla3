@@ -355,7 +355,7 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 {
 	LogMessage(Debug_Verbose, _T("CHttpControlSocket::FileTransfer()"));
 
-	LogMessage(Status, _("Downloading %s"), remotePath.FormatFilename(remoteFile).c_str());
+	LogMessage(Status, _("Downloading %s"), remotePath.FormatFilename(remoteFile).wx_str());
 
 	if (!download)
 	{
@@ -388,7 +388,7 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 
 		if (!pData->pFile->Open(pData->localFile, wxFile::write))
 		{
-			LogMessage(::Error, _("Failed to open \"%s\" for writing"), pData->localFile.c_str());
+			LogMessage(::Error, _("Failed to open \"%s\" for writing"), pData->localFile.wx_str());
 			ResetOperation(FZ_REPLY_ERROR);
 			return FZ_REPLY_ERROR;
 		}
@@ -445,7 +445,7 @@ int CHttpControlSocket::FileTransferSend()
 
 		if (!pData->pFile->Open(pData->localFile, wxFile::write))
 		{
-			LogMessage(::Error, _("Failed to open \"%s\" for writing"), pData->localFile.c_str());
+			LogMessage(::Error, _("Failed to open \"%s\" for writing"), pData->localFile.wx_str());
 			ResetOperation(FZ_REPLY_ERROR);
 			return FZ_REPLY_ERROR;
 		}
@@ -460,10 +460,10 @@ int CHttpControlSocket::FileTransferSend()
 	if (pData->m_newLocation == _T(""))
 	{
 		if (m_pCurrentServer->GetProtocol() == HTTPS)
-			location = _T("https://") + m_pCurrentServer->FormatHost() + pData->remotePath.FormatFilename(pData->remoteFile).c_str();
+			location = _T("https://") + m_pCurrentServer->FormatHost() + pData->remotePath.FormatFilename(pData->remoteFile);
 		else
-			location = _T("http://") + m_pCurrentServer->FormatHost() + pData->remotePath.FormatFilename(pData->remoteFile).c_str();
-		hostWithPort = wxString::Format(_T("%s:%d"), m_pCurrentServer->FormatHost(true).c_str(), m_pCurrentServer->GetPort());
+			location = _T("http://") + m_pCurrentServer->FormatHost() + pData->remotePath.FormatFilename(pData->remoteFile);
+		hostWithPort = wxString::Format(_T("%s:%d"), m_pCurrentServer->FormatHost(true).wx_str(), m_pCurrentServer->GetPort());
 	}
 	else
 	{
@@ -471,10 +471,10 @@ int CHttpControlSocket::FileTransferSend()
 		hostWithPort = pData->m_newHostWithPort;
 	}
 
-	wxString action = wxString::Format(_T("GET %s HTTP/1.1"), location.c_str());
+	wxString action = wxString::Format(_T("GET %s HTTP/1.1"), location.wx_str());
 	LogMessageRaw(Command, action);
 
-	wxString command = wxString::Format(_T("%s\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n\r\n"), action.c_str(), hostWithPort.c_str(), wxString(PACKAGE_STRING, wxConvLocal).c_str());
+	wxString command = wxString::Format(_T("%s\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n\r\n"), action.wx_str(), hostWithPort.wx_str(), wxString(PACKAGE_STRING, wxConvLocal).wx_str());
 
 	const wxWX2MBbuf str = command.mb_str();
 	if (!Send(str, strlen(str)))
@@ -494,7 +494,7 @@ int CHttpControlSocket::InternalConnect(wxString host, unsigned short port, bool
 	pData->tls = tls;
 
 	if (!IsIpAddress(host))
-		LogMessage(Status, _("Resolving address of %s"), host.c_str());
+		LogMessage(Status, _("Resolving address of %s"), host.wx_str());
 
 	pData->host = host;
 	return DoInternalConnect();
@@ -563,7 +563,7 @@ int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 
 		if (pData->pFile->Write(p, len) != len)
 		{
-			LogMessage(::Error, _("Failed to write to file %s"), pData->localFile.c_str());
+			LogMessage(::Error, _("Failed to write to file %s"), pData->localFile.wx_str());
 			ResetOperation(FZ_REPLY_ERROR);
 			return FZ_REPLY_ERROR;
 		}
@@ -716,7 +716,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
-					pData->m_newHostWithPort = wxString::Format(_T("%s:%d"), host.c_str(), (int)port);
+					pData->m_newHostWithPort = wxString::Format(_T("%s:%d"), host.wx_str(), (int)port);
 
 					// International domain names
 					host = ConvertDomainName(host);
@@ -769,7 +769,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 				{
 					if (*p < '0' || *p > '9')
 					{
-						LogMessage(::Error, _("Malformed header: %s"), _("Invalid Content-Length"));
+						LogMessage(::Error, _("Malformed header: %s"), _("Invalid Content-Length").wx_str());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
@@ -824,7 +824,7 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 			{
 				if (p[i + 1] != '\n')
 				{
-					LogMessage(::Error, _("Malformed chunk data: %s"), _("Wrong line endings"));
+					LogMessage(::Error, _("Malformed chunk data: %s"), _("Wrong line endings").wx_str());
 					ResetOperation(FZ_REPLY_ERROR);
 					return FZ_REPLY_ERROR;
 				}
@@ -836,7 +836,7 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 			if (len == m_recvBufferLen)
 			{
 				// We don't support lines larger than 4096
-				LogMessage(::Error, _("Malformed chunk data: %s"), _("Line length exceeded"));
+				LogMessage(::Error, _("Malformed chunk data: %s"), _("Line length exceeded").wx_str());
 				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
 			}
@@ -851,7 +851,7 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 			{
 				// The chunk data has to end with CRLF. If i is nonzero,
 				// it didn't end with just CRLF.
-				LogMessage(::Error, _("Malformed chunk data: %s"), _("Chunk data improperly terminated"));
+				LogMessage(::Error, _("Malformed chunk data: %s"), _("Chunk data improperly terminated").wx_str());
 				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
 			}
@@ -893,7 +893,7 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 				else
 				{
 					// Invalid size
-					LogMessage(::Error, _("Malformed chunk data: %s"), _("Invalid chunk size"));
+					LogMessage(::Error, _("Malformed chunk data: %s"), _("Invalid chunk size").wx_str());
 					ResetOperation(FZ_REPLY_ERROR);
 					return FZ_REPLY_ERROR;
 				}
@@ -950,7 +950,7 @@ void CHttpControlSocket::OnClose(int error)
 
 	if (error)
 	{
-		LogMessage(::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error).c_str());
+		LogMessage(::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error).wx_str());
 		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 		return;
 	}

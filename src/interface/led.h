@@ -10,12 +10,16 @@ public:
 
 	void Ping();
 
+	void SetEngine(CFileZillaEngine* pEngine);
+
 protected:
 	void Set();
 	void Unset();
 
 	int m_index;
 	int m_ledState;
+
+	CFileZillaEngine* m_pEngine;
 
 	wxBitmap m_leds[2];
 	bool m_loaded;

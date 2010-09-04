@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "transfersocket.h"
 #include "ftpcontrolsocket.h"
 #include "directorylistingparser.h"
@@ -287,12 +287,7 @@ void CTransferSocket::OnReceive()
 
 			if (numread > 0)
 			{
-				if (!m_pDirectoryListingParser->AddData(pBuffer, numread))
-				{
-					TransferEnd(transfer_failure);
-					return;
-				}
-
+				m_pDirectoryListingParser->AddData(pBuffer, numread);
 				m_pEngine->SetActive(CFileZillaEngine::recv);
 				if (!m_madeProgress)
 				{

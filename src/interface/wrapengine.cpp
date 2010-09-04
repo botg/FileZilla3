@@ -1,13 +1,11 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "wrapengine.h"
+#include <wx/wizard.h>
 #include "filezillaapp.h"
 #include "ipcmutex.h"
 #include "xmlfunctions.h"
 #include "buildinfo.h"
 #include "Options.h"
-
-#include <wx/statbox.h>
-#include <wx/wizard.h>
 
 bool CWrapEngine::m_use_cache = true;
 
@@ -802,7 +800,7 @@ int CWrapEngine::GetWidthFromCache(const char* name)
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("layout.xml"));
 	TiXmlElement* pDocument = GetXmlFile(file);
 
 	if (!pDocument)
@@ -852,7 +850,7 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("layout.xml"));
 	TiXmlElement* pDocument = GetXmlFile(file);
 
 	if (!pDocument)
@@ -879,7 +877,7 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 	TiXmlElement* pDialog = FindElementWithAttribute(pLanguage, "Dialog", "name", name);
 	if (!pDialog)
 	{
-		pDialog = pLanguage->LinkEndChild(new TiXmlElement("Dialog"))->ToElement();
+		pDialog = pLanguage->InsertEndChild(TiXmlElement("Dialog"))->ToElement();
 		pDialog->SetAttribute("name", name);
 	}
 
@@ -935,7 +933,7 @@ bool CWrapEngine::LoadCache()
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("layout.xml"));
 	CXmlFile xml(file);
 	TiXmlElement* pDocument = xml.Load();
 
@@ -951,7 +949,7 @@ bool CWrapEngine::LoadCache()
 
 	TiXmlElement* pElement = pDocument->FirstChildElement("Layout");
 	if (!pElement)
-		pElement = pDocument->LinkEndChild(new TiXmlElement("Layout"))->ToElement();
+		pElement = pDocument->InsertEndChild(TiXmlElement("Layout"))->ToElement();
 
 	const wxString buildDate = CBuildInfo::GetBuildDateString();
 	if (GetTextAttribute(pElement, "Builddate") != buildDate)
@@ -972,7 +970,7 @@ bool CWrapEngine::LoadCache()
 
 	TiXmlElement* pResources = pElement->FirstChildElement("Resources");
 	if (!pResources)
-		pResources = pElement->LinkEndChild(new TiXmlElement("Resources"))->ToElement();
+		pResources = pElement->InsertEndChild(TiXmlElement("Resources"))->ToElement();
 
 	wxString resourceDir = wxGetApp().GetResourceDir();
 	wxDir dir(resourceDir);
@@ -992,7 +990,7 @@ bool CWrapEngine::LoadCache()
 		TiXmlElement* resourceElement = FindElementWithAttribute(pResources, "xrc", "file", xrc.mb_str());
 		if (!resourceElement)
 		{
-			resourceElement = pResources->LinkEndChild(new TiXmlElement("xrc"))->ToElement();
+			resourceElement = pResources->InsertEndChild(TiXmlElement("xrc"))->ToElement();
 			resourceElement->SetAttribute("file", xrc.mb_str());
 			resourceElement->SetAttribute("date", ticks.ToString().mb_str());
 			cacheValid = false;
@@ -1028,7 +1026,7 @@ bool CWrapEngine::LoadCache()
 	TiXmlElement* languageElement = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
 	if (!languageElement)
 	{
-		languageElement = pElement->LinkEndChild(new TiXmlElement("Language"))->ToElement();
+		languageElement = pElement->InsertEndChild(TiXmlElement("Language"))->ToElement();
 		languageElement->SetAttribute("id", language.mb_str());
 	}
 
@@ -1042,7 +1040,7 @@ bool CWrapEngine::LoadCache()
 
 	TiXmlElement* pFontElement = languageElement->FirstChildElement("Font");
 	if (!pFontElement)
-		pFontElement = languageElement->LinkEndChild(new TiXmlElement("Font"))->ToElement();
+		pFontElement = languageElement->InsertEndChild(TiXmlElement("Font"))->ToElement();
 
 	if (GetTextAttribute(pFontElement, "font") != fontDesc)
 	{
@@ -1089,7 +1087,7 @@ bool CWrapEngine::LoadCache()
 			languageElement->RemoveChild(dialog);
 	}
 
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+	if (COptions::Get()->GetDefaultVal(DEFAULT_KIOSKMODE) == 2)
 	{
 		m_use_cache = cacheValid;
 		return true;
@@ -1114,7 +1112,7 @@ void CWrapEngine::ClearCache()
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("layout.xml"));
 	if (file.FileExists())
 		wxRemoveFile(file.GetFullPath());
 }

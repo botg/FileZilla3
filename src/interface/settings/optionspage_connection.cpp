@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "../Options.h"
 #include "settingsdialog.h"
 #include "optionspage.h"
@@ -20,8 +20,9 @@ bool COptionsPageConnection::LoadPage()
 
 bool COptionsPageConnection::SavePage()
 {
-	SetIntOptionFromText(XRCID("ID_RETRIES"), OPTION_RECONNECTCOUNT);
-	SetIntOptionFromText(XRCID("ID_RETRYDELAY"), OPTION_RECONNECTDELAY);
+	long tmp;
+	GetText(XRCID("ID_RETRIES")).ToLong(&tmp); m_pOptions->SetOption(OPTION_RECONNECTCOUNT, tmp);
+	GetText(XRCID("ID_RETRYDELAY")).ToLong(&tmp); m_pOptions->SetOption(OPTION_RECONNECTDELAY, tmp);
 	SetOptionFromText(XRCID("ID_TIMEOUT"), OPTION_TIMEOUT);
 	return true;
 }

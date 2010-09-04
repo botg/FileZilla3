@@ -56,7 +56,11 @@ public:
 	void FinishTransfer(bool successful, const wxString& fileName);
 	void FinishTransfer(bool successful, const wxString& fileName, const CServerPath& remotePath, const CServer& server);
 
-	void CheckForModifications(bool emitEvent = false);
+	void CheckForModifications(
+#ifdef __WXMAC__
+			bool emitEvent = false
+#endif
+		);
 
 	void SetQueue(CQueueView* pQueue) { m_pQueue = pQueue; }
 
@@ -90,7 +94,7 @@ public:
 	// Returns command to open the file. If association is set but
 	// program does not exist, program_exists is set to false.
 	wxString GetOpenCommand(const wxString& file, bool& program_exists);
-	wxString GetSystemOpenCommand(wxString file, bool &program_exists);
+	wxString GetSystemOpenCommand(const wxString& file, bool &program_exists);
 
 protected:
 	CEditHandler();
@@ -118,8 +122,7 @@ protected:
 	CQueueView* m_pQueue;
 
 	wxTimer m_timer;
-	wxTimer m_busyTimer;
-	
+
 	void RemoveTemporaryFiles(const wxString& temp);
 
 	wxString GetTemporaryFile(wxString name);
@@ -136,15 +139,15 @@ protected:
 
 	DECLARE_EVENT_TABLE()
 	void OnTimerEvent(wxTimerEvent& event);
+#ifdef __WXMAC__
 	void OnChangedFileEvent(wxCommandEvent& event);
+#endif
 };
 
-class CWindowStateManager;
 class CEditHandlerStatusDialog : protected wxDialogEx
 {
 public:
 	CEditHandlerStatusDialog(wxWindow* parent);
-	virtual ~CEditHandlerStatusDialog();
 
 	virtual int ShowModal();
 
@@ -154,8 +157,6 @@ protected:
 	CEditHandler::t_fileData* GetDataFromItem(int item, CEditHandler::fileType &type);
 
 	wxWindow* m_pParent;
-
-	CWindowStateManager* m_pWindowStateManager;
 
 	DECLARE_EVENT_TABLE()
 	void OnSelectionChanged(wxListEvent& event);

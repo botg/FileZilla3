@@ -3,7 +3,6 @@
 
 #include "systemimagelist.h"
 #include "state.h"
-#include "treectrlex.h"
 
 class CQueueView;
 
@@ -11,7 +10,7 @@ class CQueueView;
 class CVolumeDescriptionEnumeratorThread;
 #endif
 
-class CLocalTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler
+class CLocalTreeView : public wxTreeCtrl, CSystemImageList, CStateEventHandler
 {
 	DECLARE_CLASS(CLocalTreeView)
 
@@ -27,7 +26,7 @@ public:
 #endif
 
 protected:
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(enum t_statechange_notifications notification, const wxString& data);
 
 	void SetDir(wxString localDir);
 	void Refresh();
@@ -55,9 +54,6 @@ protected:
 
 	DECLARE_EVENT_TABLE()
 	void OnItemExpanding(wxTreeEvent& event);
-#ifdef __WXMSW__
-	void OnSelectionChanging(wxTreeEvent& event);
-#endif
 	void OnSelectionChanged(wxTreeEvent& event);
 	void OnBeginDrag(wxTreeEvent& event);
 #ifndef __WXMSW__
@@ -74,7 +70,6 @@ protected:
 	void OnBeginLabelEdit(wxTreeEvent& event);
 	void OnEndLabelEdit(wxTreeEvent& event);
 	void OnChar(wxKeyEvent& event);
-	void OnMenuOpen(wxCommandEvent& event);
 
 #ifdef __WXMSW__
 	// React to changed drive letters
@@ -86,8 +81,59 @@ protected:
 
 	CQueueView* m_pQueueView;
 
+	bool m_setSelection;
+
 	wxTreeItemId m_contextMenuItem;
 	wxTreeItemId m_dropHighlight;
 };
+
+#ifdef __WXMSW__
+
+DECLARE_EVENT_TYPE(fzEVT_VOLUMESENUMERATED, -1)
+
+// Windows has this very strange concept of drive letters (nowadays called
+// volumes), even if the drive isn't mounted (in the sense of no media
+// inserted).
+// This can result in a long seek time if trying to enumerate the volume
+// labels, especially with legacy floppy drives (why are people still using
+// them?)
+// Since the local directory including the drives is populated at startup,
+// use a background thread to obtain the labels.
+class CVolumeDescriptionEnumeratorThread : protected wxThreadEx
+{
+public:
+	CVolumeDescriptionEnumeratorThread(wxEvtHandler* pEvtHandler);
+	virtual ~CVolumeDescriptionEnumeratorThread();
+
+	bool Failed() const { return m_failure; }
+
+	struct t_VolumeInfo
+	{
+		wxString volume;
+		wxString volumeName;
+	};
+
+	std::list<t_VolumeInfo> GetVolumes();
+
+protected:
+	bool GetDrives();
+	virtual ExitCode Entry();
+
+	wxEvtHandler* m_pEvtHandler;
+
+	bool m_failure;
+	bool m_stop;
+	bool m_running;
+
+	struct t_VolumeInfoInternal
+	{
+		wxChar* pVolume;
+		wxChar* pVolumeName;
+	};
+
+	std::list<t_VolumeInfoInternal> m_volumeInfo;
+};
+
+#endif
 
 #endif

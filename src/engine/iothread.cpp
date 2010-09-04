@@ -1,8 +1,5 @@
-#include <filezilla.h>
-
+#include "FileZilla.h"
 #include "iothread.h"
-
-#include <wx/log.h>
 
 const wxEventType fzEVT_IOTHREAD = wxNewEventType();
 

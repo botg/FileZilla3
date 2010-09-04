@@ -1,21 +1,18 @@
-#include <filezilla.h>
-
+#include "FileZilla.h"
 #include "asyncrequestqueue.h"
-#include "defaultfileexistsdlg.h"
 #include "fileexistsdlg.h"
-#include "loginmanager.h"
 #include "Mainfrm.h"
+#include "defaultfileexistsdlg.h"
 #include "Options.h"
 #include "queue.h"
 #include "verifycertdialog.h"
-#include "verifyhostkeydialog.h"
+#include "loginmanager.h"
 
 DECLARE_EVENT_TYPE(fzEVT_PROCESSASYNCREQUESTQUEUE, -1)
 DEFINE_EVENT_TYPE(fzEVT_PROCESSASYNCREQUESTQUEUE)
 
 BEGIN_EVENT_TABLE(CAsyncRequestQueue, wxEvtHandler)
 EVT_COMMAND(wxID_ANY, fzEVT_PROCESSASYNCREQUESTQUEUE, CAsyncRequestQueue::OnProcessQueue)
-EVT_TIMER(wxID_ANY, CAsyncRequestQueue::OnTimer)
 END_EVENT_TABLE()
 
 CAsyncRequestQueue::CAsyncRequestQueue(CMainFrame *pMainFrame)
@@ -23,8 +20,6 @@ CAsyncRequestQueue::CAsyncRequestQueue(CMainFrame *pMainFrame)
 	m_pMainFrame = pMainFrame;
 	m_pQueueView = 0;
 	m_pVerifyCertDlg = new CVerifyCertDialog;
-	m_inside_request = false;
-	m_timer.SetOwner(this);
 }
 
 CAsyncRequestQueue::~CAsyncRequestQueue()
@@ -73,22 +68,6 @@ bool CAsyncRequestQueue::ProcessDefaults(CFileZillaEngine *pEngine, CAsyncReques
 
 			return true;
 		}
-	case reqId_hostkey:
-	case reqId_hostkeyChanged:
-		{
-			CHostKeyNotification *pHostKeyNotification = reinterpret_cast<CHostKeyNotification *>(pNotification);
-
-			if (!CVerifyHostkeyDialog::IsTrusted(pHostKeyNotification))
-				break;
-			
-			pHostKeyNotification->m_trust = true;
-			pHostKeyNotification->m_alwaysTrust = false;
-
-			pEngine->SetAsyncRequestReply(pNotification);
-			delete pNotification;
-
-			return true;
-		}
 	case reqId_certificate:
 		{
 			CCertificateNotification* pCertNotification = reinterpret_cast<CCertificateNotification *>(pNotification);
@@ -132,10 +111,10 @@ bool CAsyncRequestQueue::AddRequest(CFileZillaEngine *pEngine, CAsyncRequestNoti
 	return true;
 }
 
-bool CAsyncRequestQueue::ProcessNextRequest()
+void CAsyncRequestQueue::ProcessNextRequest()
 {
 	if (m_requestList.empty())
-		return true;
+		return;
 
 	t_queueEntry &entry = m_requestList.front();
 
@@ -143,9 +122,9 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 	{
 		delete entry.pNotification;
 		m_requestList.pop_front();
-		return true;
+		return;
 	}
-
+		
 	if (entry.pNotification->GetRequestID() == reqId_fileexists)
 	{
 		CFileExistsNotification *pNotification = reinterpret_cast<CFileExistsNotification *>(entry.pNotification);
@@ -165,9 +144,6 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 
 		if (action == CFileExistsNotification::ask)
 		{
-			if (!CheckWindowState())
-				return false;
-
 			CFileExistsDlg dlg(pNotification);
 			dlg.Create(m_pMainFrame);
 			int res = dlg.ShowModal();
@@ -236,9 +212,6 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 		{
 		case CFileExistsNotification::rename:
 			{
-				if (!CheckWindowState())
-					return false;
-
 				wxString msg;
 				wxString defaultName;
 				if (pNotification->download)
@@ -280,14 +253,6 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 						{
 							pNotification->overwriteAction = CFileExistsNotification::rename;
 							pNotification->newName = dlg.GetValue();
-
-							// If request got processed successfully, notify queue about filename change
-							if (entry.pEngine->SetAsyncRequestReply(entry.pNotification) && m_pQueueView)
-								m_pQueueView->RenameFileInTransfer(entry.pEngine, dlg.GetValue(), pNotification->download);
-							delete pNotification;
-
-							// Jump near end of function
-							goto ProcessNextRequest_done;
 						}
 					}
 					else
@@ -308,45 +273,43 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 	{
 		CInteractiveLoginNotification* pNotification = reinterpret_cast<CInteractiveLoginNotification*>(entry.pNotification);
 
-		if (CLoginManager::Get().GetPassword(pNotification->server, true, _T(""), pNotification->GetChallenge()))
+		if (CLoginManager::Get().GetPassword(pNotification->server, false, _T(""), pNotification->GetChallenge()))
 			pNotification->passwordSet = true;
-		else
-		{
-			// Retry with prompt
-
-			if (!CheckWindowState())
-				return false;
-
-			if (CLoginManager::Get().GetPassword(pNotification->server, false, _T(""), pNotification->GetChallenge()))
-				pNotification->passwordSet = true;
-		}
 
 		entry.pEngine->SetAsyncRequestReply(pNotification);
 		delete pNotification;
 	}
 	else if (entry.pNotification->GetRequestID() == reqId_hostkey || entry.pNotification->GetRequestID() == reqId_hostkeyChanged)
 	{
-		if (!CheckWindowState())
-			return false;
-
 		CHostKeyNotification *pNotification = reinterpret_cast<CHostKeyNotification *>(entry.pNotification);
 
-		if (CVerifyHostkeyDialog::IsTrusted(pNotification))
+		wxDialogEx* pDlg = new wxDialogEx;
+		if (pNotification->GetRequestID() == reqId_hostkey)
+			pDlg->Load(m_pMainFrame, _T("ID_HOSTKEY"));
+		else
+			pDlg->Load(m_pMainFrame, _T("ID_HOSTKEYCHANGED"));
+
+		pDlg->WrapText(pDlg, XRCID("ID_DESC"), 400);
+
+		pDlg->SetLabel(XRCID("ID_HOST"), wxString::Format(_T("%s:%d"), pNotification->GetHost().c_str(), pNotification->GetPort()));
+		pDlg->SetLabel(XRCID("ID_FINGERPRINT"), pNotification->GetFingerprint());
+
+		pDlg->GetSizer()->Fit(pDlg);
+		pDlg->GetSizer()->SetSizeHints(pDlg);
+
+		int res = pDlg->ShowModal();
+
+		if (res == wxID_OK)
 		{
 			pNotification->m_trust = true;
-			pNotification->m_alwaysTrust = false;
+			pNotification->m_alwaysTrust = XRCCTRL(*pDlg, "ID_ALWAYS", wxCheckBox)->GetValue();
 		}
-		else
-			CVerifyHostkeyDialog::ShowVerificationDialog(m_pMainFrame, pNotification);
 
 		entry.pEngine->SetAsyncRequestReply(pNotification);
 		delete pNotification;
 	}
 	else if (entry.pNotification->GetRequestID() == reqId_certificate)
 	{
-		if (!CheckWindowState())
-			return false;
-
 		CCertificateNotification* pNotification = reinterpret_cast<CCertificateNotification *>(entry.pNotification);
 
 		m_pVerifyCertDlg->ShowVerificationDialog(pNotification);
@@ -360,11 +323,8 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 		delete entry.pNotification;
 	}
 
-ProcessNextRequest_done:
 	RecheckDefaults();
 	m_requestList.pop_front();
-
-	return true;
 }
 
 void CAsyncRequestQueue::ClearPending(const CFileZillaEngine *pEngine)
@@ -412,62 +372,11 @@ void CAsyncRequestQueue::SetQueue(CQueueView *pQueue)
 
 void CAsyncRequestQueue::OnProcessQueue(wxCommandEvent &event)
 {
-	if (m_inside_request)
-		return;
+	ProcessNextRequest();
 
-	m_inside_request = true;
-	bool success = ProcessNextRequest();
-	m_inside_request = false;
-
-	if (success && !m_requestList.empty())
+	if (!m_requestList.empty())
 	{
 		wxCommandEvent evt(fzEVT_PROCESSASYNCREQUESTQUEUE);
 		wxPostEvent(this, evt);
 	}
 }
-
-void CAsyncRequestQueue::TriggerProcessing()
-{
-	if (m_inside_request)
-		return;
-
-	wxCommandEvent evt(fzEVT_PROCESSASYNCREQUESTQUEUE);
-	wxPostEvent(this, evt);
-}
-
-bool CAsyncRequestQueue::CheckWindowState()
-{
-	m_timer.Stop();
-	wxMouseState mouseState = wxGetMouseState();
-	if (mouseState.LeftDown() || mouseState.MiddleDown() || mouseState.RightDown())
-	{
-		m_timer.Start(1000, true);
-		return false;
-	}
-
-#ifndef __WXMAC__
-	if (m_pMainFrame->IsIconized())
-	{
-#ifndef __WXGTK__
-		m_pMainFrame->Show();
-		m_pMainFrame->Iconize(true);
-		m_pMainFrame->RequestUserAttention();
-#endif
-		return false;
-	}
-
-	wxWindow* pFocus = m_pMainFrame->FindFocus();
-	while (pFocus && pFocus != m_pMainFrame)
-		pFocus = pFocus->GetParent();
-	if (!pFocus)
-		m_pMainFrame->RequestUserAttention();
-#endif
-
-	return true;
-}
-
-void CAsyncRequestQueue::OnTimer(wxTimerEvent& event)
-{
-	TriggerProcessing();
-}
-

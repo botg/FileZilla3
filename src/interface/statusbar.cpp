@@ -1,15 +1,13 @@
-#include <filezilla.h>
-#include "Options.h"
-#include "sftp_crypt_info_dlg.h"
-#include "sizeformatting.h"
-#include "speedlimits_dialog.h"
+#include "FileZilla.h"
 #include "statusbar.h"
+#include "Options.h"
 #include "verifycertdialog.h"
+#include "sftp_crypt_info_dlg.h"
 
-static const int statbarWidths[3] = {
-	-3, 0, 35
+static const int statbarWidths[5] = {
+	-3, 40, 20, 0, 35
 };
-#define FIELD_QUEUESIZE 1
+#define FIELD_QUEUESIZE 3
 
 BEGIN_EVENT_TABLE(wxStatusBarEx, wxStatusBar)
 EVT_SIZE(wxStatusBarEx::OnSize)
@@ -124,6 +122,45 @@ int wxStatusBarEx::GetFieldIndex(int field)
 	return field;
 }
 
+void wxStatusBarEx::AddChild(int field, wxWindow* pChild, int cx)
+{
+	t_statbar_child data;
+	data.field = GetFieldIndex(field);
+	data.pChild = pChild;
+	data.cx = cx;
+
+	m_children.push_back(data);
+
+	PositionChild(data);
+}
+
+void wxStatusBarEx::RemoveChild(int field, wxWindow* pChild)
+{
+	field = GetFieldIndex(field);
+
+	for (std::list<struct t_statbar_child>::iterator iter = m_children.begin(); iter != m_children.end(); iter++)
+	{
+		if (pChild != iter->pChild)
+			continue;
+
+		if (field != iter->field)
+			continue;
+
+		m_children.erase(iter);
+		break;
+	}
+}
+
+void wxStatusBarEx::PositionChild(const struct wxStatusBarEx::t_statbar_child& data)
+{
+	const wxSize size = data.pChild->GetSize();
+
+	wxRect rect;
+	GetFieldRect(data.field, rect);
+
+	data.pChild->SetSize(rect.x + data.cx, rect.GetTop() + (rect.GetHeight() - size.x + 1) / 2, -1, -1);
+}
+
 void wxStatusBarEx::OnSize(wxSizeEvent& event)
 {
 #ifdef __WXMSW__
@@ -146,6 +183,14 @@ void wxStatusBarEx::OnSize(wxSizeEvent& event)
 		}
 	}
 #endif
+
+	for (std::list<struct t_statbar_child>::iterator iter = m_children.begin(); iter != m_children.end(); iter++)
+		PositionChild(*iter);
+
+#ifdef __WXMSW__
+	if (GetLayoutDirection() != wxLayout_RightToLeft)
+		Update();
+#endif
 }
 
 #ifdef __WXGTK__
@@ -164,103 +209,6 @@ void wxStatusBarEx::SetStatusText(const wxString& text, int number /*=0*/)
 	}
 }
 #endif
-
-int wxStatusBarEx::GetGripperWidth()
-{
-#if defined(__WXMSW__)
-	return m_pParent->IsMaximized() ? 0 : 6;
-#elif defined(__WXGTK__)
-	return 15;
-#else
-	return 0;
-#endif
-}
-
-
-
-BEGIN_EVENT_TABLE(CWidgetsStatusBar, wxStatusBarEx)
-EVT_SIZE(CWidgetsStatusBar::OnSize)
-END_EVENT_TABLE()
-
-CWidgetsStatusBar::CWidgetsStatusBar(wxTopLevelWindow* parent)
-	: wxStatusBarEx(parent)
-{
-}
-
-CWidgetsStatusBar::~CWidgetsStatusBar()
-{
-}
-
-void CWidgetsStatusBar::OnSize(wxSizeEvent& event)
-{
-	wxStatusBarEx::OnSize(event);
-
-	for (int i = 0; i < GetFieldsCount(); i++)
-		PositionChildren(i);
-
-#ifdef __WXMSW__
-	if (GetLayoutDirection() != wxLayout_RightToLeft)
-		Update();
-#endif
-}
-
-void CWidgetsStatusBar::AddChild(int field, int idx, wxWindow* pChild)
-{
-	field = GetFieldIndex(field);
-
-	t_statbar_child data;
-	data.field = field;
-	data.pChild = pChild;
-
-	m_children[idx] = data;
-
-	PositionChildren(field);
-}
-
-void CWidgetsStatusBar::RemoveChild(int idx)
-{
-	std::map<int, struct t_statbar_child>::iterator iter = m_children.find(idx);
-	if (iter != m_children.end())
-	{
-		int field = iter->second.field;
-		m_children.erase(iter);
-		PositionChildren(field);
-	}
-}
-
-void CWidgetsStatusBar::PositionChildren(int field)
-{
-	wxRect rect;
-	GetFieldRect(field, rect);
-	
-	int offset = 2;
-
-	if (field + 1 == GetFieldsCount())
-	{
-		rect.SetWidth(m_columnWidths[field]);	
-		offset += 5 + GetGripperWidth();
-	}
-
-	for (std::map<int, struct t_statbar_child>::iterator iter = m_children.begin(); iter != m_children.end(); iter++)
-	{
-		if (iter->second.field != field)
-			continue;
-
-		const wxSize size = iter->second.pChild->GetSize();
-		int position = rect.GetRight() - size.x - offset;
-
-		iter->second.pChild->SetSize(position, rect.GetTop() + (rect.GetHeight() - size.y + 1) / 2, -1, -1);
-
-		offset += size.x + 3;
-	}
-}
-
-void CWidgetsStatusBar::SetFieldWidth(int field, int width)
-{
-	wxStatusBarEx::SetFieldWidth(field, width);
-	for (int i = 0; i < GetFieldsCount(); i++)
-		PositionChildren(i);
-}
 
 #ifdef __WXMSW__
 class wxStaticBitmapEx : public wxStaticBitmap
@@ -295,10 +243,10 @@ END_EVENT_TABLE()
 #define wxStaticBitmapEx wxStaticBitmap
 #endif
 
-class CIndicator : public wxStaticBitmapEx
+class CEncryptionIndicator : public wxStaticBitmapEx
 {
 public:
-	CIndicator(CStatusBar* pStatusBar, const wxBitmap& bmp)
+	CEncryptionIndicator(CStatusBar* pStatusBar, const wxBitmap& bmp)
 		: wxStaticBitmapEx(pStatusBar, wxID_ANY, bmp)
 	{
 		m_pStatusBar = pStatusBar;
@@ -308,73 +256,47 @@ protected:
 	CStatusBar* m_pStatusBar;
 
 	DECLARE_EVENT_TABLE()
-	void OnLeftMouseUp(wxMouseEvent& event)
+	void OnMouseUp(wxMouseEvent& event)
 	{
-		m_pStatusBar->OnHandleLeftClick(this);
-	}
-	void OnRightMouseUp(wxMouseEvent& event)
-	{
-		m_pStatusBar->OnHandleRightClick(this);
+		m_pStatusBar->OnHandleClick(this);
 	}
 };
 
-BEGIN_EVENT_TABLE(CIndicator, wxStaticBitmapEx)
-EVT_LEFT_UP(CIndicator::OnLeftMouseUp)
-EVT_RIGHT_UP(CIndicator::OnRightMouseUp)
-END_EVENT_TABLE()
-
-BEGIN_EVENT_TABLE(CStatusBar, CWidgetsStatusBar)
-EVT_MENU(XRCID("ID_SPEEDLIMITCONTEXT_ENABLE"), CStatusBar::OnSpeedLimitsEnable)
-EVT_MENU(XRCID("ID_SPEEDLIMITCONTEXT_CONFIGURE"), CStatusBar::OnSpeedLimitsConfigure)
+BEGIN_EVENT_TABLE(CEncryptionIndicator, wxStaticBitmapEx)
+EVT_LEFT_UP(CEncryptionIndicator::OnMouseUp)
 END_EVENT_TABLE()
 
 CStatusBar::CStatusBar(wxTopLevelWindow* pParent)
-	: CWidgetsStatusBar(pParent), CStateEventHandler(0)
+	: wxStatusBarEx(pParent)
 {
-	// Speedlimits
-	RegisterOption(OPTION_SPEEDLIMIT_ENABLE);
-	RegisterOption(OPTION_SPEEDLIMIT_INBOUND);
-	RegisterOption(OPTION_SPEEDLIMIT_OUTBOUND);
-
-	// Size format
-	RegisterOption(OPTION_SIZE_FORMAT);
-	RegisterOption(OPTION_SIZE_USETHOUSANDSEP);
-	RegisterOption(OPTION_SIZE_DECIMALPLACES);
-
-	RegisterOption(OPTION_ASCIIBINARY);
-
-	// Reload icons
-	RegisterOption(OPTION_THEME);
-
-	CContextManager::Get()->RegisterHandler(this, STATECHANGE_SERVER, true, false);
-	CContextManager::Get()->RegisterHandler(this, STATECHANGE_CHANGEDCONTEXT, false, false);
-
 	m_pDataTypeIndicator = 0;
 	m_pEncryptionIndicator = 0;
-	m_pSpeedLimitsIndicator = 0;
+	m_pCertificate = 0;
+	m_pSftpEncryptionInfo = 0;
 
 	m_size = 0;
 	m_hasUnknownFiles = false;
 
-	const int count = 3;
+	const int count = 5;
 	SetFieldsCount(count);
 	int array[count];
-	array[0] = wxSB_FLAT;
-	array[1] = wxSB_NORMAL;
-	array[2] = wxSB_FLAT;
+	for (int i = 0; i < count - 2; i++)
+		array[i] = wxSB_FLAT;
+	array[count - 2] = wxSB_NORMAL;
+	array[count - 1] = wxSB_FLAT;
 	SetStatusStyles(count, array);
 
 	SetStatusWidths(count, statbarWidths);
 
-	UpdateSizeFormat();
+	MeasureQueueSizeWidth();
 
-	UpdateSpeedLimitsIcon();
-	DisplayDataType();
-	DisplayEncrypted();
+	UpdateSizeFormat();
 }
 
 CStatusBar::~CStatusBar()
 {
+	delete m_pCertificate;
+	delete m_pSftpEncryptionInfo;
 }
 
 void CStatusBar::DisplayQueueSize(wxLongLong totalSize, bool hasUnknown)
@@ -387,27 +309,61 @@ void CStatusBar::DisplayQueueSize(wxLongLong totalSize, bool hasUnknown)
 		SetStatusText(_("Queue: empty"), FIELD_QUEUESIZE);
 		return;
 	}
+	int divider;
+	if (m_sizeFormat == 3)
+		divider = 1000;
+	else
+		divider = 1024;
 
-	wxString queueSize = wxString::Format(_("Queue: %s%s"), hasUnknown ? _T(">") : _T(""),
-		CSizeFormat::Format(totalSize, true, m_sizeFormat, m_sizeFormatThousandsSep, m_sizeFormatDecimalPlaces).c_str());
+	// We always round up. Set to true if there's a reminder
+	bool r2 = false;
 
+	int p = 0; // Exponent (2^(10p) or 10^(3p) depending on option
+	while (totalSize > divider && p < 6)
+	{
+		const wxLongLong rr = totalSize / divider;
+		if (rr * divider != totalSize)
+			r2 = true;
+		totalSize = rr;
+		p++;
+	}
+	if (r2)
+		totalSize++;
+
+	wxString queueSize;
+	if (!p)
+		queueSize.Printf(_("Queue: %s%d bytes"), hasUnknown ? _T(">") : _T(""), totalSize.GetLo());
+	else
+	{
+		// We stop at Exa. If someone has files bigger than that, he can afford to
+		// make a donation to have this changed ;)
+		const wxChar prefix[] = { ' ', 'K', 'M', 'G', 'T', 'P', 'E' };
+
+		queueSize.Printf(_("Queue: %s%d %c"), hasUnknown ? _T(">") : _T(""), totalSize.GetLo(), prefix[p]);
+
+		if (m_sizeFormat == 1)
+			queueSize += _T("iB");
+		else
+			queueSize += _T("B");
+	}
 	SetStatusText(queueSize, FIELD_QUEUESIZE);
 }
 
-void CStatusBar::DisplayDataType()
+void CStatusBar::DisplayDataType(const CServer* const pServer)
 {
-	const CServer* pServer = 0;
-	const CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (pState)
-		pServer = pState->GetServer();
-
 	if (!pServer || !CServer::ProtocolHasDataTypeConcept(pServer->GetProtocol()))
 	{
 		if (m_pDataTypeIndicator)
 		{
-			RemoveChild(widget_datatype);
+			RemoveChild(-4, m_pDataTypeIndicator);
 			m_pDataTypeIndicator->Destroy();
 			m_pDataTypeIndicator = 0;
+
+			if (m_pEncryptionIndicator)
+			{
+				RemoveChild(-4, m_pEncryptionIndicator);
+				AddChild(-4, m_pEncryptionIndicator, 22);
+			}
 		}
 	}
 	else
@@ -415,7 +371,7 @@ void CStatusBar::DisplayDataType()
 		wxString name;
 		wxString desc;
 
-		const int type = COptions::Get()->GetOptionVal(OPTION_ASCIIBINARY);
+		int type = COptions::Get()->GetOptionVal(OPTION_ASCIIBINARY);
 		if (type == 1)
 		{
 			name = _T("ART_ASCII");
@@ -435,8 +391,14 @@ void CStatusBar::DisplayDataType()
 		wxBitmap bmp = wxArtProvider::GetBitmap(name, wxART_OTHER, wxSize(16, 16));
 		if (!m_pDataTypeIndicator)
 		{
-			m_pDataTypeIndicator = new CIndicator(this, bmp);
-			AddChild(0, widget_datatype, m_pDataTypeIndicator);
+			m_pDataTypeIndicator = new wxStaticBitmapEx(this, wxID_ANY, bmp);
+			AddChild(-4, m_pDataTypeIndicator, 22);
+
+			if (m_pEncryptionIndicator)
+			{
+				RemoveChild(-4, m_pEncryptionIndicator);
+				AddChild(-4, m_pEncryptionIndicator, 2);
+			}
 		}
 		else
 			m_pDataTypeIndicator->SetBitmap(bmp);
@@ -450,46 +412,36 @@ void CStatusBar::MeasureQueueSizeWidth()
 	dc.SetFont(GetFont());
 
 	wxSize s = dc.GetTextExtent(_("Queue: empty"));
-	
-	wxString tmp = _T(">8888");
-	if (m_sizeFormatDecimalPlaces)
-	{
-		tmp += _T(".");
-		for (int i = 0; i < m_sizeFormatDecimalPlaces; i++)
-			tmp += _T("8");
-	}
-	s.IncTo(dc.GetTextExtent(wxString::Format(_("Queue: %s MiB"), tmp.c_str())));
+	s.IncTo(dc.GetTextExtent(wxString::Format(_("Queue: %s%d MiB"), _T(">"), 8888)));
+	s.IncTo(dc.GetTextExtent(wxString::Format(_("Queue: %s%d bytes"), _T(">"), 8888)));
 
-	SetFieldWidth(FIELD_QUEUESIZE, s.x + 10);
+	SetFieldWidth(-2, s.x + 10);
 }
 
-void CStatusBar::DisplayEncrypted()
+void CStatusBar::DisplayEncrypted(const CServer* const pServer)
 {
-	const CServer* pServer = 0;
-	const CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (pState)
-		pServer = pState->GetServer();
-
+	delete m_pCertificate;
+	m_pCertificate = 0;
+	delete m_pSftpEncryptionInfo;
+	m_pSftpEncryptionInfo = 0;
 	if (!pServer || (pServer->GetProtocol() != FTPS && pServer->GetProtocol() != FTPES && pServer->GetProtocol() != SFTP))
 	{
 		if (m_pEncryptionIndicator)
 		{
-			RemoveChild(widget_encryption);
+			RemoveChild(-4, m_pEncryptionIndicator);
 			m_pEncryptionIndicator->Destroy();
 			m_pEncryptionIndicator = 0;
 		}
 	}
 	else
 	{
+		if (m_pEncryptionIndicator)
+			return;
 		wxBitmap bmp = wxArtProvider::GetBitmap(_T("ART_LOCK"), wxART_OTHER, wxSize(16, 16));
-		if (!m_pEncryptionIndicator)
-		{
-			m_pEncryptionIndicator = new CIndicator(this, bmp);
-			AddChild(0, widget_encryption, m_pEncryptionIndicator);
-			m_pEncryptionIndicator->SetToolTip(_("The connection is encrypted. Click icon for details."));
-		}
-		else
-			m_pEncryptionIndicator->SetBitmap(bmp);
+		m_pEncryptionIndicator = new CEncryptionIndicator(this, bmp);
+		AddChild(-4, m_pEncryptionIndicator, m_pDataTypeIndicator ? 2 : 22);
+
+		m_pEncryptionIndicator->SetToolTip(_("The connection is encrypted. Click icon for details."));
 	}
 }
 
@@ -497,186 +449,52 @@ void CStatusBar::UpdateSizeFormat()
 {
 	// 0 equals bytes, however just use IEC binary prefixes instead, 
 	// exact byte counts for queue make no sense.
-	m_sizeFormat = CSizeFormat::_format(COptions::Get()->GetOptionVal(OPTION_SIZE_FORMAT));
+	m_sizeFormat = COptions::Get()->GetOptionVal(OPTION_SIZE_FORMAT);
 	if (!m_sizeFormat)
-		m_sizeFormat = CSizeFormat::iec;
-
-	m_sizeFormatThousandsSep = COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
-	m_sizeFormatDecimalPlaces = COptions::Get()->GetOptionVal(OPTION_SIZE_DECIMALPLACES);
-
-	MeasureQueueSizeWidth();
+		m_sizeFormat = 1;
 
 	DisplayQueueSize(m_size, m_hasUnknownFiles);
 }
 
-void CStatusBar::OnHandleLeftClick(wxWindow* pWnd)
+void CStatusBar::OnHandleClick(wxWindow* pWnd)
 {
-	if (pWnd == m_pEncryptionIndicator)
+	if (pWnd != m_pEncryptionIndicator)
+		return;
+
+	if (m_pCertificate)
 	{
-		CState* pState = CContextManager::Get()->GetCurrentContext();
-		CCertificateNotification *pCertificateNotification = 0;
-		CSftpEncryptionNotification *pSftpEncryptionNotification = 0;
-		if (pState->GetSecurityInfo(pCertificateNotification))
-		{
-			CVerifyCertDialog dlg;
-			dlg.ShowVerificationDialog(pCertificateNotification, true);
-		}
-		else if (pState->GetSecurityInfo(pSftpEncryptionNotification))
-		{
-			CSftpEncryptioInfoDialog dlg;
-			dlg.ShowDialog(pSftpEncryptionNotification);
-		}
-		else
-			wxMessageBox(_("Certificate and session data are not available yet."), _("Security information"));
+		CVerifyCertDialog dlg;
+		dlg.ShowVerificationDialog(m_pCertificate, true);
 	}
-	else if (pWnd == m_pSpeedLimitsIndicator)
+	else if (m_pSftpEncryptionInfo)
 	{
-		CSpeedLimitsDialog dlg;
-		dlg.Run(m_pParent);
-	}
-}
-
-void CStatusBar::OnHandleRightClick(wxWindow* pWnd)
-{
-	if (pWnd == m_pDataTypeIndicator)
-	{
-		wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_TRANSFER_TYPE_CONTEXT"));
-		if (!pMenu)
-			return;
-	
-		const int type = COptions::Get()->GetOptionVal(OPTION_ASCIIBINARY);
-		switch (type)
-		{
-		case 1:
-			pMenu->Check(XRCID("ID_MENU_TRANSFER_TYPE_ASCII"), true);
-			break;
-		case 2:
-			pMenu->Check(XRCID("ID_MENU_TRANSFER_TYPE_BINARY"), true);
-			break;
-		default:
-			pMenu->Check(XRCID("ID_MENU_TRANSFER_TYPE_AUTO"), true);
-			break;
-		}
-
-		PopupMenu(pMenu);
-		delete pMenu;
-	}
-	else if (pWnd == m_pSpeedLimitsIndicator)
-	{
-		wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_SPEEDLIMITCONTEXT"));
-		if (!pMenu)
-			return;
-
-		int downloadlimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_INBOUND);
-		int uploadlimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_OUTBOUND);
-		bool enable = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_ENABLE) != 0;
-		if (!downloadlimit && !uploadlimit)
-			enable = false;
-		pMenu->Check(XRCID("ID_SPEEDLIMITCONTEXT_ENABLE"), enable);
-
-		PopupMenu(pMenu);
-		delete pMenu;
-	}
-}
-
-void CStatusBar::UpdateSpeedLimitsIcon()
-{
-	bool enable = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_ENABLE) != 0;
-
-	wxBitmap bmp = wxArtProvider::GetBitmap(_T("ART_SPEEDLIMITS"), wxART_OTHER, wxSize(16, 16));
-	wxString tooltip;
-
-	int downloadLimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_INBOUND);
-	int uploadLimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_OUTBOUND);
-	if (!enable || (!downloadLimit && !uploadLimit))
-	{
-		wxImage img = bmp.ConvertToImage();
-		img = img.ConvertToGreyscale();
-		bmp = wxBitmap(img);
-		tooltip = _("Speed limits are disabled, click to change.");
+		CSftpEncryptioInfoDialog dlg;
+		dlg.ShowDialog(m_pSftpEncryptionInfo);
 	}
 	else
-	{
-		tooltip = _("Speed limits are enabled, click to change.");
-		tooltip += _T("\n");
-		if (downloadLimit)
-			tooltip += wxString::Format(_("Download limit: %s/s"), CSizeFormat::FormatUnit(downloadLimit, CSizeFormat::kilo).c_str());
-		else
-			tooltip += _("Download limit: none");
-		tooltip += _T("\n");
-		if (uploadLimit)
-			tooltip += wxString::Format(_("Upload limit: %s/s"), CSizeFormat::FormatUnit(uploadLimit, CSizeFormat::kilo).c_str());
-		else
-			tooltip += _("Upload limit: none");
-	}
-	
-	if (!m_pSpeedLimitsIndicator)
-	{
-		m_pSpeedLimitsIndicator = new CIndicator(this, bmp);
-		AddChild(0, widget_speedlimit, m_pSpeedLimitsIndicator);
-	}
+		wxMessageBox(_("Certificate and session data are not available yet."), _("Security information"));
+}
+
+void CStatusBar::SetCertificate(CCertificateNotification* pCertificate)
+{
+	delete m_pSftpEncryptionInfo;
+	m_pSftpEncryptionInfo = 0;
+
+	delete m_pCertificate;
+	if (pCertificate)
+		m_pCertificate = new CCertificateNotification(*pCertificate);
 	else
-		m_pSpeedLimitsIndicator->SetBitmap(bmp);
-	m_pSpeedLimitsIndicator->SetToolTip(tooltip);
+		m_pCertificate = 0;
 }
 
-void CStatusBar::OnOptionChanged(int option)
+void CStatusBar::SetSftpEncryptionInfo(const CSftpEncryptionNotification* pEncryptionInfo)
 {
-	switch (option)
-	{
-	case OPTION_SPEEDLIMIT_ENABLE:
-	case OPTION_SPEEDLIMIT_INBOUND:
-	case OPTION_SPEEDLIMIT_OUTBOUND:
-		UpdateSpeedLimitsIcon();
-		break;
-	case OPTION_SIZE_FORMAT:
-	case OPTION_SIZE_USETHOUSANDSEP:
-	case OPTION_SIZE_DECIMALPLACES:
-		UpdateSizeFormat();
-		break;
-	case OPTION_ASCIIBINARY:
-		DisplayDataType();
-		break;
-	case OPTION_THEME:
-		DisplayDataType();
-		UpdateSpeedLimitsIcon();
-		DisplayEncrypted();
-		break;
-	default:
-		break;
-	}
-}
+	delete m_pCertificate;
+	m_pCertificate = 0;
 
-void CStatusBar::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
-{
-	if (notification == STATECHANGE_SERVER || notification == STATECHANGE_CHANGEDCONTEXT)
-	{
-		DisplayDataType();
-		DisplayEncrypted();
-	}
-}
-
-void CStatusBar::OnSpeedLimitsEnable(wxCommandEvent& event)
-{
-	int downloadlimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_INBOUND);
-	int uploadlimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_OUTBOUND);
-	bool enable = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_ENABLE) == 0;
-	if (enable)
-	{
-		if (!downloadlimit && !uploadlimit)
-		{
-			CSpeedLimitsDialog dlg;
-			dlg.Run(m_pParent);
-		}
-		else
-			COptions::Get()->SetOption(OPTION_SPEEDLIMIT_ENABLE, 1);
-	}
+	delete m_pSftpEncryptionInfo;
+	if (pEncryptionInfo)
+		m_pSftpEncryptionInfo = new CSftpEncryptionNotification(*pEncryptionInfo);
 	else
-		COptions::Get()->SetOption(OPTION_SPEEDLIMIT_ENABLE, 0);
-}
-
-void CStatusBar::OnSpeedLimitsConfigure(wxCommandEvent& event)
-{
-	CSpeedLimitsDialog dlg;
-	dlg.Run(m_pParent);
+		m_pSftpEncryptionInfo = 0;
 }

@@ -24,8 +24,7 @@ class CConnectOpData : public COpData
 {
 public:
 	CConnectOpData()
-		: COpData(cmd_connect),
-		port(0)
+		: COpData(cmd_connect)
 	{
 	}
 
@@ -36,12 +35,12 @@ public:
 class CFileTransferOpData : public COpData
 {
 public:
-	CFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path);
+	CFileTransferOpData();
 	virtual ~CFileTransferOpData();
 	// Transfer data
 	wxString localFile, remoteFile;
 	CServerPath remotePath;
-	const bool download;
+	bool download;
 
 	wxDateTime fileTime;
 	wxFileOffset localFileSize;
@@ -183,16 +182,12 @@ protected:
 
 	virtual int SendNextCommand();
 
-	void LogTransferResultMessage(int nErrorCode, CFileTransferOpData *pData);
-
 	// Called by ResetOperation if there's a queued operation
 	virtual int ParseSubcommandResult(int prevResult);
 	
 	wxString ConvertDomainName(wxString domain);
 
 	int CheckOverwriteFile();
-
-	void CreateLocalDir(const wxString &local_file);
 
 	bool ParsePwdReply(wxString reply, bool unquoted = false, const CServerPath& defaultPath = CServerPath());
 

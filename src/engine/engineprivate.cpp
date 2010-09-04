@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "ControlSocket.h"
 #include "ftpcontrolsocket.h"
 #include "sftpcontrolsocket.h"
@@ -29,7 +29,8 @@ typedef void (wxEvtHandler::*fzEngineEventFunction)(wxFzEngineEvent&);
     ),
 
 std::list<CFileZillaEnginePrivate*> CFileZillaEnginePrivate::m_engineList;
-int CFileZillaEnginePrivate::m_activeStatus[2] = {0, 0};
+int CFileZillaEnginePrivate::m_activeStatusSend = 0;
+int CFileZillaEnginePrivate::m_activeStatusRecv = 0;
 std::list<CFileZillaEnginePrivate::t_failedLogins> CFileZillaEnginePrivate::m_failedLogins;
 
 DEFINE_EVENT_TYPE(fzEVT_ENGINE_NOTIFICATION);
@@ -170,8 +171,6 @@ void CFileZillaEnginePrivate::AddNotification(CNotification *pNotification)
 
 int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 {
-	m_pLogging->LogMessage(Debug_Debug, _T("CFileZillaEnginePrivate::ResetOperation(%d)"), nErrorCode);
-					
 	if (nErrorCode & FZ_REPLY_DISCONNECTED)
 		m_lastListDir.Clear();
 
@@ -185,25 +184,24 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 
 		if (m_pCurrentCommand->GetId() == cmd_connect)
 		{
-			if (!(nErrorCode & ~(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED | FZ_REPLY_TIMEOUT | FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED)) && 
-				nErrorCode & (FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED))				
+			if (!(nErrorCode & ~(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED | FZ_REPLY_TIMEOUT)) && 
+				nErrorCode & (FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED) &&
+				m_retryCount < m_pOptions->GetOptionVal(OPTION_RECONNECTCOUNT))
 			{
+				m_retryCount++;
+
 				const CConnectCommand *pConnectCommand = (CConnectCommand *)m_pCurrentCommand;
 
-				RegisterFailedLoginAttempt(pConnectCommand->GetServer(), (nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR);
+				RegisterFailedLoginAttempt(pConnectCommand->GetServer());
 
-				if ((nErrorCode & FZ_REPLY_CRITICALERROR) != FZ_REPLY_CRITICALERROR)
+				if (pConnectCommand->RetryConnecting())
 				{
-					m_retryCount++;
-					if (m_retryCount < m_pOptions->GetOptionVal(OPTION_RECONNECTCOUNT) && pConnectCommand->RetryConnecting())
-					{
-						unsigned int delay = GetRemainingReconnectDelay(pConnectCommand->GetServer());
-						if (!delay)
-							delay = 1;
-						m_pLogging->LogMessage(Status, _("Waiting to retry..."));
-						m_retryTimer.Start(delay, true);
-						return FZ_REPLY_WOULDBLOCK;
-					}
+					unsigned int delay = GetRemainingReconnectDelay(pConnectCommand->GetServer());
+					if (!delay)
+						delay = 1;
+					m_pLogging->LogMessage(Status, _("Waiting to retry..."));
+					m_retryTimer.Start(delay, true);
+					return FZ_REPLY_WOULDBLOCK;
 				}
 			}
 		}
@@ -235,14 +233,27 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 	return nErrorCode;
 }
 
-void CFileZillaEnginePrivate::SetActive(int direction)
+void CFileZillaEnginePrivate::SetActive(bool recv)
 {
 	if (m_pControlSocket)
 		m_pControlSocket->SetAlive();
 
-	if (!m_activeStatus[direction])
-		AddNotification(new CActiveNotification(direction));
-	m_activeStatus[direction] = 2;
+	if (recv)
+	{
+		if (!m_activeStatusRecv)
+		{
+			m_activeStatusRecv = 2;
+			AddNotification(new CActiveNotification(true));
+		}
+	}
+	else
+	{
+		if (!m_activeStatusSend)
+		{
+			m_activeStatusSend = 2;
+			AddNotification(new CActiveNotification(false));
+		}
+	}
 }
 
 unsigned int CFileZillaEnginePrivate::GetNextAsyncRequestNumber()
@@ -261,17 +272,6 @@ int CFileZillaEnginePrivate::Connect(const CConnectCommand &command)
 		return FZ_REPLY_BUSY;
 
 	m_retryCount = 0;
-
-	if (m_pControlSocket)
-	{
-		// Need to delete before setting m_pCurrentCommand.
-		// The destructor can call CFileZillaEnginePrivate::ResetOperation
-		// which would delete m_pCurrentCommand
-		delete m_pControlSocket;
-		m_pControlSocket = 0;
-		m_nControlSocketError = 0;
-	}
-
 	m_pCurrentCommand = command.Clone();
 
 	if (command.GetServer().GetPort() != CServer::GetDefaultPort(command.GetServer().GetProtocol()))
@@ -353,8 +353,6 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 		if (pServer)
 		{
 			CServerPath path(CPathCache::Lookup(*pServer, command.GetPath(), command.GetSubDir()));
-			if (path.IsEmpty() && command.GetSubDir().IsEmpty())
-				path = command.GetPath();
 			if (!path.IsEmpty())
 			{
 				CDirectoryListing *pListing = new CDirectoryListing;
@@ -516,7 +514,7 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 		return;
 	}
 
-	CDirectoryCache cache;
+	const CDirectoryCache cache;
 	
 	CTimeEx changeTime;
 	if (!cache.GetChangeTime(changeTime, *pOwnServer, path))
@@ -553,14 +551,14 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 	}
 }
 
-void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, bool critical)
+void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server)
 {
 	std::list<t_failedLogins>::iterator iter = m_failedLogins.begin();
 	while (iter != m_failedLogins.end())
 	{
 		const wxTimeSpan span = wxDateTime::UNow() - iter->time;
 		if (span.GetSeconds() >= m_pOptions->GetOptionVal(OPTION_RECONNECTDELAY) ||
-			iter->server == server || (!critical && (iter->server.GetHost() == server.GetHost() && iter->server.GetPort() == server.GetPort())))
+			(iter->host == server.GetHost() && iter->port == server.GetPort()))
 		{
 			std::list<t_failedLogins>::iterator prev = iter;
 			iter++;
@@ -571,7 +569,8 @@ void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, 
 	}
 
 	t_failedLogins failure;
-	failure.server = server;
+	failure.host = server.GetHost();
+	failure.port = server.GetPort();
 	failure.time = wxDateTime::UNow();
 	m_failedLogins.push_back(failure);
 }
@@ -589,10 +588,10 @@ unsigned int CFileZillaEnginePrivate::GetRemainingReconnectDelay(const CServer& 
 			iter++;
 			m_failedLogins.erase(prev);
 		}
-		else if (!iter->critical && iter->server.GetHost() == server.GetHost() && iter->server.GetPort() == server.GetPort())
+		else if (iter->host == server.GetHost() && iter->port == server.GetPort())
+		{
 			return delay * 1000 - span.GetMilliseconds().GetLo();
-		else if (iter->server == server)
-			return delay * 1000 - span.GetMilliseconds().GetLo();
+		}
 		else
 			iter++;
 	}
@@ -614,23 +613,23 @@ void CFileZillaEnginePrivate::OnTimer(wxTimerEvent& event)
 	wxASSERT(!GetRemainingReconnectDelay(pConnectCommand->GetServer()));
 #endif
 
+	ContinueConnect();
+}
+
+int CFileZillaEnginePrivate::ContinueConnect()
+{
 	if (m_pControlSocket)
 	{
 		delete m_pControlSocket;
 		m_pControlSocket = 0;
 	}
 
-	ContinueConnect();
-}
-
-int CFileZillaEnginePrivate::ContinueConnect()
-{
 	const CConnectCommand *pConnectCommand = (CConnectCommand *)m_pCurrentCommand;
 	const CServer& server = pConnectCommand->GetServer();
 	unsigned int delay = GetRemainingReconnectDelay(server);
 	if (delay)
 	{
-		m_pLogging->LogMessage(Status, wxPLURAL("Delaying connection for %d second due to previously failed connection attempt...", "Delaying connection for %d seconds due to previously failed connection attempt...", (delay + 999) / 1000), (delay + 999) / 1000);
+		m_pLogging->LogMessage(Status, _("Delaying connection due to previously failed connection attempt..."));
 		m_retryTimer.Start(delay, true);
 		return FZ_REPLY_WOULDBLOCK;
 	}
@@ -646,7 +645,6 @@ int CFileZillaEnginePrivate::ContinueConnect()
 		m_pControlSocket = new CSftpControlSocket(this);
 		break;
 	case HTTP:
-	case HTTPS:
 		m_pControlSocket = new CHttpControlSocket(this);
 		break;
 	default:

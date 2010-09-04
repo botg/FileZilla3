@@ -1,8 +1,7 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "xmlfunctions.h"
+#include "filezillaapp.h"
 #include "Options.h"
-#include <wx/ffile.h>
-#include <wx/log.h>
 
 CXmlFile::CXmlFile(const wxString& fileName)
 {
@@ -20,7 +19,7 @@ CXmlFile::CXmlFile(const wxFileName& fileName /*=wxFileName()*/)
 
 void CXmlFile::SetFileName(const wxString& name)
 {
-	m_fileName = wxFileName(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), name + _T(".xml"));
+	m_fileName = wxFileName(wxGetApp().GetSettingsDir(), name + _T(".xml"));
 	m_modificationTime = wxDateTime();
 }
 
@@ -38,7 +37,7 @@ CXmlFile::~CXmlFile()
 
 TiXmlElement* CXmlFile::Load(const wxString& name)
 {
-	wxFileName fileName(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), name + _T(".xml"));
+	wxFileName fileName(wxGetApp().GetSettingsDir(), name + _T(".xml"));
 	return Load(fileName);
 }
 
@@ -52,15 +51,9 @@ TiXmlElement* CXmlFile::Load(const wxFileName& fileName)
 	delete m_pDocument;
 	m_pDocument = 0;
 
-	wxString error;
-	TiXmlElement* pElement = GetXmlFile(m_fileName, true, &error);
+	TiXmlElement* pElement = GetXmlFile(m_fileName);
 	if (!pElement)
 	{
-		m_error.Printf(_("The file '%s' could not be loaded."), m_fileName.GetFullPath().c_str());
-		if (!error.empty())
-			m_error += _T("\n") + error;
-		else
-			m_error += wxString(_T("\n")) + _("Make sure the file can be accessed and is a well-formed XML document.");
 		m_modificationTime = wxDateTime();
 		return 0;
 	}
@@ -142,9 +135,9 @@ TiXmlElement* CXmlFile::CreateEmpty()
 
 	m_pDocument = new TiXmlDocument();
 	m_pDocument->SetCondenseWhiteSpace(false);
-	m_pDocument->LinkEndChild(new TiXmlDeclaration("1.0", "UTF-8", "yes"));
+	m_pDocument->InsertEndChild(TiXmlDeclaration("1.0", "UTF-8", "yes"));
 
-	return m_pDocument->LinkEndChild(new TiXmlElement("FileZilla3"))->ToElement();
+	return m_pDocument->InsertEndChild(TiXmlElement("FileZilla3"))->ToElement();
 }
 
 char* ConvUTF8(const wxString& value)
@@ -172,16 +165,16 @@ void AddTextElement(TiXmlElement* node, const char* name, const wxString& value)
 {
 	wxASSERT(node);
 
+	TiXmlElement element(name);
+
 	char* utf8 = ConvUTF8(value);
 	if (!utf8)
 		return;
 
-	TiXmlElement *element = new TiXmlElement(name);
-
-	element->LinkEndChild(new TiXmlText(utf8));
+    element.InsertEndChild(TiXmlText(utf8));
 	delete [] utf8;
 
-	node->LinkEndChild(element);
+	node->InsertEndChild(element);
 }
 
 void AddTextElement(TiXmlElement* node, const char* name, int value)
@@ -196,11 +189,11 @@ void AddTextElementRaw(TiXmlElement* node, const char* name, const char* value)
 	wxASSERT(node);
 	wxASSERT(value && *value);
 
-	TiXmlElement *element = new TiXmlElement(name);
+	TiXmlElement element(name);
 
-	element->LinkEndChild(new TiXmlText(value));
+    element.InsertEndChild(TiXmlText(value));
 
-	node->LinkEndChild(element);
+	node->InsertEndChild(element);
 }
 
 void AddTextElement(TiXmlElement* node, const wxString& value)
@@ -220,7 +213,7 @@ void AddTextElement(TiXmlElement* node, const wxString& value)
 		break;
 	}
 
-	node->LinkEndChild(new TiXmlText(utf8));
+    node->InsertEndChild(TiXmlText(utf8));
 	delete [] utf8;
 }
 
@@ -245,7 +238,7 @@ void AddTextElementRaw(TiXmlElement* node, const char* value)
 		break;
 	}
 
-    node->LinkEndChild(new TiXmlText(value));
+    node->InsertEndChild(TiXmlText(value));
 }
 
 wxString GetTextElement_Trimmed(TiXmlElement* node, const char* name)
@@ -395,48 +388,22 @@ bool GetTextElementBool(TiXmlElement* node, const char* name, bool defValue /*=f
 	}
 }
 
-bool LoadXmlDocument(TiXmlDocument* pXmlDocument, const wxString& file, wxString* error /*=0*/)
-{
-	wxFFile f(file, _T("rb"));
-	if (!f.IsOpened())
-	{
-		if (error)
-		{
-			const wxChar* s = wxSysErrorMsg();
-			if (s && *s)
-				*error = s;
-			else
-				*error = _("Unknown error opening the file. Make sure the file can be accessed and is a well-formed XML document.");
-		}
-		return false;
-	}
-
-	if (!pXmlDocument->LoadFile(f.fp()))
-	{
-		if (pXmlDocument->ErrorId() != TiXmlBase::TIXML_ERROR_DOCUMENT_EMPTY)
-		{
-			if (error)
-			{
-				const char* s = pXmlDocument->ErrorDesc();
-				error->Printf(_("The XML document is not well-formed: %s"), wxString(s, wxConvLibc).c_str());
-			}
-			return false;
-		}
-	}
-	return true;
-}
-
 // Opens the specified XML file if it exists or creates a new one otherwise.
 // Returns 0 on error.
-TiXmlElement* GetXmlFile(wxFileName file, bool create /*=true*/, wxString* error /*=0*/)
+TiXmlElement* GetXmlFile(wxFileName file)
 {
 	if (wxFileExists(file.GetFullPath()) && file.GetSize() > 0)
 	{
 		// File does exist, open it
 
-		TiXmlDocument* pXmlDocument = new TiXmlDocument;
+		TiXmlDocument* pXmlDocument = new TiXmlDocument();
 		pXmlDocument->SetCondenseWhiteSpace(false);
-		if (!LoadXmlDocument(pXmlDocument, file.GetFullPath(), error))
+		if (!pXmlDocument->LoadFile(file.GetFullPath().mb_str()))
+		{
+			delete pXmlDocument;
+			return 0;
+		}
+		if (!pXmlDocument->FirstChildElement("FileZilla3"))
 		{
 			delete pXmlDocument;
 			return 0;
@@ -445,34 +412,23 @@ TiXmlElement* GetXmlFile(wxFileName file, bool create /*=true*/, wxString* error
 		TiXmlElement* pElement = pXmlDocument->FirstChildElement("FileZilla3");
 		if (!pElement)
 		{
-			if (pXmlDocument->FirstChildElement())
-			{
-				// Not created by FileZilla3
-				delete pXmlDocument;
-
-				if (error)
-					*error = _("Unknown root element, the file does not appear to be generated by FileZilla.");
-				return 0;
-			}
-			pElement = pXmlDocument->LinkEndChild(new TiXmlElement("FileZilla3"))->ToElement();
+			delete pXmlDocument;
+			return 0;
 		}
-
-		return pElement;
+		else
+			return pElement;
 	}
 	else
 	{
-		// File does not exist
-		if (!create)
-			return 0;
-		
-		// create new XML document
+		// File does not exist, create new XML document
+
 		TiXmlDocument* pXmlDocument = new TiXmlDocument();
 		pXmlDocument->SetCondenseWhiteSpace(false);
-		pXmlDocument->LinkEndChild(new TiXmlDeclaration("1.0", "UTF-8", "yes"));
+		pXmlDocument->InsertEndChild(TiXmlDeclaration("1.0", "UTF-8", "yes"));
 
-		pXmlDocument->LinkEndChild(new TiXmlElement("FileZilla3"));
+		pXmlDocument->InsertEndChild(TiXmlElement("FileZilla3"));
 
-		if (!SaveXmlFile(file, pXmlDocument, 0))
+		if (!pXmlDocument->SaveFile(file.GetFullPath().mb_str()))
 		{
 			delete pXmlDocument;
 			return 0;
@@ -482,7 +438,7 @@ TiXmlElement* GetXmlFile(wxFileName file, bool create /*=true*/, wxString* error
 	}
 }
 
-bool SaveXmlFile(const wxFileName& file, TiXmlNode* node, wxString* error /*=0*/, bool move /*=false*/)
+bool SaveXmlFile(const wxFileName& file, TiXmlNode* node, wxString* error /*=0*/)
 {
 	if (!node)
 		return true;
@@ -495,18 +451,7 @@ bool SaveXmlFile(const wxFileName& file, TiXmlNode* node, wxString* error /*=0*/
 	if (wxFileExists(fullPath))
 	{
 		exists = true;
-		bool res;
-		if (!move)
-		{
-			wxLogNull null;
-			res = wxCopyFile(fullPath, fullPath + _T("~"));
-		}
-		else
-		{
-			wxLogNull null;
-			res = wxRenameFile(fullPath, fullPath + _T("~"));
-		}
-		if (!res)
+		if (!wxCopyFile(fullPath, fullPath + _T("~")))
 		{
 			const wxString msg = _("Failed to create backup copy of xml file");
 			if (error)
@@ -517,15 +462,11 @@ bool SaveXmlFile(const wxFileName& file, TiXmlNode* node, wxString* error /*=0*/
 		}
 	}
 
-	wxFFile f(fullPath, _T("w"));
-	if (!f.IsOpened() || !pDocument->SaveFile(f.fp()))
+	if (!pDocument->SaveFile(fullPath.mb_str()))
 	{
 		wxRemoveFile(fullPath);
 		if (exists)
-		{
-			wxLogNull null;
 			wxRenameFile(fullPath + _T("~"), fullPath);
-		}
 		const wxString msg = _("Failed to write xml file");
 		if (error)
 			*error = msg;
@@ -671,7 +612,7 @@ void SetServer(TiXmlElement *node, const CServer& server)
 		if (pOptions)
 		{
 			initialized = true;
-			if (pOptions->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 0)
+			if (pOptions->GetDefaultVal(DEFAULT_KIOSKMODE) != 0)
 				kiosk_mode = true;
 		}
 	}
@@ -739,7 +680,7 @@ void SetServer(TiXmlElement *node, const CServer& server)
 		const std::vector<wxString>& postLoginCommands = server.GetPostLoginCommands();
 		if (!postLoginCommands.empty())
 		{
-			TiXmlElement* pElement = node->LinkEndChild(new TiXmlElement("PostLoginCommands"))->ToElement();
+			TiXmlElement* pElement = node->InsertEndChild(TiXmlElement("PostLoginCommands"))->ToElement();
 			for (std::vector<wxString>::const_iterator iter = postLoginCommands.begin(); iter != postLoginCommands.end(); iter++)
 				AddTextElement(pElement, "Command", *iter);
 		}

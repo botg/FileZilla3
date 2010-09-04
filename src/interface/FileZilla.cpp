@@ -1,7 +1,4 @@
-#include <filezilla.h>
-#ifdef _MSC_VER
-#pragma hdrstop
-#endif
+#include "FileZilla.h"
 #include "filezillaapp.h"
 #include "Mainfrm.h"
 #include "Options.h"
@@ -10,9 +7,9 @@
 #ifdef __WXMSW__
 #include <wx/msw/registry.h> // Needed by CheckForWin2003FirewallBug
 #endif
+#include "xmlfunctions.h"
 #include <wx/tokenzr.h>
 #include "cmdline.h"
-#include "welcome_dialog.h"
 
 #include <wx/xrc/xh_bmpbt.h>
 #include <wx/xrc/xh_bttn.h>
@@ -38,10 +35,8 @@
 #include <wx/xrc/xh_tree.h>
 #include <wx/xrc/xh_hyperlink.h>
 #include "xh_toolb_ex.h"
-#include "xh_menu_ex.h"
 #ifdef __WXMSW__
 #include <wx/socket.h>
-#include <wx/dynlib.h>
 #endif
 #ifdef WITH_LIBDBUS
 #include <../dbus/session_manager.h>
@@ -58,6 +53,15 @@
 #ifdef ENABLE_BINRELOC
 	#define BR_PTHREADS 0
 	#include "prefix.h"
+#endif
+
+#ifdef __WXMSW__
+	#include <shlobj.h>
+
+	// Needed for MinGW:
+	#ifndef SHGFP_TYPE_CURRENT
+		#define SHGFP_TYPE_CURRENT 0
+	#endif
 #endif
 
 #ifdef _DEBUG
@@ -146,30 +150,6 @@ bool CheckForWin2003FirewallBug()
 
 	return true;
 }
-
-extern "C" 
-{
-	typedef HRESULT (WINAPI *t_SetCurrentProcessExplicitAppUserModelID)(PCWSTR AppID);
-}
-
-static void SetAppId()
-{
-	wxDynamicLibrary dll;
-	if (!dll.Load(_T("shell32.dll")))
-		return;
-
-	if (!dll.HasSymbol(_T("SetCurrentProcessExplicitAppUserModelID")))
-		return;
-
-	t_SetCurrentProcessExplicitAppUserModelID pSetCurrentProcessExplicitAppUserModelID =
-		(t_SetCurrentProcessExplicitAppUserModelID)dll.GetSymbol(_T("SetCurrentProcessExplicitAppUserModelID"));
-
-	if (!pSetCurrentProcessExplicitAppUserModelID)
-		return;
-
-	pSetCurrentProcessExplicitAppUserModelID(_T("FileZilla.Client.AppID"));
-}
-
 #endif //__WXMSW__
 
 bool CFileZillaApp::OnInit()
@@ -183,26 +163,10 @@ bool CFileZillaApp::OnInit()
 #ifdef __WXMSW__
 	// Need to call WSAStartup. Let wx do that for us
 	wxSocketBase::Initialize();
-
-	SetAppId();
 #endif
 
-	//wxSystemOptions is slow, if a value is not set, it keeps querying the environment
-	//each and every time...
-	wxSystemOptions::SetOption(_T("filesys.no-mimetypesmanager"), 0);
-	wxSystemOptions::SetOption(_T("window-default-variant"), _T(""));
-#ifdef __WXMSW__
-	wxSystemOptions::SetOption(_T("no-maskblt"), 0);
-	wxSystemOptions::SetOption(_T("msw.window.no-clip-children"), 0);
-	wxSystemOptions::SetOption(_T("msw.font.no-proof-quality"), 0);
-#endif
-
-#ifdef __WXMSW__
 	wxSystemOptions::SetOption(_T("msw.remap"), 0);
-#endif
-#ifdef __WXMAC__
 	wxSystemOptions::SetOption(_T("mac.listctrl.always_use_generic"), 1);
-#endif
 
 	int cmdline_result = ProcessCommandLine();
 	if (!cmdline_result)
@@ -217,6 +181,7 @@ bool CFileZillaApp::OnInit()
 	}
 
 	InitDefaultsDir();
+	InitSettingsDir();
 
 	COptions::Init();
 
@@ -281,6 +246,19 @@ DO NOT use it in production environments,\r\n\
 DO NOT distribute the binaries,\r\n\
 DO NOT complain about it\r\n\
 USE AT OWN RISK"), _T("Important Information"));
+	else if (buildType == _T("official"))
+	{
+		wxString greetingVersion = COptions::Get()->GetOption(OPTION_GREETINGVERSION);
+		if (greetingVersion == _T("") ||
+			CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion()) > CBuildInfo::ConvertToVersionNumber(greetingVersion))
+		{
+			COptions::Get()->SetOption(OPTION_GREETINGVERSION, CBuildInfo::GetVersion());
+
+			wxMessageBox(wxString::Format(_T("Welcome to FileZilla %s\r\n\r\n\
+Please report all bugs you may encounter.\
+"), CBuildInfo::GetVersion().c_str()), _T("Welcome"));
+		}
+	}
 #endif
 
 	if (!LoadResourceFiles())
@@ -324,11 +302,7 @@ FileZilla will timeout on big transfers.\
 	frame->Show(true);
 	SetTopWindow(frame);
 
-	CWelcomeDialog *welcome_dialog = new CWelcomeDialog;
-	welcome_dialog->Run(frame, false, true);
-
 	frame->ProcessCommandLine();
-	frame->PostInitialize();
 
 	return true;
 }
@@ -500,7 +474,7 @@ bool CFileZillaApp::LoadResourceFiles()
 #endif
 
 	pResource->AddHandler(new wxMenuXmlHandler);
-	pResource->AddHandler(new wxMenuBarXmlHandlerEx);
+	pResource->AddHandler(new wxMenuBarXmlHandler);
 	pResource->AddHandler(new wxDialogXmlHandler);
 	pResource->AddHandler(new wxPanelXmlHandler);
 	pResource->AddHandler(new wxSizerXmlHandler);
@@ -547,9 +521,101 @@ bool CFileZillaApp::InitDefaultsDir()
 		m_defaultsDir = _T("/etc/filezilla");
 	else
 #endif
-	m_defaultsDir = GetDataDir(_T("/fzdefaults.xml"));
+		m_defaultsDir = GetDataDir(_T("/fzdefaults.xml"));
 
 	return m_defaultsDir != _T("");
+}
+
+wxString CFileZillaApp::GetSettingsDirFromDefaults()
+{
+	if (GetDefaultsDir() == _T(""))
+		return _T("");
+
+	wxFileName fn(GetDefaultsDir(), _T("fzdefaults.xml"));
+	if (!fn.IsOk() || !fn.FileExists())
+		return _T("");
+
+	CXmlFile file(fn);
+	TiXmlElement* element = file.Load();
+	if (!element)
+		return _T("");
+
+	TiXmlElement* settings = element->FirstChildElement("Settings");
+	if (!settings)
+		return _T("");
+
+	TiXmlElement* setting = FindElementWithAttribute(settings, "Setting", "name", "Config Location");
+	if (!setting)
+		return _T("");
+
+	wxString location = GetTextElement(setting);
+	if (location == _T(""))
+		return _T("");
+
+	wxStringTokenizer tokenizer(location, _T("/\\"), wxTOKEN_RET_EMPTY_ALL);
+	location = _T("");
+	while (tokenizer.HasMoreTokens())
+	{
+		wxString token = tokenizer.GetNextToken();
+		if (token[0] == '$')
+		{
+			if (token[1] == '$')
+				token = token.Mid(1);
+			else
+			{
+				wxString value;
+				if (wxGetEnv(token.Mid(1), &value))
+					token = value;
+			}
+		}
+		location += token;
+		const wxChar delimiter = tokenizer.GetLastDelimiter();
+		if (delimiter)
+			location += delimiter;
+
+	}
+
+	wxFileName norm(location, _T(""));
+	norm.Normalize(wxPATH_NORM_ALL, fn.GetPath());
+
+	location = norm.GetFullPath();
+	return location;
+}
+
+bool CFileZillaApp::InitSettingsDir()
+{
+	m_settingsDir = GetSettingsDirFromDefaults();
+
+	wxFileName fn;
+	if (m_settingsDir != _T(""))
+		fn = wxFileName(m_settingsDir, _T(""));
+	else
+	{
+
+#ifdef __WXMSW__
+		wxChar buffer[MAX_PATH * 2 + 1];
+
+		if (SUCCEEDED(SHGetFolderPath(0, CSIDL_APPDATA, 0, SHGFP_TYPE_CURRENT, buffer)))
+		{
+			fn = wxFileName(buffer, _T(""));
+			fn.AppendDir(_T("FileZilla"));
+		}
+		else
+		{
+			// Fall back to directory where the executable is
+			if (GetModuleFileName(0, buffer, MAX_PATH * 2))
+				fn = buffer;
+		}
+#else
+		fn = wxFileName(wxGetHomeDir(), _T(""));
+		fn.AppendDir(_T(".filezilla"));
+#endif
+	}
+	if (!fn.DirExists())
+		wxMkdir(fn.GetPath(), 0700);
+	m_settingsDir = fn.GetPath();
+
+	return true;
 }
 
 bool CFileZillaApp::LoadLocales()
@@ -830,17 +896,6 @@ int CFileZillaApp::ProcessCommandLine()
 #ifdef __WXMSW__
 			EnumWindows((WNDENUMPROC)EnumWindowCallback, 0);
 #endif
-			return 0;
-		}
-
-		if (m_pCommandLine->HasSwitch(CCommandLine::version))
-		{
-			wxString out = wxString::Format(_T("FileZilla %s"), CBuildInfo::GetVersion().c_str());
-			if (!CBuildInfo::GetBuildType().empty())
-				out += _T(" ") + CBuildInfo::GetBuildType() + _T(" build");
-			out += _T(", compiled on ") + CBuildInfo::GetBuildDateString();
-
-			printf("%s\n", (const char*)out.mb_str());
 			return 0;
 		}
 	}

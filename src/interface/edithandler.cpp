@@ -1,11 +1,9 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "edithandler.h"
 #include "dialogex.h"
 #include "filezillaapp.h"
 #include "queue.h"
 #include "Options.h"
-#include "window_state_manager.h"
-#include "local_filesys.h"
 
 // Defined in optionspage_edit.cpp
 bool UnquoteCommand(wxString& command, wxString& arguments);
@@ -35,12 +33,16 @@ void CChangedFileDialog::OnNo(wxCommandEvent& event)
 
 //-------------
 
+#ifdef __WXMAC__
 DECLARE_EVENT_TYPE(fzEDIT_CHANGEDFILE, -1)
 DEFINE_EVENT_TYPE(fzEDIT_CHANGEDFILE)
+#endif
 
 BEGIN_EVENT_TABLE(CEditHandler, wxEvtHandler)
 EVT_TIMER(wxID_ANY, CEditHandler::OnTimerEvent)
+#ifdef __WXMAC__
 EVT_COMMAND(wxID_ANY, fzEDIT_CHANGEDFILE, CEditHandler::OnChangedFileEvent)
+#endif
 END_EVENT_TABLE()
 
 CEditHandler* CEditHandler::m_pEditHandler = 0;
@@ -50,7 +52,6 @@ CEditHandler::CEditHandler()
 	m_pQueue = 0;
 
 	m_timer.SetOwner(this);
-	m_busyTimer.SetOwner(this);
 
 #ifdef __WXMSW__
 	m_lockfile_handle = INVALID_HANDLE_VALUE;
@@ -190,8 +191,6 @@ void CEditHandler::Release()
 {
 	if (m_timer.IsRunning())
 		m_timer.Stop();
-	if (m_busyTimer.IsRunning())
-		m_busyTimer.Stop();
 
 	if (m_localDir != _T(""))
 	{
@@ -302,9 +301,6 @@ bool CEditHandler::AddFile(enum CEditHandler::fileType type, wxString& fileName,
 	}
 	data.remotePath = remotePath;
 	data.server = server;
-
-	if (type == local && !COptions::Get()->GetOptionVal(OPTION_EDIT_TRACK_LOCAL))
-		return StartEditing(local, data);
 
 	if (type == remote || StartEditing(type, data))
 		m_fileDataList[type].push_back(data);
@@ -600,9 +596,8 @@ bool CEditHandler::StartEditing(enum CEditHandler::fileType type, t_fileData& da
 		return false;
 	data.modificationTime = fn.GetModificationTime();
 
-	bool program_exists = false;
-	wxString cmd = GetOpenCommand(fn.GetFullPath(), program_exists);
-	if (cmd.empty() || !program_exists)
+	wxString cmd = GetOpenCommand(fn.GetFullPath());
+	if (cmd == _T(""))
 		return false;
 
 	if (!wxExecute(cmd))
@@ -611,105 +606,135 @@ bool CEditHandler::StartEditing(enum CEditHandler::fileType type, t_fileData& da
 	return true;
 }
 
-void CEditHandler::CheckForModifications(bool emitEvent)
+void CEditHandler::CheckForModifications(
+#ifdef __WXMAC__
+		bool emitEvent /*=false*/
+#endif
+	)
 {
 	static bool insideCheckForModifications = false;
 	if (insideCheckForModifications)
 		return;
 
+#ifdef __WXMAC__
 	if (emitEvent)
 	{
 		wxCommandEvent evt(fzEDIT_CHANGEDFILE);
 		AddPendingEvent(evt);
 		return;
 	}
+#endif
 
 	insideCheckForModifications = true;
 
-	for (int i = 0; i < 2; i++)
+checkmodifications_remote:
+	for (std::list<t_fileData>::iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); iter++)
 	{
-checkmodifications_loopbegin:
-		for (std::list<t_fileData>::iterator iter = m_fileDataList[i].begin(); iter != m_fileDataList[i].end(); iter++)
+		if (iter->state != edit)
+			continue;
+
+		wxFileName fn(iter->file);
+		if (!fn.FileExists())
 		{
-			if (iter->state != edit)
-				continue;
+			m_fileDataList[remote].erase(iter);
 
-			wxFileName fn(iter->file);
-			if (!fn.FileExists())
-			{
-				m_fileDataList[i].erase(iter);
-
-				// Evil goto. Imo the next C++ standard needs a comefrom keyword.
-				goto checkmodifications_loopbegin;
-			}
-
-			wxDateTime mtime;
-
-			{
-				wxLogNull log; // If GetModificationTime fails wx spams error messages
-				mtime = fn.GetModificationTime();
-			}
-
-			if (!mtime.IsValid())
-				continue;
-
-			if (iter->modificationTime.IsValid() && iter->modificationTime == mtime)
-				continue;
-
-			// File has changed, ask user what to do
-
-			m_busyTimer.Stop();
-			wxMouseState mouseState = wxGetMouseState();
-			if (mouseState.LeftDown() || mouseState.MiddleDown() || mouseState.RightDown())
-			{
-				m_busyTimer.Start(1000, true);
-				insideCheckForModifications = false;
-				return;
-			}
-
-			wxTopLevelWindow* pTopWindow = (wxTopLevelWindow*)wxTheApp->GetTopWindow();
-			if (pTopWindow && pTopWindow->IsIconized())
-			{
-				pTopWindow->RequestUserAttention(wxUSER_ATTENTION_INFO);
-				insideCheckForModifications = false;
-				return;
-			}
-
-			bool remove;
-			int res = DisplayChangeNotification(CEditHandler::fileType(i), iter, remove);
-			if (res == -1)
-				continue;
-
-			if (res == wxID_YES)
-			{
-				UploadFile(CEditHandler::fileType(i), iter, remove);
-				goto checkmodifications_loopbegin;
-			}
-			else if (remove)
-			{
-				if (i == remote)
-				{
-					if (!fn.FileExists() || wxRemoveFile(fn.GetFullPath()))
-					{
-						m_fileDataList[i].erase(iter);
-						goto checkmodifications_loopbegin;
-					}
-					iter->state = removing;
-				}
-				else
-				{
-					m_fileDataList[i].erase(iter);
-					goto checkmodifications_loopbegin;
-				}
-			}
-			else if (!fn.FileExists())
-			{
-				m_fileDataList[i].erase(iter);
-				goto checkmodifications_loopbegin;
-			}
-			else
-				iter->modificationTime = mtime;
+			// Evil goto. Imo the next C++ standard needs a comefrom keyword.
+			goto checkmodifications_remote;
 		}
+
+		wxDateTime mtime = fn.GetModificationTime();
+		if (!mtime.IsValid())
+			continue;
+
+		if (iter->modificationTime.IsValid() && iter->modificationTime == mtime)
+			continue;
+
+		// File has changed, ask user what to do
+
+        wxTopLevelWindow* pTopWindow = (wxTopLevelWindow*)wxTheApp->GetTopWindow();
+		if (pTopWindow && pTopWindow->IsIconized())
+		{
+			pTopWindow->RequestUserAttention(wxUSER_ATTENTION_INFO);
+			insideCheckForModifications = false;
+			return;
+		}
+
+		bool remove;
+		int res = DisplayChangeNotification(remote, iter, remove);
+		if (res == -1)
+			continue;
+
+		if (res == wxID_YES)
+		{
+			UploadFile(remote, iter, remove);
+			goto checkmodifications_remote;
+		}
+		else if (remove)
+		{
+			if (!fn.FileExists() || wxRemoveFile(fn.GetFullPath()))
+			{
+				m_fileDataList[remote].erase(iter);
+				goto checkmodifications_remote;
+			}
+
+			iter->state = removing;
+		}
+		else if (!fn.FileExists())
+		{
+			m_fileDataList[remote].erase(iter);
+			goto checkmodifications_remote;
+		}
+		else
+			iter->modificationTime = mtime;
+	}
+
+checkmodifications_local:
+	for (std::list<t_fileData>::iterator iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); iter++)
+	{
+		if (iter->state != edit)
+			continue;
+
+		wxFileName fn(iter->file);
+		if (!fn.FileExists())
+		{
+			m_fileDataList[local].erase(iter);
+
+			// Evil goto. Imo the next C++ standard needs a comefrom keyword.
+			goto checkmodifications_local;
+		}
+
+		wxDateTime mtime = fn.GetModificationTime();
+		if (!mtime.IsValid())
+			continue;
+
+		if (iter->modificationTime.IsValid() && iter->modificationTime == mtime)
+			continue;
+
+		// File has changed, ask user what to do
+
+		wxTopLevelWindow* pTopWindow = (wxTopLevelWindow*)wxTheApp->GetTopWindow();
+		if (pTopWindow && pTopWindow->IsIconized())
+		{
+			pTopWindow->RequestUserAttention(wxUSER_ATTENTION_INFO);
+			insideCheckForModifications = false;
+			return;
+		}
+
+		bool remove;
+		int res = DisplayChangeNotification(local, iter, remove);
+
+		if (res == wxID_YES)
+			UploadFile(local, iter, remove);
+		else if (remove)
+			m_fileDataList[local].erase(iter);
+		else if (!fn.FileExists())
+		{
+			m_fileDataList[remote].erase(iter);
+			goto checkmodifications_remote;
+		}
+		else
+			iter->modificationTime = mtime;
+		goto checkmodifications_local;
 	}
 
 	SetTimerState();
@@ -786,32 +811,24 @@ bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterato
 
 	iter->state = unedit ? upload_and_remove : upload;
 
-	wxLongLong size;
-	wxDateTime mtime;
+	wxFileName fn(iter->file);
 
-	bool is_link;
-	if (CLocalFileSystem::GetFileInfo(iter->file, is_link, &size, &mtime, 0) != CLocalFileSystem::file)
+	if (!fn.FileExists())
 	{
 		m_fileDataList[type].erase(iter);
 		return false;
 	}
 
+	wxDateTime mtime = fn.GetModificationTime();
 	if (!mtime.IsValid())
 		mtime = wxDateTime::Now();
 
 	iter->modificationTime = mtime;
 
 	wxASSERT(m_pQueue);
-
-	wxString file;
-	CLocalPath localPath(iter->file, &file);
-	if (file.empty())
-	{
-		m_fileDataList[type].erase(iter);
-		return false;
-	}
-
-	m_pQueue->QueueFile(false, false, localPath, file, iter->name, iter->remotePath, iter->server, wxLongLong(size.GetHi(), size.GetLo()), type);
+	wxULongLong size = fn.GetSize();
+	
+	m_pQueue->QueueFile(false, false, fn.GetFullPath(), iter->name, iter->remotePath, iter->server, wxLongLong(size.GetHi(), size.GetLo()), type);
 	m_pQueue->QueueFile_Finish(true);
 
 	return true;
@@ -842,13 +859,13 @@ void CEditHandler::SetTimerState()
 		m_timer.Start(15000);
 }
 
-wxString CEditHandler::CanOpen(enum CEditHandler::fileType type, const wxString& fileName, bool &dangerous, bool &program_exists)
+bool CEditHandler::CanOpen(enum CEditHandler::fileType type, const wxString& fileName, bool &dangerous)
 {
 	wxASSERT(type != none);
 
-	wxString command = GetOpenCommand(fileName, program_exists);
-	if (command.empty() || !program_exists)
-		return command;
+	wxString command = GetOpenCommand(fileName);
+	if (command == _T(""))
+		return false;
 
 	wxFileName fn;
 	if (type == remote)
@@ -864,43 +881,27 @@ wxString CEditHandler::CanOpen(enum CEditHandler::fileType type, const wxString&
 	else
 		dangerous = false;
 
-	return command;
+	return true;
 }
 
-wxString CEditHandler::GetOpenCommand(const wxString& file, bool& program_exists)
+wxString CEditHandler::GetOpenCommand(const wxString& file)
 {
 	if (!COptions::Get()->GetOptionVal(OPTION_EDIT_ALWAYSDEFAULT))
 	{
-		const wxString command = GetCustomOpenCommand(file, program_exists);
+		const wxString command = GetCustomOpenCommand(file);
 		if (command != _T(""))
 			return command;
 
 		if (COptions::Get()->GetOptionVal(OPTION_EDIT_INHERITASSOCIATIONS))
 		{
-			const wxString command = GetSystemOpenCommand(file, program_exists);
+			const wxString command = GetSystemOpenCommand(file);
 			if (command != _T(""))
 				return command;
 		}
 	}
 
 	wxString command = COptions::Get()->GetOption(OPTION_EDIT_DEFAULTEDITOR);
-	if (command[0] == '0')
-		return _T(""); // None set
-	else if (command[0] == '1')
-	{
-		// Text editor
-		const wxString random = _T("5AC2EE515D18406 space aB77C2C60F1F88952.txt"); // Chosen by fair dice roll. Guaranteed to be random.
-		wxString command = GetSystemOpenCommand(random, program_exists);
-		if (command.empty() || !program_exists)
-			return command;
-
-		command.Replace(random, file);
-		return command;
-	}
-	else if (command[0] == '2')
-		command = command.Mid(1);
-
-	if (command.empty())
+	if (command == _T(""))
 		return _T("");
 
 	wxString args;
@@ -909,53 +910,12 @@ wxString CEditHandler::GetOpenCommand(const wxString& file, bool& program_exists
 		return _T("");
 
 	if (!ProgramExists(editor))
-	{
-		program_exists = false;
-		return editor;
-	}
+		return _T("");
 
-	program_exists = true;
 	return command + _T(" \"") + file + _T("\"");
 }
 
-
-static bool PathExpand(wxString& cmd)
-{
-#ifndef __WXMSW__
-	if (cmd[0] == '/')
-		return true;
-#else
-	if (cmd[0] == '\\')
-		// UNC or root of current working dir, whatever that is
-		return true;
-	if (cmd.Len() > 2 && cmd[1] == ':')
-		// Absolute path
-		return true;
-#endif
-
-	// Need to search for program in $PATH
-	wxString path;
-	if (!wxGetEnv(_T("PATH"), &path))
-		return false;
-
-	wxString full_cmd;
-	bool found = wxFindFileInPath(&full_cmd, path, cmd);
-#ifdef __WXMSW__
-	if (!found && cmd.Right(4).Lower() != _T(".exe"))
-	{
-		cmd += _T(".exe");
-		found = wxFindFileInPath(&full_cmd, path, cmd);
-	}
-#endif
-
-	if (!found)
-		return false;
-
-	cmd = full_cmd;
-	return true;
-}
-
-wxString CEditHandler::GetSystemOpenCommand(wxString file, bool &program_exists)
+wxString CEditHandler::GetSystemOpenCommand(const wxString& file)
 {
 	wxFileName fn(file);
 
@@ -963,81 +923,28 @@ wxString CEditHandler::GetSystemOpenCommand(wxString file, bool &program_exists)
 	if (ext == _T(""))
 		return _T("");
 
-	while (true)
+	wxFileType* pType = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
+	if (!pType)
+		return _T("");
+
+	wxString cmd;
+	if (!pType->GetOpenCommand(&cmd, wxFileType::MessageParameters(file)))
 	{
-		wxFileType* pType = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
-		if (!pType)
-			return _T("");
-
-		wxString cmd;
-		if (!pType->GetOpenCommand(&cmd, wxFileType::MessageParameters(file)))
-		{
-			delete pType;
-			return _T("");
-		}
 		delete pType;
-
-		if (cmd.empty())
-			return wxEmptyString;
-
-		program_exists = false;
-
-		wxString editor;
-		if (cmd.Left(7) == _T("WX_DDE#"))
-		{
-			// See wxWidget's wxExecute in src/msw/utilsexc.cpp
-			// WX_DDE#<command>#DDE_SERVER#DDE_TOPIC#DDE_COMMAND
-			editor = cmd.Mid(7);
-			int pos = editor.Find('#');
-			if (pos < 1)
-				return cmd;
-			editor = editor.Left(pos);
-		}
-		else
-			editor = cmd;
-
-		wxString args;
-		if (!UnquoteCommand(editor, args) || editor.empty())
-			return cmd;
-
-		if (!PathExpand(editor))
-			return cmd;
-
-		if (ProgramExists(editor))
-			program_exists = true;
-
-#ifdef __WXGTK__
-		int pos = args.Find(file);
-		if (pos != -1 && file.Find(' ') != -1 && file[0] != '\'' && file[0] != '"')
-		{
-			// Might need to quote filename, wxWidgets doesn't do it
-			if ((!pos || (args[pos - 1] != '\'' && args[pos - 1] != '"')) &&
-				args[pos + file.Length()] != '\'' && args[pos + file.Length()] != '"')
-			{
-				// Filename in command arguments isn't quoted. Repeat with quoted filename
-				file = _T("\"") + file + _T("\"");
-				continue;
-			}
-		}
-#endif
-		return cmd;
+		return _T("");
 	}
+	delete pType;
 
-	return wxEmptyString;
+	return cmd;
 }
 
-wxString CEditHandler::GetCustomOpenCommand(const wxString& file, bool& program_exists)
+wxString CEditHandler::GetCustomOpenCommand(const wxString& file)
 {
 	wxFileName fn(file);
 
-	wxString ext = fn.GetExt();
+	const wxString& ext = fn.GetExt();
 	if (ext == _T(""))
-	{
-		if (fn.GetFullName()[0] == '.')
-			ext = _T(".");
-		else
-			ext = _T("/");
-	}
+		return _T("");
 
 	wxString associations = COptions::Get()->GetOption(OPTION_EDIT_CUSTOMASSOCIATIONS) + _T("\n");
 	associations.Replace(_T("\r"), _T(""));
@@ -1067,22 +974,20 @@ wxString CEditHandler::GetCustomOpenCommand(const wxString& file, bool& program_
 			return _T("");
 
 		if (!ProgramExists(prog))
-		{
-			program_exists = false;
-			return prog;
-		}
-		
-		program_exists = true;
+			return _T("");
+
 		return command + _T(" \"") + fn.GetFullPath() + _T("\"");
 	}
 
 	return _T("");
 }
 
+#ifdef __WXMAC__
 void CEditHandler::OnChangedFileEvent(wxCommandEvent& event)
 {
 	CheckForModifications();
 }
+#endif
 
 wxString CEditHandler::GetTemporaryFile(wxString name)
 {
@@ -1160,11 +1065,7 @@ bool CEditHandler::FilenameExists(const wxString& file)
 {
 	for (std::list<t_fileData>::const_iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); iter++)
 	{
-#ifdef __WXMSW__
-		if (!iter->file.CmpNoCase(file))
-#else
 		if (iter->file == file)
-#endif
 			return true;
 	}
 
@@ -1196,16 +1097,6 @@ END_EVENT_TABLE()
 CEditHandlerStatusDialog::CEditHandlerStatusDialog(wxWindow* parent)
 	: m_pParent(parent)
 {
-	m_pWindowStateManager = 0;
-}
-
-CEditHandlerStatusDialog::~CEditHandlerStatusDialog()
-{
-	if (m_pWindowStateManager)
-	{
-		m_pWindowStateManager->Remember(OPTION_EDITSTATUSDIALOG_SIZE);
-		delete m_pWindowStateManager;
-	}
 }
 
 int CEditHandlerStatusDialog::ShowModal()
@@ -1302,9 +1193,6 @@ int CEditHandlerStatusDialog::ShowModal()
 	pListCtrl->SetMinSize(wxSize(pListCtrl->GetColumnWidth(0) + pListCtrl->GetColumnWidth(1) + pListCtrl->GetColumnWidth(2) + pListCtrl->GetColumnWidth(3) + 10, pListCtrl->GetMinSize().GetHeight()));
 	GetSizer()->Fit(this);
 
-	m_pWindowStateManager = new CWindowStateManager(this);
-	m_pWindowStateManager->Restore(OPTION_EDITSTATUSDIALOG_SIZE, GetSize());
-
 	SetCtrlState();
 
 	int res = wxDialogEx::ShowModal();
@@ -1385,9 +1273,9 @@ void CEditHandlerStatusDialog::OnUnedit(wxCommandEvent& event)
 		
 		if (type == CEditHandler::local)
 		{
-			pEditHandler->Remove(pData->file);
 			delete pData;
 			pListCtrl->DeleteItem(i);
+			pEditHandler->Remove(pData->file);
 		}
 		else
 		{
@@ -1524,207 +1412,10 @@ CEditHandler::t_fileData* CEditHandlerStatusDialog::GetDataFromItem(int item, CE
 	CEditHandler::t_fileData* pData = (CEditHandler::t_fileData*)pListCtrl->GetItemData(item);
 	wxASSERT(pData);
 
-	wxListItem info;
-	info.SetMask(wxLIST_MASK_TEXT);
-	info.SetId(item);
-	info.SetColumn(1);
-	pListCtrl->GetItem(info);
-	if (info.GetText() == _("Local"))
+	if (pListCtrl->GetItemText(item) == _("Local"))
 		type = CEditHandler::local;
 	else
 		type = CEditHandler::remote;
 
 	return pData;
-}
-
-//----------
-
-BEGIN_EVENT_TABLE(CNewAssociationDialog, wxDialogEx)
-EVT_RADIOBUTTON(wxID_ANY, CNewAssociationDialog::OnRadioButton)
-EVT_BUTTON(wxID_OK, CNewAssociationDialog::OnOK)
-EVT_BUTTON(XRCID("ID_BROWSE"), CNewAssociationDialog::OnBrowseEditor)
-END_EVENT_TABLE()
-
-CNewAssociationDialog::CNewAssociationDialog(wxWindow *parent)
-	: m_pParent(parent)
-{
-}
-
-bool CNewAssociationDialog::Show(const wxString &file)
-{
-	if (!Load(m_pParent, _T("ID_EDIT_NOPROGRAM")))
-		return true;
-
-	int pos = file.Find('.', true);
-	if (!pos)
-		m_ext = _T(".");
-	else if (pos != -1)
-		m_ext = file.Mid(pos + 1);	
-	else
-		m_ext.clear();
-
-	wxStaticText *pDesc = XRCCTRL(*this, "ID_DESC", wxStaticText);
-	pDesc->SetLabel(wxString::Format(pDesc->GetLabel(), m_ext.c_str()));
-
-	bool program_exists = false;
-	wxString cmd = CEditHandler::Get()->GetSystemOpenCommand(_T("foo.txt"), program_exists);
-	if (!program_exists)
-		cmd.clear();
-	if (!cmd.empty())
-	{
-		wxString args;
-		if (!UnquoteCommand(cmd, args))
-			cmd.clear();
-	}
-
-	if (!PathExpand(cmd))
-		cmd.clear();
-
-	pDesc = XRCCTRL(*this, "ID_EDITOR_DESC", wxStaticText);
-	if (cmd.empty())
-	{
-		XRCCTRL(*this, "ID_USE_CUSTOM", wxRadioButton)->SetValue(true);
-		XRCCTRL(*this, "ID_USE_EDITOR", wxRadioButton)->Enable(false);
-		pDesc->Hide();
-	}
-	else
-	{
-		XRCCTRL(*this, "ID_EDITOR_DESC_NONE", wxStaticText)->Hide();
-		pDesc->SetLabel(wxString::Format(pDesc->GetLabel(), cmd.c_str()));
-	}
-
-	SetCtrlState();
-
-	GetSizer()->Fit(this);
-
-	if (ShowModal() != wxID_OK)
-		return false;
-
-	return true;
-}
-
-void CNewAssociationDialog::SetCtrlState()
-{
-	wxRadioButton* pCustom = wxDynamicCast(FindWindow(XRCID("ID_USE_CUSTOM")), wxRadioButton);
-	if (!pCustom)
-	{
-		// Return since it can get called before dialog got fully loaded
-		return;
-	}
-
-	const bool custom = pCustom->GetValue();
-
-	XRCCTRL(*this, "ID_CUSTOM", wxTextCtrl)->Enable(custom);
-	XRCCTRL(*this, "ID_BROWSE", wxButton)->Enable(custom);
-}
-
-void CNewAssociationDialog::OnRadioButton(wxCommandEvent& event)
-{
-	SetCtrlState();
-}
-
-void CNewAssociationDialog::OnOK(wxCommandEvent& event)
-{
-	const bool custom = XRCCTRL(*this, "ID_USE_CUSTOM", wxRadioButton)->GetValue();
-	const bool always = XRCCTRL(*this, "ID_ALWAYS", wxCheckBox)->GetValue();
-
-	if (custom)
-	{
-		wxString cmd = XRCCTRL(*this, "ID_CUSTOM", wxTextCtrl)->GetValue();
-		wxString editor = cmd;
-		wxString args;
-		if (!UnquoteCommand(editor, args) || editor.empty())
-		{
-			wxMessageBox(_("You need to enter a properly quoted command."), _("Cannot set file association"), wxICON_EXCLAMATION);
-			return;
-		}
-		if (!ProgramExists(editor))
-		{
-			wxMessageBox(_("Selected editor does not exist."), _("Cannot set file association"), wxICON_EXCLAMATION, this);
-			return;
-		}
-
-		if (always)
-			COptions::Get()->SetOption(OPTION_EDIT_DEFAULTEDITOR, _T("2") + cmd);
-		else
-		{
-			wxString associations = COptions::Get()->GetOption(OPTION_EDIT_CUSTOMASSOCIATIONS);
-			if (associations.Last() != '\n')
-				associations += '\n';
-			if (m_ext.empty())
-				m_ext = _T("/");
-			associations += m_ext + _T(" ") + cmd;
-			COptions::Get()->SetOption(OPTION_EDIT_CUSTOMASSOCIATIONS, associations);
-		}
-	}
-	else
-	{
-		if (always)
-			COptions::Get()->SetOption(OPTION_EDIT_DEFAULTEDITOR, _T("1"));
-		else
-		{
-			bool program_exists = false;
-			wxString cmd = CEditHandler::Get()->GetSystemOpenCommand(_T("foo.txt"), program_exists);
-			if (!program_exists)
-				cmd.clear();
-			if (!cmd.empty())
-			{
-				wxString args;
-				if (!UnquoteCommand(cmd, args))
-					cmd.clear();
-			}
-			if (cmd.empty()
-#ifdef __WXGTK__
-				|| !PathExpand(cmd)
-#endif
-				)
-			{
-				wxMessageBox(_("The default editor for text files could not be found."), _("Cannot set file association"), wxICON_EXCLAMATION, this);
-				return;
-			}
-			if (cmd.Find(' ') != -1)
-				cmd = _T("\"") + cmd + _T("\"");
-			wxString associations = COptions::Get()->GetOption(OPTION_EDIT_CUSTOMASSOCIATIONS);
-			if (!associations.empty() && associations.Last() != '\n')
-				associations += '\n';
-			if (m_ext.empty())
-				m_ext = _T("/");
-			associations += m_ext + _T(" ") + cmd;
-			COptions::Get()->SetOption(OPTION_EDIT_CUSTOMASSOCIATIONS, associations);
-		}
-	}
-
-	EndModal(wxID_OK);
-}
-
-void CNewAssociationDialog::OnBrowseEditor(wxCommandEvent& event)
-{
-	wxFileDialog dlg(this, _("Select default editor"), _T(""), _T(""),
-#ifdef __WXMSW__
-		_T("Executable file (*.exe)|*.exe"),
-#elif __WXMAC__
-		_T("Applications (*.app)|*.app"),
-#else
-		wxFileSelectorDefaultWildcardStr,
-#endif
-		wxFD_OPEN | wxFD_FILE_MUST_EXIST);
-
-	if (dlg.ShowModal() != wxID_OK)
-		return;
-
-	wxString editor = dlg.GetPath();
-	if (editor == _T(""))
-		return;
-
-	if (!ProgramExists(editor))
-	{
-		XRCCTRL(*this, "ID_EDITOR", wxWindow)->SetFocus();
-		wxMessageBox(_("Selected editor does not exist."), _("File not found"), wxICON_EXCLAMATION, this);
-		return;
-	}
-
-	if (editor.Find(' ') != -1)
-		editor = _T("\"") + editor + _T("\"");
-
-	XRCCTRL(*this, "ID_CUSTOM", wxTextCtrl)->ChangeValue(editor);
 }

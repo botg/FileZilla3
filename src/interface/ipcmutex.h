@@ -26,9 +26,8 @@ enum t_ipcMutexType
 	MUTEX_MOSTRECENTSERVERS = 7,
 	MUTEX_TRUSTEDCERTS = 8,
 	MUTEX_GLOBALBOOKMARKS = 9,
-	MUTEX_SEARCHCONDITIONS = 10,
 	
-	MUTEX_LASTFREE = 11
+	MUTEX_LASTFREE = 10
 };
 
 class CInterProcessMutex
@@ -37,8 +36,8 @@ public:
 	CInterProcessMutex(enum t_ipcMutexType mutexType, bool initialLock = true);
 	~CInterProcessMutex();
 
-	bool Lock();
-	int TryLock(); // Tries to lock the mutex. Returns 1 on success, 0 if held by other process, -1 on failure
+	void Lock();
+	bool TryLock(); // Tries to lock the mutex. Returns true if successful, else otherwise.
 	void Unlock();
 
 	bool IsLocked() const { return m_locked; }

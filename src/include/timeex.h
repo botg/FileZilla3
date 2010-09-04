@@ -6,17 +6,15 @@
  * an extended time class in wich Now() never returns the same value.
  */
 
-#include <wx/timer.h>
-
 class CTimeEx
 {
 public:
-	CTimeEx(const wxDateTime& time);
+	CTimeEx(wxDateTime time);
 	CTimeEx();
 
 	static CTimeEx Now();
 
-	wxDateTime GetTime() const { return m_time; }
+	wxDateTime GetTime() { return m_time; }
 
 	bool IsValid() const { return m_time.IsValid(); }
 

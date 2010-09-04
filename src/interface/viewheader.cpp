@@ -1,12 +1,10 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "viewheader.h"
 #include "commandqueue.h"
 
 #ifdef __WXMSW__
 #include "wx/msw/uxtheme.h"
 #endif //__WXMSW__
-
-#include <wx/combobox.h>
 
 #ifdef __WXMSW__
 const int border_offset = 0;
@@ -89,16 +87,11 @@ END_EVENT_TABLE()
 CViewHeader::CViewHeader(wxWindow* pParent, const wxString& label)
 	: wxWindow(pParent, wxID_ANY)
 {
-	m_cbOffset = 0;
-	m_labelHeight = 0;
 	m_alreadyInPaint = false;
 	m_pComboBox = new CComboBoxEx(this);
 	m_pLabel = new wxStaticText(this, wxID_ANY, label, wxDefaultPosition, wxDefaultSize);
 	wxSize size = GetSize();
 	size.SetHeight(m_pComboBox->GetBestSize().GetHeight() + border_offset);
-
-	SetLabel(label);
-
 	SetSize(size);
 
 #ifdef __WXMSW__
@@ -107,6 +100,8 @@ CViewHeader::CViewHeader(wxWindow* pParent, const wxString& label)
 	m_pComboBox->Connect(wxID_ANY, wxEVT_LEFT_UP, (wxObjectEventFunction)(wxEventFunction)(wxMouseEventFunction)&CViewHeader::OnComboMouseEvent, 0, this);
 	m_bLeftMousePressed = false;
 #endif //__WXMSW__
+
+	SetLabel(label);
 }
 
 void CViewHeader::OnSize(wxSizeEvent& event)
@@ -493,7 +488,7 @@ void CLocalViewHeader::OnSelectionChanged(wxCommandEvent& event)
 
 	if (!wxDir::Exists(dir))
 	{
-		const wxString& current = m_pState->GetLocalDir().GetPath();
+		const wxString& current = m_pState->GetLocalDir();
 		int item = m_pComboBox->FindString(current, true);
 		if (item != wxNOT_FOUND)
 			m_pComboBox->SetSelection(item);
@@ -520,11 +515,11 @@ void CLocalViewHeader::OnTextEnter(wxCommandEvent& event)
 			wxMessageBox(error, _("Failed to change directory"), wxICON_INFORMATION);
 		else
 			wxBell();
-		m_pComboBox->SetValue(m_pState->GetLocalDir().GetPath());
+		m_pComboBox->SetValue(m_pState->GetLocalDir());
 	}
 }
 
-void CLocalViewHeader::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CLocalViewHeader::OnStateChange(enum t_statechange_notifications notification, const wxString& data)
 {
 	wxASSERT(notification == STATECHANGE_LOCAL_DIR);
 
@@ -532,7 +527,7 @@ void CLocalViewHeader::OnStateChange(CState* pState, enum t_statechange_notifica
 	m_autoCompletionText = _T("");
 #endif
 
-	wxString dir = pState->GetLocalDir().GetPath();
+	wxString dir = m_pState->GetLocalDir();
 	AddRecentDirectory(dir);
 }
 
@@ -548,11 +543,11 @@ CRemoteViewHeader::CRemoteViewHeader(wxWindow* pParent, CState* pState)
 	m_pComboBox->Disable();
 }
 
-void CRemoteViewHeader::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CRemoteViewHeader::OnStateChange(enum t_statechange_notifications notification, const wxString& data)
 {
 	wxASSERT(notification == STATECHANGE_REMOTE_DIR);
 
-	m_path = pState->GetRemotePath();
+	m_path = m_pState->GetRemotePath();
 	if (m_path.IsEmpty())
 	{
 		m_pComboBox->SetValue(_T(""));
@@ -560,7 +555,7 @@ void CRemoteViewHeader::OnStateChange(CState* pState, enum t_statechange_notific
 	}
 	else
 	{
-		const CServer* const pServer = pState->GetServer();
+		const CServer* const pServer = m_pState->GetServer();
 		if (pServer && *pServer != m_lastServer)
 		{
 			m_pComboBox->Clear();
@@ -588,7 +583,7 @@ void CRemoteViewHeader::OnTextEnter(wxCommandEvent& event)
 		return;
 	}
 
-	m_pState->ChangeRemoteDir(path);
+	m_pState->m_pCommandQueue->ProcessCommand(new CListCommand(path));
 }
 
 void CRemoteViewHeader::OnSelectionChanged(wxCommandEvent& event)
@@ -610,5 +605,5 @@ void CRemoteViewHeader::OnSelectionChanged(wxCommandEvent& event)
 		return;
 	}
 
-	m_pState->ChangeRemoteDir(path);
+	m_pState->m_pCommandQueue->ProcessCommand(new CListCommand(path));
 }

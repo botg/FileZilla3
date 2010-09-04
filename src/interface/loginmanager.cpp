@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "loginmanager.h"
 #include "filezillaapp.h"
 

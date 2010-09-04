@@ -8,10 +8,6 @@ public:
 	virtual bool LoadPage();
 	virtual bool SavePage();
 	virtual bool Validate();
-
-protected:
-	DECLARE_EVENT_TABLE();
-	void OnToggleSpeedLimitEnable(wxCommandEvent& event);
 };
 
 #endif //__OPTIONSPAGE_TRANSFER_H__

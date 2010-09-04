@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "commandqueue.h"
 #include "Mainfrm.h"
 #include "state.h"
@@ -55,16 +55,6 @@ void CCommandQueue::ProcessNextCommand()
 		return;
 
 	m_inside_commandqueue = true;
-
-	if (m_CommandList.empty()) {
-		// Possible sequence of events:
-		// - Engine emits listing and operation finished
-		// - Connection gets terminated
-		// - Interface cannot obtain listing since not connected
-		// - Yet getting operation successful
-		// To keep things flowing, we need to advance the recursive operation.
-		m_pState->GetRecursiveOperationHandler()->NextOperation();
-	}
 
 	while (!m_CommandList.empty())
 	{
@@ -133,9 +123,6 @@ void CCommandQueue::ProcessNextCommand()
 			GrantExclusiveEngineRequest();
 		else
 			m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
-
-		if (!m_pState->SuccessfulConnect())
-			m_pState->SetServer(0);
 	}
 }
 
@@ -188,6 +175,8 @@ void CCommandQueue::Finish(COperationNotification *pNotification)
 		}
 		if (pNotification->nReplyCode & FZ_REPLY_PASSWORDFAILED)
 			CLoginManager::Get().CachedPasswordFailed(*m_pState->GetServer());
+		if (!m_pState->SuccessfulConnect())
+			m_pState->SetServer(0);
 	}
 
 	if (m_exclusiveEngineLock)

@@ -13,8 +13,7 @@ dist_resources_DATA = defaultfilters.xml \
 		theme.xml toolbar.xrc up.png
 
 resources48dir = $(pkgdatadir)/resources/48x48
-dist_resources48_DATA = 48x48/filezilla.png \
-			48x48/speedlimits.png
+dist_resources48_DATA = 48x48/filezilla.png
 
 if USE_RESOURCEFILE
 nodist_noinst_DATA = filezilla.o

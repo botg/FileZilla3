@@ -1,9 +1,8 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "externalipresolver.h"
 #include "wx/regex.h"
 #include "socket.h"
 #include <errno.h>
-#include "misc.h"
 
 const wxEventType fzEVT_EXTERNALIPRESOLVE = wxNewEventType();
 
@@ -44,7 +43,7 @@ CExternalIPResolver::~CExternalIPResolver()
 	m_pSocket = 0;
 }
 
-void CExternalIPResolver::GetExternalIP(const wxString& address, enum CSocket::address_family protocol, bool force /*=false*/)
+void CExternalIPResolver::GetExternalIP(const wxString& address /*=_T("")*/, bool force /*=false*/)
 {
 	if (m_checked)
 	{
@@ -58,7 +57,6 @@ void CExternalIPResolver::GetExternalIP(const wxString& address, enum CSocket::a
 	}
 
 	m_address = address;
-	m_protocol = protocol;
 
 	wxString host;
 	int pos;
@@ -90,7 +88,7 @@ void CExternalIPResolver::GetExternalIP(const wxString& address, enum CSocket::a
 
 	m_pSocket = new CSocket(this);
 
-	int res = m_pSocket->Connect(host, m_port, protocol);
+	int res = m_pSocket->Connect(host, m_port);
 	if (res && res != EINPROGRESS)
 	{
 		Close(false);
@@ -340,7 +338,7 @@ void CExternalIPResolver::OnHeader()
 
 					ResetHttpData(false);
 
-					GetExternalIP(location, m_protocol);
+					GetExternalIP(location);
 					return;
 				}
 
@@ -389,11 +387,6 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 		{
 			if (buffer[i] == '\r' || buffer[i] == '\n')
 				break;
-			if (buffer[i] > 127)
-			{
-				Close(false);
-				return;
-			}
 		}
 
 		if (i)
@@ -403,46 +396,20 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 			return;
 	}
 
-	if (m_protocol == CSocket::ipv6)
+	// Validate ip address
+	wxString digit = _T("0*[0-9]{1,3}");
+	const wxChar* dot = _T("\\.");
+	wxString exp = _T("(^|[^\\.[:digit:]])(") + digit + dot + digit + dot + digit + dot + digit + _T(")([^\\.[:digit:]]|$)");
+	wxRegEx regex;
+	regex.Compile(exp);
+
+	if (!regex.Matches(m_data))
 	{
-		if (m_data[0] == '[')
-		{
-			if (m_data.Last() != ']')
-			{
-				Close(false);
-				return;
-			}
-			m_data.RemoveLast();
-			m_data = m_data.Mid(1);
-		}
-
-		if (GetIPV6LongForm(m_data).IsEmpty())
-		{
-			Close(false);
-			return;
-		}
-
-		m_ip = m_data;
-	}
-	else
-	{
-
-		// Validate ip address
-		wxString digit = _T("0*[0-9]{1,3}");
-		const wxChar* dot = _T("\\.");
-		wxString exp = _T("(^|[^\\.[:digit:]])(") + digit + dot + digit + dot + digit + dot + digit + _T(")([^\\.[:digit:]]|$)");
-		wxRegEx regex;
-		regex.Compile(exp);
-
-		if (!regex.Matches(m_data))
-		{
-			Close(false);
-			return;
-		}
-
-		m_ip = regex.GetMatch(m_data, 2);
+		Close(false);
+		return;
 	}
 
+	m_ip = regex.GetMatch(m_data, 2);
 	Close(true);
 }
 

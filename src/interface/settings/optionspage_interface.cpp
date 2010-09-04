@@ -1,10 +1,9 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "../Options.h"
 #include "settingsdialog.h"
 #include "optionspage.h"
 #include "optionspage_interface.h"
 #include "../Mainfrm.h"
-#include "../power_management.h"
 
 BEGIN_EVENT_TABLE(COptionsPageInterface, COptionsPage)
 EVT_CHECKBOX(XRCID("ID_FILEPANESWAP"), COptionsPageInterface::OnLayoutChange)
@@ -25,13 +24,6 @@ bool COptionsPageInterface::LoadPage()
 	SetCheckFromOption(XRCID("ID_MINIMIZE_TRAY"), OPTION_MINIMIZE_TRAY, failure);
 #endif
 
-	SetCheckFromOption(XRCID("ID_PREVENT_IDLESLEEP"), OPTION_PREVENT_IDLESLEEP, failure);
-	
-	SetCheckFromOption(XRCID("ID_SPEED_DISPLAY"), OPTION_SPEED_DISPLAY, failure);
-
-	if (!CPowerManagement::IsSupported())
-		XRCCTRL(*this, "ID_PREVENT_IDLESLEEP", wxCheckBox)->Hide();
-
 	return !failure;
 }
 
@@ -45,10 +37,6 @@ bool COptionsPageInterface::SavePage()
 #ifndef __WXMAC__
 	SetOptionFromCheck(XRCID("ID_MINIMIZE_TRAY"), OPTION_MINIMIZE_TRAY);
 #endif
-
-	SetOptionFromCheck(XRCID("ID_PREVENT_IDLESLEEP"), OPTION_PREVENT_IDLESLEEP);
-	
-	SetOptionFromCheck(XRCID("ID_SPEED_DISPLAY"), OPTION_SPEED_DISPLAY);
 
 	return true;
 }

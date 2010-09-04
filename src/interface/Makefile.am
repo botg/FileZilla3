@@ -23,6 +23,7 @@ filezilla_SOURCES = aboutdialog.cpp \
 		commandqueue.cpp \
 		conditionaldialog.cpp \
 		context_control.cpp \
+		cursor_resetter.cpp \
 		customheightlistctrl.cpp \
 		defaultfileexistsdlg.cpp \
 		dialogex.cpp \
@@ -129,6 +130,7 @@ noinst_HEADERS = aboutdialog.h \
 		 commandqueue.h \
 		 conditionaldialog.h \
 		 context_control.h \
+		 cursor_resetter.h \
 		 customheightlistctrl.h \
 		 defaultfileexistsdlg.h \
 		 dialogex.h \
@@ -273,10 +275,6 @@ $(top_builddir)/FileZilla.app/Contents/MacOS/filezilla$(EXEEXT): filezilla
 	mkdir -p $(top_builddir)/FileZilla.app/Contents/Resources
 	$(MAKE) -C resources mac-copy-resources
 	cp -f filezilla $(top_builddir)/FileZilla.app/Contents/MacOS/filezilla
-	cp -f $(top_srcdir)/COPYING $(top_builddir)/FileZilla.app/COPYING
-	mkdir -p $(top_builddir)/FileZilla.app/docs
-	cp -f $(top_srcdir)/docs/fzdefaults.xml.example $(top_builddir)/FileZilla.app/docs/fzdefaults.xml.example
-	cp -f $(top_srcdir)/docs/*.man $(top_builddir)/FileZilla.app/docs
 
 CLEANFILES = filezilla.h.gch
 

@@ -507,8 +507,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 	int attributes;
 	bool is_dir;
 	const wxLongLong size(-1);
-	wxDateTime date;
-	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes))
+	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, 0, &attributes))
 	{
 		wxASSERT(is_dir);
 		if (file == _T(""))
@@ -524,7 +523,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 		if (file != knownSubdir)
 #endif
 		{
-			if (filter.FilenameFiltered(file, dirname, true, size, true, attributes, date.IsValid() ? &date : 0))
+			if (filter.FilenameFiltered(file, dirname, true, size, true, attributes))
 				continue;
 		}
 		else
@@ -573,8 +572,7 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 	int attributes;
 	bool is_dir;
 	const wxLongLong size(-1);
-	wxDateTime date;
-	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes))
+	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, 0, &attributes))
 	{
 		wxASSERT(is_dir);
 		if (file == _T(""))
@@ -583,7 +581,7 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 			continue;
 		}
 
-		if (filter.FilenameFiltered(file, dirname, true, size, true, attributes, date.IsValid() ? &date : 0))
+		if (filter.FilenameFiltered(file, dirname, true, size, true, attributes))
 			continue;
 
 		return file;
@@ -782,8 +780,7 @@ void CLocalTreeView::Refresh()
 		bool was_link;
 		bool is_dir;
 		int attributes;
-		wxDateTime date;
-		while (local_filesystem.GetNextFile(file, was_link, is_dir, 0, &date, &attributes))
+		while (local_filesystem.GetNextFile(file, was_link, is_dir, 0, 0, &attributes))
 		{
 			if (file == _T(""))
 			{
@@ -791,7 +788,7 @@ void CLocalTreeView::Refresh()
 				continue;
 			}
 
-			if (filter.FilenameFiltered(file, dir.dir, true, size, true, attributes, date.IsValid() ? &date : 0))
+			if (filter.FilenameFiltered(file, dir.dir, true, size, true, attributes))
 				continue;
 
 			dirs.push_back(file);
@@ -1151,9 +1148,9 @@ void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 	if (!m_contextMenuItem.IsOk())
 		return;
 
-	CLocalPath path(GetDirFromItem(m_contextMenuItem));
+	wxString path = GetDirFromItem(m_contextMenuItem);
 
-	if (!path.HasParent())
+	if (!CLocalPath(path).HasParent())
 		return;
 
 	if (!m_pState->IsRemoteConnected())
@@ -1167,6 +1164,8 @@ void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 	if (!remotePath.ChangePath(GetItemText(m_contextMenuItem)))
 		return;
 
+	if (path.Last() == wxFileName::GetPathSeparator())
+		path.RemoveLast();
 	m_pQueueView->QueueFolder(event.GetId() == XRCID("ID_ADDTOQUEUE"), false, path, remotePath, server);
 }
 
@@ -1406,7 +1405,7 @@ void CLocalTreeView::OnChar(wxKeyEvent& event)
 	wxCommandEvent cmdEvt;
 	if (event.GetKeyCode() == WXK_F2)
 		OnMenuRename(cmdEvt);
-	else if (event.GetKeyCode() == WXK_DELETE || event.GetKeyCode() == WXK_NUMPAD_DELETE)
+	else if (event.GetKeyCode() == WXK_DELETE)
 		OnMenuDelete(cmdEvt);
 	else
 		event.Skip();
@@ -1427,7 +1426,7 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 			CFilterManager filter;
 
 			const int attributes = S_IRUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
-			if (!filter.FilenameFiltered(_T("localhost"), path, true, size, true, attributes, 0))
+			if (!filter.FilenameFiltered(_T("localhost"), path, true, size, true, attributes))
 			{
 				if (!child)
 					AppendItem(item, _T(""));
@@ -1447,15 +1446,14 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 			bool wasLink;
 			int attributes;
 			enum CLocalFileSystem::local_fileType type;
-			wxDateTime date;
 			if (path.Last() == CLocalFileSystem::path_separator)
-				type = CLocalFileSystem::GetFileInfo(path + pData->m_known_subdir, wasLink, 0, &date, &attributes);
+				type = CLocalFileSystem::GetFileInfo(path + pData->m_known_subdir, wasLink, 0, 0, &attributes);
 			else
-				type = CLocalFileSystem::GetFileInfo(path + CLocalFileSystem::path_separator + pData->m_known_subdir, wasLink, 0, &date, &attributes);
+				type = CLocalFileSystem::GetFileInfo(path + CLocalFileSystem::path_separator + pData->m_known_subdir, wasLink, 0, 0, &attributes);
 			if (type == CLocalFileSystem::dir)
 			{
 				CFilterManager filter;
-				if (!filter.FilenameFiltered(pData->m_known_subdir, path, true, size, true, attributes, date.IsValid() ? &date : 0))
+				if (!filter.FilenameFiltered(pData->m_known_subdir, path, true, size, true, attributes))
 					return true;
 			}
 		}

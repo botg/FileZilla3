@@ -293,11 +293,11 @@ CLocalPath CUpdateWizard::GetDownloadDir() const
 		{
 			wxString dir = path;
 			CoTaskMemFree(path);
-			return CLocalPath(dir);
+			return dir;
 		}
 	}
 #endif
-	return CLocalPath(wxStandardPaths::Get().GetDocumentsDir());
+	return wxStandardPaths::Get().GetDocumentsDir();
 }
 
 bool CUpdateWizard::SetLocalFile()

@@ -8,6 +8,9 @@
 #include "QueueView.h"
 #include "sitemanager.h"
 #include "state.h"
+#ifdef __WXGTK__
+#include "cursor_resetter.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(CMenuBar, wxMenuBar)
 
@@ -40,7 +43,7 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 
 	
 #if FZ_MANUALUPDATECHECK
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK))
+	if (COptions::Get()->GetDefaultVal(DEFAULT_DISABLEUPDATECHECK))
 #endif
 	{
 		wxMenu *helpMenu;
@@ -131,6 +134,10 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 	menubar->RegisterOption(OPTION_SPEEDLIMIT_INBOUND);
 	menubar->RegisterOption(OPTION_SPEEDLIMIT_OUTBOUND);
 
+#ifdef __WXGTK__
+	ResetCursor(menubar);
+#endif
+
 	return menubar;
 }
 
@@ -182,9 +189,7 @@ void CMenuBar::UpdateBookmarkMenu()
 				id = *ids;
 				ids++;
 			}
-			wxString name(*iter);
-			name.Replace(_T("&"), _T("&&"));
-			pMenu->Append(id, name);
+			pMenu->Append(id, *iter);
 
 			m_bookmark_menu_id_map_global[id] = *iter;
 		}
@@ -214,9 +219,7 @@ void CMenuBar::UpdateBookmarkMenu()
 			id = *ids;
 			ids++;
 		}
-		wxString name(*iter);
-		name.Replace(_T("&"), _T("&&"));
-		pMenu->Append(id, name);
+		pMenu->Append(id, *iter);
 
 		m_bookmark_menu_id_map_site[id] = *iter;
 	}

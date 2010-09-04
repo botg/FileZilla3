@@ -347,11 +347,8 @@ void CLocalPath::AddSegment(const wxString& segment)
 	wxASSERT(segment.Find(_T("\\")) == -1);
 #endif
 
-	if (!segment.empty())
-	{
-		m_path += segment;
-		m_path += path_separator;
-	}
+	m_path += segment;
+	m_path += path_separator;
 }
 
 bool CLocalPath::ChangePath(const wxString& path)

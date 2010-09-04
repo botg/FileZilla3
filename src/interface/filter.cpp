@@ -6,7 +6,6 @@
 #include "xmlfunctions.h"
 #include <wx/regex.h>
 #include "Mainfrm.h"
-#include "Options.h"
 #include "inputdialog.h"
 #include "state.h"
 
@@ -171,9 +170,6 @@ void CFilterDialog::SaveFilter(TiXmlElement* pElement, const CFilter& filter)
 		case filter_path:
 			type = 4;
 			break;
-		case filter_date:
-			type = 5;
-			break;
 		default:
 			wxFAIL_MSG(_T("Unhandled filter type"));
 			continue;
@@ -181,19 +177,7 @@ void CFilterDialog::SaveFilter(TiXmlElement* pElement, const CFilter& filter)
 
 		TiXmlElement* pCondition = pConditions->LinkEndChild(new TiXmlElement("Condition"))->ToElement();
 		AddTextElement(pCondition, "Type", type);
-
-		if (condition.type == filter_size)
-		{
-			// Backwards compatibility sucks
-			int v = condition.condition;
-			if (v == 2)
-				v = 3;
-			else if (v > 2)
-				--v;
-			AddTextElement(pCondition, "Condition", v);
-		}
-		else
-			AddTextElement(pCondition, "Condition", condition.condition);
+		AddTextElement(pCondition, "Condition", condition.condition);
 		AddTextElement(pCondition, "Value", condition.strValue);
 	}
 }
@@ -202,7 +186,7 @@ void CFilterDialog::SaveFilters()
 {
 	CInterProcessMutex mutex(MUTEX_FILTERS);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("filters.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("filters.xml"));
 	CXmlFile xml(file);
 	TiXmlElement* pDocument = xml.Load();
 	if (!pDocument)
@@ -605,7 +589,7 @@ bool CFilterManager::HasSameLocalAndRemoteFilters() const
 	return true;
 }
 
-bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes,const wxDateTime* date) const
+bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes) const
 {
 	if (m_filters_disabled)
 		return false;
@@ -620,13 +604,13 @@ bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path
 		if (local)
 		{
 			if (set.local[i])
-				if (FilenameFilteredByFilter(m_globalFilters[i], name, path, dir, size, attributes, date))
+				if (FilenameFilteredByFilter(m_globalFilters[i], name, path, dir, size, attributes))
 					return true;
 		}
 		else
 		{
 			if (set.remote[i])
-				if (FilenameFilteredByFilter(m_globalFilters[i], name, path, dir, size, attributes, date))
+				if (FilenameFilteredByFilter(m_globalFilters[i], name, path, dir, size, attributes))
 					return true;
 		}
 	}
@@ -634,11 +618,11 @@ bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path
 	return false;
 }
 
-bool CFilterManager::FilenameFiltered(const std::list<CFilter> &filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, const wxDateTime* date) const
+bool CFilterManager::FilenameFiltered(const std::list<CFilter> &filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes) const
 {
 	for (std::list<CFilter>::const_iterator iter = filters.begin(); iter != filters.end(); iter++)
 	{
-		if (FilenameFilteredByFilter(*iter, name, path, dir, size, attributes, date))
+		if (FilenameFilteredByFilter(*iter, name, path, dir, size, attributes))
 			return true;
 	}
 
@@ -727,7 +711,7 @@ static bool StringMatch(const wxString& subject, const wxString& filter, int con
 	return match;
 }
 
-bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, wxLongLong size, int attributes, const wxDateTime* date)
+bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, wxLongLong size, int attributes)
 {
 	if (dir && !filter.filterDirs)
 		return false;
@@ -746,7 +730,6 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 			break;
 		case filter_path:
 			match = StringMatch(path, condition.strValue, condition.condition, filter.matchCase, condition.pRegEx);
-			break;
 		case filter_size:
 			if (size == -1)
 				continue;
@@ -761,10 +744,6 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 					match = true;
 				break;
 			case 2:
-				if (size != condition.value)
-					match = true;
-				break;
-			case 3:
 				if (size < condition.value)
 					match = true;
 				break;
@@ -853,30 +832,6 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 			}
 #endif //__WXMSW__
 			break;
-		case filter_date:
-			if (!date)
-				break;
-
-			switch (condition.condition)
-			{
-			case 0:
-				// Before
-				match = date->GetDateOnly() < condition.date;
-				break;
-			case 1:
-				// Equals
-				match = date->GetDateOnly() == condition.date;
-				break;
-			case 2:
-				// Not equals
-				match = date->GetDateOnly() != condition.date;
-				break;
-			case 3:
-				// After
-				match = date->GetDateOnly() > condition.date;
-				break;
-			}
-			break;
 		default:
 			wxFAIL_MSG(_T("Unhandled filter type"));
 			break;
@@ -948,7 +903,8 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 	if (!pConditions)
 		return false;
 
-	for (TiXmlElement *pCondition = pConditions->FirstChildElement("Condition"); pCondition; pCondition = pCondition->NextSiblingElement("Condition"))
+	TiXmlElement *pCondition = pConditions->FirstChildElement("Condition");
+	while (pCondition)
 	{
 		CFilterCondition condition;
 		int type = GetTextElementInt(pCondition, "Type", 0);
@@ -969,25 +925,19 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 		case 4:
 			condition.type = filter_path;
 			break;
-		case 5:
-			condition.type = filter_date;
-			break;
 		default:
+			pCondition = pCondition->NextSiblingElement("Condition");
 			continue;
 		}
 		condition.condition = GetTextElementInt(pCondition, "Condition", 0);
-		if (condition.type == filter_size)
-		{
-			if (condition.value == 3)
-				condition.value = 2;
-			else if (condition.value >= 2)
-				++condition.value;
-		}
 		condition.strValue = GetTextElement(pCondition, "Value");
 		condition.matchCase = filter.matchCase;
 		if (condition.strValue == _T(""))
+		{
+			pCondition = pCondition->NextSiblingElement("Condition");
 			continue;
-		
+		}
+
 		// TODO: 64bit filesize
 		if (condition.type == filter_size)
 		{
@@ -1002,13 +952,10 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 			else
 				condition.value = 1;
 		}
-		else if (condition.type == filter_date)
-		{
-			if (!condition.date.ParseFormat(condition.strValue, _T("%Y-%m-%d")) || !condition.date.IsValid())
-				continue;			
-		}
 
 		filter.filters.push_back(condition);
+
+		pCondition = pCondition->NextSiblingElement("Condition");
 	}
 
 	return true;
@@ -1023,7 +970,7 @@ void CFilterManager::LoadFilters()
 
 	CInterProcessMutex mutex(MUTEX_FILTERS);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("filters.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("filters.xml"));
 	if (!file.FileExists())
 	{
 		wxFileName defaults(wxGetApp().GetResourceDir(), _T("defaultfilters.xml"));

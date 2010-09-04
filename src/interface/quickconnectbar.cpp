@@ -140,24 +140,16 @@ void CQuickconnectBar::OnQuickconnectDropdown(wxCommandEvent& event)
 		pMenu->Append(1, _("Connect bypassing proxy settings"));
 	pMenu->Append(2, _("Clear quickconnect bar"));
 	pMenu->Append(3, _("Clear history"));
+	pMenu->AppendSeparator();
 
 	m_recentServers = CRecentServerList::GetMostRecentServers();
-	if (!m_recentServers.empty())
+	unsigned int i = 0;
+	for (std::list<CServer>::const_iterator iter = m_recentServers.begin();
+		iter != m_recentServers.end();
+		iter++, i++)
 	{
-		pMenu->AppendSeparator();
-
-		unsigned int i = 0;
-		for (std::list<CServer>::const_iterator iter = m_recentServers.begin();
-			iter != m_recentServers.end();
-			iter++, i++)
-		{
-			wxString name(iter->FormatServer());
-			name.Replace(_T("&"), _T("&&"));
-			pMenu->Append(10 + i, name);
-		}
+		pMenu->Append(10 + i, iter->FormatServer());
 	}
-	else
-		pMenu->Enable(3, false);
 
 	XRCCTRL(*this, "ID_QUICKCONNECT_DROPDOWN", wxButton)->PopupMenu(pMenu);
 	delete pMenu;

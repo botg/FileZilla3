@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla Client 3.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-20 11:35+0200\n"
+"POT-Creation-Date: 2010-06-06 16:06+0200\n"
 "PO-Revision-Date: 2010-04-07 20:22+0200\n"
 "Last-Translator: Kari Saariniemi <kari.saariniemi@pp.inet.fi>\n"
 "Language-Team: Kari Saariniemi <kari.saariniemi@pp.inet.fi>\n"
@@ -15,13 +15,13 @@ msgstr ""
 "X-Poedit-SourceCharset: iso-8859-1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:65
-#: ../../locales/../src/interface/statuslinectrl.cpp:221
+#: ../../locales/../src/interface/statuslinectrl.cpp:68
+#: ../../locales/../src/interface/statuslinectrl.cpp:228
 msgid "%H:%M:%S elapsed"
 msgstr "%H:%M:%S kulunut"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:69
-#: ../../locales/../src/interface/statuslinectrl.cpp:229
+#: ../../locales/../src/interface/statuslinectrl.cpp:72
+#: ../../locales/../src/interface/statuslinectrl.cpp:236
 msgid "%H:%M:%S left"
 msgstr "%H:%M:%S jäljellä"
 
@@ -34,9 +34,9 @@ msgstr ""
 "%a -Tili (Rivit, jotka sisältävät tämän, jätetään huomiotta, jos ei käytetä "
 "Tili-kirjautumistyyppiä)"
 
-#: ../../locales/../src/interface/filelist_statusbar.cpp:63
-#: ../../locales/../src/interface/filelist_statusbar.cpp:74
-#: ../../locales/../src/interface/filelist_statusbar.cpp:86
+#: ../../locales/../src/interface/filelist_statusbar.cpp:59
+#: ../../locales/../src/interface/filelist_statusbar.cpp:70
+#: ../../locales/../src/interface/filelist_statusbar.cpp:82
 #, c-format
 msgid "%d directory"
 msgid_plural "%d directories"
@@ -52,8 +52,8 @@ msgid_plural "%d directories with their contents"
 msgstr[0] "%d hakemisto sisältöineen"
 msgstr[1] "%d hakemistot sisältöineen"
 
-#: ../../locales/../src/interface/filelist_statusbar.cpp:62
-#: ../../locales/../src/interface/filelist_statusbar.cpp:85
+#: ../../locales/../src/interface/filelist_statusbar.cpp:58
+#: ../../locales/../src/interface/filelist_statusbar.cpp:81
 #: ../../locales/../src/interface/RemoteListView.cpp:1660
 #: ../../locales/../src/interface/search.cpp:801
 #: ../../locales/../src/interface/search.cpp:1049
@@ -63,14 +63,14 @@ msgid_plural "%d files"
 msgstr[0] "%d tiedosto"
 msgstr[1] "%d tiedostoa"
 
-#: ../../locales/../src/interface/filelist_statusbar.cpp:81
+#: ../../locales/../src/interface/filelist_statusbar.cpp:77
 #, c-format
 msgid "%d file. Total size: %s"
 msgid_plural "%d files. Total size: %s"
 msgstr[0] "%d tiedosto. Koko yhteensä: %s"
 msgstr[1] "%d tiedostoa. Koko yhteensä: %s"
 
-#: ../../locales/../src/interface/filelist_statusbar.cpp:79
+#: ../../locales/../src/interface/filelist_statusbar.cpp:75
 #, c-format
 msgid "%d file. Total size: At least %s"
 msgid_plural "%d files. Total size: At least %s"
@@ -98,22 +98,22 @@ msgstr "%h - Isäntä"
 msgid "%p - Password"
 msgstr "%p - Salasana"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:177
+#: ../../locales/../src/interface/statuslinectrl.cpp:184
 #, c-format
 msgid "%s (%d B/s)"
 msgstr "%s (%d B/s)"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:175
+#: ../../locales/../src/interface/statuslinectrl.cpp:182
 #, c-format
 msgid "%s (%d.%d KB/s)"
 msgstr "%s (%d.%d kt/s)"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:173
+#: ../../locales/../src/interface/statuslinectrl.cpp:180
 #, c-format
 msgid "%s (%d.%d MB/s)"
 msgstr "%s (%d.%d Mt/s)"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:180
+#: ../../locales/../src/interface/statuslinectrl.cpp:187
 #, c-format
 msgid "%s (? B/s)"
 msgstr "%s (? B/s)"
@@ -133,12 +133,12 @@ msgstr "%s - Ei vielä kelvollinen!"
 msgid "%s - Proxy user"
 msgstr "%s - Välityspalvelimen käyttäjä"
 
-#: ../../locales/../src/interface/filelist_statusbar.cpp:91
+#: ../../locales/../src/interface/filelist_statusbar.cpp:87
 #, c-format
 msgid "%s and %s. Total size: %s"
 msgstr "%s ja %s. Koko yhteensä: %s"
 
-#: ../../locales/../src/interface/filelist_statusbar.cpp:89
+#: ../../locales/../src/interface/filelist_statusbar.cpp:85
 #, c-format
 msgid "%s and %s. Total size: At least %s"
 msgstr "%s ja %s. Koko yhteensä: vähintään %s"
@@ -359,7 +359,7 @@ msgstr "L&uo hakemisto"
 msgid "&Create new tab"
 msgstr "L&uo uusi välilehti"
 
-#: ../../locales/../src/interface/menu_bar.cpp:70
+#: ../../locales/../src/interface/menu_bar.cpp:73
 msgid "&Debug"
 msgstr "&Debuggaus"
 
@@ -1018,7 +1018,7 @@ msgstr "'%s' ei ole hakemisto."
 msgid "'Account' logontype not supported by selected protocol"
 msgstr "'Tili' -kirjautumistyyppiä ei tueta valitussa protokollassa"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:591
+#: ../../locales/../src/interface/Mainfrm.cpp:598
 msgid ""
 "'quote' is usually a local command used by commandline clients to send the "
 "arguments following 'quote' to the server. You might want to enter the raw "
@@ -1028,8 +1028,8 @@ msgstr ""
 "asiakkaat kun lähetetään argumentteja palvelimelle, jota seuraa 'quote'. "
 "Haluaisit ehkä antaa pelkän komennon ilman 'quote' -komentoa. "
 
-#: ../../locales/../src/interface/filelist_statusbar.cpp:96
-#: ../../locales/../src/interface/filelist_statusbar.cpp:105
+#: ../../locales/../src/interface/filelist_statusbar.cpp:92
+#: ../../locales/../src/interface/filelist_statusbar.cpp:101
 #, c-format
 msgid "(%d object filtered)"
 msgid_plural "(%d objects filtered)"
@@ -1097,7 +1097,7 @@ msgstr "- Peilipalvelimen tiedosto vahingoittunut"
 msgid "- Malware on your system"
 msgstr "- Haittaohjelma järjestelmässäsi"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:232
+#: ../../locales/../src/interface/statuslinectrl.cpp:239
 msgid "--:--:-- left"
 msgstr "--:--:-- jäljellä"
 
@@ -1219,7 +1219,7 @@ msgstr ""
 msgid "A newer version of FileZilla is available:"
 msgstr "FileZillasta on uudempi versio saatavilla:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:656
+#: ../../locales/../src/interface/Mainfrm.cpp:663
 msgid ""
 "A proper server always shows all files, but some broken servers hide files "
 "from the user. Use this option to force the server to show all files."
@@ -1428,7 +1428,7 @@ msgid ""
 "Alternatively, visit http://filezilla-project.org to download the most "
 "recent version."
 msgstr ""
-"Käy vaihtoehtoisesti osoitteessa: http://filezilla-project.org ladataksesi "
+"Käy vaihtoehtoisesti osoitteessa:  http://filezilla-project.org ladataksesi "
 "uusimman ajan tasalla olevan version."
 
 #: ../../locales/../src/interface/sitemanager.cpp:2304
@@ -1524,7 +1524,7 @@ msgstr "Kysymysten teko FileZillan foorumeissa"
 msgid "Associated program not found:"
 msgstr "Sidottua ohjelmaa ei löytynyt:"
 
-#: ../../locales/../src/interface/filter_conditions_dialog.cpp:623
+#: ../../locales/../src/interface/filter_conditions_dialog.cpp:612
 msgid "At least one filter condition is incomplete"
 msgstr "Ainakin yhden suodattimen tila on puutteellinen"
 
@@ -1595,7 +1595,7 @@ msgid "Blackboard"
 msgstr "Blackboard"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:264
-#: ../../locales/../src/interface/menu_bar.cpp:305
+#: ../../locales/../src/interface/menu_bar.cpp:312
 #: ../../locales/../src/interface/sitemanager.cpp:390
 msgid "Bookmark"
 msgstr "Kirjanmerkki"
@@ -1696,7 +1696,7 @@ msgid "Cannot access '%s', no media inserted or drive not ready."
 msgstr ""
 "Ei saada yhteyttä kohteeseen '%s', mediaa ei annettu tai asema ei valmis."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:561
+#: ../../locales/../src/interface/Mainfrm.cpp:568
 msgid "Cannot add server to Site Manager"
 msgstr "Palvelinta ei voi lisätä Sivustonhallintaan"
 
@@ -1760,7 +1760,7 @@ msgstr "Ei voitu ladata tiedostoa, epäkelpo XML-tiedosto."
 msgid "Cannot load keyfile"
 msgstr "Avaintiedostoa ei voi avata"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1034
+#: ../../locales/../src/interface/Mainfrm.cpp:1041
 msgid "Cannot load toolbar from resource file"
 msgstr "Ei voitu ladata työkaluriviä resurssitiedostosta"
 
@@ -1801,7 +1801,7 @@ msgstr "Ei voi näyttää/muokata valittua tiedostoa"
 msgid "Categories"
 msgstr "Luokat"
 
-#: ../../locales/../src/interface/statusbar.cpp:525
+#: ../../locales/../src/interface/statusbar.cpp:524
 msgid "Certificate and session data are not available yet."
 msgstr "Sertifikaatin ja istunnon data eivät ole tällä hetkellä saatavissa."
 
@@ -1858,7 +1858,7 @@ msgstr "Tarkista, onko FileZillasta uudempia versioita"
 msgid "Check for updates"
 msgstr "Päivityksien tarkistus"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1751
+#: ../../locales/../src/interface/Mainfrm.cpp:1758
 msgid "Check for updates failed"
 msgstr "Päivitystarkistus epäonnistui"
 
@@ -1956,8 +1956,8 @@ msgstr "Asiakas-palvelimelle salaus:"
 msgid "Close &all other tabs"
 msgstr "Sulje &kaikki muut välilehdet "
 
-#: resources.h:501 ../../locales/../src/interface/Mainfrm.cpp:1106
-#: ../../locales/../src/interface/Mainfrm.cpp:1129
+#: resources.h:501 ../../locales/../src/interface/Mainfrm.cpp:1113
+#: ../../locales/../src/interface/Mainfrm.cpp:1136
 msgid "Close FileZilla"
 msgstr "Sulje FileZilla"
 
@@ -1973,7 +1973,7 @@ msgstr "Sulkee nykyisen välilehden"
 msgid "Co&mments:"
 msgstr "Ko&mmentit:"
 
-#: ../../locales/../src/interface/listctrlex.cpp:734
+#: ../../locales/../src/interface/listctrlex.cpp:740
 msgid "Column properties"
 msgstr "Sarakkeen ominaisuudet"
 
@@ -2113,7 +2113,7 @@ msgid "Connecting"
 msgstr "Yhdistetään"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:207
-#: ../../locales/../src/interface/statuslinectrl.cpp:271
+#: ../../locales/../src/interface/statuslinectrl.cpp:275
 #, c-format
 msgid "Connecting to %s"
 msgstr "Yhdistetään kohteeseen %s"
@@ -2322,7 +2322,7 @@ msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
 msgstr ""
-"Ei saatu kuvaavaa nimeä sertifikaatin aiheesta, gnutls_x509_get_dn "
+"Ei saatu kuvaavaa nimeä sertifikaatin aiheesta,  gnutls_x509_get_dn "
 "epäonnistui "
 
 #: ../../locales/../src/interface/state.cpp:1011
@@ -2450,7 +2450,7 @@ msgstr "Komennon lähettäminen fzputtygen:ille epäonnistui."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2708
 msgid "Could not spawn IO thread"
-msgstr "IO-solmua ei voitu muodostaa"
+msgstr "IO-solmua ei voitu  muodostaa"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1178
 #, c-format
@@ -2578,15 +2578,15 @@ msgstr ""
 "Nykyistä palvelinhakemistoa (%s) ei löydy synkronointijuuren alta (%s).\n"
 "Synkronoitu selaus poistettu käytöstä."
 
-#: ../../locales/../src/interface/statusbar.cpp:419
+#: ../../locales/../src/interface/statusbar.cpp:418
 msgid "Current transfer type is set to ASCII."
 msgstr "Nykyinen siirtotapa asetettu ASCII:lle."
 
-#: ../../locales/../src/interface/statusbar.cpp:429
+#: ../../locales/../src/interface/statusbar.cpp:428
 msgid "Current transfer type is set to automatic detection."
 msgstr "Nykyinen siirtotapa asetettu automaattiseksi."
 
-#: ../../locales/../src/interface/statusbar.cpp:424
+#: ../../locales/../src/interface/statusbar.cpp:423
 msgid "Current transfer type is set to binary."
 msgstr "Nykyinen siirtotapa asetettu binääriseksi."
 
@@ -2785,7 +2785,7 @@ msgstr "Hakemisto"
 
 #: resources.h:636 resources.h:908 resources.h:991
 #: ../../locales/../src/interface/filelistctrl.cpp:529
-#: ../../locales/../src/interface/Mainfrm.cpp:2321
+#: ../../locales/../src/interface/Mainfrm.cpp:2328
 msgid "Directory comparison"
 msgstr "Hakemistojen vertailu"
 
@@ -2826,7 +2826,7 @@ msgstr ""
 "Poistetaanko synkronoitu selaus käytöstä ja jatketaan palvelinhakemiston "
 "vaihtamista?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:658
+#: ../../locales/../src/interface/Mainfrm.cpp:665
 msgid ""
 "Disable this option again if you will not be able to see the correct "
 "directory contents anymore."
@@ -2854,7 +2854,7 @@ msgid "Disconnected from server: %s"
 msgstr "Yhteys katkaistu palvelimeen: %s"
 
 #: ../../locales/../src/interface/QueueView.cpp:1406
-#: ../../locales/../src/interface/statuslinectrl.cpp:265
+#: ../../locales/../src/interface/statuslinectrl.cpp:269
 msgid "Disconnecting from previous server"
 msgstr "Katkaistaan yhteys edelliseltä palvelimelta"
 
@@ -2883,8 +2883,8 @@ msgstr ""
 "Haluatko varmasti tarkistaa betaversiot?\n"
 "Jos et halua testata uusia ominaisuuksia, käytä vakaita versioita."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1109
-#: ../../locales/../src/interface/Mainfrm.cpp:1133
+#: ../../locales/../src/interface/Mainfrm.cpp:1116
+#: ../../locales/../src/interface/Mainfrm.cpp:1140
 msgid "Do you really want to close FileZilla?"
 msgstr "Suljetaanko FileZilla?"
 
@@ -2905,7 +2905,7 @@ msgstr "Poistetaanko valittu kohde?"
 msgid "Do you really want to delete the transfer queue?"
 msgstr "Poistetaanko siirtojono?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:592
+#: ../../locales/../src/interface/Mainfrm.cpp:599
 #, c-format
 msgid "Do you really want to send '%s' to the server?"
 msgstr "Lähetetäänkö '%s' palvelimelle?"
@@ -2935,12 +2935,12 @@ msgstr "Lataa palvelimelta"
 msgid "Download &limit:"
 msgstr "Lataus&rajoitus palvelimelta:"
 
-#: ../../locales/../src/interface/statusbar.cpp:598
+#: ../../locales/../src/interface/statusbar.cpp:597
 #, c-format
 msgid "Download limit: %s/s"
 msgstr "Latausrajoitus: %s/s"
 
-#: ../../locales/../src/interface/statusbar.cpp:600
+#: ../../locales/../src/interface/statusbar.cpp:599
 msgid "Download limit: none"
 msgstr "Latausrajoitus: Ei mitään"
 
@@ -2969,7 +2969,7 @@ msgstr "Ladataan %s"
 
 #: ../../locales/../src/interface/search.cpp:952
 msgid "Downloading multiple unrelated directories is not yet supported"
-msgstr "Usean kuulumattoman hakemiston lataaminen ei ole vielä tuettu"
+msgstr "Usean kuulumattoman hakemiston lataaminen  ei ole vielä tuettu"
 
 #: ../../locales/../src/interface/search.cpp:952
 msgid "Downloading search results"
@@ -3022,7 +3022,7 @@ msgstr "&Lopeta"
 msgid "E-Mail:"
 msgstr "Sähköposti:"
 
-#: ../../locales/../src/interface/filter_conditions_dialog.cpp:605
+#: ../../locales/../src/interface/filter_conditions_dialog.cpp:594
 msgid "Each filter needs at least one condition."
 msgstr "Jokaisella suodattimella pitää olla ainakin yksi tila."
 
@@ -3116,7 +3116,7 @@ msgstr "Anna 0 rajattomalle nopeudelle."
 msgid "Enter command"
 msgstr "Anna komento"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:573
+#: ../../locales/../src/interface/Mainfrm.cpp:580
 msgid "Enter custom command"
 msgstr "Anna oma komento"
 
@@ -3160,7 +3160,7 @@ msgstr ""
 "tunnuksella. Jos mitään protokollaa ei ole määritetty, käytetään oletuksena "
 "(ftp://).\n"
 "Voit myös antaa täydellisen URL:in muodossa://käyttäjä:salasana@palvelin:"
-"portti tässä, tällöin korvataan muiden kenttien asetukset näillä."
+"portti  tässä, tällöin korvataan muiden kenttien asetukset näillä."
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:279
 #, c-format
@@ -3272,7 +3272,7 @@ msgstr "Suori&ta"
 msgid "Executable"
 msgstr "Suoritettava"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1751
+#: ../../locales/../src/interface/Mainfrm.cpp:1758
 msgid "Executable contains no version info, cannot check for updates."
 msgstr "Sovelluksesta puuttuu versiotiedot, päivityksiä ei voi tarkistaa."
 
@@ -3425,7 +3425,7 @@ msgstr "Ei voitu avata kohdetta \"%s\" lukemista varten"
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:448
 #, c-format
 msgid "Failed to open \"%s\" for writing"
-msgstr "Ei voitu avata kohdetta \"%s\" kirjoittamista varten"
+msgstr "Ei voitu avata kohdetta  \"%s\" kirjoittamista varten"
 
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:321
 msgid "Failed to parse trusted root cert."
@@ -3615,7 +3615,7 @@ msgstr "Tiedostonsiirto onnistui"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Tiedostonsiirto onnistui, siirretty %s %s:ssä"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1108
+#: ../../locales/../src/interface/Mainfrm.cpp:1115
 msgid "File transfers still in progress."
 msgstr "Tiedostosiirrot vielä käynnissä."
 
@@ -3654,7 +3654,7 @@ msgstr ""
 "FileZilla on kiosk-tilassa.\n"
 "Kirjautumistyypit 'Normaali' ja 'Tili' eivät ole saatavissa tässä tilassa."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1496
+#: ../../locales/../src/interface/Mainfrm.cpp:1503
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr ""
 "FileZilla pitää käynnistää uudelleen, jotta kieliasetukset tulevat voimaan."
@@ -3816,7 +3816,7 @@ msgstr "Pakota UT&F-8"
 msgid "Force showing &hidden files"
 msgstr "&Pakota piilotettujen tiedostojen näyttäminen"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:653
+#: ../../locales/../src/interface/Mainfrm.cpp:660
 msgid "Force showing hidden files"
 msgstr "Pakota piilotettujen tiedostojen näyttäminen"
 
@@ -4060,7 +4060,7 @@ msgstr ""
 "Jos klikkaat Testaa, FileZilla yhdistää osoitteeseen: probe.filezilla-"
 "project.org ja suorittaa muutaman yksinkertaisen testin."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1132
+#: ../../locales/../src/interface/Mainfrm.cpp:1139
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "Jos suljet FileZillan, muutoksesi menetetään."
 
@@ -4316,7 +4316,7 @@ msgid "Invalid site path"
 msgstr "Sivuston polku ei kelpaa"
 
 # "Condition size" may be another than "Ehdon koko".
-#: ../../locales/../src/interface/filter_conditions_dialog.cpp:638
+#: ../../locales/../src/interface/filter_conditions_dialog.cpp:627
 msgid "Invalid size in condition"
 msgstr "Ehdon koko ei kelpaa"
 
@@ -4340,7 +4340,7 @@ msgstr "Oikeuden maa tai lääni:"
 msgid "Keep directories on top"
 msgstr "Pidä hakemistot päällimmäisinä"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:657
+#: ../../locales/../src/interface/Mainfrm.cpp:664
 msgid ""
 "Keep in mind that not all servers support this feature and may return "
 "incorrect listings if this option is enabled. Although FileZilla performs "
@@ -4364,7 +4364,7 @@ msgstr "P&ienin"
 msgid "Language"
 msgstr "Kieli"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1496
+#: ../../locales/../src/interface/Mainfrm.cpp:1503
 msgid "Language changed"
 msgstr "Kieli vaihdettu"
 
@@ -4567,8 +4567,8 @@ msgstr "Älä täsmää seuraaviin"
 msgid "Maximum simultaneous &transfers:"
 msgstr "Samanaikaisten s&iirtojen enimmäismäärä:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:375
-#: ../../locales/../src/interface/Mainfrm.cpp:1834
+#: ../../locales/../src/interface/Mainfrm.cpp:378
+#: ../../locales/../src/interface/Mainfrm.cpp:1841
 msgid "Message log"
 msgstr "Sanomaloki"
 
@@ -4681,7 +4681,7 @@ msgstr "Uusi kirjanmerkki"
 msgid "New directory"
 msgstr "Uusi hakemisto"
 
-#: ../../locales/../src/interface/welcome_dialog.cpp:43
+#: ../../locales/../src/interface/welcome_dialog.cpp:37
 #, c-format
 msgid "New features and improvements in %s"
 msgstr "%s:n uudet ominaisuudet ja parannukset"
@@ -4810,7 +4810,7 @@ msgstr "Ei yhdistetty"
 msgid "Not connected to any server"
 msgstr "Ei yhdistetty mihinkään palvelimeen"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:561
+#: ../../locales/../src/interface/Mainfrm.cpp:568
 msgid "Not connected to any server."
 msgstr "Ei yhdistetty mihinkään palvelimeen."
 
@@ -4819,7 +4819,7 @@ msgstr "Ei yhdistetty mihinkään palvelimeen."
 msgid "Not connected."
 msgstr "Ei yhdistetty"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:655
+#: ../../locales/../src/interface/Mainfrm.cpp:662
 msgid "Note that this feature is only supported using the FTP protocol."
 msgstr ""
 "Huomaa, että tämä toiminto on tuettu ainoastaan käytettäessä FTP-protokollaa."
@@ -5003,7 +5003,7 @@ msgstr "Pa&ssiivinen (suositus)"
 msgid "Package"
 msgstr "Pakkaus"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2466
+#: ../../locales/../src/interface/Mainfrm.cpp:2473
 msgid "Parameter not a valid URL"
 msgstr "Parametri ei ole oikea URL"
 
@@ -5169,7 +5169,7 @@ msgid ""
 "You can also optionally specify program arguments."
 msgstr ""
 "Anna polku ja suoritettava ohjelma.\n"
-"Esim. c:\\jokuPolku\\tiedosto.exe MS Windowsissa tai /jokuPolku/tiedosto "
+"Esim. c:\\jokuPolku\\tiedosto.exe MS Windowsissa tai  /jokuPolku/tiedosto "
 "Unixissa.\n"
 "Voit vaihtoehtoisesti määrittää myös ohjelman argumentit."
 
@@ -5207,7 +5207,7 @@ msgid "Please enter an upload speed limit greater or equal to 0 %s/s."
 msgstr ""
 "Anna latausnopeus palvelimelle, joka on suurempi tai yhtäsuuri kuin 0 %s/s."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:573
+#: ../../locales/../src/interface/Mainfrm.cpp:580
 msgid ""
 "Please enter raw FTP command.\n"
 "Using raw ftp commands will clear the directory cache."
@@ -5283,13 +5283,13 @@ msgstr ""
 "käytettävän troijalaisille tai muille haittaohjelmille. Tämä voi aiheuttaa "
 "väärän hälytyksen, jonka voit hylätä turvallisesti."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:705
+#: ../../locales/../src/interface/Mainfrm.cpp:712
 msgid ""
 "Please note that preserving timestamps on uploads on FTP, FTPS and FTPES "
 "servers only works if they support the MFMT command."
 msgstr ""
 "Huomioi, että aikaleimojen sisällytys palvelimelle siirrettäessä FTP-, FTPS- "
-"ja FTPES-palvelimilla toimivat ainoastaan, jos ne tukevat MFMT-komentoa."
+"ja FTPES-palvelimilla toimivat ainoastaan, jos ne tukevat  MFMT-komentoa."
 
 #: resources.h:734
 msgid ""
@@ -5400,7 +5400,7 @@ msgstr "Postinumero:"
 msgid "Predefined Sites"
 msgstr "Esimääritetyt sivustot"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:704
+#: ../../locales/../src/interface/Mainfrm.cpp:711
 msgid "Preserving file timestamps"
 msgstr "Sisällytetään aikaleimoja"
 
@@ -5494,18 +5494,18 @@ msgstr "Julkiset oikeudet"
 msgid "Queue has been fully processed"
 msgstr "Jono käsitelty onnistuneesti"
 
-#: ../../locales/../src/interface/statusbar.cpp:458
+#: ../../locales/../src/interface/statusbar.cpp:457
 #, c-format
 msgid "Queue: %s MiB"
 msgstr "Jono: %s MiB"
 
-#: ../../locales/../src/interface/statusbar.cpp:388
+#: ../../locales/../src/interface/statusbar.cpp:387
 #, c-format
 msgid "Queue: %s%s"
 msgstr "Jono: %s%s"
 
-#: ../../locales/../src/interface/statusbar.cpp:384
-#: ../../locales/../src/interface/statusbar.cpp:449
+#: ../../locales/../src/interface/statusbar.cpp:383
+#: ../../locales/../src/interface/statusbar.cpp:448
 msgid "Queue: empty"
 msgstr "Jono: tyhjä"
 
@@ -5525,7 +5525,7 @@ msgstr "K&äynnistä tietokone uudestaan"
 msgid "R&emote directory tree"
 msgstr "Palvelimen hake&mistopuu"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:589
+#: ../../locales/../src/interface/Mainfrm.cpp:596
 msgid "Raw FTP command"
 msgstr "FTP-komento"
 
@@ -5557,7 +5557,7 @@ msgstr "Lu&e"
 msgid "Read-only"
 msgstr "Vain luku"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1063
+#: ../../locales/../src/interface/Mainfrm.cpp:1070
 msgid "Really cancel current operation?"
 msgstr "Perutetaanko toiminto?"
 
@@ -5833,7 +5833,7 @@ msgstr "Etsi tiedostoja rekursiivisesti."
 msgid "Search server for files"
 msgstr "Etsi tiedostoja palvelimelta"
 
-#: ../../locales/../src/interface/statusbar.cpp:525
+#: ../../locales/../src/interface/statusbar.cpp:524
 msgid "Security information"
 msgstr "Turvallisuustiedot"
 
@@ -5945,7 +5945,7 @@ msgid_plural "Selected %d directories with their contents for transfer."
 msgstr[0] "Valittu %d hakemisto sisältöineen siirtoa varten."
 msgstr[1] "Valittu %d hakemistot sisältöineen siirtoa varten."
 
-#: ../../locales/../src/interface/filelist_statusbar.cpp:51
+#: ../../locales/../src/interface/filelist_statusbar.cpp:47
 #, c-format
 msgid "Selected %d directory."
 msgid_plural "Selected %d directories."
@@ -5959,14 +5959,14 @@ msgid_plural "Selected %d files for transfer."
 msgstr[0] "Valittu %d tiedosto siirtoa varten."
 msgstr[1] "Valittu %d tiedostoa siirtoa varten."
 
-#: ../../locales/../src/interface/filelist_statusbar.cpp:58
+#: ../../locales/../src/interface/filelist_statusbar.cpp:54
 #, c-format
 msgid "Selected %d file. Total size: %s"
 msgid_plural "Selected %d files. Total size: %s"
 msgstr[0] "Valittu %d tiedosto. Koko yhteensä: %s"
 msgstr[1] "Valittu %d tiedostoa. Koko yhteensä: %s"
 
-#: ../../locales/../src/interface/filelist_statusbar.cpp:56
+#: ../../locales/../src/interface/filelist_statusbar.cpp:52
 #, c-format
 msgid "Selected %d file. Total size: At least %s"
 msgid_plural "Selected %d files. Total size: At least %s"
@@ -5978,12 +5978,12 @@ msgstr[1] "Valittu %d tiedostoa. Koko yhteensä: vähintään %s"
 msgid "Selected %s and %s for transfer."
 msgstr "Valittu %s ja %s siirtoa varten."
 
-#: ../../locales/../src/interface/filelist_statusbar.cpp:68
+#: ../../locales/../src/interface/filelist_statusbar.cpp:64
 #, c-format
 msgid "Selected %s and %s. Total size: %s"
 msgstr "Valittu %s ja %s. Koko yhteensä: %s"
 
-#: ../../locales/../src/interface/filelist_statusbar.cpp:66
+#: ../../locales/../src/interface/filelist_statusbar.cpp:62
 #, c-format
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "Valittu %s ja %s. Koko yhteensä: vähintään %s"
@@ -6014,7 +6014,7 @@ msgstr "Valittu tiedosto on vielä muokattavana"
 msgid "Selected filter only works for local files."
 msgstr "Valittu suodatin toimii ainoastaan paikallisisten tiedostojen kanssa."
 
-#: ../../locales/../src/interface/menu_bar.cpp:305
+#: ../../locales/../src/interface/menu_bar.cpp:312
 msgid ""
 "Selected global bookmark and current server use a different server type.\n"
 "Use site-specific bookmarks for this server."
@@ -6172,7 +6172,7 @@ msgstr "&Näytä pelkistetty hakemistolistaus"
 msgid "Show &welcome dialog..."
 msgstr "&Näytä tervetuloikkuna..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2324
+#: ../../locales/../src/interface/Mainfrm.cpp:2331
 msgid "Show both directory trees and continue comparing?"
 msgstr "Näytetäänkö molemmat hakemistopuut ja jatketaan vertailua?"
 
@@ -6244,7 +6244,7 @@ msgid ""
 msgstr ""
 "Sivustokohtaisten kirjanmerkkien palvelin täytyy tallentaa "
 "Sivustonhallintaan.\n"
-"Lisätäänkö nykyinen yhteys Sivustonhallintaan? "
+"Lisätäänkö nykyinen yhteys Sivustonhallintaan?  "
 
 #: ../../locales/../src/interface/queue.cpp:1187
 msgid "Size"
@@ -6279,7 +6279,7 @@ msgstr "Ohitetaan %s:n lataus palvelimelta"
 msgid "Skipping upload of %s"
 msgstr "Ohitetaan %s:n lataus palvelimelle"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1131
+#: ../../locales/../src/interface/Mainfrm.cpp:1138
 msgid "Some files are still being edited or need to be uploaded."
 msgstr ""
 "Jotkut tiedostot ovat vielä muokattavana tai tarvitsevat latausta "
@@ -6334,11 +6334,11 @@ msgstr "Nopeusrajoitukset"
 msgid "Speed limits"
 msgstr "Nopeusrajoitukset"
 
-#: ../../locales/../src/interface/statusbar.cpp:591
+#: ../../locales/../src/interface/statusbar.cpp:590
 msgid "Speed limits are disabled, click to change."
 msgstr "Nopeusrajoitukset pois käytöstä, klikkaa vaihtaaksesi."
 
-#: ../../locales/../src/interface/statusbar.cpp:595
+#: ../../locales/../src/interface/statusbar.cpp:594
 msgid "Speed limits are enabled, click to change."
 msgstr "Nopeusrajoitukset käytössä, klikkaa vaihtaaksesi."
 
@@ -6435,7 +6435,7 @@ msgstr "Syntaksivirhe"
 #: ../../locales/../src/interface/cmdline.cpp:80
 #: ../../locales/../src/interface/cmdline.cpp:89
 #: ../../locales/../src/interface/cmdline.cpp:95
-#: ../../locales/../src/interface/Mainfrm.cpp:2468
+#: ../../locales/../src/interface/Mainfrm.cpp:2475
 msgid "Syntax error in command line"
 msgstr "Syntaksivirhe komentorivillä"
 
@@ -6515,7 +6515,7 @@ msgstr "Kirjanmerkkiä ei voitu lisätä."
 msgid "The bookmarks could not be cleared."
 msgstr "Kirjanmerkkejä ei voitu tyhjentää."
 
-#: ../../locales/../src/interface/statusbar.cpp:487
+#: ../../locales/../src/interface/statusbar.cpp:486
 msgid "The connection is encrypted. Click icon for details."
 msgstr "Yhteys on salattu. Lisätietoja saa pikakuvaketta painamalla."
 
@@ -6629,7 +6629,7 @@ msgid ""
 msgstr ""
 "Tiedosto '%s on suojattu salasanalla. FileZilla ei tue vielä salasanalla "
 "suojattuja avaintiedostoja.\n"
-"Muunnetaanko se suojaamattomaksi tiedostoksi?"
+"Muunnetaanko se  suojaamattomaksi tiedostoksi?"
 
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:144
 msgid "The file selected as default editor does not exist."
@@ -6649,11 +6649,11 @@ msgstr ""
 "käyttäjänimi ja salasana tuodaan.\n"
 "Jatketaanko tuontia?"
 
-#: ../../locales/../src/interface/listctrlex.cpp:734
+#: ../../locales/../src/interface/listctrlex.cpp:740
 msgid "The filename column can neither be hidden nor moved."
 msgstr "Tiedostonimisaraketta ei voi piilottaa eikä siirtää."
 
-#: ../../locales/../src/interface/listctrlex.cpp:784
+#: ../../locales/../src/interface/listctrlex.cpp:790
 msgid "The filename column cannot be hidden."
 msgstr "Tiedostonimisaraketta ei voi piilottaa."
 
@@ -6900,13 +6900,13 @@ msgstr ""
 msgid "Title:"
 msgstr "Otsikko:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2322
+#: ../../locales/../src/interface/Mainfrm.cpp:2329
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Jotta hakemistoja voi vertailla, molemmat tiedostolistaukset pitää olla "
 "näkyvissä."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2323
+#: ../../locales/../src/interface/Mainfrm.cpp:2330
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Jotta tämän voi tehdä, molemmat hakemistopuut pitää olla näkyvissä tai "
@@ -7015,7 +7015,7 @@ msgid "Transferred data got tainted."
 msgstr "Siirretty data vahingoittui."
 
 #: ../../locales/../src/interface/QueueView.cpp:1468
-#: ../../locales/../src/interface/statuslinectrl.cpp:274
+#: ../../locales/../src/interface/statuslinectrl.cpp:278
 msgid "Transferring"
 msgstr "Siirretään"
 
@@ -7191,12 +7191,12 @@ msgstr "Lataa palvelimelle"
 msgid "Upload failed"
 msgstr "Lataus palvelimelle epäonnistui"
 
-#: ../../locales/../src/interface/statusbar.cpp:603
+#: ../../locales/../src/interface/statusbar.cpp:602
 #, c-format
 msgid "Upload limit: %s/s"
 msgstr "Latauksen rajoitus palvelimelle: %s/s"
 
-#: ../../locales/../src/interface/statusbar.cpp:605
+#: ../../locales/../src/interface/statusbar.cpp:604
 msgid "Upload limit: none"
 msgstr "Latauksen rajoitus palvelimelle: Ei mitään"
 
@@ -7377,7 +7377,7 @@ msgstr "Odotetaan selauksen yhdistämistä"
 msgid "Waiting for password"
 msgstr "Odotetaan salasanaa"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:268
+#: ../../locales/../src/interface/statuslinectrl.cpp:272
 msgid "Waiting for transfer to be cancelled"
 msgstr "Odotetaan, siirron peruuttamista"
 

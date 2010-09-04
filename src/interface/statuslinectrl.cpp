@@ -4,6 +4,9 @@
 #include <wx/dcbuffer.h>
 #include "Options.h"
 #include "sizeformatting.h"
+#ifdef __WXGTK__
+#include "cursor_resetter.h"
+#endif
 
 BEGIN_EVENT_TABLE(CStatusLineCtrl, wxWindow)
 EVT_PAINT(CStatusLineCtrl::OnPaint)
@@ -72,6 +75,10 @@ CStatusLineCtrl::CStatusLineCtrl(CQueueView* pParent, const t_EngineData* const 
 		m_fieldOffsets[2] = m_fieldOffsets[1] + 20;
 		m_fieldOffsets[3] = m_fieldOffsets[2] + PROGRESSBAR_WIDTH + 20;
 	}
+
+#ifdef __WXGTK__
+	ResetCursor(this);
+#endif
 }
 
 CStatusLineCtrl::~CStatusLineCtrl()
@@ -99,7 +106,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent& event)
 		delete m_mdc;
 		m_data = wxBitmap(rect.GetWidth(), rect.GetHeight());
 		m_mdc = new wxMemoryDC(m_data);
-		refresh = 31;
+		refresh = 15;
 	}
 
 	int elapsed_seconds = 0;
@@ -133,7 +140,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent& event)
 		{
 			delete m_pPreviousStatusText;
 			m_pPreviousStatusText = 0;
-			refresh = 31;
+			refresh = 15;
 		}
 
 		if (m_pStatus->started.IsValid())
@@ -153,7 +160,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent& event)
 		else
 		    rate = GetSpeed(elapsed_seconds);
 
-		if (elapsed_seconds && rate > 0)
+		if (elapsed_seconds && rate > -1)
 		{
 			left = ((m_pStatus->totalSize - m_pStatus->startOffset) / rate) - elapsed_seconds;
 			if (left < 0)
@@ -236,15 +243,12 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent& event)
 			m_mdc->DrawRectangle(m_fieldOffsets[3], 0, rect.GetWidth() - m_fieldOffsets[3], rect.GetHeight());
 			m_mdc->DrawText(bytes_and_rate, m_fieldOffsets[3], h);
 		}
-		if (refresh & 16)
-		{
-			m_mdc->DrawRectangle(m_fieldOffsets[1], 0, m_fieldOffsets[2] - m_fieldOffsets[1], rect.GetHeight());
-		}
 		if (refresh & 4)
 		{
-			m_mdc->DrawRectangle(m_fieldOffsets[2], 0, m_fieldOffsets[3] - m_fieldOffsets[2], rect.GetHeight());
 			if (bar_split != -1)
 				DrawProgressBar(*m_mdc, m_fieldOffsets[2], 1, rect.GetHeight() - 2, bar_split, permill);
+			else
+				m_mdc->DrawRectangle(m_fieldOffsets[2], 0, m_fieldOffsets[3] - m_fieldOffsets[2], rect.GetHeight());
 		}
 	}
 	dc.Blit(0, 0, rect.GetWidth(), rect.GetHeight(), m_mdc, 0, 0);
@@ -314,7 +318,7 @@ void CStatusLineCtrl::OnTimer(wxTimerEvent& event)
 			m_pEngineData->pItem->GetType() == QueueItemType_File)
 		{
 			CFileItem* pItem = (CFileItem*)m_pEngineData->pItem;
-			pItem->set_made_progress(true);
+			pItem->m_madeProgress = true;
 		}
 		SetTransferStatus(&status);
 	}

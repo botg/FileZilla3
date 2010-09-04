@@ -7,26 +7,6 @@ static wxArrayString sizeConditionTypes;
 static wxArrayString attributeConditionTypes;
 static wxArrayString permissionConditionTypes;
 static wxArrayString attributeSetTypes;
-static wxArrayString dateConditionTypes;
-
-static wxChoice* CreateChoice(wxWindow* parent, wxPoint pos, const wxArrayString& items, wxSize const& size = wxDefaultSize)
-{
-#ifdef __WXGTK__
-	// Really obscure bug in wxGTK: If creating in a single step,
-	// first item in the choice sometimes looks disabled
-	// even though it can still be selected and returns to looking
-	// normal after hovering mouse over it.
-	// This works around it nicely.
-	wxChoice *ret( new wxChoice );
-	ret->Create(parent, wxID_ANY, pos, size);
-	ret->Append(items);
-	ret->InvalidateBestSize();
-	ret->SetInitialSize();
-	return ret;
-#else
-	return new wxChoice(parent, wxID_ANY, pos, size, items);
-#endif
-}
 
 CFilterControls::CFilterControls()
 {
@@ -92,7 +72,6 @@ bool CFilterConditionsDialog::CreateListControl(int conditions /*=common*/)
 
 		sizeConditionTypes.Add(_("greater than"));
 		sizeConditionTypes.Add(_("equals"));
-		sizeConditionTypes.Add(_("does not equal"));
 		sizeConditionTypes.Add(_("less than"));
 
 		attributeSetTypes.Add(_("is set"));
@@ -114,11 +93,6 @@ bool CFilterConditionsDialog::CreateListControl(int conditions /*=common*/)
 		permissionConditionTypes.Add(_("world readable"));
 		permissionConditionTypes.Add(_("world writeable"));
 		permissionConditionTypes.Add(_("world executable"));
-
-		dateConditionTypes.Add(_("before"));
-		dateConditionTypes.Add(_("equals"));
-		dateConditionTypes.Add(_("does not equal"));
-		dateConditionTypes.Add(_("after"));
 	}
 
 	if (conditions & filter_name)
@@ -146,11 +120,6 @@ bool CFilterConditionsDialog::CreateListControl(int conditions /*=common*/)
 		filterTypes.Add(_("Path"));
 		filter_type_map.push_back(filter_path);
 	}
-	if (conditions & filter_date)
-	{
-		filterTypes.Add(_("Date"));
-		filter_type_map.push_back(filter_date);
-	}
 
 	SetFilterCtrlState(true);
 
@@ -169,19 +138,14 @@ void CFilterConditionsDialog::CalcMinListWidth()
 
 	wxChoice *pStringCondition = new wxChoice(m_pListCtrl, wxID_ANY, wxDefaultPosition, wxDefaultSize, stringConditionTypes);
 	wxChoice *pSizeCondition = new wxChoice(m_pListCtrl, wxID_ANY, wxDefaultPosition, wxDefaultSize, sizeConditionTypes);
-	wxChoice *pDateCondition = new wxChoice(m_pListCtrl, wxID_ANY, wxDefaultPosition, wxDefaultSize, dateConditionTypes);
-
-	int w = wxMax(pStringCondition->GetBestSize().GetWidth(), pSizeCondition->GetBestSize().GetWidth());
-	w = wxMax(w, pDateCondition->GetBestSize().GetWidth());
-	requiredWidth += w;
-
+	requiredWidth += wxMax(pStringCondition->GetBestSize().GetWidth(), pSizeCondition->GetBestSize().GetWidth());
 	pStringCondition->Destroy();
 	pSizeCondition->Destroy();
-	pDateCondition->Destroy();
 
 	requiredWidth += m_pListCtrl->GetWindowBorderSize().x;
 	requiredWidth += 40;
 	requiredWidth += 120;
+
 	wxSize minSize = m_pListCtrl->GetMinSize();
 	minSize.IncTo(wxSize(requiredWidth, -1));
 	m_pListCtrl->SetMinSize(minSize);
@@ -325,8 +289,6 @@ void CFilterConditionsDialog::OnFilterTypeChange(wxCommandEvent& event)
 
 	if (filter.type == filter_size && filter.condition > 3)
 		filter.condition = 0;
-	else if (filter.type == filter_date && filter.condition > 3)
-		filter.condition = 0;
 	delete m_filterControls[item].pCondition;
 	m_filterControls[item].pCondition = 0;
 
@@ -353,7 +315,10 @@ void CFilterConditionsDialog::MakeControls(const CFilterCondition& condition, in
 
 	wxPoint pos = wxPoint(5, posy);
 	if (!controls.pType)
-		controls.pType = CreateChoice(m_pListCtrl, pos, filterTypes);
+	{
+		controls.pType = new wxChoice();
+		controls.pType->Create(m_pListCtrl, wxID_ANY, pos, wxDefaultSize, filterTypes);
+	}
 	else
 		controls.pType->SetPosition(pos);
 	SetSelectionFromType(controls.pType, condition.type);
@@ -369,23 +334,21 @@ void CFilterConditionsDialog::MakeControls(const CFilterCondition& condition, in
 	pos = wxPoint(10 + typeRect.GetWidth(), posy);
 	if (!controls.pCondition)
 	{
+		controls.pCondition = new wxChoice();
 		switch (condition.type)
 		{
 		case filter_name:
 		case filter_path:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, stringConditionTypes);
+			controls.pCondition->Create(m_pListCtrl, wxID_ANY, pos, wxDefaultSize, stringConditionTypes);
 			break;
 		case filter_size:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, sizeConditionTypes);
+			controls.pCondition->Create(m_pListCtrl, wxID_ANY, pos, wxDefaultSize, sizeConditionTypes);
 			break;
 		case filter_attributes:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, attributeConditionTypes);
+			controls.pCondition->Create(m_pListCtrl, wxID_ANY, pos, wxDefaultSize, attributeConditionTypes);
 			break;
 		case filter_permissions:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, permissionConditionTypes);
-			break;
-		case filter_date:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, dateConditionTypes);
+			controls.pCondition->Create(m_pListCtrl, wxID_ANY, pos, wxDefaultSize, permissionConditionTypes);
 			break;
 		default:
 			wxFAIL_MSG(_T("Unhandled condition"));
@@ -416,7 +379,7 @@ void CFilterConditionsDialog::MakeControls(const CFilterCondition& condition, in
 
 	posx = 15 + typeRect.GetWidth() + conditionsRect.GetWidth();
 	const int maxwidth = client_size.GetWidth() - posx - 10 - m_button_size.x;
-	if (condition.type == filter_name || condition.type == filter_size || condition.type == filter_path || condition.type == filter_date)
+	if (condition.type == filter_name || condition.type == filter_size || condition.type == filter_path)
 	{
 		delete controls.pSet;
 		controls.pSet = 0;
@@ -448,7 +411,10 @@ void CFilterConditionsDialog::MakeControls(const CFilterCondition& condition, in
 		pos = wxPoint(posx, posy);
 		wxSize size(maxwidth, -1);
 		if (!controls.pSet)
-			controls.pSet = CreateChoice(m_pListCtrl, pos, attributeSetTypes, size);
+		{
+			controls.pSet = new wxChoice();
+			controls.pSet->Create(m_pListCtrl, wxID_ANY, pos, size, attributeSetTypes);
+		}
 		else
 		{
 			controls.pSet->SetPosition(pos);
@@ -587,13 +553,6 @@ CFilter CFilterConditionsDialog::GetFilter()
 				condition.value = 1;
 			}
 			break;
-		case filter_date:
-			if (controls.pValue->GetValue() == _T(""))
-				continue;
-			condition.strValue = controls.pValue->GetValue();
-			if (!condition.date.ParseFormat(condition.strValue, _T("%Y-%m-%d")) || !condition.date.IsValid())
-				continue;
-			break;
 		default:
 			wxFAIL_MSG(_T("Unhandled condition"));
 			break;
@@ -677,22 +636,6 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 				m_pListCtrl->SelectLine(i);
 				controls.pValue->SetFocus();
 				error = _("Invalid size in condition");
-				SetFilterCtrlState(false);
-				return false;
-			}
-		}
-		else if (type == filter_date)
-		{
-			const wxString d = controls.pValue->GetValue();
-			if (d == _T("") && allow_empty)
-				continue;
-
-			wxDateTime date;
-			if (!date.ParseFormat(d, _T("%Y-%m-%d")) || !date.IsValid())
-			{
-				m_pListCtrl->SelectLine(i);
-				controls.pValue->SetFocus();
-				error = _("Please enter a date of the form YYYY-MM-DD such as for example 2010-07-18.");
 				SetFilterCtrlState(false);
 				return false;
 			}

@@ -314,7 +314,7 @@ void CStatusLineCtrl::OnTimer(wxTimerEvent& event)
 			m_pEngineData->pItem->GetType() == QueueItemType_File)
 		{
 			CFileItem* pItem = (CFileItem*)m_pEngineData->pItem;
-			pItem->set_made_progress(true);
+			pItem->m_madeProgress = true;
 		}
 		SetTransferStatus(&status);
 	}

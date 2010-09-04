@@ -1469,14 +1469,15 @@ void CMainFrame::OnMenuEditSettings(wxCommandEvent& event)
 	wxString newThemeSize = pOptions->GetOption(OPTION_THEME_ICONSIZE);
 	wxString newLang = pOptions->GetOption(OPTION_LANGUAGE);
 
+	if (oldTheme != newTheme)
+	{
+		wxArtProvider::Delete(m_pThemeProvider);
+		m_pThemeProvider = new CThemeProvider();
+	}
 	if (oldTheme != newTheme ||
 		oldThemeSize != newThemeSize ||
 		oldLang != newLang)
-	{
 		CreateToolBar();
-		if (m_pToolBar)
-			m_pToolBar->UpdateToolbarState();
-	}
 
 	if (oldLang != newLang ||
 		oldTimestamps != newTimestamps)
@@ -1995,7 +1996,7 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData)
 void CMainFrame::CheckChangedSettings()
 {
 #if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
-	if (!COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK))
+	if (!COptions::Get()->GetDefaultVal(DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK))
 	{
 		if (!m_pUpdateWizard)
 		{
@@ -2639,7 +2640,7 @@ void CMainFrame::PostInitialize()
 {
 #if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
 	// Need to do this after welcome screen to avoid simultaneous display of multiple dialogs
-	if (!COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK))
+	if (!COptions::Get()->GetDefaultVal(DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK))
 	{
 		m_pUpdateWizard = new CUpdateWizard(this);
 		m_pUpdateWizard->InitAutoUpdateCheck();

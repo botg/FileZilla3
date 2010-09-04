@@ -255,13 +255,6 @@ void CWidgetsStatusBar::PositionChildren(int field)
 	}
 }
 
-void CWidgetsStatusBar::SetFieldWidth(int field, int width)
-{
-	wxStatusBarEx::SetFieldWidth(field, width);
-	for (int i = 0; i < GetFieldsCount(); i++)
-		PositionChildren(i);
-}
-
 #ifdef __WXMSW__
 class wxStaticBitmapEx : public wxStaticBitmap
 {
@@ -342,9 +335,6 @@ CStatusBar::CStatusBar(wxTopLevelWindow* pParent)
 	RegisterOption(OPTION_SIZE_DECIMALPLACES);
 
 	RegisterOption(OPTION_ASCIIBINARY);
-
-	// Reload icons
-	RegisterOption(OPTION_THEME);
 
 	CContextManager::Get()->RegisterHandler(this, STATECHANGE_SERVER, true, false);
 	CContextManager::Get()->RegisterHandler(this, STATECHANGE_CHANGEDCONTEXT, false, false);
@@ -481,15 +471,13 @@ void CStatusBar::DisplayEncrypted()
 	}
 	else
 	{
+		if (m_pEncryptionIndicator)
+			return;
 		wxBitmap bmp = wxArtProvider::GetBitmap(_T("ART_LOCK"), wxART_OTHER, wxSize(16, 16));
-		if (!m_pEncryptionIndicator)
-		{
-			m_pEncryptionIndicator = new CIndicator(this, bmp);
-			AddChild(0, widget_encryption, m_pEncryptionIndicator);
-			m_pEncryptionIndicator->SetToolTip(_("The connection is encrypted. Click icon for details."));
-		}
-		else
-			m_pEncryptionIndicator->SetBitmap(bmp);
+		m_pEncryptionIndicator = new CIndicator(this, bmp);
+		AddChild(0, widget_encryption, m_pEncryptionIndicator);
+
+		m_pEncryptionIndicator->SetToolTip(_("The connection is encrypted. Click icon for details."));
 	}
 }
 
@@ -616,7 +604,9 @@ void CStatusBar::UpdateSpeedLimitsIcon()
 		AddChild(0, widget_speedlimit, m_pSpeedLimitsIndicator);
 	}
 	else
+	{
 		m_pSpeedLimitsIndicator->SetBitmap(bmp);
+	}
 	m_pSpeedLimitsIndicator->SetToolTip(tooltip);
 }
 
@@ -636,11 +626,6 @@ void CStatusBar::OnOptionChanged(int option)
 		break;
 	case OPTION_ASCIIBINARY:
 		DisplayDataType();
-		break;
-	case OPTION_THEME:
-		DisplayDataType();
-		UpdateSpeedLimitsIcon();
-		DisplayEncrypted();
 		break;
 	default:
 		break;

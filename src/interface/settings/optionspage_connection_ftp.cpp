@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "../Options.h"
 #include "settingsdialog.h"
 #include "optionspage.h"
@@ -7,19 +7,17 @@
 bool COptionsPageConnectionFTP::LoadPage()
 {
 	bool failure = false;
-
-	const bool use_pasv = m_pOptions->GetOptionVal(OPTION_USEPASV) != 0;
-	SetRCheck(XRCID("ID_PASSIVE"), use_pasv, failure);
-	SetRCheck(XRCID("ID_ACTIVE"), !use_pasv, failure);
-	SetCheckFromOption(XRCID("ID_FALLBACK"), OPTION_ALLOW_TRANSFERMODEFALLBACK, failure);
-	SetCheckFromOption(XRCID("ID_USEKEEPALIVE"), OPTION_FTP_SENDKEEPALIVE, failure);
+	SetRCheck(XRCID("ID_PASSIVE"), m_pOptions->GetOptionVal(OPTION_USEPASV) != 0, failure);
+	SetRCheck(XRCID("ID_ACTIVE"), m_pOptions->GetOptionVal(OPTION_USEPASV) == 0, failure);
+	SetCheck(XRCID("ID_FALLBACK"), m_pOptions->GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK) != 0, failure);
+	SetCheck(XRCID("ID_USEKEEPALIVE"), m_pOptions->GetOptionVal(OPTION_FTP_SENDKEEPALIVE) != 0, failure);
 	return !failure;
 }
 
 bool COptionsPageConnectionFTP::SavePage()
 {
 	m_pOptions->SetOption(OPTION_USEPASV, GetRCheck(XRCID("ID_PASSIVE")) ? 1 : 0);
-	SetOptionFromCheck(XRCID("ID_FALLBACK"), OPTION_ALLOW_TRANSFERMODEFALLBACK);
-	SetOptionFromCheck(XRCID("ID_USEKEEPALIVE"), OPTION_FTP_SENDKEEPALIVE);
+	m_pOptions->SetOption(OPTION_ALLOW_TRANSFERMODEFALLBACK, GetCheck(XRCID("ID_FALLBACK")) ? 1 : 0);
+	m_pOptions->SetOption(OPTION_FTP_SENDKEEPALIVE, GetCheck(XRCID("ID_USEKEEPALIVE")) ? 1 : 0);
 	return true;
 }

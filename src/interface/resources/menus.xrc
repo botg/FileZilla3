@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <resource version="2.3.0.1" xmlns="http://www.wxwindows.org/wxxrc">
-  <object class="wxMenuBar" name="ID_MENUBAR" subclass="CMenuBar">
+  <object class="wxMenuBar" name="ID_MENUBAR">
     <object class="wxMenu">
       <label>&amp;File</label>
       <object class="wxMenuItem" name="ID_MENU_FILE_SITEMANAGER">
@@ -10,17 +10,6 @@
       </object>
       <object class="wxMenuItem" name="ID_MENU_FILE_COPYSITEMANAGER">
         <label>&amp;Copy current connection to Site Manager...</label>
-      </object>
-      <object class="separator"/>
-      <object class="wxMenuItem" name="ID_MENU_FILE_NEWTAB">
-        <label>New &amp;tab</label>
-        <accel>CTRL+T</accel>
-        <help>Opens a new tab</help>
-      </object>
-      <object class="wxMenuItem" name="ID_MENU_FILE_CLOSETAB">
-        <label>Cl&amp;ose tab</label>
-        <accel>CTRL+W</accel>
-        <help>Closes current tab</help>
       </object>
       <object class="separator"/>
       <object class="wxMenuItem" name="ID_EXPORT">
@@ -148,17 +137,7 @@
       <object class="wxMenuItem" name="ID_MENU_TRANSFER_PRESERVETIMES">
         <label>&amp;Preserve timestamps of transferred files</label>
         <checkable>1</checkable>
-        <accel>CTRL+U</accel>
-      </object>
-      <object class="wxMenu">
-        <object class="wxMenuItem" name="ID_MENU_TRANSFER_SPEEDLIMITS_ENABLE">
-          <label>&amp;Enable</label>
-          <checkable>1</checkable>
-        </object>
-        <object class="wxMenuItem" name="ID_MENU_TRANSFER_SPEEDLIMITS_CONFIGURE">
-          <label>&amp;Configure...</label>
-        </object>
-        <label>&amp;Speed limits</label>
+        <accel>CTRL+T</accel>
       </object>
       <object class="separator"/>
       <object class="wxMenuItem" name="ID_MENU_TRANSFER_MANUAL">
@@ -214,9 +193,6 @@
         <help>Check for newer versions of FileZilla</help>
       </object>
       <object class="separator"/>
-      <object class="wxMenuItem" name="ID_MENU_HELP_WELCOME">
-        <label>Show &amp;welcome dialog...</label>
-      </object>
       <object class="wxMenuItem" name="ID_MENU_HELP_GETTINGHELP">
         <label>&amp;Getting help...</label>
       </object>
@@ -259,9 +235,6 @@
       <label>&amp;Create directory</label>
       <help>Create a new subdirectory in the current directory</help>
     </object>
-    <object class="wxMenuItem" name="ID_CONTEXT_REFRESH">
-      <label>Re&amp;fresh</label>
-    </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="ID_DELETE">
       <label>&amp;Delete</label>
@@ -294,9 +267,6 @@
     <object class="wxMenuItem" name="ID_MKDIR">
       <label>&amp;Create directory</label>
       <help>Create a new subdirectory in the current directory</help>
-    </object>
-    <object class="wxMenuItem" name="ID_CONTEXT_REFRESH">
-      <label>Re&amp;fresh</label>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="ID_DELETE">
@@ -509,11 +479,6 @@
       <help>Add selected directory to the transfer queue</help>
     </object>
     <object class="separator"/>
-    <object class="wxMenuItem" name="ID_OPEN">
-      <label>&amp;Open</label>
-      <help>Open directory in system's file manager</help>
-    </object>
-    <object class="separator"/>
     <object class="wxMenuItem" name="ID_MKDIR">
       <label>&amp;Create directory</label>
       <help>Create a new subdirectory in the current directory</help>
@@ -553,31 +518,6 @@
     </object>
     <object class="wxMenuItem" name="ID_MENU_SEARCH_DELETE">
       <label>D&amp;elete</label>
-    </object>
-  </object>
-  <object class="wxMenu" name="ID_MENU_TABCONTEXT">
-    <object class="wxMenuItem" name="ID_TABCONTEXT_NEW">
-      <label>&amp;Create new tab</label>
-    </object>
-    <object class="separator"/>
-    <object class="wxMenuItem" name="ID_TABCONTEXT_CLOSE">
-      <label>Cl&amp;ose tab</label>
-    </object>
-    <object class="wxMenuItem" name="ID_TABCONTEXT_CLOSEOTHERS">
-      <label>Close &amp;all other tabs</label>
-    </object>
-    <object class="separator"/>
-    <object class="wxMenuItem" name="ID_TABCONTEXT_REFRESH">
-      <label>&amp;Refresh</label>
-    </object>
-  </object>
-  <object class="wxMenu" name="ID_MENU_SPEEDLIMITCONTEXT">
-    <object class="wxMenuItem" name="ID_SPEEDLIMITCONTEXT_ENABLE">
-      <label>&amp;Enable</label>
-      <checkable>1</checkable>
-    </object>
-    <object class="wxMenuItem" name="ID_SPEEDLIMITCONTEXT_CONFIGURE">
-      <label>&amp;Configure speed limits...</label>
     </object>
   </object>
 </resource>

@@ -1,6 +1,6 @@
 #ifndef FILELISTCTRL_INCLUDE_TEMPLATE_DEFINITION
 // This works around a bug in GCC, appears to be [Bug pch/12707]
-#include <filezilla.h>
+#include "FileZilla.h"
 #endif
 #include "filelistctrl.h"
 #include "filezillaapp.h"
@@ -8,9 +8,6 @@
 #include "conditionaldialog.h"
 #include <algorithm>
 #include "filelist_statusbar.h"
-#ifdef __WXGTK__
-#include <gtk/gtk.h>
-#endif
 
 #ifndef __WXMSW__
 DECLARE_EVENT_TYPE(fz_EVT_FILELIST_FOCUSCHANGE, -1)
@@ -38,218 +35,99 @@ END_EVENT_TABLE()
 #ifdef __WXMSW__
 // wxWidgets does not handle LVN_ODSTATECHANGED, work around it
 
+template<class CFileData> std::map<HWND, char*> CFileListCtrl<CFileData>::m_hwnd_map;
+
 #pragma pack(push, 1)
 typedef struct fz_tagNMLVODSTATECHANGE
 {
-	NMHDR hdr;
-	int iFrom;
-	int iTo;
-	UINT uNewState;
-	UINT uOldState;
+    NMHDR hdr;
+    int iFrom;
+    int iTo;
+    UINT uNewState;
+    UINT uOldState;
 } fzNMLVODSTATECHANGE;
 #pragma pack(pop)
 
-// MinGW lacks these constants and macros
 #ifndef LVN_MARQUEEBEGIN
-#define LVN_MARQUEEBEGIN (LVN_FIRST-56)
-#endif
-#ifndef APPCOMMAND_BROWSER_FORWARD
-#define APPCOMMAND_BROWSER_FORWARD 2
-#endif
-#ifndef APPCOMMAND_BROWSER_BACKWARD
-#define APPCOMMAND_BROWSER_BACKWARD 1
-#endif
-#ifndef GET_APPCOMMAND_LPARAM
-#define GET_APPCOMMAND_LPARAM(x) (HIWORD(x)&~0xF000)
+// MinGW lacks this constant
+#define LVN_MARQUEEBEGIN        (LVN_FIRST-56)
 #endif
 
-template<class CFileData> WXLRESULT CFileListCtrl<CFileData>::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+template<class CFileData> LRESULT CALLBACK CFileListCtrl<CFileData>::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if (nMsg == WM_APPCOMMAND)
+	std::map<HWND, char*>::iterator iter = m_hwnd_map.find(hWnd);
+	if (iter == m_hwnd_map.end())
 	{
-		DWORD cmd = GET_APPCOMMAND_LPARAM(lParam);
-		if (cmd == APPCOMMAND_BROWSER_FORWARD)
-		{
-			OnNavigationEvent(true);
-			return true;
-		}
-		else if (cmd == APPCOMMAND_BROWSER_BACKWARD)
-		{
-			OnNavigationEvent(false);
-			return true;
-		}
-
-		return wxListCtrlEx::MSWWindowProc(nMsg, wParam, lParam);
+		// This shouldn't happen
+        return 0;
 	}
-	
-	return wxListCtrlEx::MSWWindowProc(nMsg, wParam, lParam);
-}
+	CFileListCtrl<CFileData>* pFileListCtrl = (CFileListCtrl<CFileData>*)iter->second;
 
-template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
-{
-	if (!m_pFilelistStatusBar)
-		return wxListCtrlEx::MSWOnNotify(idCtrl, lParam, result);
+	if (uMsg != WM_NOTIFY)
+        return CallWindowProc(pFileListCtrl->m_prevWndproc, hWnd, uMsg, wParam, lParam);
 
-	*result = 0;
+	if (!pFileListCtrl->m_pFilelistStatusBar)
+		return CallWindowProc(pFileListCtrl->m_prevWndproc, hWnd, uMsg, wParam, lParam);
 
 	NMHDR* pNmhdr = (NMHDR*)lParam;
 	if (pNmhdr->code == LVN_ODSTATECHANGED)
 	{
+		if (pFileListCtrl->m_insideSetSelection)
+			return 0;
+
 		// A range of items got (de)selected
+		fzNMLVODSTATECHANGE* pNmOdStateChange = (fzNMLVODSTATECHANGE*)lParam;
 
-		if (m_insideSetSelection)
-			return true;
+		if (!pFileListCtrl->m_pFilelistStatusBar)
+			return 0;
 
-		if (!m_pFilelistStatusBar)
-			return true;
-		
-		if (wxGetKeyState(WXK_CONTROL) && wxGetKeyState(WXK_SHIFT))
+		wxASSERT(pNmOdStateChange->iFrom <= pNmOdStateChange->iTo);
+		for (int i = pNmOdStateChange->iFrom; i <= pNmOdStateChange->iTo; i++)
 		{
-			// The behavior of Ctrl+Shift+Click is highly erratic.
-			// Even though it is very slow, we need to manually recount.
-			m_pFilelistStatusBar->UnselectAll();
-			int item = -1;
-			while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
-			{
-				if (m_hasParent && !item)
-					continue;
+			const int index = pFileListCtrl->m_indexMapping[i];
+			const CFileData& data = pFileListCtrl->m_fileData[index];
+			if (data.flags == fill)
+				continue;
 
-				const int index = m_indexMapping[item];
-				const CFileData& data = m_fileData[index];
-				if (data.flags == fill)
-					continue;
+			if (pFileListCtrl->m_hasParent && !i)
+				continue;
 
-				if (ItemIsDir(index))
-					m_pFilelistStatusBar->SelectDirectory();
-				else
-					m_pFilelistStatusBar->SelectFile(ItemGetSize(index));
-			}
+			if (pFileListCtrl->ItemIsDir(index))
+				pFileListCtrl->m_pFilelistStatusBar->SelectDirectory();
+			else
+				pFileListCtrl->m_pFilelistStatusBar->SelectFile(pFileListCtrl->ItemGetSize(index));
 		}
-		else
-		{
-			fzNMLVODSTATECHANGE* pNmOdStateChange = (fzNMLVODSTATECHANGE*)lParam;
-
-			wxASSERT(pNmOdStateChange->iFrom <= pNmOdStateChange->iTo);
-			for (int i = pNmOdStateChange->iFrom; i <= pNmOdStateChange->iTo; i++)
-			{
-				if (m_hasParent && !i)
-					continue;
-
-				const int index = m_indexMapping[i];
-				const CFileData& data = m_fileData[index];
-				if (data.flags == fill)
-					continue;
-
-				if (ItemIsDir(index))
-					m_pFilelistStatusBar->SelectDirectory();
-				else
-					m_pFilelistStatusBar->SelectFile(ItemGetSize(index));
-			}
-		}
-		return true;
+		return 0;
 	}
 	else if (pNmhdr->code == LVN_ITEMCHANGED)
 	{
-		if (m_insideSetSelection)
-			return true;
+		if (pFileListCtrl->m_insideSetSelection)
+			return 0;
 
 		NMLISTVIEW* pNmListView = (NMLISTVIEW*)lParam;
 
 		// Item of -1 means change applied to all items
 		if (pNmListView->iItem == -1 && !(pNmListView->uNewState & LVIS_SELECTED))
 		{
-			m_pFilelistStatusBar->UnselectAll();
+			pFileListCtrl->m_pFilelistStatusBar->UnselectAll();
 		}
 	}
 	else if (pNmhdr->code == LVN_MARQUEEBEGIN)
 	{
-		SetFocus();
-	}
-	else if (pNmhdr->code == LVN_GETDISPINFO)
-	{
-		// Handle this manually instead of using wx for it
-		// so that we can set the overlay image
-		LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-
-		LV_ITEM& lvi = info->item;
-		long item = lvi.iItem;
-
-		int column = m_pVisibleColumnMapping[lvi.iSubItem];
-
-		if (lvi.mask & LVIF_TEXT)
-		{
-			wxString text = GetItemText(item, column);
-			wxStrncpy(lvi.pszText, text, lvi.cchTextMax - 1);
-			lvi.pszText[lvi.cchTextMax - 1] = 0;
-		}
-
-		if (lvi.mask & LVIF_IMAGE)
-		{
-			if (!lvi.iSubItem)
-				lvi.iImage = OnGetItemImage(item);
-			else
-				lvi.iImage = -1;
-		}
-
-		if (!lvi.iSubItem)
-			lvi.state = INDEXTOOVERLAYMASK(GetOverlayIndex(lvi.iItem));
-
-		return true;
+		pFileListCtrl->SetFocus();
 	}
 
-	return wxListCtrlEx::MSWOnNotify(idCtrl, lParam, result);
-}
-#endif
-
-#ifdef __WXGTK__
-// Need to call a member function of a C++ template class
-// from a C function.
-// Sadly template functions with C linkage aren't possible,
-// so use some proxy object.
-class CGtkEventCallbackProxyBase
-{
-public:
-	virtual void OnNavigationEvent(bool forward) = 0;
-};
-
-template <class CFileData> class CGtkEventCallbackProxy : public CGtkEventCallbackProxyBase
-{
-public:
-	CGtkEventCallbackProxy(CFileListCtrl<CFileData> *pData) : m_pData(pData) {}
-
-	virtual void OnNavigationEvent(bool forward)
-	{
-		m_pData->OnNavigationEvent(forward);
-	}
-protected:
-	CFileListCtrl<CFileData> *m_pData;
-};
-
-extern "C" {
-static gboolean gtk_button_release_event(GtkWidget*, void *gdk_event, CGtkEventCallbackProxyBase *proxy)
-{
-	GdkEventButton* button_event = (GdkEventButton*)gdk_event;
-
-	// 8 is back, 9 is forward.
-	if (button_event->button != 8 && button_event->button != 9)
-		return FALSE;
-
-	proxy->OnNavigationEvent(button_event->button == 9);
-
-	return FALSE;
-}
+	return CallWindowProc(pFileListCtrl->m_prevWndproc, hWnd, uMsg, wParam, lParam);
 }
 #endif
 
 template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pParent, CState* pState, CQueueView* pQueue, bool border /*=false*/)
 : wxListCtrlEx(pParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxLC_VIRTUAL | wxLC_REPORT | wxLC_EDIT_LABELS | (border ? wxBORDER_SUNKEN : wxNO_BORDER)),
-	CComparableListing(this), CSystemImageList(16)
+	CComparableListing(this)
 {
 #ifdef __WXMSW__
 	m_pHeaderImageList = 0;
 #endif
-	m_header_icon_index.down = m_header_icon_index.up = -1;
-
 	m_pQueue = pQueue;
 
 	m_sortColumn = 0;
@@ -267,19 +145,12 @@ template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pPar
 
 	m_insideSetSelection = false;
 #ifdef __WXMSW__
-	// Enable use of overlay images
-	DWORD mask = ListView_GetCallbackMask((HWND)GetHandle()) | LVIS_OVERLAYMASK;
-	ListView_SetCallbackMask((HWND)GetHandle(), mask);
+	// Subclass window
+	m_hwnd_map[(HWND)pParent->GetHandle()] = (char*)this;
+	m_prevWndproc = (WNDPROC)SetWindowLongPtr((HWND)pParent->GetHandle(), GWLP_WNDPROC, (LONG_PTR)WindowProc);
 #else
 	m_pending_focus_processing = 0;
 	m_focusItem = -1;
-#endif
-
-#ifdef __WXGTK__
-	m_gtkEventCallbackProxy = new CGtkEventCallbackProxy<CFileData>(this);
-
-	GtkWidget* widget = GetMainWindow()->GetConnectWidget();
-	g_signal_connect(widget, "button_release_event", G_CALLBACK(gtk_button_release_event), m_gtkEventCallbackProxy.Value());
 #endif
 }
 
@@ -287,12 +158,21 @@ template<class CFileData> CFileListCtrl<CFileData>::~CFileListCtrl()
 {
 #ifdef __WXMSW__
 	delete m_pHeaderImageList;
+
+	// Remove subclass
+	if (m_prevWndproc != 0)
+	{
+		SetWindowLongPtr((HWND)GetParent()->GetHandle(), GWLP_WNDPROC, (LONG_PTR)m_prevWndproc);
+		std::map<HWND, char*>::iterator iter = m_hwnd_map.find((HWND)GetParent()->GetHandle());
+		if (iter != m_hwnd_map.end())
+			m_hwnd_map.erase(iter);
+	}
 #endif
 }
 
+#ifdef __WXMSW__
 template<class CFileData> void CFileListCtrl<CFileData>::InitHeaderImageList()
 {
-#ifdef __WXMSW__
 	// Initialize imagelist for list header
 	m_pHeaderImageList = new wxImageListEx(8, 8, true, 3);
 
@@ -327,40 +207,21 @@ template<class CFileData> void CFileListCtrl<CFileData>::InitHeaderImageList()
 	SendMessage(header, HDM_GETITEM, 0, (LPARAM)&item);
 
 	SendMessage(header, HDM_SETIMAGELIST, 0, (LPARAM)m_pHeaderImageList->GetHandle());
-
-	m_header_icon_index.up = 0;
-	m_header_icon_index.down = 1;
-#else
-
-	wxColour colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-
-	wxString lightness;
-	if (colour.Red() + colour.Green() + colour.Blue() > 3 * 128)
-		lightness = _T("DARK");
-	else
-		lightness = _T("LIGHT");
-
-	wxBitmap bmp;
-
-	bmp = wxArtProvider::GetBitmap(_T("ART_SORT_UP_") + lightness,  wxART_OTHER, wxSize(16, 16));
-	m_header_icon_index.up = m_pImageList->Add(bmp);
-	bmp = wxArtProvider::GetBitmap(_T("ART_SORT_DOWN_") + lightness,  wxART_OTHER, wxSize(16, 16));
-	m_header_icon_index.down = m_pImageList->Add(bmp);
-#endif
 }
+#endif //__WXMSW__
 
 template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=-1*/, int direction /*=-1*/, bool updateSelections /*=true*/)
 {
-	CancelLabelEdit();
-
 	if (column != -1)
 	{
-		if (column != m_sortColumn)
+#ifdef __WXMSW__
+		if (column != m_sortColumn && m_pHeaderImageList)
 		{
 			const int oldVisibleColumn = GetColumnVisibleIndex(m_sortColumn);
 			if (oldVisibleColumn != -1)
 				SetHeaderIconIndex(oldVisibleColumn, -1);
 		}
+#endif
 	}
 	else
 		column = m_sortColumn;
@@ -375,7 +236,10 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 		column = 0;
 	}
 
-	SetHeaderIconIndex(newVisibleColumn, direction ? m_header_icon_index.down : m_header_icon_index.up);
+#ifdef __WXMSW__
+	if (m_pHeaderImageList)
+		SetHeaderIconIndex(newVisibleColumn, direction ? 1 : 0);
+#endif
 
 	// Remember which files are selected
 	bool *selected = 0;
@@ -386,7 +250,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 		memset(selected, 0, sizeof(bool) * m_fileData.size());
 
 #ifndef __WXMSW__
-		// GetNextItem is O(n) if nothing is selected, GetSelectedItemCount() is O(1)
+	// GetNextItem is O(n) if nothing is selected, GetSelectedItemCount() is O(1)
 		if (GetSelectedItemCount())		
 #endif
 		{
@@ -1015,12 +879,6 @@ template<class CFileData> void CFileListCtrl<CFileData>::ClearSelection()
 
 template<class CFileData> void CFileListCtrl<CFileData>::OnKeyDown(wxKeyEvent& event)
 {
-#ifdef __WXMAC__
-#define CursorModifierKey wxMOD_CMD
-#else
-#define CursorModifierKey wxMOD_ALT
-#endif
-
 	const int code = event.GetKeyCode();
 	const int mods = event.GetModifiers();
 	if (code == 'A' && (mods == wxMOD_CMD || mods == (wxMOD_CONTROL | wxMOD_META)))
@@ -1033,17 +891,8 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnKeyDown(wxKeyEvent& e
 			else
 				SetSelection(i, false);
 		}
-		if (m_hasParent)
-			SetSelection(0, false);
 		if (m_pFilelistStatusBar)
 			m_pFilelistStatusBar->SelectAll();
-	}
-	else if (code == WXK_BACK ||
-			(code == WXK_UP && event.GetModifiers() == CursorModifierKey) ||
-			(code == WXK_LEFT && event.GetModifiers() == CursorModifierKey)
-		)
-	{
-		OnNavigationEvent(false);
 	}
 	else
 		event.Skip();

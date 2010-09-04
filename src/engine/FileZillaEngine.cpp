@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "ControlSocket.h"
 #include "directorycache.h"
 

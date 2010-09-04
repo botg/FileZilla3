@@ -1,16 +1,13 @@
-#include <filezilla.h>
-
 #define FILELISTCTRL_INCLUDE_TEMPLATE_DEFINITION
 
+#include "FileZilla.h"
 #include "search.h"
-#include "commandqueue.h"
 #include "filelistctrl.h"
-#include "ipcmutex.h"
-#include "Options.h"
-#include "queue.h"
 #include "recursive_operation.h"
-#include "sizeformatting.h"
+#include "commandqueue.h"
+#include "Options.h"
 #include "window_state_manager.h"
+#include "queue.h"
 
 class CSearchFileData : public CGenericFileData
 {
@@ -20,7 +17,7 @@ public:
 	CDirentry entry;
 };
 
-class CSearchDialogFileList : public CFileListCtrl<CSearchFileData>
+class CSearchDialogFileList : public CFileListCtrl<CSearchFileData>, public CSystemImageList
 {
 	friend class CSearchDialog;
 	friend class CSearchSortType;
@@ -40,10 +37,6 @@ protected:
 	virtual int OnGetItemImage(long item) const;
 
 	void InitDateFormat();
-
-#ifdef __WXMSW__
-	virtual int GetOverlayIndex(int item);
-#endif
 
 private:
 	virtual bool CanStartComparison(wxString* pError) { return false; }
@@ -68,7 +61,7 @@ class CSearchSort : public CListViewSort
 {
 public:
 	CSearchSort(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData> &fileData, enum DirSortMode dirSortMode)
-		: m_fileData(fileData), m_dirSortMode(dirSortMode), m_pListCtrl(pListCtrl)
+		: m_pListCtrl(pListCtrl), m_fileData(fileData), m_dirSortMode(dirSortMode)
 	{
 	}
 
@@ -96,31 +89,31 @@ public:
 		{
 		default:
 		case dirsort_ontop:
-			if (data1.is_dir())
+			if (data1.dir)
 			{
-				if (!data2.is_dir())
+				if (!data2.dir)
 					return -1;
 				else
 					return 0;
 			}
 			else
 			{
-				if (data2.is_dir())
+				if (data2.dir)
 					return 1;
 				else
 					return 0;
 			}
 		case dirsort_onbottom:
-			if (data1.is_dir())
+			if (data1.dir)
 			{
-				if (!data2.is_dir())
+				if (!data2.dir)
 					return 1;
 				else
 					return 0;
 			}
 			else
 			{
-				if (data2.is_dir())
+				if (data2.dir)
 					return -1;
 				else
 					return 0;
@@ -157,16 +150,16 @@ public:
 
 	inline int CmpTime(const CDirentry &data1, const CDirentry &data2) const
 	{
-		if (!data1.has_date())
+		if (data1.hasTimestamp == CDirentry::timestamp_none)
 		{
-			if (data2.has_date())
+			if (data2.hasTimestamp != CDirentry::timestamp_none)
 				return -1;
 			else
 				return 0;
 		}
 		else
 		{
-			if (!data2.has_date())
+			if (data2.hasTimestamp == CDirentry::timestamp_none)
 				return 1;
 
 			if (data1.time < data2.time)
@@ -281,9 +274,9 @@ public:
 		CMP(CmpDir, data1.entry, data2.entry);
 
 		if (data1.fileType.IsEmpty())
-			data1.fileType = m_pListCtrl->GetType(data1.entry.name, data1.entry.is_dir());
+			data1.fileType = m_pListCtrl->GetType(data1.entry.name, data1.entry.dir);
 		if (data2.fileType.IsEmpty())
-			data2.fileType = m_pListCtrl->GetType(data2.entry.name, data2.entry.is_dir());
+			data2.fileType = m_pListCtrl->GetType(data2.entry.name, data2.entry.dir);
 
 		CMP(CmpStringNoCase, data1.fileType, data2.fileType);
 
@@ -361,12 +354,15 @@ typedef CReverseSort<CSearchSortOwnerGroup> CSearchSortOwnerGroup_Reverse;
 // Search dialog file list
 // -----------------------
 
+// Defined in LocalListView.cpp
+extern wxString FormatSize(const wxLongLong& size, bool add_bytes_suffix = false);
+
 // Defined in RemoteListView.cpp
 extern wxString StripVMSRevision(const wxString& name);
 
 CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CState* pState, CQueueView* pQueue)
 	: CFileListCtrl<CSearchFileData>(pParent, pState, pQueue, true),
-	m_searchDialog(pParent)
+	CSystemImageList(16), m_searchDialog(pParent)
 {
 	m_hasParent = false;
 
@@ -378,8 +374,9 @@ CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CState* pSt
 
 	InitSort(OPTION_SEARCH_SORTORDER);
 
+#ifdef __WXMSW__
 	InitHeaderImageList();
-
+#endif
 	const unsigned long widths[7] = { 130, 130, 75, 80, 120, 80, 80 };
 
 	AddColumn(_("Filename"), wxLIST_FORMAT_LEFT, widths[0]);
@@ -394,7 +391,7 @@ CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CState* pSt
 
 bool CSearchDialogFileList::ItemIsDir(int index) const
 {
-	return m_fileData[index].entry.is_dir();
+	return m_fileData[index].entry.dir;
 }
 
 wxLongLong CSearchDialogFileList::ItemGetSize(int index) const
@@ -455,10 +452,10 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 		return m_fileData[index].path.GetPath();
 	else if (column == 2)
 	{
-		if (entry.is_dir() || entry.size < 0)
+		if (entry.dir || entry.size < 0)
 			return _T("");
 		else
-			return CSizeFormat::Format(entry.size);
+			return FormatSize(entry.size);
 	}
 	else if (column == 3)
 	{
@@ -466,19 +463,19 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 		if (data.fileType.IsEmpty())
 		{
 			if (data.path.GetType() == VMS)
-				data.fileType = GetType(StripVMSRevision(entry.name), entry.is_dir());
+				data.fileType = GetType(StripVMSRevision(entry.name), entry.dir);
 			else
-				data.fileType = GetType(entry.name, entry.is_dir());
+				data.fileType = GetType(entry.name, entry.dir);
 		}
 
 		return data.fileType;
 	}
 	else if (column == 4)
 	{
-		if (!entry.has_date())
+		if (entry.hasTimestamp == CDirentry::timestamp_none)
 			return _T("");
 
-		if (entry.has_time())
+		if (entry.hasTimestamp >= CDirentry::timestamp_time)
 			return entry.time.Format(m_timeFormat);
 		else
 			return entry.time.Format(m_dateFormat);
@@ -535,7 +532,6 @@ EVT_BUTTON(XRCID("ID_STOP"), CSearchDialog::OnStop)
 EVT_CONTEXT_MENU(CSearchDialog::OnContextMenu)
 EVT_MENU(XRCID("ID_MENU_SEARCH_DOWNLOAD"), CSearchDialog::OnDownload)
 EVT_MENU(XRCID("ID_MENU_SEARCH_DELETE"), CSearchDialog::OnDelete)
-EVT_CHAR_HOOK(CSearchDialog::OnCharHook)
 END_EVENT_TABLE()
 
 CSearchDialog::CSearchDialog(wxWindow* parent, CState* pState, CQueueView* pQueue)
@@ -561,19 +557,11 @@ bool CSearchDialog::Load()
 	if (!wxDialogEx::Load(m_parent, _T("ID_SEARCH")))
 		return false;
 
-	/* XRCed complains if adding a status bar to a dialog, so do it here instead */
-	CFilelistStatusBar* pStatusBar = new CFilelistStatusBar(this);
-	pStatusBar->SetEmptyString(_("No search results"));
-
-	GetSizer()->Add(pStatusBar, 0, wxGROW);
-
-	if (!CreateListControl(filter_name | filter_size | filter_path | filter_date))
+	if (!CreateListControl(filter_name | filter_size | filter_path))
 		return false;
 
 	m_results = new CSearchDialogFileList(this, m_pState, 0);
 	ReplaceControl(XRCCTRL(*this, "ID_RESULTS", wxWindow), m_results);
-
-	m_results->SetFilelistStatusBar(pStatusBar);
 
 	const CServerPath path = m_pState->GetRemotePath();
 	if (!path.IsEmpty())
@@ -585,10 +573,13 @@ bool CSearchDialog::Load()
 	m_pWindowStateManager->Restore(OPTION_SEARCH_SIZE, wxSize(750, 500));
 
 	Layout();
-
-	LoadConditions();
-	EditFilter(m_search_filter);
-	XRCCTRL(*this, "ID_CASE", wxCheckBox)->SetValue(m_search_filter.matchCase);
+	CFilter filter;
+	CFilterCondition cond;
+	cond.condition = 0;
+	cond.type = filter_name;
+	filter.filters.push_back(cond);
+	EditFilter(filter);
+	XRCCTRL(*this, "ID_CASE", wxCheckBox)->SetValue(filter.matchCase);
 
 	return true;
 }
@@ -600,12 +591,10 @@ void CSearchDialog::Run()
 
 	m_pState->BlockHandlers(STATECHANGE_REMOTE_DIR);
 	m_pState->BlockHandlers(STATECHANGE_REMOTE_DIR_MODIFIED);
-	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR, false);
-	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_IDLE, false);
+	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR);
+	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_IDLE);
 
 	ShowModal();
-
-	SaveConditions();
 
 	m_pState->UnregisterHandler(this, STATECHANGE_REMOTE_IDLE);
 	m_pState->UnregisterHandler(this, STATECHANGE_REMOTE_DIR);
@@ -627,15 +616,16 @@ void CSearchDialog::Run()
 		if (m_pState->IsRemoteIdle() && !m_original_dir.IsEmpty())
 			m_pState->ChangeRemoteDir(m_original_dir);
 	}
+
 }
 
-void CSearchDialog::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CSearchDialog::OnStateChange(enum t_statechange_notifications notification, const wxString& data)
 {
 	if (notification == STATECHANGE_REMOTE_DIR)
 		ProcessDirectoryListing();
 	else if (notification == STATECHANGE_REMOTE_IDLE)
 	{
-		if (pState->IsRemoteIdle())
+		if (m_pState->IsRemoteIdle())
 			m_searching = false;
 		SetCtrlState();
 	}
@@ -654,29 +644,20 @@ void CSearchDialog::ProcessDirectoryListing()
 	
 	int old_count = m_results->m_fileData.size();
 	int added = 0;
-
-	m_results->m_fileData.reserve(m_results->m_fileData.size() + listing->GetCount());
-	m_results->m_indexMapping.reserve(m_results->m_indexMapping.size() + listing->GetCount());
-
 	for (unsigned int i = 0; i < listing->GetCount(); i++)
 	{
 		const CDirentry& entry = (*listing)[i];
 
-		if (m_search_filter.filters.size() && !CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, listing->path.GetPath(), entry.is_dir(), entry.size, 0, entry.has_date() ? &entry.time : 0))
+		if (m_search_filter.filters.size() && !CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, listing->path.GetPath(), entry.dir, entry.size, 0))
 			continue;
 
 		CSearchFileData data;
 		data.flags = CComparableListing::normal;
 		data.entry = entry;
 		data.path = listing->path;
-		data.icon = entry.is_dir() ? m_results->m_dirIcon : -2;
+		data.icon = entry.dir ? m_results->m_dirIcon : -2;
 		m_results->m_fileData.push_back(data);
 		m_results->m_indexMapping.push_back(old_count + added++);
-
-		if (entry.is_dir())
-			m_results->GetFilelistStatusBar()->AddDirectory();
-		else
-			m_results->GetFilelistStatusBar()->AddFile(entry.size);
 	}
 
 	m_results->SetItemCount(old_count + added);
@@ -727,14 +708,11 @@ void CSearchDialog::OnSearch(wxCommandEvent& event)
 	m_search_filter.matchCase = XRCCTRL(*this, "ID_CASE", wxCheckBox)->GetValue();
 
 	// Delete old results
-	m_results->ClearSelection();
 	m_results->m_indexMapping.clear();
 	m_results->m_fileData.clear();
 	m_results->SetItemCount(0);
 	m_visited.clear();
 	m_results->RefreshListOnly(true);
-
-	m_results->GetFilelistStatusBar()->Clear();
 
 	// Start
 	m_searching = true;
@@ -862,7 +840,7 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::list<C
 			continue;
 		int index = m_results->m_indexMapping[sel];
 
-		if (m_results->m_fileData[index].entry.is_dir())
+		if (m_results->m_fileData[index].entry.dir)
 		{
 			CServerPath path = m_results->m_fileData[index].path;
 			path.ChangePath(m_results->m_fileData[index].entry.name);
@@ -997,8 +975,7 @@ void CSearchDialog::OnDownload(wxCommandEvent& event)
 		}
 
 		CServerPath remote_path = m_results->m_fileData[*iter].path;
-		const wxString localName = CQueueView::ReplaceInvalidCharacters(entry.name);
-		m_pQueue->QueueFile(!start, true, target_path, localName, entry.name, remote_path, *pServer, entry.size);
+		m_pQueue->QueueFile(!start, true, target_path.GetPath() + entry.name, entry.name, remote_path, *pServer, entry.size);
 	}
 	m_pQueue->QueueFile_Finish(start);
 
@@ -1014,7 +991,7 @@ void CSearchDialog::OnDownload(wxCommandEvent& event)
 		if (!flatten && iter->HasParent())
 			target_path.AddSegment(iter->GetLastSegment());
 
-		m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(*iter, _T(""), target_path, false);
+		m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(*iter, _T(""), target_path.GetPath(), false);
 		std::list<CFilter> filters; // Empty, recurse into everything
 		m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(mode, *iter, filters, true, m_original_dir);
 	}
@@ -1076,73 +1053,4 @@ void CSearchDialog::OnDelete(wxCommandEvent& event)
 		std::list<CFilter> filters; // Empty, recurse into everything
 		m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, path, filters, !path.HasParent(), m_original_dir);
 	}
-}
-
-void CSearchDialog::OnCharHook(wxKeyEvent& event)
-{
-	if (IsEscapeKey(event))
-	{
-		EndDialog(wxID_CANCEL);
-		return;
-	}
-
-	event.Skip();
-}
-
-#ifdef __WXMSW__
-int CSearchDialogFileList::GetOverlayIndex(int item)
-{
-	if (item < 0 || item >= (int)m_indexMapping.size())
-		return -1;
-	int index = m_indexMapping[item];
-
-	if (m_fileData[index].entry.is_link())
-		return GetLinkOverlayIndex();
-
-	return 0;
-}
-#endif
-
-void CSearchDialog::LoadConditions()
-{
-	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
-
-	CXmlFile file;
-	
-	TiXmlElement* pDocument = file.Load(_T("search"));
-	if (!pDocument)
-	{
-		wxMessageBox(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
-		return;
-	}
-
-	TiXmlElement* pFilter = pDocument->FirstChildElement("Filter");
-	if (!pFilter)
-		return;
-
-	if (!CFilterManager::LoadFilter(pFilter, m_search_filter))
-		m_search_filter = CFilter();
-}
-
-void CSearchDialog::SaveConditions()
-{
-	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
-
-	CXmlFile file;
-	
-	TiXmlElement* pDocument = file.Load(_T("search"));
-	if (!pDocument)
-	{
-		wxMessageBox(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
-		return;
-	}
-
-	TiXmlElement* pFilter;
-	while ((pFilter = pDocument->FirstChildElement("Filter")))
-		pDocument->RemoveChild(pFilter);
-	pFilter = pDocument->LinkEndChild(new TiXmlElement("Filter"))->ToElement();
-
-	CFilterDialog::SaveFilter(pFilter, m_search_filter);
-
-	file.Save();
 }

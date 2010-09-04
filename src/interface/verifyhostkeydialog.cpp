@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "verifyhostkeydialog.h"
 #include <wx/tokenzr.h>
 #include "dialogex.h"

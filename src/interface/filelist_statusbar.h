@@ -1,9 +1,7 @@
 #ifndef __FILELIST_STATUSBAR_H__
 #define __FILELIST_STATUSBAR_H__
 
-#include "option_change_event_handler.h"
-
-class CFilelistStatusBar : public wxStatusBar, protected COptionChangeEventHandler
+class CFilelistStatusBar : public wxStatusBar
 {
 public:
 	CFilelistStatusBar(wxWindow* pParent);
@@ -27,13 +25,8 @@ public:
 	void UnselectDirectory();
 
 	void SetEmptyString(const wxString& empty);
-
-	void SetConnected(bool connected);
 protected:
 
-	virtual void OnOptionChanged(int option);
-
-	bool m_connected;
 	int m_count_files;
 	int m_count_dirs;
 	wxLongLong m_total_size;
@@ -48,7 +41,6 @@ protected:
 	wxTimer m_updateTimer;
 
 	wxString m_empty_string;
-	wxString m_offline_string;
 
 	DECLARE_EVENT_TABLE()
 	void OnTimer(wxTimerEvent& event);

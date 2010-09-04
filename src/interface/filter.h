@@ -11,8 +11,6 @@ enum t_filterType
 	filter_attributes = 0x04,
 	filter_permissions = 0x08,
 	filter_path = 0x10,
-	filter_date = 0x20,
-	filter_time = 0x40,
 #ifdef __WXMSW__
 	filter_meta = filter_attributes,
 	filter_foreign = filter_permissions,
@@ -29,10 +27,8 @@ public:
 
 	enum t_filterType type;
 	int condition;
-
-	wxString strValue; // All other types
-	wxLongLong value; // If type is size
-	wxDateTime date; // If type is date
+	wxString strValue;
+	wxLongLong value;
 	bool matchCase;
 	CSharedPointer<const wxRegEx> pRegEx;
 };
@@ -70,16 +66,15 @@ public:
 	std::vector<bool> remote;
 };
 
-class TiXmlElement;
 class CFilterManager
 {
 public:
 	CFilterManager();
 
 	// Note: Under non-windows, attributes are permissions
-	bool FilenameFiltered(const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, const wxDateTime* date) const;
-	bool FilenameFiltered(const std::list<CFilter> &filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, const wxDateTime* date) const;
-	static bool FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, wxLongLong size, int attributes, const wxDateTime* date);
+	bool FilenameFiltered(const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes) const;
+	bool FilenameFiltered(const std::list<CFilter> &filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes) const;
+	static bool FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, wxLongLong size, int attributes);
 	static bool HasActiveFilters(bool ignore_disabled = false);
 
 	bool HasSameLocalAndRemoteFilters() const;
@@ -89,8 +84,6 @@ public:
 	std::list<CFilter> GetActiveFilters(bool local);
 
 	static bool CompileRegexes(CFilter& filter);
-
-	static bool LoadFilter(TiXmlElement* pElement, CFilter& filter);
 
 protected:
 	static bool CompileRegexes();
@@ -114,8 +107,6 @@ public:
 	virtual ~CFilterDialog() { }
 
 	bool Create(CMainFrame* parent);
-
-	static void SaveFilter(TiXmlElement* pElement, const CFilter& filter);
 
 protected:
 

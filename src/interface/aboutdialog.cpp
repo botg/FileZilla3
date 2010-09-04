@@ -1,10 +1,6 @@
-#include <filezilla.h>
-
+#include "FileZilla.h"
 #include "aboutdialog.h"
 #include "buildinfo.h"
-
-#include <misc.h>
-
 #include <wx/hyperlink.h>
 #include <wx/clipbrd.h>
 
@@ -20,7 +16,7 @@ bool CAboutDialog::Create(wxWindow* parent)
 
 	XRCCTRL(*this, "ID_URL", wxHyperlinkCtrl)->SetLabel(_T("http://filezilla-project.org"));
 
-	XRCCTRL(*this, "ID_COPYRIGHT", wxStaticText)->SetLabel(_T("Copyright (C) 2004-2010  Tim Kosse"));
+	XRCCTRL(*this, "ID_COPYRIGHT", wxStaticText)->SetLabel(_T("Copyright (C) 2004-2009  Tim Kosse"));
 
 	wxString version = CBuildInfo::GetVersion();
 	if (CBuildInfo::GetBuildType() == _T("nightly"))
@@ -96,61 +92,6 @@ bool CAboutDialog::Create(wxWindow* parent)
 	if (pVer_gnutls)
 		pVer_gnutls->SetLabel(GetDependencyVersion(dependency_gnutls));
 
-	wxStaticText* pSystemName = XRCCTRL(*this, "ID_SYSTEM_NAME", wxStaticText);
-	if (!pSystemName)
-		return false;
-
-	wxStaticText* pSystemNameDesc = XRCCTRL(*this, "ID_SYSTEM_NAME_DESC", wxStaticText);
-	if (!pSystemNameDesc)
-		return false;
-
-	wxString os = wxGetOsDescription();
-	if (os.empty())
-	{
-		pSystemName->Hide();
-		pSystemNameDesc->Hide();
-	}
-	else
-		pSystemName->SetLabel(os);
-
-	wxStaticText* pSystemVersion = XRCCTRL(*this, "ID_SYSTEM_VER", wxStaticText);
-	if (!pSystemVersion)
-		return false;
-
-	wxStaticText* pSystemVersionDesc = XRCCTRL(*this, "ID_SYSTEM_VER_DESC", wxStaticText);
-	if (!pSystemVersionDesc)
-		return false;
-
-	int major, minor;
-	if (wxGetOsVersion(&major, &minor) != wxOS_UNKNOWN)
-	{
-		wxString version = wxString::Format(_T("%d.%d"), major, minor);
-		pSystemVersion->SetLabel(version);
-	}
-	else
-	{
-		pSystemVersionDesc->Hide();
-		pSystemVersion->Hide();
-	}
-   
-	wxStaticText* pSystemPlatform = XRCCTRL(*this, "ID_SYSTEM_PLATFORM", wxStaticText);
-	if (!pSystemPlatform)
-		return false;
-
-	wxStaticText* pSystemPlatformDesc = XRCCTRL(*this, "ID_SYSTEM_PLATFORM_DESC", wxStaticText);
-	if (!pSystemPlatformDesc)
-		return false;
-
-#if defined(__WXMSW__)
-	if (::wxIsPlatform64Bit())
-		pSystemPlatform->SetLabel(_("64 bit system"));
-	else
-		pSystemPlatform->SetLabel(_("32 bit system"));
-#else
-	pSystemPlatform->Hide();
-	pSystemPlatformDesc->Hide();
-#endif
-
 	GetSizer()->Fit(this);
 	GetSizer()->SetSizeHints(this);
 
@@ -193,23 +134,6 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 	text += _T("\nLinked against:\n  wxWidgets:      ") + wxString(wxVERSION_NUM_DOT_STRING_T) + _T("\n");
 	text += _T("  GnuTLS:         ") + GetDependencyVersion(dependency_gnutls) + _T("\n");
 
-
-	text += _T("\nOperating system:\n");
-	wxString os = wxGetOsDescription();
-	if (!os.empty())
-		text += _T("  Name:           ") + os + _T("\n");
-	
-	int major, minor;
-	if (wxGetOsVersion(&major, &minor) != wxOS_UNKNOWN)
-		text += wxString::Format(_T("  Version:        %d.%d\n"), major, minor);
-
-#if defined(__WXMSW__)
-	if (::wxIsPlatform64Bit())
-		text += _T("  Platform:       64 bit system\n");
-	else
-		text += _T("  Platform:       32 bit system\n");
-#endif
-
 #ifdef __WXMSW__
 	text.Replace(_T("\n"), _T("\r\n"));
 #endif
@@ -221,6 +145,5 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 	}
 
 	wxTheClipboard->SetData(new wxTextDataObject(text));
-	wxTheClipboard->Flush();
 	wxTheClipboard->Close();
 }

@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "listingcomparison.h"
 #include "filter.h"
 #include "Options.h"
@@ -267,10 +267,8 @@ void CComparisonManager::SetListings(CComparableListing* pLeft, CComparableListi
 	m_pLeft = pLeft;
 	m_pRight = pRight;
 
-	if (m_pLeft)
-		m_pLeft->SetOther(m_pRight);
-	if (m_pRight)
-		m_pRight->SetOther(m_pLeft);
+	m_pLeft->SetOther(m_pRight);
+	m_pRight->SetOther(m_pLeft);
 }
 
 void CComparisonManager::ExitComparisonMode()

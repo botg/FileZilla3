@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "cmdline.h"
 
 CCommandLine::CCommandLine(int argc, wxChar** argv)
@@ -6,10 +6,7 @@ CCommandLine::CCommandLine(int argc, wxChar** argv)
 	m_parser.AddSwitch(_T("h"), _T("help"), _("Shows this help dialog"), wxCMD_LINE_OPTION_HELP);
 	m_parser.AddSwitch(_T("s"), _T("site-manager"), _("Start with opened Site Manager"));
 	m_parser.AddOption(_T("c"), _T("site"), _("Connect to specified Site Manager site"));
-
-	wxString desc = wxString::Format(_("Logontype, can only be used together with FTP URL. Argument has to be either '%s' or '%s'"), _T("ask"), _T("interactive"));
-	m_parser.AddOption(_T("l"), _T("logontype"), desc);
-
+	m_parser.AddOption(_T("l"), _T("logontype"), _("Logontype, can only be used together with FTP URL. Argument has to be either 'ask' or 'interactive'"));
 #ifdef __WXMSW__
 	m_parser.AddSwitch(_T(""), _T("close"), _("Close all running instances of FileZilla"));
 #endif

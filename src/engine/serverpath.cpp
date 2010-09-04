@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "serverpath.h"
 
 #define FTP_MVS_DOUBLE_QUOTE (wxChar)0xDC
@@ -62,6 +62,9 @@ CServerPath::CServerPath(const CServerPath &path, wxString subdir)
 	m_type = path.m_type;
 	m_bEmpty = path.m_bEmpty;
 
+	subdir.Trim(true);
+	subdir.Trim(false);
+
 	if (subdir == _T(""))
 		return;
 
@@ -103,6 +106,9 @@ bool CServerPath::SetPath(wxString &newPath, bool isFile)
 {
 	wxString path = newPath;
 	wxString file;
+
+	path.Trim(true);
+	path.Trim(false);
 
 	if (path == _T(""))
 		return false;
@@ -437,6 +443,9 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 {
 	wxString dir = subdir;
 	wxString file;
+
+	dir.Trim(true);
+	dir.Trim(false);
 
 	if (dir == _T(""))
 	{

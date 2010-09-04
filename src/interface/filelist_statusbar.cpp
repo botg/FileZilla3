@@ -1,6 +1,5 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "filelist_statusbar.h"
-#include "sizeformatting.h"
 
 BEGIN_EVENT_TABLE(CFilelistStatusBar, wxStatusBar)
 EVT_TIMER(wxID_ANY, CFilelistStatusBar::OnTimer)
@@ -9,7 +8,6 @@ END_EVENT_TABLE()
 CFilelistStatusBar::CFilelistStatusBar(wxWindow* pParent)
 	: wxStatusBar(pParent, wxID_ANY, 0)
 {
-	m_connected = true;
 	m_count_files = 0;
 	m_count_dirs = 0;
 	m_total_size = 0;
@@ -24,7 +22,6 @@ CFilelistStatusBar::CFilelistStatusBar(wxWindow* pParent)
 	m_updateTimer.SetOwner(this);
 
 	m_empty_string = _("Empty directory.");
-	m_offline_string = _("Not connected.");
 
 	UpdateText();
 
@@ -32,26 +29,21 @@ CFilelistStatusBar::CFilelistStatusBar(wxWindow* pParent)
 	if (GetLayoutDirection() != wxLayout_RightToLeft)
 		SetDoubleBuffered(true);
 #endif
-
-	RegisterOption(OPTION_SIZE_FORMAT);
-	RegisterOption(OPTION_SIZE_USETHOUSANDSEP);
-	RegisterOption(OPTION_SIZE_DECIMALPLACES);
 }
+
+// Defined in LocalListView.cpp
+extern wxString FormatSize(const wxLongLong& size, bool add_bytes_suffix = false);
 
 void CFilelistStatusBar::UpdateText()
 {
 	wxString text;
-	if (!m_connected)
-	{
-		text = m_offline_string;
-	}
-	else if (m_count_selected_files || m_count_selected_dirs)
+	if (m_count_selected_files || m_count_selected_dirs)
 	{
 		if (!m_count_selected_files)
 			text = wxString::Format(wxPLURAL("Selected %d directory.", "Selected %d directories.", m_count_selected_dirs), m_count_selected_dirs);
 		else if (!m_count_selected_dirs)
 		{
-			const wxString size = CSizeFormat::Format(m_total_selected_size, true);
+			const wxString size = FormatSize(m_total_selected_size, true);
 			if (m_unknown_selected_size)
 				text = wxString::Format(wxPLURAL("Selected %d file. Total size: At least %s", "Selected %d files. Total size: At least %s", m_count_selected_files), m_count_selected_files, size.c_str());
 			else
@@ -61,7 +53,7 @@ void CFilelistStatusBar::UpdateText()
 		{
 			const wxString files = wxString::Format(wxPLURAL("%d file", "%d files", m_count_selected_files), m_count_selected_files);
 			const wxString dirs = wxString::Format(wxPLURAL("%d directory", "%d directories", m_count_selected_dirs), m_count_selected_dirs);
-			const wxString size = CSizeFormat::Format(m_total_selected_size, true);
+			const wxString size = FormatSize(m_total_selected_size, true);
 			if (m_unknown_selected_size)
 				text = wxString::Format(_("Selected %s and %s. Total size: At least %s"), files.c_str(), dirs.c_str(), size.c_str());
 			else
@@ -74,7 +66,7 @@ void CFilelistStatusBar::UpdateText()
 			text = wxString::Format(wxPLURAL("%d directory", "%d directories", m_count_dirs), m_count_dirs);
 		else if (!m_count_dirs)
 		{
-			const wxString size = CSizeFormat::Format(m_total_size, true);
+			const wxString size = FormatSize(m_total_size, true);
 			if (m_unknown_size)
 				text = wxString::Format(wxPLURAL("%d file. Total size: At least %s", "%d files. Total size: At least %s", m_count_files), m_count_files, size.c_str());
 			else
@@ -84,7 +76,7 @@ void CFilelistStatusBar::UpdateText()
 		{
 			const wxString files = wxString::Format(wxPLURAL("%d file", "%d files", m_count_files), m_count_files);
 			const wxString dirs = wxString::Format(wxPLURAL("%d directory", "%d directories", m_count_dirs), m_count_dirs);
-			const wxString size = CSizeFormat::Format(m_total_size, true);
+			const wxString size = FormatSize(m_total_size, true);
 			if (m_unknown_size)
 				text = wxString::Format(_("%s and %s. Total size: At least %s"), files.c_str(), dirs.c_str(), size.c_str());
 			else
@@ -244,16 +236,6 @@ void CFilelistStatusBar::SetHidden(int hidden)
 
 void CFilelistStatusBar::SetEmptyString(const wxString& empty)
 {
-	TriggerUpdateText();
-}
-
-void CFilelistStatusBar::SetConnected(bool connected)
-{
-	m_connected = connected;
-	TriggerUpdateText();
-}
-
-void CFilelistStatusBar::OnOptionChanged(int option)
-{
+	m_empty_string = empty;
 	TriggerUpdateText();
 }

@@ -23,8 +23,6 @@ public:
 	void RemoveObject(CRateLimiterObject* pObject);
 
 protected:
-	wxLongLong GetLimit(enum rate_direction direction) const;
-
 	int GetBucketSize() const;
 
 	CRateLimiter(COptionsBase* pOptions);

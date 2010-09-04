@@ -1,14 +1,13 @@
 #ifndef __QUICKCONNECTBAR_H__
 #define __QUICKCONNECTBAR_H__
 
-class CMainFrame;
 class CQuickconnectBar : public wxPanel
 {
 public:
 	CQuickconnectBar();
 	virtual~CQuickconnectBar();
 
-	bool Create(CMainFrame* pParent);
+	bool Create(wxWindow* pParent);
 
 	void ClearFields();
 
@@ -26,8 +25,6 @@ protected:
 	wxTextCtrl* m_pUser;
 	wxTextCtrl* m_pPass;
 	wxTextCtrl* m_pPort;
-
-	CMainFrame *m_pMainFrame;
 };
 
 

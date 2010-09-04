@@ -4,10 +4,9 @@
 #include "systemimagelist.h"
 #include "state.h"
 #include "filter.h"
-#include "treectrlex.h"
 
 class CQueueView;
-class CRemoteTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler
+class CRemoteTreeView : public wxTreeCtrl, CSystemImageList, CStateEventHandler
 {
 	DECLARE_CLASS(CRemoteTreeView)
 

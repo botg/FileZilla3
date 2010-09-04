@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "listctrlex.h"
 #include <wx/renderer.h>
 #include <wx/tokenzr.h>
@@ -18,14 +18,7 @@ EVT_MOUSEWHEEL(wxListCtrlEx::OnMouseWheel)
 EVT_LIST_ITEM_FOCUSED(wxID_ANY, wxListCtrlEx::OnSelectionChanged)
 EVT_LIST_ITEM_SELECTED(wxID_ANY, wxListCtrlEx::OnSelectionChanged)
 EVT_KEY_DOWN(wxListCtrlEx::OnKeyDown)
-EVT_LIST_BEGIN_LABEL_EDIT(wxID_ANY, wxListCtrlEx::OnBeginLabelEdit)
-EVT_LIST_END_LABEL_EDIT(wxID_ANY, wxListCtrlEx::OnEndLabelEdit)
-#ifndef __WXMSW__
-EVT_LIST_COL_DRAGGING(wxID_ANY, wxListCtrlEx::OnColumnDragging)
-#endif
 END_EVENT_TABLE()
-
-#define MIN_COLUMN_WIDTH 12
 
 wxListCtrlEx::wxListCtrlEx(wxWindow *parent,
 						   wxWindowID id,
@@ -38,13 +31,6 @@ wxListCtrlEx::wxListCtrlEx(wxWindow *parent,
 {
 	m_pVisibleColumnMapping = 0;
 	m_prefixSearch_enabled = false;
-
-#ifndef __WXMSW__
-	m_editing = false;
-#else
-	m_columnDragging = false;
-#endif
-	m_blockedLabelEditing = false;
 }
 
 wxListCtrlEx::~wxListCtrlEx()
@@ -535,8 +521,6 @@ bool wxListCtrlEx::ReadColumnWidths(unsigned int optionId)
 			delete [] newWidths;
 			return false;
 		}
-		else if (newWidths[i] < MIN_COLUMN_WIDTH)
-			newWidths[i] = MIN_COLUMN_WIDTH;
 	}
 
 	for (unsigned int i = 0; i < count; i++)
@@ -608,7 +592,9 @@ void wxListCtrlEx::MoveColumn(unsigned int col, unsigned int before)
 			info.order++;
 	}
 
+#ifdef __WXMSW__
 	int icon = -1;
+#endif
 
 	t_columnInfo& info = m_columnInfo[col];
 	if (info.shown)
@@ -623,7 +609,9 @@ void wxListCtrlEx::MoveColumn(unsigned int col, unsigned int before)
 				m_pVisibleColumnMapping[j - 1] = m_pVisibleColumnMapping[j];
 			info.width = GetColumnWidth(i);
 
+#ifdef __WXMSW__
 			icon = GetHeaderIconIndex(i);
+#endif
 			DeleteColumn(i);
 
 			break;
@@ -645,7 +633,9 @@ void wxListCtrlEx::MoveColumn(unsigned int col, unsigned int before)
 
 		InsertColumn(pos, info.name, info.align, info.width);
 
+#ifdef __WXMSW__
 		SetHeaderIconIndex(pos, icon);
+#endif
 	}
 	m_columnInfo[col].order = before;
 }
@@ -817,12 +807,12 @@ int wxListCtrlEx::GetColumnVisibleIndex(int col)
 	return -1;
 }
 
+#ifdef __WXMSW__
 int wxListCtrlEx::GetHeaderIconIndex(int col)
 {
 	if (col < 0 || col >= GetColumnCount())
 		return -1;
 
-#ifdef __WXMSW__
 	HWND hWnd = (HWND)GetHandle();
 	HWND header = (HWND)SendMessage(hWnd, LVM_GETHEADER, 0, 0);
 
@@ -834,13 +824,6 @@ int wxListCtrlEx::GetHeaderIconIndex(int col)
 		return -1;
 
 	return item.iImage;
-#else
-	wxListItem item;
-	if (!GetColumn(col, item))
-		return -1;
-
-	return item.GetImage();
-#endif
 }
 
 void wxListCtrlEx::SetHeaderIconIndex(int col, int icon)
@@ -848,7 +831,6 @@ void wxListCtrlEx::SetHeaderIconIndex(int col, int icon)
 	if (col < 0 || col >= GetColumnCount())
 		return;
 
-#ifdef __WXMSW__
 	HWND hWnd = (HWND)GetHandle();
 	HWND header = (HWND)SendMessage(hWnd, LVM_GETHEADER, 0, 0);
 
@@ -867,15 +849,8 @@ void wxListCtrlEx::SetHeaderIconIndex(int col, int icon)
 	else
 		item.fmt &= ~(HDF_IMAGE | HDF_BITMAP_ON_RIGHT);
 	SendMessage(header, HDM_SETITEM, col, (LPARAM)&item);
-#else
-	wxListItem item;
-	if (!GetColumn(col, item))
-		return;
-
-	item.SetImage(icon);
-	SetColumn(col, item);
-#endif
 }
+#endif //__WXMSW__
 
 void wxListCtrlEx::RefreshListOnly(bool eraseBackground /*=true*/)
 {
@@ -886,161 +861,3 @@ void wxListCtrlEx::RefreshListOnly(bool eraseBackground /*=true*/)
 	GetMainWindow()->Refresh(eraseBackground);
 #endif
 }
-
-void wxListCtrlEx::CancelLabelEdit()
-{
-#ifdef __WXMSW__
-	if (GetEditControl())
-		ListView_CancelEditLabel((HWND)GetHandle());
-#else
-	m_editing = false;
-	wxTextCtrl* pEdit = GetEditControl();
-	if (pEdit)
-	{
-		wxKeyEvent evt(wxEVT_CHAR);
-		evt.m_keyCode = WXK_ESCAPE;
-		pEdit->GetEventHandler()->ProcessEvent(evt);
-	}
-#endif
-
-}
-
-void wxListCtrlEx::OnBeginLabelEdit(wxListEvent& event)
-{
-#ifndef __WXMSW__
-	if (m_editing)
-	{
-		event.Veto();
-		return;
-	}
-#endif
-	if (m_blockedLabelEditing)
-	{
-		event.Veto();
-		return;
-	}
-
-	if (!OnBeginRename(event))
-		event.Veto();
-#ifndef __WXMSW__
-	else
-		m_editing = true;
-#endif
-}
-
-void wxListCtrlEx::OnEndLabelEdit(wxListEvent& event)
-{
-#ifdef __WXMAC__
-	int item = event.GetIndex();
-	if (item != -1)
-	{
-		int to = item + 1;
-		if (to < GetItemCount())
-		{
-			int from = item;
-			if (from)
-				from--;
-			RefreshItems(from, to);
-		}
-		else
-			RefreshListOnly();
-	}
-#endif
-
-#ifndef __WXMSW__
-	if (!m_editing)
-	{
-		event.Veto();
-		return;
-	}
-	m_editing = false;
-#endif
-
-	if (event.IsEditCancelled())
-		return;
-
-	if (!OnAcceptRename(event))
-		event.Veto();
-}
-
-bool wxListCtrlEx::OnBeginRename(const wxListEvent& event)
-{
-	return false;
-}
-
-bool wxListCtrlEx::OnAcceptRename(const wxListEvent& event)
-{
-	return false;
-}
-
-void wxListCtrlEx::SetLabelEditBlock(bool block)
-{
-	if (block)
-	{
-		CancelLabelEdit();
-		++m_blockedLabelEditing;
-	}
-	else
-	{
-		wxASSERT(m_blockedLabelEditing);
-		if (m_blockedLabelEditing > 0)
-			m_blockedLabelEditing--;
-	}
-}
-
-CLabelEditBlocker::CLabelEditBlocker(wxListCtrlEx& listCtrl)
-	: m_listCtrl(listCtrl)
-{
-	m_listCtrl.SetLabelEditBlock(true);
-}
-
-CLabelEditBlocker::~CLabelEditBlocker()
-{
-	m_listCtrl.SetLabelEditBlock(false);
-}
-
-void wxListCtrlEx::OnColumnDragging(wxListEvent& event)
-{
-	if (event.GetItem().GetWidth() < MIN_COLUMN_WIDTH)
-		event.Veto();
-}
-
-#ifdef __WXMSW__
-bool wxListCtrlEx::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
-{
-	// MSW doesn't generate HDN_TRACK on all header styles, so handle it
-	// ourselves using HDN_ITEMCHANGING.
-	NMHDR *nmhdr = (NMHDR *)lParam;
-	HWND hwndHdr = ListView_GetHeader((HWND)GetHandle());
-
-    if (nmhdr->hwndFrom != hwndHdr)
-		return wxListCtrl::MSWOnNotify(idCtrl, lParam, result);
-
-	HD_NOTIFY *nmHDR = (HD_NOTIFY *)nmhdr;
-
-	switch ( nmhdr->code )
-	{
-		// See comment in src/msw/listctrl.cpp of wx why both A and W are needed
-	case HDN_BEGINTRACKA:
-	case HDN_BEGINTRACKW:
-		m_columnDragging = true;
-		break;
-	case HDN_ENDTRACKA:
-	case HDN_ENDTRACKW:
-		m_columnDragging = true;
-		break;
-	case HDN_ITEMCHANGINGA:
-	case HDN_ITEMCHANGINGW:
-		if (m_columnDragging)
-		{
-			if (nmHDR->pitem->cxy < 10)
-				*result = 1;
-			else
-				*result = 0;
-		}
-		return true;
-	}
-
-	return wxListCtrl::MSWOnNotify(idCtrl, lParam, result);
-}
-#endif

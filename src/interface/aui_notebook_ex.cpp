@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include <wx/aui/aui.h>
 #include "aui_notebook_ex.h"
 #include <wx/dcmirror.h>
@@ -196,29 +196,19 @@ protected:
 	bool m_bottom;
 };
 
-struct wxAuiTabArtExData
-{
-	std::map<wxString, int> maxSizes;
-};
-
 class wxAuiTabArtEx : public wxAuiDefaultTabArt
 {
 public:
-	wxAuiTabArtEx(wxAuiNotebookEx* pNotebook, bool bottom, CSharedPointer<struct wxAuiTabArtExData> data)
+	wxAuiTabArtEx(wxAuiNotebookEx* pNotebook, bool bottom)
 	{
 		m_pNotebook = pNotebook;
 		m_fonts_initialized = false;
 		m_bottom = bottom;
-		m_data = data;
 	}
 
 	virtual wxAuiTabArt* Clone()
 	{
-		wxAuiTabArtEx *art = new wxAuiTabArtEx(m_pNotebook, m_bottom, m_data);
-		art->SetNormalFont(m_normal_font);
-		art->SetSelectedFont(m_selected_font);
-		art->SetMeasuringFont(m_measuring_font);
-		return art;
+		return new wxAuiTabArtEx(m_pNotebook, m_bottom);
 	}
 
 	virtual wxSize GetTabSize(wxDC& dc, wxWindow* wnd, const wxString& caption, const wxBitmap& bitmap, bool active, int close_button_state, int* x_extent)
@@ -229,9 +219,9 @@ public:
 		int pos;
 		if ((pos = caption.Find(_T(" ("))) != -1)
 			text = text.Left(pos);
-		std::map<wxString, int>::iterator iter = m_data->maxSizes.find(text);
-		if (iter == m_data->maxSizes.end())
-			m_data->maxSizes[text] = size.x;
+		std::map<wxString, int>::iterator iter = m_maxSizes.find(text);
+		if (iter == m_maxSizes.end())
+			m_maxSizes[text] = size.x;
 		else
 		{
 			if (iter->second > size.x)
@@ -290,7 +280,7 @@ public:
 protected:
 	wxAuiNotebookEx* m_pNotebook;
 
-	CSharedPointer<struct wxAuiTabArtExData> m_data;
+	static std::map<wxString, int> m_maxSizes;
 
 	wxFont m_original_normal_font;
 	wxFont m_highlighted_font;
@@ -298,9 +288,10 @@ protected:
 	bool m_bottom;
 };
 
+std::map<wxString, int> wxAuiTabArtEx::m_maxSizes;
+
 BEGIN_EVENT_TABLE(wxAuiNotebookEx, wxAuiNotebook)
 EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, wxAuiNotebookEx::OnPageChanged)
-EVT_NAVIGATION_KEY(wxAuiNotebookEx::OnNavigationKey)
 END_EVENT_TABLE()
 
 wxAuiNotebookEx::wxAuiNotebookEx()
@@ -323,7 +314,7 @@ void wxAuiNotebookEx::RemoveExtraBorders()
 
 void wxAuiNotebookEx::SetExArtProvider()
 {
-	SetArtProvider(new wxAuiTabArtEx(this, GetWindowStyle() & wxAUI_NB_BOTTOM, new struct wxAuiTabArtExData));
+	SetArtProvider(new wxAuiTabArtEx(this, GetWindowStyle() & wxAUI_NB_BOTTOM));
 }
 
 bool wxAuiNotebookEx::SetPageText(size_t page_idx, const wxString& text)
@@ -385,30 +376,4 @@ void wxAuiNotebookEx::OnPageChanged(wxAuiNotebookEvent& event)
 		return;
 	
 	m_highlighted[page] = false;
-}
-
-void wxAuiNotebookEx::OnNavigationKey(wxNavigationKeyEvent& event)
-{
-	if (!event.IsWindowChange())
-	{
-		event.Skip();
-		return;
-	}
-
-	AdvanceTab(event.GetDirection());
-}
-
-void wxAuiNotebookEx::AdvanceTab(bool forward)
-{
-	int page = GetSelection();
-	if (forward)
-		page++;
-	else
-		page--;
-	if (page >= (int)GetPageCount())
-		page = 0;
-	else if (page < 0)
-		page = GetPageCount() - 1;
-
-	SetSelection(page);
 }

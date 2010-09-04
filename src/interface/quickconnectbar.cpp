@@ -1,11 +1,10 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "quickconnectbar.h"
 #include "recentserverlist.h"
 #include "commandqueue.h"
 #include "state.h"
 #include "Options.h"
 #include "loginmanager.h"
-#include "Mainfrm.h"
 
 BEGIN_EVENT_TABLE(CQuickconnectBar, wxPanel)
 EVT_BUTTON(XRCID("ID_QUICKCONNECT_OK"), CQuickconnectBar::OnQuickconnect)
@@ -27,9 +26,8 @@ CQuickconnectBar::~CQuickconnectBar()
 {
 }
 
-bool CQuickconnectBar::Create(CMainFrame* pParent)
+bool CQuickconnectBar::Create(wxWindow* pParent)
 {
-	m_pMainFrame = pParent;
     if (!wxXmlResource::Get()->LoadPanel(this, pParent, _T("ID_QUICKCONNECTBAR")))
 	{
 		wxLogError(_("Cannot load Quickconnect bar from resource file"));
@@ -73,12 +71,16 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	wxString pass = m_pPass->GetValue();
 	wxString port = m_pPort->GetValue();
 	
+	long numericPort = 0;
+	if (port != _T(""))
+		port.ToLong(&numericPort);
+	
 	CServer server;
 
 	wxString error;
 
 	CServerPath path;
-	if (!server.ParseUrl(host, port, user, pass, error, path))
+	if (!server.ParseUrl(host, numericPort, user, pass, error, path))
 	{
 		wxString msg = _("Could not parse server address:");
 		msg += _T("\n");
@@ -125,7 +127,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	if (event.GetId() == 1)
 		server.SetBypassProxy(true);
 
-	if (!m_pMainFrame->ConnectToServer(server, path))
+	if (!pState->Connect(server, true, path))
 		return;
 
 	CRecentServerList::SetMostRecentServer(server);
@@ -140,24 +142,16 @@ void CQuickconnectBar::OnQuickconnectDropdown(wxCommandEvent& event)
 		pMenu->Append(1, _("Connect bypassing proxy settings"));
 	pMenu->Append(2, _("Clear quickconnect bar"));
 	pMenu->Append(3, _("Clear history"));
+	pMenu->AppendSeparator();
 
 	m_recentServers = CRecentServerList::GetMostRecentServers();
-	if (!m_recentServers.empty())
+	unsigned int i = 0;
+	for (std::list<CServer>::const_iterator iter = m_recentServers.begin();
+		iter != m_recentServers.end();
+		iter++, i++)
 	{
-		pMenu->AppendSeparator();
-
-		unsigned int i = 0;
-		for (std::list<CServer>::const_iterator iter = m_recentServers.begin();
-			iter != m_recentServers.end();
-			iter++, i++)
-		{
-			wxString name(iter->FormatServer());
-			name.Replace(_T("&"), _T("&&"));
-			pMenu->Append(10 + i, name);
-		}
+		pMenu->Append(10 + i, iter->FormatServer());
 	}
-	else
-		pMenu->Enable(3, false);
 
 	XRCCTRL(*this, "ID_QUICKCONNECT_DROPDOWN", wxButton)->PopupMenu(pMenu);
 	delete pMenu;
@@ -198,7 +192,7 @@ void CQuickconnectBar::OnMenu(wxCommandEvent& event)
 		return;
 	}
 
-	m_pMainFrame->ConnectToServer(server);
+	pState->Connect(server, true);
 }
 
 void CQuickconnectBar::ClearFields()

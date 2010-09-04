@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "serverpath.h"
 
 #define FTP_MVS_DOUBLE_QUOTE (wxChar)0xDC

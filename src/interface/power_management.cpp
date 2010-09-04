@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "power_management.h"
 #include "Mainfrm.h"
 #include "Options.h"

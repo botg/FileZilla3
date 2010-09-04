@@ -16,13 +16,12 @@ public:
 	wxLongLong GetLastOffset() const { return m_pStatus ? m_pStatus->currentOffset : m_lastOffset; }
 	wxLongLong GetTotalSize() const { return m_pStatus ? m_pStatus->totalSize : -1; }
 	wxFileOffset GetSpeed(int elapsedSeconds);
-	wxFileOffset GetCurrentSpeed();
 
 	virtual bool Show(bool show = true);
 
 protected:
 	void DrawRightAlignedText(wxDC& dc, wxString text, int x, int y);
-	void DrawProgressBar(wxDC& dc, int x, int y, int height, int bar_split, int permill);
+	void DrawProgressBar(wxDC& dc, int x, int y, int height);
 
 	CQueueView* m_pParent;
 	const t_EngineData* m_pEngineData;
@@ -48,21 +47,6 @@ protected:
 	} m_past_data[10];
 	int m_past_data_index;
 
-	//Used by getCurrentSpeed
-	wxDateTime m_gcLastTimeStamp;
-	wxFileOffset m_gcLastOffset;
-	wxFileOffset m_gcLastSpeed;
-
-	//Used to avoid excessive redraws
-	wxBitmap m_data;
-	wxMemoryDC* m_mdc;
-	wxString* m_pPreviousStatusText;
-	int m_last_elapsed_seconds;
-	int m_last_left;
-	wxString m_last_bytes_and_rate;
-	int m_last_bar_split;
-	int m_last_permill;
-	
 	DECLARE_EVENT_TABLE()
 	void OnPaint(wxPaintEvent& event);
 	void OnTimer(wxTimerEvent& event);

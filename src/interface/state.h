@@ -53,8 +53,6 @@ public:
 	void RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool current_only, bool blockable);
 	void UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification);
 
-	size_t HandlerCount(enum t_statechange_notifications notification) const;
-
 	CState* CreateState(CMainFrame* pMainFrame);
 	void DestroyState(CState* pState);
 	void DestroyAllStates();
@@ -104,7 +102,7 @@ public:
 	// Returns a file:// URL
 	static wxString GetAsURL(const wxString& dir);
 
-	bool Connect(const CServer& server, const CServerPath& path = CServerPath());
+	bool Connect(const CServer& server, bool askBreak, const CServerPath& path = CServerPath());
 	bool Disconnect();
 
 	bool ChangeRemoteDir(const CServerPath& path, const wxString& subdir = _T(""), int flags = 0, bool ignore_busy = false);
@@ -113,13 +111,10 @@ public:
 	const CServerPath GetRemotePath() const;
 
 	const CServer* GetServer() const;
-	wxString GetTitle() const;
 
 	void RefreshLocal();
 	void RefreshLocalFile(wxString file);
 	void LocalDirCreated(const CLocalPath& path);
-
-	bool RefreshRemote();
 
 	void RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool blockable = true);
 	void UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification);
@@ -159,10 +154,6 @@ public:
 	void SetLastServer(const CServer& server, const CServerPath& path)
 	{ m_last_server = server; m_last_path = path; }
 
-	bool GetSecurityInfo(CCertificateNotification *& pInfo);
-	bool GetSecurityInfo(CSftpEncryptionNotification *& pInfo);
-	void SetSecurityInfo(CCertificateNotification const& info);
-	void SetSecurityInfo(CSftpEncryptionNotification const& info);
 protected:
 	void SetServer(const CServer* server);
 
@@ -170,7 +161,6 @@ protected:
 	CSharedPointer<const CDirectoryListing> m_pDirectoryListing;
 
 	CServer* m_pServer;
-	wxString m_title;
 	bool m_successful_connect;
 
 	CServer m_last_server;
@@ -200,9 +190,6 @@ protected:
 		bool is_changing;
 		bool compare;
 	} m_sync_browse;
-
-	CCertificateNotification* m_pCertificate;
-	CSftpEncryptionNotification* m_pSftpEncryptionInfo;
 };
 
 class CStateEventHandler

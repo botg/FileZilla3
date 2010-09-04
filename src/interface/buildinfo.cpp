@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "buildinfo.h"
 
 wxString CBuildInfo::GetVersion()
@@ -172,15 +172,4 @@ wxString CBuildInfo::GetBuildSystem()
 	wxString flags(USED_BUILD, wxConvLocal);
 	return flags;
 #endif
-}
-
-bool CBuildInfo::IsUnstable()
-{
-	if (GetVersion().Find(_T("beta")) != -1)
-		return true;
-
-	if (GetVersion().Find(_T("rc")) != -1)
-		return true;
-
-	return false;
 }

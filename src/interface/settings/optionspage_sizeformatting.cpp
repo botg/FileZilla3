@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 
 #include "../Options.h"
 #include "settingsdialog.h"
@@ -53,16 +53,16 @@ bool COptionsPageSizeFormatting::SavePage()
 	return true;
 }
 
-CSizeFormat::_format COptionsPageSizeFormatting::GetFormat() const
+int COptionsPageSizeFormatting::GetFormat()
 {
 	if (GetRCheck(XRCID("ID_SIZEFORMAT_IEC")))
-		return CSizeFormat::iec;
+		return 1;
 	else if (GetRCheck(XRCID("ID_SIZEFORMAT_SI_BINARY")))
-		return CSizeFormat::si1024;
+		return 2;
 	else if (GetRCheck(XRCID("ID_SIZEFORMAT_SI_DECIMAL")))
-		return CSizeFormat::si1000;
+		return 3;
 
-	return CSizeFormat::bytes;
+	return 0;
 }
 
 bool COptionsPageSizeFormatting::Validate()
@@ -92,13 +92,17 @@ void COptionsPageSizeFormatting::UpdateControls()
 	XRCCTRL(*this, "ID_SIZEFORMAT_DECIMALPLACES", wxSpinCtrl)->Enable(format != 0);
 }
 
+// defined in LocalListView.cpp
+// TODO: Find a better place for this
+extern wxString FormatSize(const wxLongLong& size, bool add_bytes_suffix, int format, bool thousands_separator, int num_decimal_places);
+
 wxString COptionsPageSizeFormatting::FormatSize(const wxLongLong& size)
 {
-	const CSizeFormat::_format format = GetFormat();
+	const int format = GetFormat();
 	const bool thousands_separator = GetCheck(XRCID("ID_SIZEFORMAT_SEPARATE_THOUTHANDS"));
 	const int num_decimal_places = XRCCTRL(*this, "ID_SIZEFORMAT_DECIMALPLACES", wxSpinCtrl)->GetValue();
 
-	return CSizeFormat::Format(size, false, format, thousands_separator, num_decimal_places);
+	return ::FormatSize(size, false, format, thousands_separator, num_decimal_places);
 }
 
 void COptionsPageSizeFormatting::UpdateExamples()

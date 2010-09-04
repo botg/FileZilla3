@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <resource version="2.3.0.1" xmlns="http://www.wxwindows.org/wxxrc">
-  <object class="wxMenuBar" name="ID_MENUBAR" subclass="CMenuBar">
+  <object class="wxMenuBar" name="ID_MENUBAR">
     <object class="wxMenu">
       <label>&amp;File</label>
       <object class="wxMenuItem" name="ID_MENU_FILE_SITEMANAGER">
@@ -149,16 +149,6 @@
         <label>&amp;Preserve timestamps of transferred files</label>
         <checkable>1</checkable>
         <accel>CTRL+U</accel>
-      </object>
-      <object class="wxMenu">
-        <object class="wxMenuItem" name="ID_MENU_TRANSFER_SPEEDLIMITS_ENABLE">
-          <label>&amp;Enable</label>
-          <checkable>1</checkable>
-        </object>
-        <object class="wxMenuItem" name="ID_MENU_TRANSFER_SPEEDLIMITS_CONFIGURE">
-          <label>&amp;Configure...</label>
-        </object>
-        <label>&amp;Speed limits</label>
       </object>
       <object class="separator"/>
       <object class="wxMenuItem" name="ID_MENU_TRANSFER_MANUAL">
@@ -569,15 +559,6 @@
     <object class="separator"/>
     <object class="wxMenuItem" name="ID_TABCONTEXT_REFRESH">
       <label>&amp;Refresh</label>
-    </object>
-  </object>
-  <object class="wxMenu" name="ID_MENU_SPEEDLIMITCONTEXT">
-    <object class="wxMenuItem" name="ID_SPEEDLIMITCONTEXT_ENABLE">
-      <label>&amp;Enable</label>
-      <checkable>1</checkable>
-    </object>
-    <object class="wxMenuItem" name="ID_SPEEDLIMITCONTEXT_CONFIGURE">
-      <label>&amp;Configure speed limits...</label>
     </object>
   </object>
 </resource>

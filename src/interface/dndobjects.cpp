@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "dndobjects.h"
 
 #if FZ3_USESHELLEXT

@@ -9,9 +9,6 @@ class CQueueView;
 class CFileListCtrl_SortComparisonObject;
 class CState;
 class CFilelistStatusBar;
-#ifdef __WXGTK__
-class CGtkEventCallbackProxyBase;
-#endif
 
 class CGenericFileData
 {
@@ -69,8 +66,6 @@ public:
 	CFilelistStatusBar* GetFilelistStatusBar() { return m_pFilelistStatusBar; }
 
 	void ClearSelection();
-
-	virtual void OnNavigationEvent(bool forward) {}
 
 protected:
 	CQueueView *m_pQueue;
@@ -147,16 +142,14 @@ private:
 	bool m_insideSetSelection;
 
 #ifdef __WXMSW__
-	virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-	virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+	static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	WNDPROC m_prevWndproc;
+	// char* instead of CFileListCtrl<CFileData> due to bug in mingw compiler
+	static std::map<HWND, char*> m_hwnd_map;
 #else
 	int m_focusItem;
 	std::vector<bool> m_selections;
 	int m_pending_focus_processing;
-#endif
-
-#ifdef __WXGTK__
-	CSharedPointer<CGtkEventCallbackProxyBase> m_gtkEventCallbackProxy;
 #endif
 
 	DECLARE_EVENT_TABLE()

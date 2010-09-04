@@ -147,8 +147,10 @@ private:
 	bool m_insideSetSelection;
 
 #ifdef __WXMSW__
-	virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-	virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+	static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	WNDPROC m_prevWndproc;
+	// char* instead of CFileListCtrl<CFileData> due to bug in mingw compiler
+	static std::map<HWND, char*> m_hwnd_map;
 #else
 	int m_focusItem;
 	std::vector<bool> m_selections;

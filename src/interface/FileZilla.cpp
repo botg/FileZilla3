@@ -10,6 +10,7 @@
 #ifdef __WXMSW__
 #include <wx/msw/registry.h> // Needed by CheckForWin2003FirewallBug
 #endif
+#include "xmlfunctions.h"
 #include <wx/tokenzr.h>
 #include "cmdline.h"
 #include "welcome_dialog.h"

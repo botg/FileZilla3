@@ -38,6 +38,8 @@ END_EVENT_TABLE()
 #ifdef __WXMSW__
 // wxWidgets does not handle LVN_ODSTATECHANGED, work around it
 
+template<class CFileData> std::map<HWND, char*> CFileListCtrl<CFileData>::m_hwnd_map;
+
 #pragma pack(push, 1)
 typedef struct fz_tagNMLVODSTATECHANGE
 {
@@ -63,66 +65,69 @@ typedef struct fz_tagNMLVODSTATECHANGE
 #define GET_APPCOMMAND_LPARAM(x) (HIWORD(x)&~0xF000)
 #endif
 
-template<class CFileData> WXLRESULT CFileListCtrl<CFileData>::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+template<class CFileData> LRESULT CALLBACK CFileListCtrl<CFileData>::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if (nMsg == WM_APPCOMMAND)
+	std::map<HWND, char*>::iterator iter = m_hwnd_map.find(hWnd);
+	if (iter == m_hwnd_map.end())
+	{
+		// This shouldn't happen
+		return 0;
+	}
+	CFileListCtrl<CFileData>* pFileListCtrl = (CFileListCtrl<CFileData>*)iter->second;
+
+	if (uMsg == WM_APPCOMMAND)
 	{
 		DWORD cmd = GET_APPCOMMAND_LPARAM(lParam);
 		if (cmd == APPCOMMAND_BROWSER_FORWARD)
 		{
-			OnNavigationEvent(true);
+			pFileListCtrl->OnNavigationEvent(true);
 			return true;
 		}
 		else if (cmd == APPCOMMAND_BROWSER_BACKWARD)
 		{
-			OnNavigationEvent(false);
+			pFileListCtrl->OnNavigationEvent(false);
 			return true;
 		}
 
-		return wxListCtrlEx::MSWWindowProc(nMsg, wParam, lParam);
+		return CallWindowProc(pFileListCtrl->m_prevWndproc, hWnd, uMsg, wParam, lParam);
 	}
-	
-	return wxListCtrlEx::MSWWindowProc(nMsg, wParam, lParam);
-}
+	else if (uMsg != WM_NOTIFY)
+		return CallWindowProc(pFileListCtrl->m_prevWndproc, hWnd, uMsg, wParam, lParam);
 
-template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
-{
-	if (!m_pFilelistStatusBar)
-		return wxListCtrlEx::MSWOnNotify(idCtrl, lParam, result);
-
-	*result = 0;
+	if (!pFileListCtrl->m_pFilelistStatusBar)
+		return CallWindowProc(pFileListCtrl->m_prevWndproc, hWnd, uMsg, wParam, lParam);
 
 	NMHDR* pNmhdr = (NMHDR*)lParam;
 	if (pNmhdr->code == LVN_ODSTATECHANGED)
 	{
 		// A range of items got (de)selected
 
-		if (m_insideSetSelection)
-			return true;
+		if (pFileListCtrl->m_insideSetSelection)
+			return 0;
 
-		if (!m_pFilelistStatusBar)
-			return true;
+		if (!pFileListCtrl->m_pFilelistStatusBar)
+				return 0;
 		
 		if (wxGetKeyState(WXK_CONTROL) && wxGetKeyState(WXK_SHIFT))
 		{
 			// The behavior of Ctrl+Shift+Click is highly erratic.
 			// Even though it is very slow, we need to manually recount.
-			m_pFilelistStatusBar->UnselectAll();
+			pFileListCtrl->m_pFilelistStatusBar->UnselectAll();
 			int item = -1;
-			while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
+			while ((item = pFileListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
 			{
-				if (m_hasParent && !item)
+				if (pFileListCtrl->m_hasParent && !item)
 					continue;
 
-				const int index = m_indexMapping[item];
-				const CFileData& data = m_fileData[index];
+				const int index = pFileListCtrl->m_indexMapping[item];
+				const CFileData& data = pFileListCtrl->m_fileData[index];
 				if (data.flags == fill)
 					continue;
 
-				if (ItemIsDir(index))
-					m_pFilelistStatusBar->SelectDirectory();
+				if (pFileListCtrl->ItemIsDir(index))
+					pFileListCtrl->m_pFilelistStatusBar->SelectDirectory();
 				else
-					m_pFilelistStatusBar->SelectFile(ItemGetSize(index));
+					pFileListCtrl->m_pFilelistStatusBar->SelectFile(pFileListCtrl->ItemGetSize(index));
 			}
 		}
 		else
@@ -132,38 +137,38 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 			wxASSERT(pNmOdStateChange->iFrom <= pNmOdStateChange->iTo);
 			for (int i = pNmOdStateChange->iFrom; i <= pNmOdStateChange->iTo; i++)
 			{
-				if (m_hasParent && !i)
+				if (pFileListCtrl->m_hasParent && !i)
 					continue;
 
-				const int index = m_indexMapping[i];
-				const CFileData& data = m_fileData[index];
+				const int index = pFileListCtrl->m_indexMapping[i];
+				const CFileData& data = pFileListCtrl->m_fileData[index];
 				if (data.flags == fill)
 					continue;
 
-				if (ItemIsDir(index))
-					m_pFilelistStatusBar->SelectDirectory();
+				if (pFileListCtrl->ItemIsDir(index))
+					pFileListCtrl->m_pFilelistStatusBar->SelectDirectory();
 				else
-					m_pFilelistStatusBar->SelectFile(ItemGetSize(index));
+					pFileListCtrl->m_pFilelistStatusBar->SelectFile(pFileListCtrl->ItemGetSize(index));
 			}
 		}
-		return true;
+		return 0;
 	}
 	else if (pNmhdr->code == LVN_ITEMCHANGED)
 	{
-		if (m_insideSetSelection)
-			return true;
+		if (pFileListCtrl->m_insideSetSelection)
+			return 0;
 
 		NMLISTVIEW* pNmListView = (NMLISTVIEW*)lParam;
 
 		// Item of -1 means change applied to all items
 		if (pNmListView->iItem == -1 && !(pNmListView->uNewState & LVIS_SELECTED))
 		{
-			m_pFilelistStatusBar->UnselectAll();
+			pFileListCtrl->m_pFilelistStatusBar->UnselectAll();
 		}
 	}
 	else if (pNmhdr->code == LVN_MARQUEEBEGIN)
 	{
-		SetFocus();
+		pFileListCtrl->SetFocus();
 	}
 	else if (pNmhdr->code == LVN_GETDISPINFO)
 	{
@@ -174,11 +179,11 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 		LV_ITEM& lvi = info->item;
 		long item = lvi.iItem;
 
-		int column = m_pVisibleColumnMapping[lvi.iSubItem];
+		int column = pFileListCtrl->m_pVisibleColumnMapping[lvi.iSubItem];
 
 		if (lvi.mask & LVIF_TEXT)
 		{
-			wxString text = GetItemText(item, column);
+			wxString text = pFileListCtrl->GetItemText(item, column);
 			wxStrncpy(lvi.pszText, text, lvi.cchTextMax - 1);
 			lvi.pszText[lvi.cchTextMax - 1] = 0;
 		}
@@ -186,18 +191,18 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 		if (lvi.mask & LVIF_IMAGE)
 		{
 			if (!lvi.iSubItem)
-				lvi.iImage = OnGetItemImage(item);
+				lvi.iImage = pFileListCtrl->OnGetItemImage(item);
 			else
 				lvi.iImage = -1;
 		}
 
 		if (!lvi.iSubItem)
-			lvi.state = INDEXTOOVERLAYMASK(GetOverlayIndex(lvi.iItem));
+			lvi.state = INDEXTOOVERLAYMASK(pFileListCtrl->GetOverlayIndex(lvi.iItem));
 
-		return true;
+		return 0;
 	}
 
-	return wxListCtrlEx::MSWOnNotify(idCtrl, lParam, result);
+	return CallWindowProc(pFileListCtrl->m_prevWndproc, hWnd, uMsg, wParam, lParam);
 }
 #endif
 
@@ -267,6 +272,10 @@ template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pPar
 
 	m_insideSetSelection = false;
 #ifdef __WXMSW__
+	// Subclass window
+	m_hwnd_map[(HWND)pParent->GetHandle()] = (char*)this;
+	m_prevWndproc = (WNDPROC)SetWindowLongPtr((HWND)pParent->GetHandle(), GWLP_WNDPROC, (LONG_PTR)WindowProc);
+
 	// Enable use of overlay images
 	DWORD mask = ListView_GetCallbackMask((HWND)GetHandle()) | LVIS_OVERLAYMASK;
 	ListView_SetCallbackMask((HWND)GetHandle(), mask);
@@ -287,6 +296,15 @@ template<class CFileData> CFileListCtrl<CFileData>::~CFileListCtrl()
 {
 #ifdef __WXMSW__
 	delete m_pHeaderImageList;
+
+	// Remove subclass
+	if (m_prevWndproc != 0)
+	{
+		SetWindowLongPtr((HWND)GetParent()->GetHandle(), GWLP_WNDPROC, (LONG_PTR)m_prevWndproc);
+		std::map<HWND, char*>::iterator iter = m_hwnd_map.find((HWND)GetParent()->GetHandle());
+		if (iter != m_hwnd_map.end())
+			m_hwnd_map.erase(iter);
+	}
 #endif
 }
 

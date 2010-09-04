@@ -10,7 +10,7 @@ class CChmodDialog;
 class CInfoText;
 class CRemoteListViewDropTarget;
 
-class CRemoteListView : public CFileListCtrl<CGenericFileData>, CStateEventHandler
+class CRemoteListView : public CFileListCtrl<CGenericFileData>, CSystemImageList, CStateEventHandler
 {
 	friend class CRemoteListViewDropTarget;
 	friend class CRemoteListViewSortType;
@@ -18,6 +18,8 @@ class CRemoteListView : public CFileListCtrl<CGenericFileData>, CStateEventHandl
 public:
 	CRemoteListView(wxWindow* pParent, CState* pState, CQueueView* pQueue);
 	virtual ~CRemoteListView();
+
+	bool DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, const CLocalPath& path, bool queueOnly);
 
 	void InitDateFormat();
 
@@ -51,25 +53,24 @@ protected:
 	virtual bool ItemIsDir(int index) const;
 	virtual wxLongLong ItemGetSize(int index) const;
 
+protected:
 	bool IsItemValid(unsigned int item) const;
 	int GetItemIndex(unsigned int item) const;
 
 	virtual CSortComparisonObject GetSortComparisonObject();
 
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(enum t_statechange_notifications notification, const wxString& data);
 	void ApplyCurrentFilter();
-	void SetDirectoryListing(const CSharedPointer<const CDirectoryListing> &pDirectoryListing, bool modified = false);
-	bool UpdateDirectoryListing(const CSharedPointer<const CDirectoryListing> &pDirectoryListing);
-	void UpdateDirectoryListing_Removed(const CSharedPointer<const CDirectoryListing> &pDirectoryListing);
-	void UpdateDirectoryListing_Added(const CSharedPointer<const CDirectoryListing> &pDirectoryListing);
+	void SetDirectoryListing(const CDirectoryListing *pDirectoryListing, bool modified = false);
+	bool UpdateDirectoryListing(const CDirectoryListing *pDirectoryListing);
+	void UpdateDirectoryListing_Removed(const CDirectoryListing *pDirectoryListing);
+	void UpdateDirectoryListing_Added(const CDirectoryListing *pDirectoryListing);
 
 #ifdef __WXDEBUG__
 	void ValidateIndexMapping();
 #endif
 
-	virtual void OnNavigationEvent(bool forward);
-
-	CSharedPointer <const CDirectoryListing> m_pDirectoryListing;
+	const CDirectoryListing *m_pDirectoryListing;
 
 	// Caller is responsible to check selection is valid!
 	void TransferSelectedFiles(const CLocalPath& local_parent, bool queueOnly);
@@ -80,13 +81,6 @@ protected:
 	CInfoText* m_pInfoText;
 	void RepositionInfoText();
 	void SetInfoText();
-
-	virtual bool OnBeginRename(const wxListEvent& event);
-	virtual bool OnAcceptRename(const wxListEvent& event);
-
-#ifdef __WXMSW__
-	virtual int GetOverlayIndex(int item);
-#endif
 
 	wxDropTarget* m_pDropTarget;
 	int m_dropTarget;
@@ -102,7 +96,7 @@ protected:
 		CServer server;
 		CServerPath remote_path;
 		wxString link;
-		CLocalPath local_path;
+		wxString local_path;
 	} *m_pLinkResolveState;
 
 	DECLARE_EVENT_TABLE()
@@ -113,13 +107,14 @@ protected:
 	void OnMenuDelete(wxCommandEvent& event);
 	void OnMenuRename(wxCommandEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
+	void OnBeginLabelEdit(wxListEvent& event);
+	void OnEndLabelEdit(wxListEvent& event);
 	void OnMenuChmod(wxCommandEvent& event);
 	void OnSize(wxSizeEvent& event);
 	void OnBeginDrag(wxListEvent& event);
 	void OnMenuEdit(wxCommandEvent& event);
 	void OnMenuEnter(wxCommandEvent& event);
 	void OnMenuGeturl(wxCommandEvent& event);
-	void OnMenuRefresh(wxCommandEvent& event);
 };
 
 #endif

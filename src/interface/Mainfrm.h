@@ -7,27 +7,30 @@
 
 class CStatusView;
 class CQueueView;
+class CLocalTreeView;
+class CLocalListView;
+class CRemoteTreeView;
+class CRemoteListView;
 class CState;
 class CAsyncRequestQueue;
 class CLed;
 class CThemeProvider;
+class CView;
 class CQuickconnectBar;
 #if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
 class CUpdateWizard;
 #endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
 class CSiteManagerItemData_Site;
 class CQueue;
+class CViewHeader;
+class CComparisonManager;
 class CWindowStateManager;
 class CStatusBar;
 class CMainFrameStateEventHandler;
 class CSplitterWindowEx;
-class CContextControl;
-class CToolBar;
-class CMenuBar;
 
 class CMainFrame : public wxFrame
 {
-	friend class CMainFrameStateEventHandler;
 public:
 	CMainFrame();
 	virtual ~CMainFrame();
@@ -35,7 +38,10 @@ public:
 	void UpdateActivityLed(int direction);
 
 	void AddToRequestQueue(CFileZillaEngine* pEngine, CAsyncRequestNotification* pNotification);
+	CState* GetState() { return m_pState; }
 	CStatusView* GetStatusView() { return m_pStatusView; }
+	CLocalListView* GetLocalListView() { return m_pLocalListView; }
+	CRemoteListView* GetRemoteListView() { return m_pRemoteListView; }
 	CQueueView* GetQueue() { return m_pQueueView; }
 	CQuickconnectBar* GetQuickconnectBar() { return m_pQuickconnectBar; }
 
@@ -52,49 +58,73 @@ public:
 
 	CStatusBar* GetStatusBar() { return m_pStatusBar; }
 
+	void UpdateToolbarState();
+	void UpdateMenubarState();
+
 	void ProcessCommandLine();
 
-	void PostInitialize();
-	
-	bool ConnectToServer(const CServer& server, const CServerPath& path = CServerPath());
+	void ClearBookmarks();
 
-	CContextControl* GetContextControl() { return m_pContextControl; }
-
-	bool ConnectToSite(CSiteManagerItemData_Site* const pData);
+	CComparisonManager* GetComparisonManager() { return m_pComparisonManager; }
 
 protected:
 	bool CreateMenus();
 	bool CreateQuickconnectBar();
 	bool CreateToolBar();
+	void SetProgress(const CTransferStatus* pStatus);
+	bool ConnectToSite(CSiteManagerItemData_Site* const pData);
 	void OpenSiteManager(const CServer* pServer = 0);
+	void InitToolbarState();
+	void InitMenubarState();
 
 	void FocusNextEnabled(std::list<wxWindow*>& windowOrder, std::list<wxWindow*>::iterator iter, bool skipFirst, bool forward);
 
-	void SetBookmarksFromPath(const wxString& path);
+	void UpdateBookmarkMenu();
+
+	std::list<int> m_bookmark_menu_ids;
+	std::map<int, wxString> m_bookmark_menu_id_map_global;
+	std::map<int, wxString> m_bookmark_menu_id_map_site;
+	wxString m_last_bookmark_path;
+	std::list<wxString> m_bookmarks;
 
 	CStatusBar* m_pStatusBar;
-	CMenuBar* m_pMenuBar;
-	CToolBar* m_pToolBar;
+	wxMenuBar* m_pMenuBar;
+	wxToolBar* m_pToolBar;
 	CQuickconnectBar* m_pQuickconnectBar;
 
 	CSplitterWindowEx* m_pTopSplitter; // If log position is 0, splits message log from rest of panes
-	CSplitterWindowEx* m_pBottomSplitter; // Top contains view splitter, bottom queue (or queuelog splitter if in position 1)
+	CSplitterWindowEx* m_pBottomSplitter; // Top contains view splitter, buttom queue (or queuelog splitter if in position 1)
+	CSplitterWindowEx* m_pViewSplitter; // Contains local and remote splitters
+	CSplitterWindowEx* m_pLocalSplitter;
+	CSplitterWindowEx* m_pRemoteSplitter;
 	CSplitterWindowEx* m_pQueueLogSplitter;
-
-	CContextControl* m_pContextControl;
 
 	CStatusView* m_pStatusView;
 	CQueueView* m_pQueueView;
+	CView* m_pLocalTreeViewPanel;
+	CView* m_pLocalListViewPanel;
+	CLocalTreeView* m_pLocalTreeView;
+	CLocalListView* m_pLocalListView;
+	CView* m_pRemoteTreeViewPanel;
+	CView* m_pRemoteListViewPanel;
+	CRemoteTreeView* m_pRemoteTreeView;
+	CRemoteListView* m_pRemoteListView;
+	CViewHeader* m_pLocalViewHeader;
+	CViewHeader* m_pRemoteViewHeader;
 	CLed* m_pActivityLed[2];
 	wxTimer m_transferStatusTimer;
 	CThemeProvider* m_pThemeProvider;
 #if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
 	CUpdateWizard* m_pUpdateWizard;
 #endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
+	CComparisonManager* m_pComparisonManager;
 
 	void ShowLocalTree();
 	void ShowRemoteTree();
 
+#if defined(EVT_TOOL_DROPDOWN) && defined(__WXMSW__)
+	void MakeDropdownTool(wxToolBar* pToolBar, int id);
+#endif
 	void ShowDropdownMenu(wxMenu* pMenu, wxToolBar* pToolBar, wxCommandEvent& event);
 
 #ifdef __WXMSW__
@@ -107,6 +137,7 @@ protected:
 	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent& event);
 	void OnMenuHandler(wxCommandEvent& event);
+	void OnMenuOpenHandler(wxMenuEvent& event);
 	void OnEngineEvent(wxEvent& event);
 	void OnDisconnect(wxCommandEvent& event);
 	void OnCancel(wxCommandEvent& event);
@@ -135,18 +166,11 @@ protected:
 	void OnToolbarComparison(wxCommandEvent& event);
 	void OnToolbarComparisonDropdown(wxCommandEvent& event);
 	void OnDropdownComparisonMode(wxCommandEvent& event);
-	void OnDropdownComparisonHide(wxCommandEvent& event);
 	void OnSyncBrowse(wxCommandEvent& event);
 #ifndef __WXMAC__
 	void OnIconize(wxIconizeEvent& event);
 	void OnTaskBarClick(wxTaskBarIconEvent& event);
 #endif
-#ifdef __WXGTK__
-	void OnTaskBarClick_Delayed(wxCommandEvent& event);
-#endif
-	void OnSearch(wxCommandEvent& event);
-	void OnMenuNewTab(wxCommandEvent& event);
-	void OnMenuCloseTab(wxCommandEvent& event);
 
 	bool m_bInitDone;
 	bool m_bQuit;
@@ -154,6 +178,7 @@ protected:
 	wxTimer m_closeEventTimer;
 
 	CAsyncRequestQueue* m_pAsyncRequestQueue;
+	CState* m_pState;
 	CMainFrameStateEventHandler* m_pStateEventHandler;
 
 	CWindowStateManager* m_pWindowStateManager;
@@ -162,14 +187,6 @@ protected:
 
 #ifndef __WXMAC__
 	wxTaskBarIcon* m_taskBarIcon;
-#endif
-#ifdef __WXGTK__
-	// There is a bug in KDE, causing the window to toggle iconized state
-	// several times a second after uniconizing it from taskbar icon.
-	// Set m_taskbar_is_uniconizing in OnTaskBarClick and unset the
-	// next time the pending event processing runs and calls OnTaskBarClick_Delayed.
-	// While set, ignore iconize events.
-	bool m_taskbar_is_uniconizing;
 #endif
 };
 

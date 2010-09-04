@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 
 struct t_protocolInfo
 {
@@ -13,7 +13,6 @@ static const t_protocolInfo protocolInfos[] = {
 	{ FTP,     _T("ftp"),   21,  false, _T("FTP - File Transfer Protocol") },
 	{ SFTP,    _T("sftp"),  22,  false, _T("SFTP - SSH File Transfer Protocol") },
 	{ HTTP,    _T("http"),  80,  false, _T("HTTP - Hypertext Transfer Protocol") },
-	{ HTTPS,   _T("https"), 443, true, wxTRANSLATE("HTTPS - HTTP over TLS") },
 	{ FTPS,    _T("ftps"),  990, true,  wxTRANSLATE("FTPS - FTP over implicit TLS/SSL") },
 	{ FTPES,   _T("ftpes"), 21,  true,  wxTRANSLATE("FTPES - FTP over explicit TLS/SSL") },
 	{ UNKNOWN, _T(""),      21,  false, _T("") }
@@ -35,22 +34,6 @@ static const wxString typeNames[SERVERTYPE_MAX] = {
 CServer::CServer()
 {
 	Initialize();
-}
-
-bool CServer::ParseUrl(wxString host, const wxString& port, wxString user, wxString pass, wxString &error, CServerPath &path)
-{
-	unsigned long nPort = 0;
-	if (!port.empty())
-	{
-		if (port.size() > 5 || !port.ToULong(&nPort) || !nPort || nPort > 65535)
-		{
-			error = _("Invalid port given. The port has to be a value from 1 to 65535.");
-			error += _T("\n");
-			error += _("You can leave the port field empty to use the default port.");
-			return false;
-		}
-	}
-	return ParseUrl(host, nPort, user, pass, error, path);
 }
 
 bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString pass, wxString &error, CServerPath &path)
@@ -817,7 +800,7 @@ bool CServer::GetBypassProxy() const
 
 bool CServer::ProtocolHasDataTypeConcept(const enum ServerProtocol protocol)
 {
-	if (protocol == FTP || protocol == FTPS || protocol == FTPES)
+	if (protocol == FTP || protocol == FTPES || protocol == FTPES)
 		return true;
 
 	return false;

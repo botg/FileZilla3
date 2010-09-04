@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "chmoddialog.h"
 
 BEGIN_EVENT_TABLE(CChmodDialog, wxDialogEx)
@@ -243,7 +243,7 @@ void CChmodDialog::OnNumericChanged(wxCommandEvent& event)
 	}
 }
 
-wxString CChmodDialog::GetPermissions(const char* previousPermissions, bool dir)
+wxString CChmodDialog::GetPermissions(const char* previousPermissions)
 {
 	// Construct a new permission string
 
@@ -259,14 +259,13 @@ wxString CChmodDialog::GetPermissions(const char* previousPermissions, bool dir)
 	}
 	if (!previousPermissions)
 	{
-		// Use default of  (0...0)755 for dirs and
-		// 644 for files
+		// Use default of  (0...0)755
 		if (numeric[numeric.Length() - 1] == 'x')
-			numeric[numeric.Length() - 1] = dir ? '5' : '4';
+			numeric[numeric.Length() - 1] = '5';
 		if (numeric[numeric.Length() - 2] == 'x')
-			numeric[numeric.Length() - 2] = dir ? '5' : '4';
+			numeric[numeric.Length() - 2] = '5';
 		if (numeric[numeric.Length() - 3] == 'x')
-			numeric[numeric.Length() - 3] = dir ? '7' : '6';
+			numeric[numeric.Length() - 3] = '7';
 		numeric.Replace(_T("x"), _T("0"));
 		return numeric;
 	}
@@ -329,7 +328,7 @@ bool CChmodDialog::ConvertPermissions(wxString rwx, char* permissions)
 
 	if (rwx.Len() < 3)
 		return false;
-	size_t i;
+	int i;
 	for (i = 0; i < rwx.Len(); i++)
 		if (rwx[i] < '0' || rwx[i] > '9')
 			break;

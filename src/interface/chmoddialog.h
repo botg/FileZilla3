@@ -12,7 +12,7 @@ public:
 	bool Create(wxWindow* parent, int fileCount, int dirCount, 
 				const wxString& name, const char permissions[9]);
 
-	wxString GetPermissions(const char* previousPermissions, bool dir);
+	wxString GetPermissions(const char* previousPermissions);
 
 	bool Recursive() const ;
 	int GetApplyType() const { return m_applyType; }
@@ -24,7 +24,7 @@ public:
 	//   drwxr--r-- gets converted into 222211211
 	//   0644 gets converted into 221211211
 	//   foo (0273) gets converted into 121222122
-	static bool ConvertPermissions(wxString rwx, char* permissions);
+	bool ConvertPermissions(wxString rwx, char* permissions);
 
 protected:
 

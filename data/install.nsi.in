@@ -45,7 +45,6 @@
   !include "WinVer.nsh"
   !include "FileFunc.nsh"
   !include "Memento.nsh"
-  !include "@srcdir@\process_running.nsh"
 
 ;--------------------------------
 ;Required functions
@@ -70,7 +69,6 @@
   Var ALL_USERS_BUTTON
   Var IS_ADMIN
   Var USERNAME
-  Var PERFORM_UPDATE
 
 ;--------------------------------
 ;Interface Settings
@@ -89,9 +87,7 @@
 ;--------------------------------
 ;Pages
 
-  !define MUI_PAGE_CUSTOMFUNCTION_PRE PageLicensePre
   !insertmacro MUI_PAGE_LICENSE "${top_srcdir}\COPYING"
-
   Page custom PageReinstall PageLeaveReinstall
   Page custom PageAllUsers PageLeaveAllUsers
 
@@ -264,20 +260,6 @@ Function LoadPreviousSettings
 
 FunctionEnd
 
-Function ReadUpdateCommandline
-
-  ${GetParameters} $R0
-
-  ${GetOptions} $R0 "/update" $R1
-
-  ${If} ${Errors}
-    StrCpy $PERFORM_UPDATE 0
-  ${Else}
-    StrCpy $PERFORM_UPDATE 1
-  ${EndIf}
-
-FunctionEnd
-
 Function .onInit
 
   ${Unless} ${AtLeastWin2000}
@@ -295,9 +277,6 @@ UAC_Err:
   MessageBox mb_iconstop "Could not elevate process (errorcode $0), continuing with normal user privileges." /SD IDOK
 UAC_ElevationAborted:
 UAC_Success:
-
-  ; /update argument
-  Call ReadUpdateCommandline
 
   Call GetUserInfo
 
@@ -334,21 +313,13 @@ UAC_Success:
     ${EndIf}
   ${EndIf}
         
-  ${If} $PREVIOUS_VERSION == ""
-
-    StrCpy $PERFORM_UPDATE 0
-
-  ${Else}
+  ${Unless} $PREVIOUS_VERSION == ""
 
     Push "${VERSION}"
     Push $PREVIOUS_VERSION
     Call FZVersionCompare
 
-    ${If} $PREVIOUS_VERSION_STATE != "newer"
-      StrCpy $PERFORM_UPDATE 0
-    ${EndIf}
-
-  ${EndIf}
+  ${EndUnless}
 
   StrCpy $ALL_USERS_DEFAULT $ALL_USERS
 
@@ -442,22 +413,9 @@ versioncomparedone:
 
 FunctionEnd
 
-Function PageLicensePre
-
-  ${If} $PERFORM_UPDATE == 1
-    Abort
-  ${EndIf}
-
-FunctionEnd
-
 Function PageReinstall
 
   ${If} $PREVIOUS_VERSION == ""
-    Abort
-  ${EndIf}
-
-  ${If} $PERFORM_UPDATE == 1
-    StrCpy $REINSTALL_UNINSTALL 1
     Abort
   ${EndIf}
 
@@ -518,7 +476,7 @@ Function PageReinstall
   ${Else}
     SendMessage $R0 ${BM_SETCHECK} 1 0
   ${EndIf}
-
+  
   nsDialogs::Show
 
 FunctionEnd
@@ -544,7 +502,7 @@ Function RunUninstaller
   ${AndIf} $REINSTALL_UNINSTALL == "1"
     ExecWait '$R1 _?=$INSTDIR'
   ${Else}
-    ExecWait '$R1 /frominstall /keepstartmenudir _?=$INSTDIR'
+    ExecWait '$R1 /frominstall _?=$INSTDIR'
   ${EndIf}
 
   IfErrors no_remove_uninstaller
@@ -692,61 +650,7 @@ Function PageStartmenuPre
 
 FunctionEnd
 
-Function CheckFileZillaRunning
-
-  Push "filezilla.exe"
-  Call IsProcessRunning
-  Pop $R1
-
-  ${If} $PERFORM_UPDATE == 1
-    StrCpy $R0 10
-  ${Else}
-    StrCpy $R0 2
-  ${EndIf}
-
-  ${While} $R1 == 1
- 
-    ${If} $R0 == 0
-
-      ${ExitWhile}
-
-    ${EndIf}
-
-    Sleep 500
-
-    Push "filezilla.exe"
-    Call IsProcessRunning
-    Pop $R1
-
-    IntOp $R0 $R0 - 1
-
-  ${EndWhile}
-
-  Push "filezilla.exe"
-  Call IsProcessRunning
-  Pop $R1
-
-  ${While} $R1 == 1
-
-    MessageBox MB_ABORTRETRYIGNORE|MB_DEFBUTTON2 "FileZilla appears to be running.$\nPlease close all running instances of FileZilla before continuing the installation." /SD IDIGNORE IDABORT CheckFileZillaRunning_abort IDIGNORE CheckFileZillaRunning_ignore
-
-    Push "filezilla.exe"
-    Call IsProcessRunning
-    Pop $R1
-    
-  ${EndWhile}
-
- CheckFileZillaRunning_ignore:
-  Return
-
- CheckFileZillaRunning_abort:
-  Quit
-
-FunctionEnd
-
 Function PageInstfilesShow
-
-  Call CheckFileZillaRunning
 
   ${If} $REINSTALL_UNINSTALL != ""
 
@@ -836,13 +740,6 @@ Section "FileZilla Client" SecMain
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\FileZilla.lnk" "$INSTDIR\filezilla.exe"
   
-  ${If} ${AtLeastWin7}
-    ; Setting AppID
-    push "FileZilla.Client.AppID"
-    push "$SMPROGRAMS\$STARTMENU_FOLDER\FileZilla.lnk"
-    nsis_appid::set_appid
-  ${EndIf}
-
   !insertmacro MUI_STARTMENU_WRITE_END
 
   Push $R0
@@ -1055,24 +952,17 @@ Function un.RemoveStartmenu
   Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\FileZilla.lnk"
   
-  ${un.GetParameters} $R0
-
-  ${un.GetOptions} $R0 "/keepstartmenudir" $R1
-  ${If} ${Errors}
+  ;Delete empty start menu parent diretories
+  StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
  
-    ;Delete empty start menu parent diretories
-    StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
- 
-    startMenuDeleteLoop:
-      RMDir $MUI_TEMP
-      GetFullPathName $MUI_TEMP "$MUI_TEMP\.."
+  startMenuDeleteLoop:
+    RMDir $MUI_TEMP
+    GetFullPathName $MUI_TEMP "$MUI_TEMP\.."
     
-      IfErrors startMenuDeleteLoopDone
+    IfErrors startMenuDeleteLoopDone
   
-      StrCmp $MUI_TEMP $SMPROGRAMS startMenuDeleteLoopDone startMenuDeleteLoop
-    startMenuDeleteLoopDone:
-
-  ${EndUnless}
+    StrCmp $MUI_TEMP $SMPROGRAMS startMenuDeleteLoopDone startMenuDeleteLoop
+  startMenuDeleteLoopDone:
 
 FunctionEnd
 

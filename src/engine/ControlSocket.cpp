@@ -500,7 +500,7 @@ int CControlSocket::CheckOverwriteFile()
 	{
 		if (!pData->fileTime.IsValid())
 		{
-			if (entry.has_date())
+			if (entry.hasTimestamp != CDirentry::timestamp_none)
 			{
 				pNotification->remoteTime = entry.time;
 				pData->fileTime = entry.time;
@@ -1358,7 +1358,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			{
 				wxLongLong size = entry.size;
 				pData->remoteFileSize = size.GetLo() + ((wxFileOffset)size.GetHi() << 32);
-				if (entry.has_date())
+				if (entry.hasTimestamp != CDirentry::timestamp_none)
 					pData->fileTime = entry.time;
 
 				if (CheckOverwriteFile() != FZ_REPLY_OK)

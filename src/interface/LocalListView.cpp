@@ -238,6 +238,8 @@ BEGIN_EVENT_TABLE(CLocalListView, CFileListCtrl<CLocalFileData>)
 	EVT_MENU(XRCID("ID_DELETE"), CLocalListView::OnMenuDelete)
 	EVT_MENU(XRCID("ID_RENAME"), CLocalListView::OnMenuRename)
 	EVT_KEY_DOWN(CLocalListView::OnKeyDown)
+	EVT_LIST_BEGIN_LABEL_EDIT(wxID_ANY, CLocalListView::OnBeginLabelEdit)
+	EVT_LIST_END_LABEL_EDIT(wxID_ANY, CLocalListView::OnEndLabelEdit)
 	EVT_LIST_BEGIN_DRAG(wxID_ANY, CLocalListView::OnBeginDrag)
 	EVT_MENU(XRCID("ID_OPEN"), CLocalListView::OnMenuOpen)
 	EVT_MENU(XRCID("ID_EDIT"), CLocalListView::OnMenuEdit)
@@ -296,7 +298,10 @@ CLocalListView::~CLocalListView()
 
 bool CLocalListView::DisplayDir(wxString dirname)
 {
-	CancelLabelEdit();
+#ifdef __WXMSW__
+	if (GetEditControl())
+		ListView_CancelEditLabel((HWND)GetHandle());
+#endif
 
 	wxString focused;
 	std::list<wxString> selectedNames;
@@ -399,7 +404,7 @@ regular_dir:
 			data.hasTime = data.lastModified.IsValid();
 
 			m_fileData.push_back(data);
-			if (!filter.FilenameFiltered(data.name, dirname, data.dir, data.size, true, data.attributes, data.hasTime ? &data.lastModified : 0))
+			if (!filter.FilenameFiltered(data.name, dirname, data.dir, data.size, true, data.attributes))
 			{
 				if (data.dir)
 					totalDirCount++;
@@ -580,9 +585,11 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 		return;
 	}
 
+	wxFileName fn(m_dir, data->name);
+
 	const bool queue_only = action == 1;
 
-	m_pQueue->QueueFile(queue_only, false, CLocalPath(m_dir), data->name, data->name, path, *pServer, data->size);
+	m_pQueue->QueueFile(queue_only, false, fn.GetFullPath(), data->name, path, *pServer, data->size);
 	m_pQueue->QueueFile_Finish(true);
 }
 
@@ -1165,13 +1172,15 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 		{
 			path.ChangePath(data->name);
 
-			CLocalPath localPath(m_dir);
-			localPath.AddSegment(data->name);
-			m_pQueue->QueueFolder(event.GetId() == XRCID("ID_ADDTOQUEUE"), false, localPath, path, *pServer);
+			wxFileName fn(m_dir, _T(""));
+			fn.AppendDir(data->name);
+			m_pQueue->QueueFolder(event.GetId() == XRCID("ID_ADDTOQUEUE"), false, fn.GetPath(), path, *pServer);
 		}
 		else
 		{
-			m_pQueue->QueueFile(queue_only, false, CLocalPath(m_dir), data->name, data->name, path, *pServer, data->size);
+			wxFileName fn(m_dir, data->name);
+
+			m_pQueue->QueueFile(queue_only, false, fn.GetFullPath(), data->name, path, *pServer, data->size);
 			added = true;
 		}
 	}
@@ -1265,14 +1274,8 @@ void CLocalListView::OnMenuRename(wxCommandEvent& event)
 
 void CLocalListView::OnKeyDown(wxKeyEvent& event)
 {
-#ifdef __WXMAC__
-#define CursorModifierKey wxMOD_CMD
-#else
-#define CursorModifierKey wxMOD_ALT
-#endif
-
 	const int code = event.GetKeyCode();
-	if (code == WXK_DELETE || code == WXK_NUMPAD_DELETE)
+	if (code == WXK_DELETE)
 	{
 		if (GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) == -1)
 		{
@@ -1288,34 +1291,30 @@ void CLocalListView::OnKeyDown(wxKeyEvent& event)
 		wxCommandEvent tmp;
 		OnMenuRename(tmp);
 	}
-	else if (code == WXK_RIGHT && event.GetModifiers() == CursorModifierKey)
-	{
-		wxListEvent evt;
-		evt.m_itemIndex = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
-		OnItemActivated(evt);
-	}
-	else if (code == WXK_DOWN && event.GetModifiers() == CursorModifierKey)
-	{
-		wxCommandEvent cmdEvent;
-		OnMenuUpload(cmdEvent);
-	}
 	else
 		event.Skip();
 }
 
-bool CLocalListView::OnBeginRename(const wxListEvent& event)
+void CLocalListView::OnBeginLabelEdit(wxListEvent& event)
 {
 	if (!m_pState->GetLocalDir().IsWriteable())
-		return false;
+	{
+		event.Veto();
+		return;
+	}
 
 	if (event.GetIndex() == 0 && m_hasParent)
-		return false;
+	{
+		event.Veto();
+		return;
+	}
 
 	const CLocalFileData * const data = GetData(event.GetIndex());
 	if (!data || data->flags == fill)
-		return false;
-
-	return true;
+	{
+		event.Veto();
+		return;
+	}
 }
 
 bool Rename(wxWindow* parent, wxString dir, wxString from, wxString to)
@@ -1369,21 +1368,50 @@ bool Rename(wxWindow* parent, wxString dir, wxString from, wxString to)
 #endif
 }
 
-bool CLocalListView::OnAcceptRename(const wxListEvent& event)
+void CLocalListView::OnEndLabelEdit(wxListEvent& event)
 {
+#ifdef __WXMAC__
+	int item = event.GetIndex();
+	if (item != -1)
+	{
+		int from = item;
+		int to = item;
+		if (from)
+			from--;
+		if (to < GetItemCount() - 1)
+			to++;
+		RefreshItems(from, to);
+	}
+#endif
+
+	if (event.IsEditCancelled())
+		return;
+
 	const int index = event.GetIndex();
 	if (!index && m_hasParent)
-		return false;
+	{
+		event.Veto();
+		return;
+	}
 
 	if (event.GetLabel() == _T(""))
-		return false;
+	{
+		event.Veto();
+		return;
+	}
 
 	if (!m_pState->GetLocalDir().IsWriteable())
-		return false;
+	{
+		event.Veto();
+		return;
+	}
 
 	CLocalFileData *const data = GetData(event.GetIndex());
 	if (!data || data->flags == fill)
-		return false;
+	{
+		event.Veto();
+		return;
+	}
 
 	wxString newname = event.GetLabel();
 #ifdef __WXMSW__
@@ -1391,18 +1419,18 @@ bool CLocalListView::OnAcceptRename(const wxListEvent& event)
 #endif
 
 	if (newname == data->name)
-		return false;
+		return;
 
 	if (!Rename(this, m_dir, data->name, newname))
-		return false;
-
-	data->name = newname;
+		event.Veto();
+	else
+	{
+		data->name = newname;
 #ifdef __WXMSW__
-	data->label = data->name;
+		data->label = data->name;
 #endif
-	m_pState->RefreshLocal();
-
-	return true;
+		m_pState->RefreshLocal();
+	}
 }
 
 void CLocalListView::ApplyCurrentFilter()
@@ -1436,7 +1464,7 @@ void CLocalListView::ApplyCurrentFilter()
 		const CLocalFileData& data = m_fileData[i];
 		if (data.flags == fill)
 			continue;
-		if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes, data.hasTime ? &data.lastModified : 0))
+		if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes))
 		{
 			hidden++;
 			continue;
@@ -1636,8 +1664,6 @@ void CLocalListView::OnBeginDrag(wxListEvent& event)
 		return;
 	}
 
-	CLabelEditBlocker(*this);
-
 	wxDropSource source(this);
 	source.SetData(obj);
 	int res = source.DoDragDrop(wxDrag_AllowMove);
@@ -1673,10 +1699,8 @@ void CLocalListView::RefreshFile(const wxString& file)
 	data.hasTime = data.lastModified.IsValid();
 
 	CFilterManager filter;
-	if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes, data.hasTime ? &data.lastModified : 0))
+	if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes))
 		return;
-
-	CancelLabelEdit();
 
 	// Look if file data already exists
 	unsigned int i = 0;
@@ -2233,13 +2257,13 @@ void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 		wxString drive = iter->volume;
 
 		unsigned int item, index;
-		for (item = 1; item < m_indexMapping.size(); ++item)
+		for (item = 1; item < m_indexMapping.size(); item++)
 		{
 			index = m_indexMapping[item];
 			if (m_fileData[index].name == drive || m_fileData[index].name.Left(drive.Len() + 1) == drive + _T(" "))
 				break;
 		}
-		if (item >= m_indexMapping.size())
+		if (item == m_indexMapping.size())
 			continue;
 
 		m_fileData[index].label = drive + _T(" (") + iter->volumeName + _T(")");

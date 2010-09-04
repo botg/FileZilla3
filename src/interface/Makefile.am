@@ -248,10 +248,6 @@ if MINGW
 filezilla_LDFLAGS += -lole32 -luuid -lnetapi32 -lmpr
 endif
 
-# GTK+ libs, empty if not using wxGTK
-filezilla_CPPFLAGS += $(LIBGTK_CFLAGS)
-filezilla_LDFLAGS += $(LIBGTK_LIBS)
-
 if MINGW
 filezilla_DEPENDENCIES += resources/filezilla.o
 endif
@@ -273,10 +269,6 @@ $(top_builddir)/FileZilla.app/Contents/MacOS/filezilla$(EXEEXT): filezilla
 	mkdir -p $(top_builddir)/FileZilla.app/Contents/Resources
 	$(MAKE) -C resources mac-copy-resources
 	cp -f filezilla $(top_builddir)/FileZilla.app/Contents/MacOS/filezilla
-	cp -f $(top_srcdir)/COPYING $(top_builddir)/FileZilla.app/COPYING
-	mkdir -p $(top_builddir)/FileZilla.app/docs
-	cp -f $(top_srcdir)/docs/fzdefaults.xml.example $(top_builddir)/FileZilla.app/docs/fzdefaults.xml.example
-	cp -f $(top_srcdir)/docs/*.man $(top_builddir)/FileZilla.app/docs
 
 CLEANFILES = filezilla.h.gch
 

@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "servercapabilities.h"
 
 std::map<CServer, CCapabilities> CServerCapabilities::m_serverMap;

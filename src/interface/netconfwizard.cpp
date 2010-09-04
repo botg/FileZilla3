@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "netconfwizard.h"
 #include "Options.h"
 #include "dialogex.h"
@@ -707,7 +707,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 			PrintMessage(wxString::Format(_("Retrieving external IP address from %s"), address.c_str()), 0);
 
 			m_pIPResolver = new CExternalIPResolver(this);
-			m_pIPResolver->GetExternalIP(address, CSocket::ipv4, true);
+			m_pIPResolver->GetExternalIP(address, true);
 			if (!m_pIPResolver->Done())
 				return _T("");
 		}

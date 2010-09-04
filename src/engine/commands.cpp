@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 
 CConnectCommand::CConnectCommand(const CServer &server, bool retry_connecting /*=true*/)
 	: m_Server(server)

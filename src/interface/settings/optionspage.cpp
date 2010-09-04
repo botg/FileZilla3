@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "../Options.h"
 #include "settingsdialog.h"
 #include "optionspage.h"
@@ -47,7 +47,7 @@ void COptionsPage::SetCheckFromOption(int control_id, int option_id, bool& failu
 	SetCheck(control_id, m_pOptions->GetOptionVal(option_id) != 0, failure);
 }
 
-bool COptionsPage::GetCheck(int id) const
+bool COptionsPage::GetCheck(int id)
 {
 	wxCheckBox* pCheckBox = wxDynamicCast(FindWindow(id), wxCheckBox);
 	wxASSERT(pCheckBox);
@@ -79,7 +79,7 @@ void COptionsPage::SetTextFromOption(int ctrlId, int optionId, bool& failure)
 	pTextCtrl->ChangeValue(text);
 }
 
-wxString COptionsPage::GetText(int id) const
+wxString COptionsPage::GetText(int id)
 {
 	wxTextCtrl* pTextCtrl = wxDynamicCast(FindWindow(id), wxTextCtrl);
 	wxASSERT(pTextCtrl);
@@ -113,7 +113,7 @@ void COptionsPage::SetRCheck(int id, bool checked, bool& failure)
 	pRadioButton->SetValue(checked);
 }
 
-bool COptionsPage::GetRCheck(int id) const
+bool COptionsPage::GetRCheck(int id)
 {
 	wxRadioButton* pRadioButton = wxDynamicCast(FindWindow(id), wxRadioButton);
 	wxASSERT(pRadioButton);
@@ -133,7 +133,7 @@ void COptionsPage::SetStaticText(int id, const wxString& text, bool& failure)
 	pStaticText->SetLabel(text);
 }
 
-wxString COptionsPage::GetStaticText(int id) const
+wxString COptionsPage::GetStaticText(int id)
 {
 	wxStaticText* pStaticText = wxDynamicCast(FindWindow(id), wxStaticText);
 	wxASSERT(pStaticText);
@@ -150,16 +150,6 @@ void COptionsPage::SetOptionFromText(int ctrlId, int optionId)
 {
 	const wxString& value = GetText(ctrlId);
 	m_pOptions->SetOption(optionId, value);
-}
-
-void COptionsPage::SetIntOptionFromText(int ctrlId, int optionId)
-{
-	const wxString& value = GetText(ctrlId);
-
-	long n;
-	wxCHECK_RET(value.ToLong(&n), _T("Some options page did not validate user input!"));
-
-	m_pOptions->SetOption(optionId, n);
 }
 
 void COptionsPage::SetChoice(int id, int selection, bool& failure)
@@ -186,7 +176,7 @@ void COptionsPage::SetChoice(int id, int selection, bool& failure)
 	pChoice->SetSelection(selection);
 }
 
-int COptionsPage::GetChoice(int id) const
+int COptionsPage::GetChoice(int id)
 {
 	wxChoice* pChoice = wxDynamicCast(FindWindow(id), wxChoice);
 	wxASSERT(pChoice);

@@ -9,7 +9,7 @@ protected:
 public:
 
 	static wxString GetVersion();
-	static wxLongLong ConvertToVersionNumber(const wxChar* version);
+	static wxULongLong ConvertToVersionNumber(const wxChar* version);
 	static wxString GetBuildDateString();
 	static wxString GetBuildTimeString();
 	static wxDateTime GetBuildDate();
@@ -18,7 +18,6 @@ public:
 	static wxString GetCompilerFlags();
 	static wxString GetHostname();
 	static wxString GetBuildSystem();
-	static bool IsUnstable(); // Returns true on beta or rc releases.
 };
 
 #endif //__BUILDINFO_H__

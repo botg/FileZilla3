@@ -1,13 +1,11 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "wrapengine.h"
+#include <wx/wizard.h>
 #include "filezillaapp.h"
 #include "ipcmutex.h"
 #include "xmlfunctions.h"
 #include "buildinfo.h"
 #include "Options.h"
-
-#include <wx/statbox.h>
-#include <wx/wizard.h>
 
 bool CWrapEngine::m_use_cache = true;
 
@@ -402,8 +400,8 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 				{
 #if WRAPDEBUG >= 3
 					plvl printf("Leave: WrapText failed\n");
-#endif		
-					return result | wrap_failed;
+#endif				
+					return wrap_failed;
 				}
 				text->SetLabel(str);
 
@@ -491,20 +489,20 @@ void CWrapEngine::UnwrapRecursive_Wrapped(const std::list<int> &wrapped, std::ve
 		iter != wrapped.end();
 		iter++)
 	{
-		UnwrapRecursive(windows[i], windows[i]->GetSizer());
-		windows[i]->GetSizer()->Layout();
-
-		if (!(*iter & wrap_didwrap) && !(*iter & wrap_failed))
+		if (!(*iter & wrap_didwrap))
 		{
 			if (!(*iter) && remove_fitting)
 			{
 				// Page didn't need to be wrapped with current wrap offset,
-				// remove it since desired width will only be larger in further wrappings.
+				// remove it since desired with will only be larger in further wrappings.
 				windows.erase(windows.begin() + i);
-				continue;
 			}
+			continue;
 		}
-		
+
+		UnwrapRecursive(windows[i], windows[i]->GetSizer());
+		windows[i]->GetSizer()->Layout();
+
 		i++;
 	}
 }
@@ -523,8 +521,6 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 			pSizer->Layout();
 			
 #ifdef __WXMAC__
-			const int offset = 6;
-#elif defined(__WXGTK__)
 			const int offset = 4;
 #else
 			const int offset = 0;
@@ -542,8 +538,6 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 		}
 		return true;
 	}
-
-	std::vector<wxWindow*> all_windows = windows;
 
 	wxSize size = minRequestedSize;
 
@@ -579,7 +573,6 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 #if WRAPDEBUG > 0	
 	printf("Target ratio: %f\n", (float)ratio);
 	printf("Canvas: % 4d % 4d\n", canvas.x, canvas.y);
-	printf("Initial min and max: %d %d\n", min, max);
 #endif
 
 	while (true)
@@ -591,26 +584,21 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 		{
 			wxSizer* pSizer = (*iter)->GetSizer();
 #ifdef __WXMAC__
-			const int offset = 6;
-#elif defined(__WXGTK__)
 			const int offset = 4;
 #else
 			const int offset = 0;
 #endif
 			int res = WrapRecursive(*iter, pSizer, desiredWidth - offset);
+			didwrap.push_back(res);
 			if (res & wrap_didwrap)
 				pSizer->Layout();
-			didwrap.push_back(res);
-			wxSize minSize = pSizer->GetMinSize();
-			if (minSize.x > desiredWidth)
-				res |= wrap_failed;
-			size.IncTo(minSize);
+			size.IncTo(pSizer->GetMinSize());
 			if (res & wrap_failed)
 				break;
 		}
 
 #if WRAPDEBUG > 0
-	    printf("Current: % 4d % 4d   desiredWidth: %d, min: %d, max: %d\n", size.GetWidth(), size.GetHeight(), desiredWidth, min, max);
+	    printf("Current: % 4d % 4d   desiredWidth: %d\n", size.GetWidth(), size.GetHeight(), desiredWidth);
 #endif
 		if (size.GetWidth() > desiredWidth)
 		{
@@ -624,9 +612,6 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 
 			desiredWidth = (min + max) / 2;
 
-#if WRAPDEBUG > 0
-			printf("Wrapping failed, new min: %d\n", min);
-#endif
 			continue;
 		}
 		actualWidth = size.GetWidth();
@@ -679,10 +664,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 
 		currentRatio = newRatio;
 	}
-#if WRAPDEBUG > 0		
-		printf("Performing final wrap with bestwidth %d\n", bestWidth);
-#endif		
-	for (std::vector<wxWindow*>::iterator iter = all_windows.begin(); iter != all_windows.end(); iter++)
+	for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); iter++)
 	{
 		wxSizer *pSizer = (*iter)->GetSizer();
 
@@ -802,7 +784,7 @@ int CWrapEngine::GetWidthFromCache(const char* name)
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("layout.xml"));
 	TiXmlElement* pDocument = GetXmlFile(file);
 
 	if (!pDocument)
@@ -852,7 +834,7 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("layout.xml"));
 	TiXmlElement* pDocument = GetXmlFile(file);
 
 	if (!pDocument)
@@ -879,7 +861,7 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 	TiXmlElement* pDialog = FindElementWithAttribute(pLanguage, "Dialog", "name", name);
 	if (!pDialog)
 	{
-		pDialog = pLanguage->LinkEndChild(new TiXmlElement("Dialog"))->ToElement();
+		pDialog = pLanguage->InsertEndChild(TiXmlElement("Dialog"))->ToElement();
 		pDialog->SetAttribute("name", name);
 	}
 
@@ -935,7 +917,7 @@ bool CWrapEngine::LoadCache()
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("layout.xml"));
 	CXmlFile xml(file);
 	TiXmlElement* pDocument = xml.Load();
 
@@ -951,7 +933,7 @@ bool CWrapEngine::LoadCache()
 
 	TiXmlElement* pElement = pDocument->FirstChildElement("Layout");
 	if (!pElement)
-		pElement = pDocument->LinkEndChild(new TiXmlElement("Layout"))->ToElement();
+		pElement = pDocument->InsertEndChild(TiXmlElement("Layout"))->ToElement();
 
 	const wxString buildDate = CBuildInfo::GetBuildDateString();
 	if (GetTextAttribute(pElement, "Builddate") != buildDate)
@@ -972,7 +954,7 @@ bool CWrapEngine::LoadCache()
 
 	TiXmlElement* pResources = pElement->FirstChildElement("Resources");
 	if (!pResources)
-		pResources = pElement->LinkEndChild(new TiXmlElement("Resources"))->ToElement();
+		pResources = pElement->InsertEndChild(TiXmlElement("Resources"))->ToElement();
 
 	wxString resourceDir = wxGetApp().GetResourceDir();
 	wxDir dir(resourceDir);
@@ -992,7 +974,7 @@ bool CWrapEngine::LoadCache()
 		TiXmlElement* resourceElement = FindElementWithAttribute(pResources, "xrc", "file", xrc.mb_str());
 		if (!resourceElement)
 		{
-			resourceElement = pResources->LinkEndChild(new TiXmlElement("xrc"))->ToElement();
+			resourceElement = pResources->InsertEndChild(TiXmlElement("xrc"))->ToElement();
 			resourceElement->SetAttribute("file", xrc.mb_str());
 			resourceElement->SetAttribute("date", ticks.ToString().mb_str());
 			cacheValid = false;
@@ -1028,7 +1010,7 @@ bool CWrapEngine::LoadCache()
 	TiXmlElement* languageElement = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
 	if (!languageElement)
 	{
-		languageElement = pElement->LinkEndChild(new TiXmlElement("Language"))->ToElement();
+		languageElement = pElement->InsertEndChild(TiXmlElement("Language"))->ToElement();
 		languageElement->SetAttribute("id", language.mb_str());
 	}
 
@@ -1042,7 +1024,7 @@ bool CWrapEngine::LoadCache()
 
 	TiXmlElement* pFontElement = languageElement->FirstChildElement("Font");
 	if (!pFontElement)
-		pFontElement = languageElement->LinkEndChild(new TiXmlElement("Font"))->ToElement();
+		pFontElement = languageElement->InsertEndChild(TiXmlElement("Font"))->ToElement();
 
 	if (GetTextAttribute(pFontElement, "font") != fontDesc)
 	{
@@ -1089,7 +1071,7 @@ bool CWrapEngine::LoadCache()
 			languageElement->RemoveChild(dialog);
 	}
 
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+	if (COptions::Get()->GetDefaultVal(DEFAULT_KIOSKMODE) == 2)
 	{
 		m_use_cache = cacheValid;
 		return true;
@@ -1114,7 +1096,7 @@ void CWrapEngine::ClearCache()
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("layout.xml"));
 	if (file.FileExists())
 		wxRemoveFile(file.GetFullPath());
 }

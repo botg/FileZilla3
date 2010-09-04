@@ -399,7 +399,7 @@ regular_dir:
 			data.hasTime = data.lastModified.IsValid();
 
 			m_fileData.push_back(data);
-			if (!filter.FilenameFiltered(data.name, dirname, data.dir, data.size, true, data.attributes, data.hasTime ? &data.lastModified : 0))
+			if (!filter.FilenameFiltered(data.name, dirname, data.dir, data.size, true, data.attributes))
 			{
 				if (data.dir)
 					totalDirCount++;
@@ -580,9 +580,11 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 		return;
 	}
 
+	wxFileName fn(m_dir, data->name);
+
 	const bool queue_only = action == 1;
 
-	m_pQueue->QueueFile(queue_only, false, CLocalPath(m_dir), data->name, data->name, path, *pServer, data->size);
+	m_pQueue->QueueFile(queue_only, false, fn.GetFullPath(), data->name, path, *pServer, data->size);
 	m_pQueue->QueueFile_Finish(true);
 }
 
@@ -1165,13 +1167,15 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 		{
 			path.ChangePath(data->name);
 
-			CLocalPath localPath(m_dir);
-			localPath.AddSegment(data->name);
-			m_pQueue->QueueFolder(event.GetId() == XRCID("ID_ADDTOQUEUE"), false, localPath, path, *pServer);
+			wxFileName fn(m_dir, _T(""));
+			fn.AppendDir(data->name);
+			m_pQueue->QueueFolder(event.GetId() == XRCID("ID_ADDTOQUEUE"), false, fn.GetPath(), path, *pServer);
 		}
 		else
 		{
-			m_pQueue->QueueFile(queue_only, false, CLocalPath(m_dir), data->name, data->name, path, *pServer, data->size);
+			wxFileName fn(m_dir, data->name);
+
+			m_pQueue->QueueFile(queue_only, false, fn.GetFullPath(), data->name, path, *pServer, data->size);
 			added = true;
 		}
 	}
@@ -1265,14 +1269,8 @@ void CLocalListView::OnMenuRename(wxCommandEvent& event)
 
 void CLocalListView::OnKeyDown(wxKeyEvent& event)
 {
-#ifdef __WXMAC__
-#define CursorModifierKey wxMOD_CMD
-#else
-#define CursorModifierKey wxMOD_ALT
-#endif
-
 	const int code = event.GetKeyCode();
-	if (code == WXK_DELETE || code == WXK_NUMPAD_DELETE)
+	if (code == WXK_DELETE)
 	{
 		if (GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) == -1)
 		{
@@ -1287,17 +1285,6 @@ void CLocalListView::OnKeyDown(wxKeyEvent& event)
 	{
 		wxCommandEvent tmp;
 		OnMenuRename(tmp);
-	}
-	else if (code == WXK_RIGHT && event.GetModifiers() == CursorModifierKey)
-	{
-		wxListEvent evt;
-		evt.m_itemIndex = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
-		OnItemActivated(evt);
-	}
-	else if (code == WXK_DOWN && event.GetModifiers() == CursorModifierKey)
-	{
-		wxCommandEvent cmdEvent;
-		OnMenuUpload(cmdEvent);
 	}
 	else
 		event.Skip();
@@ -1436,7 +1423,7 @@ void CLocalListView::ApplyCurrentFilter()
 		const CLocalFileData& data = m_fileData[i];
 		if (data.flags == fill)
 			continue;
-		if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes, data.hasTime ? &data.lastModified : 0))
+		if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes))
 		{
 			hidden++;
 			continue;
@@ -1673,7 +1660,7 @@ void CLocalListView::RefreshFile(const wxString& file)
 	data.hasTime = data.lastModified.IsValid();
 
 	CFilterManager filter;
-	if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes, data.hasTime ? &data.lastModified : 0))
+	if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes))
 		return;
 
 	CancelLabelEdit();
@@ -2233,13 +2220,13 @@ void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 		wxString drive = iter->volume;
 
 		unsigned int item, index;
-		for (item = 1; item < m_indexMapping.size(); ++item)
+		for (item = 1; item < m_indexMapping.size(); item++)
 		{
 			index = m_indexMapping[item];
 			if (m_fileData[index].name == drive || m_fileData[index].name.Left(drive.Len() + 1) == drive + _T(" "))
 				break;
 		}
-		if (item >= m_indexMapping.size())
+		if (item == m_indexMapping.size())
 			continue;
 
 		m_fileData[index].label = drive + _T(" (") + iter->volumeName + _T(")");

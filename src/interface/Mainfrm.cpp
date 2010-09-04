@@ -298,10 +298,8 @@ CMainFrame::CMainFrame()
 
 #ifdef __WXMSW__
 	long style = wxSP_NOBORDER | wxSP_LIVE_UPDATE;
-#elif !defined(__WXMAC__)
-	long style = wxSP_3DBORDER | wxSP_LIVE_UPDATE;
 #else
-	long style = wxSP_LIVE_UPDATE;
+	long style = wxSP_3DBORDER | wxSP_LIVE_UPDATE;
 #endif
 
 	wxSize clientSize = GetClientSize();
@@ -1020,10 +1018,6 @@ bool CMainFrame::CreateToolBar()
 {
 	if (m_pToolBar)
 	{
-#ifdef __WXMAC__
-		if (m_pToolBar)
-			COptions::Get()->SetOption(OPTION_TOOLBAR_HIDDEN, m_pToolBar->IsShown() ? 0 : 1);
-#endif
 		SetToolBar(0);
 		delete m_pToolBar;
 	}
@@ -1207,11 +1201,6 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 		}
 
 		RememberSplitterPositions();
-		
-#ifdef __WXMAC__
-		if (m_pToolBar)
-			COptions::Get()->SetOption(OPTION_TOOLBAR_HIDDEN, m_pToolBar->IsShown() ? 0 : 1);
-#endif
 		m_bQuit = true;
 	}
 
@@ -1469,14 +1458,15 @@ void CMainFrame::OnMenuEditSettings(wxCommandEvent& event)
 	wxString newThemeSize = pOptions->GetOption(OPTION_THEME_ICONSIZE);
 	wxString newLang = pOptions->GetOption(OPTION_LANGUAGE);
 
+	if (oldTheme != newTheme)
+	{
+		wxArtProvider::Delete(m_pThemeProvider);
+		m_pThemeProvider = new CThemeProvider();
+	}
 	if (oldTheme != newTheme ||
 		oldThemeSize != newThemeSize ||
 		oldLang != newLang)
-	{
 		CreateToolBar();
-		if (m_pToolBar)
-			m_pToolBar->UpdateToolbarState();
-	}
 
 	if (oldLang != newLang ||
 		oldTimestamps != newTimestamps)
@@ -1995,7 +1985,7 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData)
 void CMainFrame::CheckChangedSettings()
 {
 #if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
-	if (!COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK))
+	if (!COptions::Get()->GetDefaultVal(DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK))
 	{
 		if (!m_pUpdateWizard)
 		{
@@ -2639,7 +2629,7 @@ void CMainFrame::PostInitialize()
 {
 #if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
 	// Need to do this after welcome screen to avoid simultaneous display of multiple dialogs
-	if (!COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK))
+	if (!COptions::Get()->GetDefaultVal(DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK))
 	{
 		m_pUpdateWizard = new CUpdateWizard(this);
 		m_pUpdateWizard->InitAutoUpdateCheck();

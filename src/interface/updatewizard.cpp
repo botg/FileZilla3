@@ -132,13 +132,6 @@ CUpdateWizard::CUpdateWizard(wxWindow* pParent)
 	m_urlFile += osVersion;
 #endif
 
-#ifdef __WXMSW__
-	if (wxIsPlatform64Bit())
-		m_urlFile += _T("&osarch=64");
-	else
-		m_urlFile += _T("&osarch=32");
-#endif
-
 	m_statusTimer.SetOwner(this);
 	m_autoCheckTimer.SetOwner(this);
 	m_busy_timer.SetOwner(this);
@@ -293,11 +286,11 @@ CLocalPath CUpdateWizard::GetDownloadDir() const
 		{
 			wxString dir = path;
 			CoTaskMemFree(path);
-			return CLocalPath(dir);
+			return dir;
 		}
 	}
 #endif
-	return CLocalPath(wxStandardPaths::Get().GetDocumentsDir());
+	return wxStandardPaths::Get().GetDocumentsDir();
 }
 
 bool CUpdateWizard::SetLocalFile()

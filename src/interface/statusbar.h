@@ -30,7 +30,7 @@ public:
 	virtual void SetFieldsCount(int number = 1, const int* widths = NULL);
 	virtual void SetStatusWidths(int n, const int *widths);
 
-	virtual void SetFieldWidth(int field, int width);
+	void SetFieldWidth(int field, int width);
 
 	int GetGripperWidth();
 
@@ -68,7 +68,6 @@ public:
 	
 	void RemoveChild(int idx);
 
-	virtual void SetFieldWidth(int field, int width);
 protected:
 
 	struct t_statbar_child

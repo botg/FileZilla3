@@ -40,7 +40,7 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 
 	
 #if FZ_MANUALUPDATECHECK
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK))
+	if (COptions::Get()->GetDefaultVal(DEFAULT_DISABLEUPDATECHECK))
 #endif
 	{
 		wxMenu *helpMenu;
@@ -87,7 +87,6 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 	menubar->Check(XRCID("ID_VIEW_LOCALTREE"), COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_LOCAL) != 0);
 	menubar->Check(XRCID("ID_VIEW_REMOTETREE"), COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_REMOTE) != 0);
 	menubar->Check(XRCID("ID_MENU_VIEW_FILELISTSTATUSBAR"), COptions::Get()->GetOptionVal(OPTION_FILELIST_STATUSBAR) != 0);
-	menubar->Check(XRCID("ID_MENU_TRANSFER_PRESERVETIMES"), COptions::Get()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) != 0);
 
 	switch (COptions::Get()->GetOptionVal(OPTION_ASCIIBINARY))
 	{
@@ -182,9 +181,7 @@ void CMenuBar::UpdateBookmarkMenu()
 				id = *ids;
 				ids++;
 			}
-			wxString name(*iter);
-			name.Replace(_T("&"), _T("&&"));
-			pMenu->Append(id, name);
+			pMenu->Append(id, *iter);
 
 			m_bookmark_menu_id_map_global[id] = *iter;
 		}
@@ -214,9 +211,7 @@ void CMenuBar::UpdateBookmarkMenu()
 			id = *ids;
 			ids++;
 		}
-		wxString name(*iter);
-		name.Replace(_T("&"), _T("&&"));
-		pMenu->Append(id, name);
+		pMenu->Append(id, *iter);
 
 		m_bookmark_menu_id_map_site[id] = *iter;
 	}
@@ -334,9 +329,6 @@ void CMenuBar::OnStateChange(CState* pState, enum t_statechange_notifications no
 	switch (notification)
 	{
 	case STATECHANGE_CHANGEDCONTEXT:
-		UpdateMenubarState();
-		UpdateBookmarkMenu();
-		break;
 	case STATECHANGE_SERVER:
 	case STATECHANGE_REMOTE_IDLE:
 		UpdateMenubarState();
@@ -383,7 +375,7 @@ void CMenuBar::OnOptionChanged(int option)
 		}
 		break;
 	case OPTION_PRESERVE_TIMESTAMPS:
-		Check(XRCID("ID_MENU_TRANSFER_PRESERVETIMES"), COptions::Get()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) != 0);
+		Check(XRCID("ID_MENU_TRANSFER_PRESERVETIMES"), COptions::Get()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) ? true : false);
 		break;
 	case OPTION_SHOW_TREE_LOCAL:
 		Check(XRCID("ID_VIEW_LOCALTREE"), COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_LOCAL) != 0);

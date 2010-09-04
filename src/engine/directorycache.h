@@ -30,7 +30,7 @@ public:
 	~CDirectoryCache();
 
 	void Store(const CDirectoryListing &listing, const CServer &server);
-	bool GetChangeTime(CTimeEx& time, const CServer &server, const CServerPath &path);
+	bool GetChangeTime(CTimeEx& time, const CServer &server, const CServerPath &path) const;
 	bool Lookup(CDirectoryListing &listing, const CServer &server, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated);
 	bool DoesExist(const CServer &server, const CServerPath &path, int &hasUnsureEntries, bool &is_outdated);
 	bool LookupFile(CDirentry &entry, const CServer &server, const CServerPath &path, const wxString& file, bool &dirDidExist, bool &matchedCase);
@@ -46,15 +46,14 @@ protected:
 	class CCacheEntry
 	{
 	public:
-		CCacheEntry() : lruIt() { };
+		CCacheEntry() { };
 		CCacheEntry(const CCacheEntry &entry);
 		~CCacheEntry() { };
 		CDirectoryListing listing;
+		wxDateTime createTime;
 		CTimeEx modificationTime;
 
 		CCacheEntry& operator=(const CCacheEntry &a);
-
-		void* lruIt; // void* to break cyclic declaration dependency
 	};
 
 	class CServerEntry
@@ -64,29 +63,18 @@ protected:
 		std::list<CCacheEntry> cacheList;
 	};
 
-	typedef std::list<CServerEntry>::iterator tServerIter;
+	CServerEntry* CreateServerEntry(const CServer& server);
+	CServerEntry* GetServerEntry(const CServer& server);
+	const CServerEntry* GetServerEntry(const CServer& server) const;
 
-	tServerIter CreateServerEntry(const CServer& server);
-	tServerIter GetServerEntry(const CServer& server);
-	
 	typedef std::list<CCacheEntry>::iterator tCacheIter;
 	typedef std::list<CCacheEntry>::const_iterator tCacheConstIter;
 
-	bool Lookup(tCacheIter &cacheIter, tServerIter &sit, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated);
+	bool Lookup(tCacheIter &cacheIter, const CServer &server, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated);
 
-	static std::list<CServerEntry> m_serverList;
+	static std::list<CServerEntry *> m_ServerList;
 
 	static int m_nRefCount;
-
-	void UpdateLru(tServerIter const& sit, tCacheIter const& cit);
-
-	void Prune();
-	
-	typedef std::pair<tServerIter, tCacheIter> tFullEntryPosition;
-	typedef std::list<tFullEntryPosition> tLruList;
-	static tLruList m_leastRecentlyUsedList;
-
-	static wxLongLongNative m_totalFileCount;
 };
 
 #endif

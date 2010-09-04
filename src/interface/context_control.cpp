@@ -10,7 +10,6 @@
 #include "recursive_operation.h"
 #include "RemoteListView.h"
 #include "RemoteTreeView.h"
-#include "sitemanager.h"
 #include "splitter.h"
 #include "view.h"
 #include "viewheader.h"
@@ -185,8 +184,6 @@ void CContextControl::CreateContextControls(CState* pState)
 		pRemoteFilelistStatusBar->Hide();
 	context_controls.pRemoteListViewPanel->SetStatusBar(pRemoteFilelistStatusBar);
 	context_controls.pRemoteListView->SetFilelistStatusBar(pRemoteFilelistStatusBar);
-	pRemoteFilelistStatusBar->SetConnected(false);
-
 
 	const int layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
 	const int swap = COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP);
@@ -276,10 +273,6 @@ void CContextControl::CreateContextControls(CState* pState)
 		context_controls.tab_index = 0;
 		context_controls.site_bookmarks = new CContextControl::_context_controls::_site_bookmarks;
 		
-		context_controls.site_bookmarks->path = COptions::Get()->GetOption(OPTION_LAST_CONNECTED_SITE);
-		CSiteManager::GetBookmarks(context_controls.site_bookmarks->path,
-			context_controls.site_bookmarks->bookmarks);
-
 		Initialize(context_controls.pViewSplitter);
 	}
 

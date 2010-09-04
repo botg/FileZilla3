@@ -15,7 +15,6 @@ class CLocalPathTest : public CppUnit::TestFixture
 #ifdef __WXMSW__
 	CPPUNIT_TEST(testHasLogicalParent);
 #endif
-	CPPUNIT_TEST(testAddSegment);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -28,7 +27,6 @@ public:
 #ifdef __WXMSW__
 	void testHasLogicalParent();
 #endif
-	void testAddSegment();
 
 protected:
 };
@@ -128,18 +126,3 @@ void CLocalPathTest::testHasLogicalParent()
 	CPPUNIT_ASSERT(CLocalPath(_T("\\\\foo\\bar")).HasLogicalParent());
 }
 #endif
-
-void CLocalPathTest::testAddSegment()
-{
-#ifdef __WXMSW__
-	CLocalPath a(_T("c:\\foo"));
-#else
-	CLocalPath a(_T("/foo"));
-#endif
-	CLocalPath b(a);
-
-	a.AddSegment(_T(""));
-	CPPUNIT_ASSERT(a == b);
-	CPPUNIT_ASSERT(a.GetPath() == b.GetPath());
-}
-

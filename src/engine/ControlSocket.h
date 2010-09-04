@@ -24,8 +24,7 @@ class CConnectOpData : public COpData
 {
 public:
 	CConnectOpData()
-		: COpData(cmd_connect),
-		port(0)
+		: COpData(cmd_connect)
 	{
 	}
 
@@ -36,12 +35,12 @@ public:
 class CFileTransferOpData : public COpData
 {
 public:
-	CFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path);
+	CFileTransferOpData(const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path);
 	virtual ~CFileTransferOpData();
 	// Transfer data
 	wxString localFile, remoteFile;
 	CServerPath remotePath;
-	const bool download;
+	bool download;
 
 	wxDateTime fileTime;
 	wxFileOffset localFileSize;

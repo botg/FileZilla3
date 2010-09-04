@@ -12,11 +12,11 @@
 
 // Connect is special for HTTP: It is done on a per-command basis, so we need
 // to establish a connection before each command.
-class CHttpConnectOpData : public CConnectOpData
+class CHttpConnectOpData : public COpData
 {
 public:
 	CHttpConnectOpData()
-		: tls(false)
+		: COpData(cmd_connect)
 	{
 	}
 
@@ -24,6 +24,8 @@ public:
 	{
 	}
 
+	wxString host;
+	unsigned int port;
 	bool tls;
 };
 
@@ -79,8 +81,8 @@ public:
 class CHttpFileTransferOpData : public CFileTransferOpData, public CHttpOpData
 {
 public:
-	CHttpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
-		: CFileTransferOpData(is_download, local_file, remote_file, remote_path), CHttpOpData(this)
+	CHttpFileTransferOpData(const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
+		: CFileTransferOpData(local_file, remote_file, remote_path), CHttpOpData(this)
 	{
 		pFile = 0;
 	}
@@ -97,9 +99,7 @@ CHttpControlSocket::CHttpControlSocket(CFileZillaEnginePrivate *pEngine)
 	: CRealControlSocket(pEngine)
 {
 	m_pRecvBuffer = 0;
-	m_recvBufferPos = 0;
 	m_pTlsSocket = 0;
-	m_pHttpOpData = 0;
 }
 
 CHttpControlSocket::~CHttpControlSocket()
@@ -369,9 +369,11 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 		delete m_pCurOpData;
 	}
 
-	CHttpFileTransferOpData *pData = new CHttpFileTransferOpData(download, localFile, remoteFile, remotePath);
+	CHttpFileTransferOpData *pData = new CHttpFileTransferOpData(localFile, remoteFile, remotePath);
 	m_pCurOpData = pData;
 	m_pHttpOpData = pData;
+
+	pData->download = download;
 
 	if (localFile != _T(""))
 	{
@@ -513,7 +515,8 @@ int CHttpControlSocket::DoInternalConnect()
 
 	CHttpConnectOpData *pData = static_cast<CHttpConnectOpData *>(m_pCurOpData);
 
-	delete m_pBackend;
+	if (m_pBackend)
+		delete m_pBackend;
 	m_pBackend = new CSocketBackend(this, m_pSocket);
 
 	int res = m_pSocket->Connect(pData->host, pData->port);

@@ -96,31 +96,31 @@ public:
 		{
 		default:
 		case dirsort_ontop:
-			if (data1.is_dir())
+			if (data1.dir)
 			{
-				if (!data2.is_dir())
+				if (!data2.dir)
 					return -1;
 				else
 					return 0;
 			}
 			else
 			{
-				if (data2.is_dir())
+				if (data2.dir)
 					return 1;
 				else
 					return 0;
 			}
 		case dirsort_onbottom:
-			if (data1.is_dir())
+			if (data1.dir)
 			{
-				if (!data2.is_dir())
+				if (!data2.dir)
 					return 1;
 				else
 					return 0;
 			}
 			else
 			{
-				if (data2.is_dir())
+				if (data2.dir)
 					return -1;
 				else
 					return 0;
@@ -157,16 +157,16 @@ public:
 
 	inline int CmpTime(const CDirentry &data1, const CDirentry &data2) const
 	{
-		if (!data1.has_date())
+		if (data1.hasTimestamp == CDirentry::timestamp_none)
 		{
-			if (data2.has_date())
+			if (data2.hasTimestamp != CDirentry::timestamp_none)
 				return -1;
 			else
 				return 0;
 		}
 		else
 		{
-			if (!data2.has_date())
+			if (data2.hasTimestamp == CDirentry::timestamp_none)
 				return 1;
 
 			if (data1.time < data2.time)
@@ -281,9 +281,9 @@ public:
 		CMP(CmpDir, data1.entry, data2.entry);
 
 		if (data1.fileType.IsEmpty())
-			data1.fileType = m_pListCtrl->GetType(data1.entry.name, data1.entry.is_dir());
+			data1.fileType = m_pListCtrl->GetType(data1.entry.name, data1.entry.dir);
 		if (data2.fileType.IsEmpty())
-			data2.fileType = m_pListCtrl->GetType(data2.entry.name, data2.entry.is_dir());
+			data2.fileType = m_pListCtrl->GetType(data2.entry.name, data2.entry.dir);
 
 		CMP(CmpStringNoCase, data1.fileType, data2.fileType);
 
@@ -394,7 +394,7 @@ CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CState* pSt
 
 bool CSearchDialogFileList::ItemIsDir(int index) const
 {
-	return m_fileData[index].entry.is_dir();
+	return m_fileData[index].entry.dir;
 }
 
 wxLongLong CSearchDialogFileList::ItemGetSize(int index) const
@@ -455,7 +455,7 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 		return m_fileData[index].path.GetPath();
 	else if (column == 2)
 	{
-		if (entry.is_dir() || entry.size < 0)
+		if (entry.dir || entry.size < 0)
 			return _T("");
 		else
 			return CSizeFormat::Format(entry.size);
@@ -466,19 +466,19 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 		if (data.fileType.IsEmpty())
 		{
 			if (data.path.GetType() == VMS)
-				data.fileType = GetType(StripVMSRevision(entry.name), entry.is_dir());
+				data.fileType = GetType(StripVMSRevision(entry.name), entry.dir);
 			else
-				data.fileType = GetType(entry.name, entry.is_dir());
+				data.fileType = GetType(entry.name, entry.dir);
 		}
 
 		return data.fileType;
 	}
 	else if (column == 4)
 	{
-		if (!entry.has_date())
+		if (entry.hasTimestamp == CDirentry::timestamp_none)
 			return _T("");
 
-		if (entry.has_time())
+		if (entry.hasTimestamp >= CDirentry::timestamp_time)
 			return entry.time.Format(m_timeFormat);
 		else
 			return entry.time.Format(m_dateFormat);
@@ -567,7 +567,7 @@ bool CSearchDialog::Load()
 
 	GetSizer()->Add(pStatusBar, 0, wxGROW);
 
-	if (!CreateListControl(filter_name | filter_size | filter_path | filter_date))
+	if (!CreateListControl(filter_name | filter_size | filter_path))
 		return false;
 
 	m_results = new CSearchDialogFileList(this, m_pState, 0);
@@ -662,18 +662,18 @@ void CSearchDialog::ProcessDirectoryListing()
 	{
 		const CDirentry& entry = (*listing)[i];
 
-		if (m_search_filter.filters.size() && !CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, listing->path.GetPath(), entry.is_dir(), entry.size, 0, entry.has_date() ? &entry.time : 0))
+		if (m_search_filter.filters.size() && !CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, listing->path.GetPath(), entry.dir, entry.size, 0))
 			continue;
 
 		CSearchFileData data;
 		data.flags = CComparableListing::normal;
 		data.entry = entry;
 		data.path = listing->path;
-		data.icon = entry.is_dir() ? m_results->m_dirIcon : -2;
+		data.icon = entry.dir ? m_results->m_dirIcon : -2;
 		m_results->m_fileData.push_back(data);
 		m_results->m_indexMapping.push_back(old_count + added++);
 
-		if (entry.is_dir())
+		if (entry.dir)
 			m_results->GetFilelistStatusBar()->AddDirectory();
 		else
 			m_results->GetFilelistStatusBar()->AddFile(entry.size);
@@ -862,7 +862,7 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::list<C
 			continue;
 		int index = m_results->m_indexMapping[sel];
 
-		if (m_results->m_fileData[index].entry.is_dir())
+		if (m_results->m_fileData[index].entry.dir)
 		{
 			CServerPath path = m_results->m_fileData[index].path;
 			path.ChangePath(m_results->m_fileData[index].entry.name);
@@ -997,8 +997,7 @@ void CSearchDialog::OnDownload(wxCommandEvent& event)
 		}
 
 		CServerPath remote_path = m_results->m_fileData[*iter].path;
-		const wxString localName = CQueueView::ReplaceInvalidCharacters(entry.name);
-		m_pQueue->QueueFile(!start, true, target_path, localName, entry.name, remote_path, *pServer, entry.size);
+		m_pQueue->QueueFile(!start, true, target_path.GetPath() + entry.name, entry.name, remote_path, *pServer, entry.size);
 	}
 	m_pQueue->QueueFile_Finish(start);
 
@@ -1014,7 +1013,7 @@ void CSearchDialog::OnDownload(wxCommandEvent& event)
 		if (!flatten && iter->HasParent())
 			target_path.AddSegment(iter->GetLastSegment());
 
-		m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(*iter, _T(""), target_path, false);
+		m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(*iter, _T(""), target_path.GetPath(), false);
 		std::list<CFilter> filters; // Empty, recurse into everything
 		m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(mode, *iter, filters, true, m_original_dir);
 	}
@@ -1096,7 +1095,7 @@ int CSearchDialogFileList::GetOverlayIndex(int item)
 		return -1;
 	int index = m_indexMapping[item];
 
-	if (m_fileData[index].entry.is_link())
+	if (m_fileData[index].entry.link)
 		return GetLinkOverlayIndex();
 
 	return 0;

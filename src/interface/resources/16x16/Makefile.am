@@ -9,18 +9,10 @@ dist_resources_DATA = ascii.png \
 		disconnect.png download.png downloadadd.png \
 		file.png \
 		filezilla.png \
-		filter.png \
-		find.png \
-		folder.png folderclosed.png localtreeview.png \
+		filter.png folder.png folderclosed.png localtreeview.png \
 		lock.png \
 		logview.png processqueue.png queueview.png reconnect.png \
 		refresh.png remotetreeview.png server.png sitemanager.png \
-		sort_down_dark.png \
-		sort_down_light.png \
-		sort_up_dark.png \
-		sort_up_light.png \
-		speedlimits.png \
-		symlink.png \
 		synchronize.png \
 		unknown.png upload.png uploadadd.png
 

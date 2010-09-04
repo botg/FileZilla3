@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "ControlSocket.h"
 #include "ftpcontrolsocket.h"
 #include "sftpcontrolsocket.h"
@@ -186,24 +186,23 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 		if (m_pCurrentCommand->GetId() == cmd_connect)
 		{
 			if (!(nErrorCode & ~(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED | FZ_REPLY_TIMEOUT | FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED)) && 
-				nErrorCode & (FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED))				
+				nErrorCode & (FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED) &&
+				m_retryCount < m_pOptions->GetOptionVal(OPTION_RECONNECTCOUNT))
 			{
+				m_retryCount++;
+
 				const CConnectCommand *pConnectCommand = (CConnectCommand *)m_pCurrentCommand;
 
 				RegisterFailedLoginAttempt(pConnectCommand->GetServer(), (nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR);
 
-				if ((nErrorCode & FZ_REPLY_CRITICALERROR) != FZ_REPLY_CRITICALERROR)
+				if (pConnectCommand->RetryConnecting())
 				{
-					m_retryCount++;
-					if (m_retryCount < m_pOptions->GetOptionVal(OPTION_RECONNECTCOUNT) && pConnectCommand->RetryConnecting())
-					{
-						unsigned int delay = GetRemainingReconnectDelay(pConnectCommand->GetServer());
-						if (!delay)
-							delay = 1;
-						m_pLogging->LogMessage(Status, _("Waiting to retry..."));
-						m_retryTimer.Start(delay, true);
-						return FZ_REPLY_WOULDBLOCK;
-					}
+					unsigned int delay = GetRemainingReconnectDelay(pConnectCommand->GetServer());
+					if (!delay)
+						delay = 1;
+					m_pLogging->LogMessage(Status, _("Waiting to retry..."));
+					m_retryTimer.Start(delay, true);
+					return FZ_REPLY_WOULDBLOCK;
 				}
 			}
 		}
@@ -353,8 +352,6 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 		if (pServer)
 		{
 			CServerPath path(CPathCache::Lookup(*pServer, command.GetPath(), command.GetSubDir()));
-			if (path.IsEmpty() && command.GetSubDir().IsEmpty())
-				path = command.GetPath();
 			if (!path.IsEmpty())
 			{
 				CDirectoryListing *pListing = new CDirectoryListing;
@@ -516,7 +513,7 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 		return;
 	}
 
-	CDirectoryCache cache;
+	const CDirectoryCache cache;
 	
 	CTimeEx changeTime;
 	if (!cache.GetChangeTime(changeTime, *pOwnServer, path))
@@ -630,7 +627,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	unsigned int delay = GetRemainingReconnectDelay(server);
 	if (delay)
 	{
-		m_pLogging->LogMessage(Status, wxPLURAL("Delaying connection for %d second due to previously failed connection attempt...", "Delaying connection for %d seconds due to previously failed connection attempt...", (delay + 999) / 1000), (delay + 999) / 1000);
+		m_pLogging->LogMessage(Status, _("Delaying connection due to previously failed connection attempt..."));
 		m_retryTimer.Start(delay, true);
 		return FZ_REPLY_WOULDBLOCK;
 	}
@@ -646,7 +643,6 @@ int CFileZillaEnginePrivate::ContinueConnect()
 		m_pControlSocket = new CSftpControlSocket(this);
 		break;
 	case HTTP:
-	case HTTPS:
 		m_pControlSocket = new CHttpControlSocket(this);
 		break;
 	default:

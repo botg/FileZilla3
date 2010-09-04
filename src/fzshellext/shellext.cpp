@@ -118,7 +118,7 @@ bool GEnabled = false;
 char GLogFile[MAX_PATH] = "";
 bool GLogOn = false;
 FILE* GLogHandle = NULL;
-HANDLE GLogMutex = 0;
+HANDLE GLogMutex;
 HINSTANCE GInstance;
 
 //---------------------------------------------------------------------------
@@ -157,11 +157,9 @@ void Debug(const char* Message)
 		SYSTEMTIME Time;
 		GetSystemTime(&Time);
 
-		fprintf(GLogHandle, "[%4d-%02d-%02d %2d:%02d:%02d.%03d][%04x:%04x] %s\n",
-			Time.wYear, Time.wMonth, Time.wDay, Time.wHour, Time.wMinute,
-			Time.wSecond, Time.wMilliseconds,
-			(unsigned int)GetCurrentProcessId(), (unsigned int)GetCurrentThreadId(),
-			Message);
+		fprintf(GLogHandle, "[%2d/%2d/%4d %2d:%02d:%02d.%03d][%04x] %s\n",
+			Time.wDay, Time.wMonth, Time.wYear, Time.wHour, Time.wMinute,
+			Time.wSecond, Time.wMilliseconds, (unsigned int)GetCurrentThreadId(), Message);
 	}
 	catch(...)
 	{
@@ -245,71 +243,55 @@ DllMain(HINSTANCE HInstance, DWORD Reason, LPVOID Reserved)
 	if (Reason == DLL_PROCESS_ATTACH)
 	{
 		GInstance = HInstance;
-
-		if (!GLogMutex)
-			GLogMutex = CreateMutex(NULL, false, _T("FileZilla3DragDropExtLogMutex"));
-
-		if (GRefThisDll != 0)
-		{
-			DEBUG_MSG("DllMain return: settings already loaded");
-			return 1;
-		}
-
-		for (int Root = 0; Root <= 1; Root++)
-		{
-			HKEY Key;
-			if (RegOpenKeyEx(Root == 0 ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
-				DRAG_EXT_REG_KEY, 0,
-				STANDARD_RIGHTS_READ | KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS,
-				&Key) == ERROR_SUCCESS)
-			{
-				unsigned long Type;
-				unsigned long Value;
-				unsigned long Size;
-				char Buf[MAX_PATH];
-
-				Size = sizeof(Value);
-				if ((RegQueryValueEx(Key, _T("Enable"), NULL, &Type,
-					reinterpret_cast<LPBYTE>(&Value), &Size) == ERROR_SUCCESS) &&
-					(Type == REG_DWORD))
-				{
-					GEnabled = (Value != 0);
-				}
-
-				Size = sizeof(Buf);
-				if ((RegQueryValueExA(Key, "LogFile", NULL, &Type,
-					reinterpret_cast<LPBYTE>(&Buf), &Size) == ERROR_SUCCESS) &&
-					(Type == REG_SZ))
-				{
-					strncpy(GLogFile, Buf, sizeof(GLogFile));
-					GLogFile[sizeof(GLogFile) - 1] = '\0';
-					GLogOn = true;
-				}
-
-				RegCloseKey(Key);
-			}
-		}
-		if (GEnabled)
-		{
-			DEBUG_MSG("DllMain loaded settings, extension is enabled");
-		}
-		else
-		{
-			DEBUG_MSG("DllMain loaded settings, extension is disabled");
-		}
-		LogVersion(HInstance);
-
-		DEBUG_MSG("DllMain leave");
 	}
-	else if (Reason == DLL_PROCESS_DETACH)
+
+	if (GRefThisDll != 0)
 	{
-		DEBUG_MSG("DllMain detaching process");
-		if (GLogMutex)
+		DEBUG_MSG("DllMain return: settings already loaded");
+		return 1;
+	}
+
+	GLogMutex = CreateMutex(NULL, false, _T("FileZilla3DragDropExtLogMutex"));
+
+	for (int Root = 0; Root <= 1; Root++)
+	{
+		HKEY Key;
+		if (RegOpenKeyEx(Root == 0 ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
+			DRAG_EXT_REG_KEY, 0,
+			STANDARD_RIGHTS_READ | KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS,
+			&Key) == ERROR_SUCCESS)
 		{
-			CloseHandle(GLogMutex);
-			GLogMutex = 0;
+			unsigned long Type;
+			unsigned long Value;
+			unsigned long Size;
+			char Buf[MAX_PATH];
+
+			Size = sizeof(Value);
+			if ((RegQueryValueEx(Key, _T("Enable"), NULL, &Type,
+				reinterpret_cast<LPBYTE>(&Value), &Size) == ERROR_SUCCESS) &&
+				(Type == REG_DWORD))
+			{
+				GEnabled = (Value != 0);
+			}
+
+			Size = sizeof(Buf);
+			if ((RegQueryValueExA(Key, "LogFile", NULL, &Type,
+				reinterpret_cast<LPBYTE>(&Buf), &Size) == ERROR_SUCCESS) &&
+				(Type == REG_SZ))
+			{
+				strncpy(GLogFile, Buf, sizeof(GLogFile));
+				GLogFile[sizeof(GLogFile) - 1] = '\0';
+				GLogOn = true;
+			}
+
+			RegCloseKey(Key);
 		}
 	}
+	DEBUG_MSG("DllMain loaded settings");
+	DEBUG_MSG(GEnabled ? "DllMain enabled" : "DllMain disabled");
+	LogVersion(HInstance);
+
+	DEBUG_MSG("DllMain leave");
 
 	return 1;   // ok
 }
@@ -763,7 +745,7 @@ STDMETHODIMP CShellExt::Initialize(LPCITEMIDLIST IDFolder,
 }
 
 //---------------------------------------------------------------------------
-STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND Hwnd, UINT wFunc, UINT Flags,
+STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND Hwnd, UINT Func, UINT Flags,
 											LPCTSTR SrcFile, DWORD SrcAttribs, LPCTSTR DestFile, DWORD DestAttribs)
 {
 	UINT Result = IDYES;
@@ -774,21 +756,13 @@ STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND Hwnd, UINT wFunc, UINT Flags,
 		return Result;
 	}
 
-	if (wFunc != FO_COPY && wFunc != FO_MOVE)
+	if (Func != FO_COPY && Func != FO_MOVE)
 	{
-		char buffer[100];
-		sprintf(buffer, "CShellExt::CopyCallback return: wFunc is %u, NOT FO_COPY nor FO_MOVE", (unsigned int)wFunc);
-		DEBUG_MSG(buffer);
+		DEBUG_MSG("CShellExt::CopyCallback return: NOT copy nor move");
 		return Result;
 	}
-	else if (wFunc == FO_COPY)
-	{
-		DEBUG_MSG("CShellExt::CopyCallback: wFunc is FO_COPY");
-	}
 	else
-	{
-		DEBUG_MSG("CShellExt::CopyCallback: wFunc is FO_MOVE");
-	}
+		DEBUG_MSG("CShellExt::CopyCallback: copy or move");
 
 	unsigned long Ticks = GetTickCount();
 	if ((Ticks - FLastTicks) < 100 && FLastTicks <= Ticks)

@@ -1,12 +1,8 @@
 #ifndef __QUEUEVIEW_H__
 #define __QUEUEVIEW_H__
 
-#include "dndobjects.h"
-#include "queue.h"
-
-#include <libfilezilla.h>
-
 #include <set>
+#include "dndobjects.h"
 #include <wx/progdlg.h>
 
 class CFolderProcessingEntry
@@ -80,25 +76,21 @@ class CStatusLineCtrl;
 class CFolderProcessingThread;
 class CAsyncRequestQueue;
 class CQueue;
-#if WITH_LIBDBUS
-class CDesktopNotification;
-#endif
 
 class CQueueView : public CQueueViewBase
 {
 	friend class CFolderProcessingThread;
 	friend class CQueueViewDropTarget;
-	friend class CQueueViewFailed;
 public:
 	CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsyncRequestQueue* pAsyncRequestQueue);
 	virtual ~CQueueView();
 
-	bool QueueFile(const bool queueOnly, const bool download, const CLocalPath& localPath, const wxString& localFile, const wxString& remoteFile,
-	const CServerPath& remotePath, const CServer& server, const wxLongLong size, enum CEditHandler::fileType edit = CEditHandler::none);
+	bool QueueFile(const bool queueOnly, const bool download, const wxString& localFile, const wxString& remoteFile,
+		const CServerPath& remotePath, const CServer& server, const wxLongLong size, enum CEditHandler::fileType edit = CEditHandler::none);
 	void QueueFile_Finish(const bool start); // Need to be called after QueueFile
-	bool QueueFiles(const bool queueOnly, const CLocalPath& localPath, const CRemoteDataObject& dataObject);
+	bool QueueFiles(const bool queueOnly, const wxString& localPath, const CRemoteDataObject& dataObject);
 	int QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, bool queueOnly, bool download, CServerItem* pServerItem, const enum CFileExistsNotification::OverwriteAction defaultFileExistsAction);
-	bool QueueFolder(bool queueOnly, bool download, const CLocalPath& localPath, const CServerPath& remotePath, const CServer& server);
+	bool QueueFolder(bool queueOnly, bool download, const wxString& localPath, const CServerPath& remotePath, const CServer& server);
 
 	bool IsEmpty() const;
 	int IsActive() const { return m_activeMode; }
@@ -130,17 +122,10 @@ public:
 
 	void RenameFileInTransfer(CFileZillaEngine *pEngine, const wxString& newName, bool local);
 
-	static wxString ReplaceInvalidCharacters(const wxString& filename);
-
 protected:
 
 	void AdvanceQueue(bool refresh = true);
 	bool TryStartNextTransfer();
-
-	// Called from TryStartNextTransfer(), checks
-	// whether it is allowed to start another transfer on that server item
-	bool CanStartTransfer(const CServerItem& server_item, struct t_EngineData *&pEngineData);
-
 	bool ProcessFolderItems(int type = -1);
 	void ProcessUploadFolderItems();
 
@@ -256,12 +241,6 @@ protected:
 #endif
 
 	wxTimer m_resize_timer;
-
-	void ReleaseExclusiveEngineLock(CFileZillaEngine* pEngine);
-
-#if WITH_LIBDBUS
-	CDesktopNotification* m_desktop_notification;
-#endif
 
 	DECLARE_EVENT_TABLE();
 	void OnEngineEvent(wxEvent &event);

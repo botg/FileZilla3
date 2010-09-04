@@ -1,26 +1,21 @@
 #ifndef __STATUSBAR_H__
 #define __STATUSBAR_H__
 
-#include "option_change_event_handler.h"
-#include "sizeformatting.h"
-#include "state.h"
-
-enum widgets
-{
-	widget_led_send,
-	widget_led_recv,
-	widget_speedlimit,
-	widget_datatype,
-	widget_encryption,
-
-	WIDGET_COUNT
-};
-
 class wxStatusBarEx : public wxStatusBar
 {
 public:
 	wxStatusBarEx(wxTopLevelWindow* parent);
 	virtual ~wxStatusBarEx();
+
+	// Adds a child window that gets repositioned on window resize
+	// field >= 0: Actual field
+	// -1 = last field, -2 = second-last field and so on
+	//
+	// cx is the horizontal offset inside the field.
+	// Children are always centered vertically.
+	void AddChild(int field, wxWindow* pChild, int cx);
+	
+	void RemoveChild(int field, wxWindow* pChild);
 
 	// We override these for two reasons:
 	// - wxWidgets does not provide a function to get the field widths back
@@ -30,9 +25,7 @@ public:
 	virtual void SetFieldsCount(int number = 1, const int* widths = NULL);
 	virtual void SetStatusWidths(int n, const int *widths);
 
-	virtual void SetFieldWidth(int field, int width);
-
-	int GetGripperWidth();
+	void SetFieldWidth(int field, int width);
 
 #ifdef __WXGTK__
 	// Basically identical to the wx one, but not calling Update
@@ -41,6 +34,15 @@ public:
 
 protected:
 	int GetFieldIndex(int field);
+
+	struct t_statbar_child
+	{
+		int field;
+		wxWindow* pChild;
+		int cx;
+	};
+
+	std::list<struct t_statbar_child> m_children;
 
 	wxTopLevelWindow* m_pParent;
 #ifdef __WXMSW__
@@ -51,75 +53,41 @@ protected:
 
 	int* m_columnWidths;
 
-	DECLARE_EVENT_TABLE();
-	void OnSize(wxSizeEvent& event);
-};
-
-class CWidgetsStatusBar : public wxStatusBarEx
-{
-public:
-	CWidgetsStatusBar(wxTopLevelWindow* parent);
-	virtual ~CWidgetsStatusBar();
-
-	// Adds a child window that gets repositioned on window resize
-	// Positioned in the field given in the constructor,
-	// right aligned and in reverse order.
-	void AddChild(int field, int idx, wxWindow* pChild);
-	
-	void RemoveChild(int idx);
-
-	virtual void SetFieldWidth(int field, int width);
-protected:
-
-	struct t_statbar_child
-	{
-		int field;
-		wxWindow* pChild;
-	};
-
-	std::map<int, struct t_statbar_child> m_children;
-
-	void PositionChildren(int field);
+	void PositionChild(const struct t_statbar_child& data);
 
 	DECLARE_EVENT_TABLE();
 	void OnSize(wxSizeEvent& event);
 };
 
-class CStatusBar : public CWidgetsStatusBar, protected COptionChangeEventHandler, protected CStateEventHandler
+class CStatusBar : public wxStatusBarEx
 {
 public:
 	CStatusBar(wxTopLevelWindow* parent);
 	virtual ~CStatusBar();
 
 	void DisplayQueueSize(wxLongLong totalSize, bool hasUnknown);
+	void UpdateSizeFormat();
+
+	void DisplayDataType(const CServer* const pServer);
+	void DisplayEncrypted(const CServer* const pServer);
+	void SetCertificate(CCertificateNotification* pCertificate);
+	void SetSftpEncryptionInfo(const CSftpEncryptionNotification* pEncryptionInfo);
 
 	void OnHandleLeftClick(wxWindow* wnd);
 	void OnHandleRightClick(wxWindow* wnd);
 
 protected:
-	void UpdateSizeFormat();
-	void DisplayDataType();
-	void DisplayEncrypted();
-	void UpdateSpeedLimitsIcon();
-
 	void MeasureQueueSizeWidth();
 
-	virtual void OnOptionChanged(int option);
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
-
-	CSizeFormat::_format m_sizeFormat;
-	bool m_sizeFormatThousandsSep;
-	int m_sizeFormatDecimalPlaces;
+	int m_sizeFormat;
 	wxLongLong m_size;
 	bool m_hasUnknownFiles;
 
 	wxStaticBitmap* m_pDataTypeIndicator;
 	wxStaticBitmap* m_pEncryptionIndicator;
-	wxStaticBitmap* m_pSpeedLimitsIndicator;
 
-	DECLARE_EVENT_TABLE();
-	void OnSpeedLimitsEnable(wxCommandEvent& event);
-	void OnSpeedLimitsConfigure(wxCommandEvent& event);
+	CCertificateNotification* m_pCertificate;
+	CSftpEncryptionNotification* m_pSftpEncryptionInfo;
 };
 
 #endif //__STATUSBAR_H__

@@ -43,15 +43,12 @@ public:
 
 	bool ResumedSession() const;
 	
-	// PEM formatted
-	bool AddTrustedRootCertificate(const wxString& cert);
 protected:
 
 	bool CopySessionData(const CTlsSocket* pPrimarySocket);
 
 	virtual void OnRateAvailable(enum CRateLimiter::rate_direction direction);
 
-	int ContinueHandshake();
 	void ContinueShutdown();
 	
 	int VerifyCertificate();
@@ -114,8 +111,6 @@ protected:
 	gnutls_datum_t m_implicitTrustedCert;
 
 	bool m_socket_eof;
-
-	bool m_require_root_trust;
 };
 
 #endif //__TLSSOCKET_H__

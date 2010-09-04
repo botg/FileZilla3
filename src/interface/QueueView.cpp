@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "queue.h"
 #include "Mainfrm.h"
 #include "Options.h"
@@ -26,9 +26,6 @@
 #include "recursive_operation.h"
 #include "auto_ascii_files.h"
 #include "dragdropmanager.h"
-#if WITH_LIBDBUS
-#include "../dbus/desktop_notification.h"
-#endif
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -63,9 +60,7 @@ public:
 
 		if (m_pDataObject->GetReceivedFormat() == m_pFileDataObject->GetFormat())
 		{
-			CState* const pState = CContextManager::Get()->GetCurrentContext();
-			if (!pState)
-				return wxDragNone;
+			CState* const pState = m_pQueueView->m_pMainFrame->GetState();
 			const CServer* const pServer = pState->GetServer();
 			if (!pServer)
 				return wxDragNone;
@@ -84,9 +79,7 @@ public:
 				return wxDragNone;
 			}
 
-			CState* const pState = CContextManager::Get()->GetCurrentContext();
-			if (!pState)
-				return wxDragNone;
+			CState* const pState = m_pQueueView->m_pMainFrame->GetState();
 			const CServer* const pServer = pState->GetServer();
 			if (!pServer)
 				return wxDragNone;
@@ -129,9 +122,7 @@ public:
 		if (pDragDropManager && !pDragDropManager->remoteParent.IsEmpty())
 		{
 			// Drag from remote to queue, check if local path is writeable
-			CState* const pState = CContextManager::Get()->GetCurrentContext();
-			if (!pState)
-				return wxDragNone;
+			CState* const pState = m_pQueueView->m_pMainFrame->GetState();
 			if (!pState->GetLocalDir().IsWriteable())
 				return wxDragNone;			
 		}
@@ -215,7 +206,7 @@ public:
 		m_processing_entries = false;
 
 		t_dirPair* pair = new t_dirPair;
-		pair->localPath = pFolderItem->GetLocalPath().GetPath().c_str();
+		pair->localPath = pFolderItem->GetLocalPath().c_str();
 		pair->remotePath.SetSafePath(pFolderItem->GetRemotePath().GetSafePath().c_str());
 		m_dirsToCheck.push_back(pair);
 	}
@@ -252,14 +243,14 @@ public:
 		CServerPath remotePath;
 	};
 
-	void ProcessDirectory(const CLocalPath& localPath, CServerPath remotePath, const wxString& name)
+	void ProcessDirectory(const wxString& localPath, CServerPath remotePath, const wxString& name)
 	{
 		wxMutexLocker locker(m_sync);
 
 		t_dirPair* pair = new t_dirPair;
 
 		{
-			pair->localPath = (localPath.GetPath() + name).c_str();
+			pair->localPath = (localPath + CLocalFileSystem::path_separator + name).c_str();
 
 			remotePath.AddSegment(name);
 			pair->remotePath.SetSafePath(remotePath.GetSafePath().c_str());
@@ -495,10 +486,6 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 #endif
 
 	m_resize_timer.SetOwner(this);
-
-#if WITH_LIBDBUS
-	m_desktop_notification = 0;
-#endif
 }
 
 CQueueView::~CQueueView()
@@ -513,14 +500,9 @@ CQueueView::~CQueueView()
 	DeleteEngines();
 
 	m_resize_timer.Stop();
-
-#if WITH_LIBDBUS
-	delete m_desktop_notification;
-#endif
 }
 
-bool CQueueView::QueueFile(const bool queueOnly, const bool download,
-						   const CLocalPath& localPath, const wxString& localFile,
+bool CQueueView::QueueFile(const bool queueOnly, const bool download, const wxString& localFile,
 						   const wxString& remoteFile, const CServerPath& remotePath,
 						   const CServer& server, const wxLongLong size, enum CEditHandler::fileType edit /*=CEditHandler::none*/)
 {
@@ -530,18 +512,14 @@ bool CQueueView::QueueFile(const bool queueOnly, const bool download,
 	if (localFile == _T("") || remotePath.IsEmpty())
 	{
 		if (download)
-		{
-			CLocalPath p(localPath);
-			p.AddSegment(localFile);
-			fileItem = new CFolderItem(pServerItem, queueOnly, p);
-		}
+			fileItem = new CFolderItem(pServerItem, queueOnly, localFile);
 		else
 			fileItem = new CFolderItem(pServerItem, queueOnly, remotePath, remoteFile);
 		wxASSERT(edit == CEditHandler::none);
 	}
 	else
 	{
-		fileItem = new CFileItem(pServerItem, queueOnly, download, localPath, localFile, remoteFile, remotePath, size);
+		fileItem = new CFileItem(pServerItem, queueOnly, download, localFile, remoteFile, remotePath, size);
 		if (download)
 			fileItem->m_transferSettings.binary = !CAutoAsciiFiles::TransferRemoteAsAscii(remoteFile, remotePath.GetType());
 		else
@@ -566,7 +544,7 @@ void CQueueView::QueueFile_Finish(const bool start)
 	if (!m_activeMode && start)
 	{
 		m_activeMode = 1;
-		CContextManager::Get()->NotifyGlobalHandlers(STATECHANGE_QUEUEPROCESSING);
+		m_pMainFrame->GetState()->NotifyHandlers(STATECHANGE_QUEUEPROCESSING);
 	}
 
 	if (m_activeMode)
@@ -582,7 +560,7 @@ void CQueueView::QueueFile_Finish(const bool start)
 		RefreshListOnly(false);
 }
 
-bool CQueueView::QueueFiles(const bool queueOnly, const CLocalPath& localPath, const CRemoteDataObject& dataObject)
+bool CQueueView::QueueFiles(const bool queueOnly, const wxString& localPath, const CRemoteDataObject& dataObject)
 {
 	CServerItem* pServerItem = CreateServerItem(dataObject.GetServer());
 
@@ -594,7 +572,7 @@ bool CQueueView::QueueFiles(const bool queueOnly, const CLocalPath& localPath, c
 			continue;
 
 		CFileItem* fileItem;
-		fileItem = new CFileItem(pServerItem, queueOnly, true, localPath, ReplaceInvalidCharacters(iter->name), iter->name, dataObject.GetServerPath(), iter->size);
+		fileItem = new CFileItem(pServerItem, queueOnly, true, localPath + iter->name, iter->name, dataObject.GetServerPath(), iter->size);
 		fileItem->m_transferSettings.binary = !CAutoAsciiFiles::TransferRemoteAsAscii(iter->name, dataObject.GetServerPath().GetType());
 
 		InsertItem(pServerItem, fileItem);
@@ -724,7 +702,7 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, CNotification* p
 					pEngineData->pItem->GetType() == QueueItemType_File)
 				{
 					CFileItem* pItem = (CFileItem*)pEngineData->pItem;
-					pItem->set_made_progress(true);
+					pItem->m_madeProgress = true;
 				}
 				pEngineData->pStatusLineCtrl->SetTransferStatus(pStatus);
 			}
@@ -732,11 +710,12 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, CNotification* p
 		delete pNotification;
 		break;
 	case nId_local_dir_created:
+		if (m_pMainFrame)
 		{
 			CLocalDirCreatedNotification *pLocalDirCreatedNotification = reinterpret_cast<CLocalDirCreatedNotification *>(pNotification);
-			const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-			for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
-				(*iter)->LocalDirCreated(pLocalDirCreatedNotification->dir);
+			CState* pState = m_pMainFrame->GetState();
+			if (pState)
+				pState->LocalDirCreated(pLocalDirCreatedNotification->dir);
 		}
 		delete pNotification;
 		break;
@@ -744,65 +723,6 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, CNotification* p
 		delete pNotification;
 		break;
 	}
-}
-
-bool CQueueView::CanStartTransfer(const CServerItem& server_item, struct t_EngineData *&pEngineData)
-{
-	const CServer &server = server_item.GetServer();
-	const int max_count = server.MaximumMultipleConnections();
-	if (!max_count)
-		return true;
-
-	int active_count = server_item.m_activeCount;
-
-	bool browsing_on_same = false;
-	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	CState* pState = 0;
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
-	{
-		pState = *iter;
-		const CServer* pBrowsingServer = pState->GetServer();
-		if (!pBrowsingServer)
-			continue;
-
-		if (*pBrowsingServer == server)
-		{
-			active_count++;
-			browsing_on_same = true;
-			break;
-		}
-	}
-
-	if (active_count < max_count)
-		return true;
-
-	// Max count has been reached
-
-	// If we got an idle engine connected to this very server, start the
-	// transfer anyhow. Let's not get this connection go to waste.
-	pEngineData = GetIdleEngine(&server);
-	if (pEngineData->pEngine->IsConnected() && pEngineData->lastServer == server)
-		return true;
-
-	if (!browsing_on_same || active_count > 1)
-		return false;
-
-	// At this point the following holds:
-	// max_count is limited to 1, only connection to server is held by the browsing connection
-	pEngineData = m_engineData[0];
-
-	if (pEngineData->active)
-		return false;
-
-	if (pEngineData->pEngine != pState->m_pEngine)
-	{
-		if (pEngineData->pEngine)
-			ReleaseExclusiveEngineLock(pEngineData->pEngine);
-		pEngineData->state = t_EngineData::waitprimary;
-		pEngineData->pEngine = pState->m_pEngine;
-	}
-
-	return true;
 }
 
 bool CQueueView::TryStartNextTransfer()
@@ -844,20 +764,57 @@ bool CQueueView::TryStartNextTransfer()
 	{
 		t_EngineData* pEngineData = 0;
 		CServerItem* currentServerItem = *iter;
-
-		if (!CanStartTransfer(*currentServerItem, pEngineData))
-			continue;
+		int maxCount = currentServerItem->GetServer().MaximumMultipleConnections();
+		int activeCount = currentServerItem->m_activeCount;
+		const CServer* pBrowsingServer = m_pMainFrame->GetState()->GetServer();
+		bool browsingOnSame = false;
+		if (pBrowsingServer && currentServerItem->GetServer() == *pBrowsingServer)
+		{
+			browsingOnSame = true;
+			activeCount++;
+		}
+		if (maxCount && activeCount >= maxCount)
+		{
+			// If we got an idle engine connected to this very server, start the
+			// transfer anyhow. Let's not get this connection go to waste.
+			pEngineData = GetIdleEngine(&(*iter)->GetServer());
+			if (pEngineData)
+			{
+				if (!pEngineData->pEngine->IsConnected() || pEngineData->lastServer != (*iter)->GetServer())
+				{
+					// If the browsing connection is connected to this server and idle, use it
+					if (browsingOnSame && activeCount == 1)
+					{
+						pEngineData = m_engineData[0];
+						if (pEngineData->active)
+							continue;
+					}
+					else
+						continue;
+				}
+			}
+			else
+			{
+				// If the browsing connection is connected to this server and idle, use it
+				if (browsingOnSame && activeCount == 1)
+				{
+					pEngineData = m_engineData[0];
+					if (pEngineData->active)
+						continue;
+				}
+				else
+					continue;
+			}
+		}
 
 		CFileItem* newFileItem = currentServerItem->GetIdleChild(m_activeMode == 1, wantedDirection);
 
 		while (newFileItem && newFileItem->Download() && newFileItem->GetType() == QueueItemType_Folder)
 		{
-			CLocalPath localPath(newFileItem->GetLocalPath());
-			localPath.AddSegment(newFileItem->GetLocalFile());
-			wxFileName::Mkdir(localPath.GetPath(), 0777, wxPATH_MKDIR_FULL);
-			const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-			for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
-				(*iter)->RefreshLocalFile(localPath.GetPath());
+			wxFileName fn(newFileItem->GetLocalFile(), _T(""));
+			wxFileName::Mkdir(fn.GetPath(), 0777, wxPATH_MKDIR_FULL);
+			CState* const pState = m_pMainFrame->GetState();
+			pState->RefreshLocalFile(fn.GetFullPath());
 			if (RemoveItem(newFileItem, true))
 			{
 				// Server got deleted. Unfortunately we have to start over now
@@ -915,27 +872,28 @@ bool CQueueView::TryStartNextTransfer()
 	const CServer oldServer = pEngineData->lastServer;
 	pEngineData->lastServer = bestMatch.serverItem->GetServer();
 
-	if (pEngineData->state != t_EngineData::waitprimary)
+	if (!pEngineData->pEngine)
 	{
-		if (!pEngineData->pEngine->IsConnected())
-		{
-			if (pEngineData->lastServer.GetLogonType() == ASK)
-			{
-				if (CLoginManager::Get().GetPassword(pEngineData->lastServer, true))
-					pEngineData->state = t_EngineData::connect;
-				else
-					pEngineData->state = t_EngineData::askpassword;
-			}
-			else
-				pEngineData->state = t_EngineData::connect;
-		}
-		else if (oldServer != bestMatch.serverItem->GetServer())
-			pEngineData->state = t_EngineData::disconnect;
-		else if (pEngineData->pItem->GetType() == QueueItemType_File)
-			pEngineData->state = t_EngineData::transfer;
-		else
-			pEngineData->state = t_EngineData::mkdir;
+		pEngineData->state = t_EngineData::waitprimary;
 	}
+	else if (!pEngineData->pEngine->IsConnected())
+	{
+		if (pEngineData->lastServer.GetLogonType() == ASK)
+		{
+			if (CLoginManager::Get().GetPassword(pEngineData->lastServer, true))
+				pEngineData->state = t_EngineData::connect;
+			else
+				pEngineData->state = t_EngineData::askpassword;
+		}
+		else
+			pEngineData->state = t_EngineData::connect;
+	}
+	else if (oldServer != bestMatch.serverItem->GetServer())
+		pEngineData->state = t_EngineData::disconnect;
+	else if (pEngineData->pItem->GetType() == QueueItemType_File)
+		pEngineData->state = t_EngineData::transfer;
+	else
+		pEngineData->state = t_EngineData::mkdir;
 
 	if (bestMatch.fileItem->GetType() == QueueItemType_File)
 	{
@@ -991,14 +949,14 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 		enum ResetReason reason;
 		if (pEngineData->pItem)
 		{
-			if (pEngineData->pItem->pending_remove())
+			if (pEngineData->pItem->m_remove)
 				reason = remove;
 			else
 			{
-				if (pEngineData->pItem->GetType() == QueueItemType_File && ((CFileItem*)pEngineData->pItem)->made_progress())
+				if (pEngineData->pItem->GetType() == QueueItemType_File && ((CFileItem*)pEngineData->pItem)->m_madeProgress)
 				{
 					CFileItem* pItem = (CFileItem*)pEngineData->pItem;
-					pItem->set_made_progress(false);
+					pItem->m_madeProgress = false;
 					pItem->m_onetime_action = CFileExistsNotification::resume;
 				}
 				reason = reset;
@@ -1079,12 +1037,12 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 		// Increase error count only if item didn't make any progress. This keeps
 		// user interaction at a minimum if connection is unstable.
 
-		if (pEngineData->pItem->GetType() == QueueItemType_File && ((CFileItem*)pEngineData->pItem)->made_progress() &&
+		if (pEngineData->pItem->GetType() == QueueItemType_File && ((CFileItem*)pEngineData->pItem)->m_madeProgress &&
 			(replyCode & FZ_REPLY_WRITEFAILED) != FZ_REPLY_WRITEFAILED)
 		{
 			// Don't increase error count if there has been progress
 			CFileItem* pItem = (CFileItem*)pEngineData->pItem;
-			pItem->set_made_progress(false);
+			pItem->m_madeProgress = false;
 			pItem->m_onetime_action = CFileExistsNotification::resume;
 		}
 		else
@@ -1168,7 +1126,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 	if (!m_activeMode)
 	{
 		enum ResetReason reason;
-		if (pEngineData->pItem && pEngineData->pItem->pending_remove())
+		if (pEngineData->pItem && pEngineData->pItem->m_remove)
 			reason = remove;
 		else
 			reason = reset;
@@ -1218,11 +1176,7 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 
 			CFileItem* const pFileItem = (CFileItem*)data.pItem;
 			if (pFileItem->Download())
-			{
-				const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-				for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
-					(*iter)->RefreshLocalFile(pFileItem->GetLocalPath().GetPath() + pFileItem->GetLocalFile());
-			}
+				m_pMainFrame->GetState()->RefreshLocalFile(pFileItem->GetLocalFile());
 
 			if (pFileItem->m_edit != CEditHandler::none && reason != retry && reason != reset)
 			{
@@ -1234,7 +1188,7 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 					pEditHandler->FinishTransfer(reason == success, pFileItem->GetRemoteFile(), pFileItem->GetRemotePath(), pServerItem->GetServer());
 				}
 				else
-					pEditHandler->FinishTransfer(reason == success, pFileItem->GetLocalPath().GetPath() + pFileItem->GetLocalFile());
+					pEditHandler->FinishTransfer(reason == success, pFileItem->GetLocalFile());
 				if (reason == success)
 					pFileItem->m_edit = CEditHandler::none;
 			}
@@ -1242,7 +1196,7 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 			if (reason == failure)
 			{
 				pFileItem->m_onetime_action = CFileExistsNotification::unknown;
-				pFileItem->set_made_progress(false);
+				pFileItem->m_madeProgress = false;
 			}
 		}
 
@@ -1265,7 +1219,7 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 
 		if (reason == reset)
 		{
-			if (!data.pItem->queued())
+			if (!data.pItem->Queued())
 				reinterpret_cast<CServerItem*>(data.pItem->GetTopLevelItem())->QueueImmediateFile(data.pItem);
 		}
 		else if (reason == failure)
@@ -1317,19 +1271,11 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 		m_activeCount--;
 	data.active = false;
 
-	if (data.state == t_EngineData::waitprimary && data.pEngine)
+	if (data.state == t_EngineData::waitprimary)
 	{
-		const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-		for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
-		{
-			CState* pState = *iter;
-			if (pState->m_pEngine != data.pEngine)
-				continue;
-			CCommandQueue* pCommandQueue = pState->m_pCommandQueue;
-			if (pCommandQueue)
-				pCommandQueue->RequestExclusiveEngine(false);
-			break;
-		}
+		CCommandQueue* pCommandQueue = m_pMainFrame->GetState()->m_pCommandQueue;
+		if (pCommandQueue)
+			pCommandQueue->RequestExclusiveEngine(false);
 	}
 
 	data.state = t_EngineData::none;
@@ -1379,29 +1325,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 		if (engineData.state == t_EngineData::waitprimary)
 		{
 			engineData.pItem->m_statusMessage = _("Waiting for browsing connection");
-
-			wxASSERT(engineData.pEngine);
-			if (!engineData.pEngine)
-			{
-				ResetEngine(engineData, retry);
-				return;
-			}
-
-			CState* pState = 0;
-			const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-			for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
-			{
-				if ((*iter)->m_pEngine != engineData.pEngine)
-					continue;
-				pState = *iter;
-				break;
-			}
-			if (!pState)
-			{
-				ResetEngine(engineData, retry);
-				return;
-			}
-
+			CState* const pState = m_pMainFrame->GetState();
 			CCommandQueue* pCommandQueue = pState->m_pCommandQueue;
 			pCommandQueue->RequestExclusiveEngine(true);
 			return;
@@ -1474,7 +1398,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 			fileItem->m_statusMessage = _("Transferring");
 			RefreshItem(engineData.pItem);
 
-			int res = engineData.pEngine->Command(CFileTransferCommand(fileItem->GetLocalPath().GetPath() + fileItem->GetLocalFile(), fileItem->GetRemotePath(),
+			int res = engineData.pEngine->Command(CFileTransferCommand(fileItem->GetLocalFile(), fileItem->GetRemotePath(),
 												fileItem->GetRemoteFile(), fileItem->Download(), fileItem->m_transferSettings));
 			wxASSERT((res & FZ_REPLY_BUSY) != FZ_REPLY_BUSY);
 			if (res == FZ_REPLY_WOULDBLOCK)
@@ -1549,19 +1473,12 @@ bool CQueueView::SetActive(bool active /*=true*/)
 		for (std::vector<CServerItem*>::iterator iter = m_serverList.begin(); iter != m_serverList.end(); iter++)
 			(*iter)->QueueImmediateFiles();
 
-		const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-		for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
+		CState* const pState = m_pMainFrame->GetState();
+		if (pState)
 		{
-			CState* pState = *iter;
-
 			CRecursiveOperation* pRecursiveOperation = pState->GetRecursiveOperationHandler();
-			if (!pRecursiveOperation)
-				continue;
-
-			if (pRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_download)
+			if (pRecursiveOperation && pRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_download)
 				pRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue);
-			if (pRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_download_flatten)
-				pRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue_flatten);
 		}
 
 		UpdateStatusLinePositions();
@@ -1589,7 +1506,7 @@ bool CQueueView::SetActive(bool active /*=true*/)
 			}
 		}
 
-		CContextManager::Get()->NotifyGlobalHandlers(STATECHANGE_QUEUEPROCESSING);
+		m_pMainFrame->GetState()->NotifyHandlers(STATECHANGE_QUEUEPROCESSING);
 
 		return m_activeCount == 0;
 	}
@@ -1603,7 +1520,7 @@ bool CQueueView::SetActive(bool active /*=true*/)
 		UpdateStatusLinePositions();
 	}
 
-	CContextManager::Get()->NotifyGlobalHandlers(STATECHANGE_QUEUEPROCESSING);
+	m_pMainFrame->GetState()->NotifyHandlers(STATECHANGE_QUEUEPROCESSING);
 
 	return true;
 }
@@ -1661,7 +1578,9 @@ void CQueueView::CheckQueueState()
 {
 	if (!m_engineData.empty() && !m_engineData[0]->active && m_engineData[0]->pEngine)
 	{
-		ReleaseExclusiveEngineLock(m_engineData[0]->pEngine);
+		CCommandQueue* pCommandQueue = m_pMainFrame->GetState()->m_pCommandQueue;
+		if (pCommandQueue)
+			pCommandQueue->ReleaseEngine();
 		m_engineData[0]->pEngine = 0;
 	}
 
@@ -1686,7 +1605,7 @@ void CQueueView::CheckQueueState()
 
 		TryRefreshListings();
 
-		CContextManager::Get()->NotifyGlobalHandlers(STATECHANGE_QUEUEPROCESSING);
+		m_pMainFrame->GetState()->NotifyHandlers(STATECHANGE_QUEUEPROCESSING);
 
 		if (!m_quit)
 			ActionAfter();
@@ -1763,7 +1682,7 @@ void CQueueView::DisplayQueueSize()
 	pStatusBar->DisplayQueueSize(m_totalQueueSize, m_filesWithUnknownSize != 0);
 }
 
-bool CQueueView::QueueFolder(bool queueOnly, bool download, const CLocalPath& localPath, const CServerPath& remotePath, const CServer& server)
+bool CQueueView::QueueFolder(bool queueOnly, bool download, const wxString& localPath, const CServerPath& remotePath, const CServer& server)
 {
 	CServerItem* pServerItem = CreateServerItem(server);
 
@@ -1810,7 +1729,7 @@ void CQueueView::ProcessUploadFolderItems()
 
 	CFolderScanItem* pItem = m_queuedFolders[1].front();
 
-	if (pItem->queued())
+	if (pItem->Queued())
 		pItem->m_statusMessage = _("Scanning for files to add to queue");
 	else
 		pItem->m_statusMessage = _("Scanning for files to upload");
@@ -1835,9 +1754,9 @@ void CQueueView::OnFolderThreadComplete(wxCommandEvent& event)
 	if (pItem->m_dir_is_empty)
 	{
 		CServerItem* pServerItem = (CServerItem*)pItem->GetTopLevelItem();
-		CFileItem* fileItem = new CFolderItem(pServerItem, pItem->queued(), pItem->m_current_remote_path, _T(""));
+		CFileItem* fileItem = new CFolderItem(pServerItem, pItem->Queued(), pItem->m_current_remote_path, _T(""));
 		InsertItem(pServerItem, fileItem);
-		QueueFile_Finish(!pItem->queued());
+		QueueFile_Finish(!pItem->Queued());
 	}
 	m_queuedFolders[1].pop_front();
 
@@ -1872,7 +1791,7 @@ int CQueueView::QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, 
 			}
 
 			const CFolderProcessingThread::t_dirPair* entry = (const CFolderProcessingThread::t_dirPair*)*iter;
-			pFolderScanItem->m_current_local_path = CLocalPath(entry->localPath);
+			pFolderScanItem->m_current_local_path = entry->localPath;
 			pFolderScanItem->m_current_remote_path = entry->remotePath;
 			pFolderScanItem->m_dir_is_empty = true;
 			delete entry;
@@ -1881,7 +1800,7 @@ int CQueueView::QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, 
 		{
 			const t_newEntry* entry = (const t_newEntry*)*iter;
 
-			if (filters.FilenameFiltered(entry->name, pFolderScanItem->m_current_local_path.GetPath(), entry->dir, entry->size, true, entry->attributes, &entry->time))
+			if (filters.FilenameFiltered(entry->name, pFolderScanItem->m_current_local_path, entry->dir, entry->size, true, entry->attributes))
 			{
 				delete entry;
 				continue;
@@ -1896,7 +1815,7 @@ int CQueueView::QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, 
 				continue;
 			}
 
-			CFileItem* fileItem = new CFileItem(pServerItem, queueOnly, download, pFolderScanItem->m_current_local_path, entry->name, entry->name, pFolderScanItem->m_current_remote_path, entry->size);
+			CFileItem* fileItem = new CFileItem(pServerItem, queueOnly, download, pFolderScanItem->m_current_local_path + CLocalFileSystem::path_separator + entry->name, entry->name, pFolderScanItem->m_current_remote_path, entry->size);
 
 			if (download)
 				fileItem->m_transferSettings.binary = !CAutoAsciiFiles::TransferRemoteAsAscii(entry->name, pFolderScanItem->m_current_remote_path.GetType());
@@ -1921,14 +1840,14 @@ int CQueueView::QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, 
 void CQueueView::SaveQueue()
 {
 	// Kiosk mode doesn't save queue
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+	if (COptions::Get()->GetDefaultVal(DEFAULT_KIOSKMODE) == 2)
 		return;
 
 	// We have to synchronize access to queue.xml so that multiple processed don't write
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_QUEUE);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("queue.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("queue.xml"));
 	CXmlFile xml(file);
 	TiXmlElement* pDocument = xml.Load();
 	if (!pDocument)
@@ -1955,7 +1874,7 @@ void CQueueView::LoadQueue()
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_QUEUE);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("queue.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("queue.xml"));
 	CXmlFile xml(file);
 	TiXmlElement* pDocument = xml.Load();
 	if (!pDocument)
@@ -1974,7 +1893,7 @@ void CQueueView::LoadQueue()
 
 	pDocument->RemoveChild(pQueue);
 
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+	if (COptions::Get()->GetDefaultVal(DEFAULT_KIOSKMODE) == 2)
 		return;
 
 	wxString error;
@@ -1997,9 +1916,6 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 			m_insertionCount = 0;
 			CServerItem *pServerItem = CreateServerItem(server);
 
-			CLocalPath previousLocalPath;
-			CServerPath previousRemotePath;
-
 			for (TiXmlElement* pFile = pServer->FirstChildElement("File"); pFile; pFile = pFile->NextSiblingElement("File"))
 			{
 				wxString localFile = GetTextElement(pFile, "LocalFile");
@@ -2010,33 +1926,16 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 				unsigned int errorCount = GetTextElementInt(pFile, "ErrorCount");
 				unsigned int priority = GetTextElementInt(pFile, "Priority", priority_normal);
 				bool binary = GetTextElementInt(pFile, "TransferMode", 1) != 0;
-				int overwrite_action = GetTextElementInt(pFile, "OverwriteAction", CFileExistsNotification::unknown);
 
 				CServerPath remotePath;
 				if (localFile != _T("") && remoteFile != _T("") && remotePath.SetSafePath(safeRemotePath) &&
 					size >= -1 && priority < PRIORITY_COUNT)
 				{
-					wxString localFileName;
-					CLocalPath localPath(localFile, &localFileName);
-
-					if (localFileName.empty())
-						continue;
-
-					// CServerPath and wxString are reference counted.
-					// Save some memory here by re-using the old copy
-					if (localPath != previousLocalPath)
-						previousLocalPath = localPath;
-					if (previousRemotePath != remotePath)
-						previousRemotePath = remotePath;
-
-					CFileItem* fileItem = new CFileItem(pServerItem, true, download, localPath, localFileName, remoteFile, previousRemotePath, size);
+					CFileItem* fileItem = new CFileItem(pServerItem, true, download, localFile, remoteFile, remotePath, size);
 					fileItem->m_transferSettings.binary = binary;
 					fileItem->SetPriorityRaw((enum QueuePriority)priority);
 					fileItem->m_errorCount = errorCount;
 					InsertItem(pServerItem, fileItem);
-
-					if (overwrite_action > 0 && overwrite_action < CFileExistsNotification::ACTION_COUNT)
-						fileItem->m_defaultFileExistsAction = (CFileExistsNotification::OverwriteAction)overwrite_action;
 				}
 			}
 			for (TiXmlElement* pFolder = pServer->FirstChildElement("Folder"); pFolder; pFolder = pFolder->NextSiblingElement("Folder"))
@@ -2049,7 +1948,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 					wxString localFile = GetTextElement(pFolder, "LocalFile");
 					if (localFile == _T(""))
 						continue;
-					folderItem = new CFolderItem(pServerItem, true, CLocalPath(localFile));
+					folderItem = new CFolderItem(pServerItem, true, localFile);
 				}
 				else
 				{
@@ -2335,7 +2234,7 @@ void CQueueView::OnRemoveSelected(wxCommandEvent& event)
 			CFileItem* pFile = (CFileItem*)pItem;
 			if (pFile->IsActive())
 			{
-				pFile->set_pending_remove(true);
+				pFile->m_remove = true;
 				StopItem(pFile);
 				continue;
 			}
@@ -2371,7 +2270,7 @@ bool CQueueView::StopItem(CFileItem* item)
 	if (item->m_pEngineData->state == t_EngineData::waitprimary)
 	{
 		enum ResetReason reason;
-		if (item->m_pEngineData->pItem && item->m_pEngineData->pItem->pending_remove())
+		if (item->m_pEngineData->pItem && item->m_pEngineData->pItem->m_remove)
 			reason = remove;
 		else
 			reason = reset;
@@ -2411,7 +2310,7 @@ bool CQueueView::StopItem(CServerItem* pServerItem)
 			CFileItem* pFile = (CFileItem*)pItem;
 			if (pFile->IsActive())
 			{
-				pFile->set_pending_remove(true);
+				pFile->m_remove = true;
 				StopItem(pFile);
 				continue;
 			}
@@ -2443,7 +2342,7 @@ void CQueueView::OnFolderThreadFiles(wxCommandEvent& event)
 
 	std::list<CFolderProcessingEntry*> entryList;
 	m_pFolderProcessingThread->GetFiles(entryList);
-	int added = QueueFiles(entryList, pItem->queued(), false, (CServerItem*)pItem->GetTopLevelItem(), pItem->m_defaultFileExistsAction);
+	int added = QueueFiles(entryList, pItem->Queued(), false, (CServerItem*)pItem->GetTopLevelItem(), pItem->m_defaultFileExistsAction);
 	m_pFolderProcessingThread->CheckFinished();
 
 	pItem->m_count += added;
@@ -2620,64 +2519,53 @@ void CQueueView::TryRefreshListings()
 	if (m_quit)
 		return;
 
-	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
+	const CState* const pState = m_pMainFrame->GetState();
+	const CServer* const pServer = pState->GetServer();
+	if (!pServer)
+		return;
+
+	const CDirectoryListing* const pListing = pState->GetRemoteDir();
+	if (!pListing)
+		return;
+
+	// See if there's an engine that is already listing
+	for (unsigned int i = 1; i < m_engineData.size(); i++)
 	{
-		CState* pState = *iter;
-
-		const CServer* const pServer = pState->GetServer();
-		if (!pServer)
+		if (!m_engineData[i]->active || m_engineData[i]->state != t_EngineData::list)
 			continue;
 
-		const CDirectoryListing* const pListing = pState->GetRemoteDir().Value();
-		if (!pListing)
-			continue;
-
-		// See if there's an engine that is already listing
-		unsigned int i;
-		for (i = 1; i < m_engineData.size(); i++)
+		if (m_engineData[i]->lastServer == *pServer)
 		{
-			if (!m_engineData[i]->active || m_engineData[i]->state != t_EngineData::list)
-				continue;
-
-			if (m_engineData[i]->lastServer != *pServer)
-				continue;
-
 			// This engine is already listing a directory on the current server
-			break;
+			return;
 		}
-		if (i != m_engineData.size())
-			continue;
-
-		if (m_last_refresh_server == *pServer && m_last_refresh_path == pListing->path &&
-			m_last_refresh_listing_time == pListing->m_firstListTime)
-		{
-			// Do not try to refresh same directory multiple times
-			continue;
-		}
-
-		t_EngineData* pEngineData = GetIdleEngine(pServer);
-		if (!pEngineData)
-			continue;
-
-		if (!pEngineData->pEngine->IsConnected() || pEngineData->lastServer != *pServer)
-			continue;
-
-		m_last_refresh_server = *pServer;
-		m_last_refresh_path = pListing->path;
-		m_last_refresh_listing_time = pListing->m_firstListTime;
-
-		CListCommand command(pListing->path, _T(""), LIST_FLAG_AVOID);
-		int res = pEngineData->pEngine->Command(command);
-		if (res != FZ_REPLY_WOULDBLOCK)
-			continue;
-
-		pEngineData->active = true;
-		pEngineData->state = t_EngineData::list;
-		m_activeCount++;
-
-		break;
 	}
+
+	if (m_last_refresh_server == *pServer && m_last_refresh_path == pListing->path &&
+		m_last_refresh_listing_time == pListing->m_firstListTime)
+	{
+		// Do not try to refresh same directory multiple times
+		return;
+	}
+	m_last_refresh_server = *pServer;
+	m_last_refresh_path = pListing->path;
+	m_last_refresh_listing_time = pListing->m_firstListTime;
+	
+	t_EngineData* pEngineData = GetIdleEngine(pServer);
+	if (!pEngineData)
+		return;
+
+	if (!pEngineData->pEngine->IsConnected() || pEngineData->lastServer != *pServer)
+		return;
+
+	CListCommand command(pListing->path, _T(""), LIST_FLAG_AVOID);
+	int res = pEngineData->pEngine->Command(command);
+	if (res != FZ_REPLY_WOULDBLOCK)
+		return;
+
+	pEngineData->active = true;
+	pEngineData->state = t_EngineData::list;
+	m_activeCount++;
 }
 
 void CQueueView::OnAskPassword(wxCommandEvent& event)
@@ -2884,7 +2772,7 @@ void CQueueView::WriteToFile(TiXmlElement* pElement) const
 	TiXmlElement* pQueue = pElement->FirstChildElement("Queue");
 	if (!pQueue)
 	{
-		pQueue = pElement->LinkEndChild(new TiXmlElement("Queue"))->ToElement();
+		pQueue = pElement->InsertEndChild(TiXmlElement("Queue"))->ToElement();
 	}
 
 	wxASSERT(pQueue);
@@ -2939,56 +2827,40 @@ void CQueueView::OnSetPriority(wxCommandEvent& event)
 
 void CQueueView::OnExclusiveEngineRequestGranted(wxCommandEvent& event)
 {
+	CCommandQueue* pCommandQueue = m_pMainFrame->GetState()->m_pCommandQueue;
+	if (!pCommandQueue)
+		return;
+
+	CFileZillaEngine* pEngine = pCommandQueue->GetEngineExclusive(event.GetId());
+
 	t_EngineData* pEngineData = m_engineData[0];
 
-	CFileZillaEngine* pEngine = 0;
-	CState* pState;
-	CCommandQueue* pCommandQueue;
-	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
+	if (!pEngineData->active)
 	{
-		pState = *iter;
-		pCommandQueue = pState->m_pCommandQueue;
-		if (!pCommandQueue)
-			continue;
-
-		pEngine = pCommandQueue->GetEngineExclusive(event.GetId());
-		if (!pEngine)
-			continue;
-
-		if (pEngine != pEngineData->pEngine)
-		{
+		wxASSERT(!pEngineData->pEngine);
+		if (pEngine)
 			pCommandQueue->ReleaseEngine();
-			pEngine = 0;
-			continue;
-		}
 
-		break;
+		return;
 	}
 
 	if (!pEngine)
 		return;
 
-	if (!pEngineData->active)
-	{
-		pCommandQueue->ReleaseEngine();
-		return;
-	}
+	wxASSERT(!pEngineData->pEngine);
 
 	wxASSERT(pEngineData->state == t_EngineData::waitprimary);
 	if (pEngineData->state != t_EngineData::waitprimary)
 		return;
 
+	const CServer* pCurrentServer = m_pMainFrame->GetState()->GetServer();
 	CServerItem* pServerItem = (CServerItem*)pEngineData->pItem->GetParent();
-
-	const CServer* pCurrentServer = pState->GetServer();
 
 	wxASSERT(pServerItem);
 
 	if (!pCurrentServer || *pCurrentServer != pServerItem->GetServer())
 	{
-		if (pState->m_pCommandQueue)
-			pState->m_pCommandQueue->ReleaseEngine();
+		pCommandQueue->ReleaseEngine();
 		ResetEngine(*pEngineData, retry);
 		return;
 	}
@@ -3015,39 +2887,6 @@ bool CQueueView::IsActionAfter(enum ActionAfterState state)
 
 void CQueueView::ActionAfter(bool warned /*=false*/)
 {
-	// Need to check all contexts whether there's a recursive
-	// download operation still in progress
-	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	for (unsigned int i = 0; i < pStates->size(); i++)
-	{
-		CState *pState = (*pStates)[i];
-		CRecursiveOperation *pRecursiveOperationHandler;
-		if (!pState || !(pRecursiveOperationHandler = pState->GetRecursiveOperationHandler()))
-			continue;
-
-		if (pRecursiveOperationHandler->GetOperationMode() == CRecursiveOperation::recursive_download ||
-			pRecursiveOperationHandler->GetOperationMode() == CRecursiveOperation::recursive_download_flatten)
-		{
-			return;
-		}
-	}
-
-#if WITH_LIBDBUS
-	if (!m_pMainFrame->IsActive())
-	{
-		if (!m_desktop_notification)
-			m_desktop_notification = new CDesktopNotification;
-		int failed_count = m_pQueue->GetQueueView_Failed()->GetFileCount();
-		if (failed_count != 0)
-		{
-			wxString fmt = wxPLURAL("All transfers have finished. %d file could not be transferred.", "All transfers have finished. %d files could not be transferred.", failed_count);
-			m_desktop_notification->Notify(_("Transfers finished"), wxString::Format(fmt, failed_count), _T("transfer.error"));
-		}
-		else
-			m_desktop_notification->Notify(_("Transfers finished"), _("All files have been successfully transferred"), _T("transfer.complete"));
-	}
-#endif
-
 	switch (m_actionAfterState)
 	{
 		case ActionAfterState_Close:
@@ -3057,13 +2896,8 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 		}
 		case ActionAfterState_Disconnect:
 		{
-			const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-			for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
-			{
-				CState* pState = *iter;
-				if (pState->IsRemoteConnected() && pState->IsRemoteIdle())
-					pState->Disconnect();
-			}
+			if (m_pMainFrame->GetState()->IsRemoteConnected() && m_pMainFrame->GetState()->IsRemoteIdle())
+				m_pMainFrame->GetState()->m_pCommandQueue->ProcessCommand(new CDisconnectCommand());
 			break;
 		}
 		case ActionAfterState_RunCommand:
@@ -3124,9 +2958,9 @@ void CQueueView::ActionAfterWarnUser(bool shutdown)
 
 	wxString message;
 	if (shutdown)
-		message = _("The system will soon shut down unless you click Cancel.");
+		message = _("The system will soon shutdown unless you click cancel.");
 	else
-		message = _("The system will soon reboot unless you click Cancel.");
+		message = _("The system will soon reboot unless you click cancel.");
 
 	m_actionAfterWarnDialog = new wxProgressDialog(_("Queue has been fully processed"), message, 150, m_pMainFrame, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_CAN_SKIP | wxPD_APP_MODAL);
 	wxSize dialogSize = m_actionAfterWarnDialog->GetSize();
@@ -3276,7 +3110,7 @@ bool CQueueView::IsOtherEngineConnected(t_EngineData* pEngineData)
 
 void CQueueView::OnChar(wxKeyEvent& event)
 {
-	if (event.GetKeyCode() == WXK_DELETE || event.GetKeyCode() == WXK_NUMPAD_DELETE)
+	if (event.GetKeyCode() == WXK_DELETE)
 	{
 		wxCommandEvent cmdEvt;
 		OnRemoveSelected(cmdEvt);
@@ -3335,82 +3169,12 @@ void CQueueView::RenameFileInTransfer(CFileZillaEngine *pEngine, const wxString&
 	CFileItem* pFile = (CFileItem*)pEngineData->pItem;
 	if (local)
 	{
-		wxFileName fn(pFile->GetLocalPath().GetPath(), pFile->GetLocalFile());
+		wxFileName fn(pFile->GetLocalFile());
 		fn.SetFullName(newName);
-		pFile->SetLocalFile(fn.GetFullName());
+		pFile->SetLocalFile(fn.GetFullPath());
 	}
 	else
 		pFile->SetRemoteFile(newName);
 
 	RefreshItem(pFile);
-}
-
-wxString CQueueView::ReplaceInvalidCharacters(const wxString& filename)
-{
-	if (!COptions::Get()->GetOptionVal(OPTION_INVALID_CHAR_REPLACE_ENABLE))
-		return filename;
-
-	const wxChar replace = COptions::Get()->GetOption(OPTION_INVALID_CHAR_REPLACE)[0];
-
-	wxString result;
-
-	wxChar* buf = result.GetWriteBuf(filename.Len() + 1);
-
-	const wxChar* p = filename.c_str();
-	while (*p)
-	{
-		const wxChar c = *p;
-		switch (c)
-		{
-		case '/':
-#ifdef __WXMSW__
-		case '\\':
-		case ':':
-		case '*':
-		case '?':
-		case '"':
-		case '<':
-		case '>':
-		case '|':
-#endif
-			if (replace)
-				*buf++ = replace;
-			break;
-		default:
-#ifdef __WXMSW__
-			if (c < 0x20)
-				*buf++ = replace;
-			else
-#endif
-			{
-				*buf++ = c;
-			}
-		}
-		p++;
-	}
-	*buf = 0;
-
-	result.UngetWriteBuf();
-
-	return result;
-}
-
-void CQueueView::ReleaseExclusiveEngineLock(CFileZillaEngine* pEngine)
-{
-	wxASSERT(pEngine);
-	if (!pEngine)
-		return;
-
-	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
-	{
-		CState* pState = *iter;
-		if (pState->m_pEngine != pEngine)
-			continue;
-		CCommandQueue *pCommandQueue = pState->m_pCommandQueue;
-		if (pCommandQueue)
-			pCommandQueue->ReleaseEngine();
-
-		break;
-	}
 }

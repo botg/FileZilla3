@@ -5,7 +5,6 @@
 #include "queue.h"
 #include "Options.h"
 #include "window_state_manager.h"
-#include "local_filesys.h"
 
 // Defined in optionspage_edit.cpp
 bool UnquoteCommand(wxString& command, wxString& arguments);
@@ -786,32 +785,24 @@ bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterato
 
 	iter->state = unedit ? upload_and_remove : upload;
 
-	wxLongLong size;
-	wxDateTime mtime;
+	wxFileName fn(iter->file);
 
-	bool is_link;
-	if (CLocalFileSystem::GetFileInfo(iter->file, is_link, &size, &mtime, 0) != CLocalFileSystem::file)
+	if (!fn.FileExists())
 	{
 		m_fileDataList[type].erase(iter);
 		return false;
 	}
 
+	wxDateTime mtime = fn.GetModificationTime();
 	if (!mtime.IsValid())
 		mtime = wxDateTime::Now();
 
 	iter->modificationTime = mtime;
 
 	wxASSERT(m_pQueue);
-
-	wxString file;
-	CLocalPath localPath(iter->file, &file);
-	if (file.empty())
-	{
-		m_fileDataList[type].erase(iter);
-		return false;
-	}
-
-	m_pQueue->QueueFile(false, false, localPath, file, iter->name, iter->remotePath, iter->server, wxLongLong(size.GetHi(), size.GetLo()), type);
+	wxULongLong size = fn.GetSize();
+	
+	m_pQueue->QueueFile(false, false, fn.GetPath(), fn.GetFullName(), iter->name, iter->remotePath, iter->server, wxLongLong(size.GetHi(), size.GetLo()), type);
 	m_pQueue->QueueFile_Finish(true);
 
 	return true;

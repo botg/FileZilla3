@@ -9,25 +9,6 @@ static wxArrayString permissionConditionTypes;
 static wxArrayString attributeSetTypes;
 static wxArrayString dateConditionTypes;
 
-static wxChoice* CreateChoice(wxWindow* parent, wxPoint pos, const wxArrayString& items, wxSize const& size = wxDefaultSize)
-{
-#ifdef __WXGTK__
-	// Really obscure bug in wxGTK: If creating in a single step,
-	// first item in the choice sometimes looks disabled
-	// even though it can still be selected and returns to looking
-	// normal after hovering mouse over it.
-	// This works around it nicely.
-	wxChoice *ret( new wxChoice );
-	ret->Create(parent, wxID_ANY, pos, size);
-	ret->Append(items);
-	ret->InvalidateBestSize();
-	ret->SetInitialSize();
-	return ret;
-#else
-	return new wxChoice(parent, wxID_ANY, pos, size, items);
-#endif
-}
-
 CFilterControls::CFilterControls()
 {
 	pType = 0;
@@ -169,19 +150,14 @@ void CFilterConditionsDialog::CalcMinListWidth()
 
 	wxChoice *pStringCondition = new wxChoice(m_pListCtrl, wxID_ANY, wxDefaultPosition, wxDefaultSize, stringConditionTypes);
 	wxChoice *pSizeCondition = new wxChoice(m_pListCtrl, wxID_ANY, wxDefaultPosition, wxDefaultSize, sizeConditionTypes);
-	wxChoice *pDateCondition = new wxChoice(m_pListCtrl, wxID_ANY, wxDefaultPosition, wxDefaultSize, dateConditionTypes);
-
-	int w = wxMax(pStringCondition->GetBestSize().GetWidth(), pSizeCondition->GetBestSize().GetWidth());
-	w = wxMax(w, pDateCondition->GetBestSize().GetWidth());
-	requiredWidth += w;
-
+	requiredWidth += wxMax(pStringCondition->GetBestSize().GetWidth(), pSizeCondition->GetBestSize().GetWidth());
 	pStringCondition->Destroy();
 	pSizeCondition->Destroy();
-	pDateCondition->Destroy();
 
 	requiredWidth += m_pListCtrl->GetWindowBorderSize().x;
 	requiredWidth += 40;
 	requiredWidth += 120;
+
 	wxSize minSize = m_pListCtrl->GetMinSize();
 	minSize.IncTo(wxSize(requiredWidth, -1));
 	m_pListCtrl->SetMinSize(minSize);
@@ -353,7 +329,10 @@ void CFilterConditionsDialog::MakeControls(const CFilterCondition& condition, in
 
 	wxPoint pos = wxPoint(5, posy);
 	if (!controls.pType)
-		controls.pType = CreateChoice(m_pListCtrl, pos, filterTypes);
+	{
+		controls.pType = new wxChoice();
+		controls.pType->Create(m_pListCtrl, wxID_ANY, pos, wxDefaultSize, filterTypes);
+	}
 	else
 		controls.pType->SetPosition(pos);
 	SetSelectionFromType(controls.pType, condition.type);
@@ -369,23 +348,24 @@ void CFilterConditionsDialog::MakeControls(const CFilterCondition& condition, in
 	pos = wxPoint(10 + typeRect.GetWidth(), posy);
 	if (!controls.pCondition)
 	{
+		controls.pCondition = new wxChoice();
 		switch (condition.type)
 		{
 		case filter_name:
 		case filter_path:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, stringConditionTypes);
+			controls.pCondition->Create(m_pListCtrl, wxID_ANY, pos, wxDefaultSize, stringConditionTypes);
 			break;
 		case filter_size:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, sizeConditionTypes);
+			controls.pCondition->Create(m_pListCtrl, wxID_ANY, pos, wxDefaultSize, sizeConditionTypes);
 			break;
 		case filter_attributes:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, attributeConditionTypes);
+			controls.pCondition->Create(m_pListCtrl, wxID_ANY, pos, wxDefaultSize, attributeConditionTypes);
 			break;
 		case filter_permissions:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, permissionConditionTypes);
+			controls.pCondition->Create(m_pListCtrl, wxID_ANY, pos, wxDefaultSize, permissionConditionTypes);
 			break;
 		case filter_date:
-			controls.pCondition = CreateChoice(m_pListCtrl, pos, dateConditionTypes);
+			controls.pCondition->Create(m_pListCtrl, wxID_ANY, pos, wxDefaultSize, dateConditionTypes);
 			break;
 		default:
 			wxFAIL_MSG(_T("Unhandled condition"));
@@ -448,7 +428,10 @@ void CFilterConditionsDialog::MakeControls(const CFilterCondition& condition, in
 		pos = wxPoint(posx, posy);
 		wxSize size(maxwidth, -1);
 		if (!controls.pSet)
-			controls.pSet = CreateChoice(m_pListCtrl, pos, attributeSetTypes, size);
+		{
+			controls.pSet = new wxChoice();
+			controls.pSet->Create(m_pListCtrl, wxID_ANY, pos, size, attributeSetTypes);
+		}
 		else
 		{
 			controls.pSet->SetPosition(pos);

@@ -94,7 +94,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Trusted root certificate", string, _T(""), internal },
 	{ "Size format", number, _T("0"), normal },
 	{ "Size thousands separator", number, _T("1"), normal },
-	{ "Size decimal places", number, _T("1"), normal },
+	{ "Size decimal places", number, _T("0"), normal },
 
 	// Interface settings
 	{ "Number of Transfers", number, _T("2"), normal },
@@ -188,7 +188,7 @@ END_EVENT_TABLE()
 COptions::COptions()
 {
 	m_theOptions = this;
-	m_pXmlFile = 0;
+
 	m_pLastServer = 0;
 
 	m_acquired = false;
@@ -640,8 +640,6 @@ void COptions::Import(TiXmlElement* pElement)
 	std::map<std::string, int> nameOptionMap;
 	GetNameOptionMap(nameOptionMap);
 	LoadOptions(nameOptionMap, pElement);
-	if (!m_save_timer.IsRunning())
-		m_save_timer.Start(15000, true);
 }
 
 void COptions::LoadOptions(const std::map<std::string, int>& nameOptionMap, TiXmlElement* settings /*=0*/)
@@ -685,15 +683,14 @@ void COptions::LoadOptionFromElement(TiXmlElement* pOption, const std::map<std::
 		if (!allowDefault && options[iter->second].flags == default_only)
 			return;
 
-		wxString value;
-
 		TiXmlNode *text = pOption->FirstChild();
-		if (text) {
-			if (!text->ToText())
-				return;
+		if (!text)
+			return;
 
-			value = ConvLocal(text->Value());
-		}
+		if (!text->ToText())
+			return;
+
+		wxString value(ConvLocal(text->Value()));
 
 		if (options[iter->second].type == number)
 		{

@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "netconfwizard.h"
 #include "Options.h"
 #include "dialogex.h"

@@ -24,7 +24,7 @@ public:
 	int attributes;
 };
 
-class CLocalListView : public CFileListCtrl<CLocalFileData>, CStateEventHandler
+class CLocalListView : public CFileListCtrl<CLocalFileData>, CSystemImageList, CStateEventHandler
 {
 	friend class CLocalListViewDropTarget;
 	friend class CLocalListViewSortType;
@@ -79,11 +79,6 @@ protected:
 
 	void RefreshFile(const wxString& file);
 
-	virtual void OnNavigationEvent(bool forward);
-
-	virtual bool OnBeginRename(const wxListEvent& event);
-	virtual bool OnAcceptRename(const wxListEvent& event);
-
 	wxString m_dir;
 
 	wxDropTarget* m_pDropTarget;
@@ -100,6 +95,8 @@ protected:
 	void OnMenuDelete(wxCommandEvent& event);
 	void OnMenuRename(wxCommandEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
+	void OnBeginLabelEdit(wxListEvent& event);
+	void OnEndLabelEdit(wxListEvent& event);
 	void OnBeginDrag(wxListEvent& event);
 	void OnMenuOpen(wxCommandEvent& event);
 	void OnMenuEdit(wxCommandEvent& event);
@@ -108,7 +105,6 @@ protected:
 	void OnVolumesEnumerated(wxCommandEvent& event);
 	CVolumeDescriptionEnumeratorThread* m_pVolumeEnumeratorThread;
 #endif
-	void OnMenuRefresh(wxCommandEvent& event);
 };
 
 #endif

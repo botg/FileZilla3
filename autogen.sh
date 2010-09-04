@@ -215,7 +215,7 @@ echo "3. Creating configure and friends... "
 mkdir -p config
 
 echo "3.1 Running aclocal... "
-$aclocal -I m4 || failedAclocal
+$aclocal -I . || failedAclocal
 
 echo "3.2 Running autoheader... "
 $autoheader

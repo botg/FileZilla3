@@ -1,10 +1,5 @@
 #include "putty.h"
 #include "misc.h"
-#if defined(HAVE_GETTIMEOFDAY)
-  #include <sys/time.h>
-#elif defined(HAVE_FTIME)
-  #include <sys/timeb.h>
-#endif
 
 int bytesAvailable[2] = { 0, 0 };
 
@@ -82,13 +77,6 @@ static int ReadQuotas(int i)
 
 int RequestQuota(int i, int bytes)
 {
-    if (bytesAvailable[i] < -100)
-	bytesAvailable[i] = 0;
-    else if (bytesAvailable[i] < 0)
-    {
-	bytesAvailable[i]--;
-	return bytes;
-    }
     if (bytesAvailable[i] == 0)
     {
 	bytesAvailable[i] = 0;
@@ -99,7 +87,10 @@ int RequestQuota(int i, int bytes)
 	ReadQuotas(i);
     }
 
-    if (bytesAvailable[i] < 0 || bytesAvailable[i] > bytes)
+    if (bytesAvailable[i] == -1)
+	return bytes;
+
+    if (bytesAvailable[i] > bytes)
 	return bytes;
 
     return bytesAvailable[i];
@@ -107,7 +98,7 @@ int RequestQuota(int i, int bytes)
 
 void UpdateQuota(int i, int bytes)
 {
-    if (bytesAvailable[i] < 0)
+    if (bytesAvailable[i] == -1)
 	return;
 
     if (bytesAvailable[i] > bytes)
@@ -118,7 +109,7 @@ void UpdateQuota(int i, int bytes)
 
 int ProcessQuotaCmd(const char* line)
 {
-    int direction = 0, number, pos;
+	int direction = 0, number, pos;
 
     if (line[0] != '-')
 	return 0;
@@ -213,97 +204,3 @@ char* read_input_line(int force, int* error)
     return NULL;
 }
 #endif
-
-void fz_timer_init(_fztimer *timer)
-{
-#ifdef _WINDOWS
-    timer->dwHighDateTime = timer->dwLowDateTime = 0;
-#else
-    timer->low = 0;
-    timer->high = 0;
-#endif
-}
-
-#ifndef _WINDOWS
-// 1/10th of a second in microseconds
-const static int notificationDelay = 1000000 / 10;
-#else
-// 1/10th of a second in 100 nanoseconds
-const static unsigned int notificationDelay = 10000000 / 10;
-#endif
-
-
-int fz_timer_check(_fztimer *timer)
-{
-#ifdef _WINDOWS
-    SYSTEMTIME sNow;
-    FILETIME fNow;
-    unsigned int diff;
-    GetSystemTime(&sNow);
-    SystemTimeToFileTime(&sNow, &fNow);
-
-    diff = fNow.dwHighDateTime - timer->dwHighDateTime;
-    if (!diff)
-    {
-	if ((fNow.dwLowDateTime - timer->dwLowDateTime) < notificationDelay)
-	    return 0;
-    }
-    else if (diff == 1)
-    {
-	if (fNow.dwLowDateTime < timer->dwLowDateTime)
-	{
-	    if (((0xFFFFFFFFU - timer->dwLowDateTime) + fNow.dwLowDateTime) < notificationDelay)
-		return 0;
-	}
-    }
-
-    *timer = fNow;
-#else
-#if defined(HAVE_GETTIMEOFDAY)
-    struct timeval tv;
-    if (!gettimeofday(&tv, 0))
-    {
-	if (tv.tv_sec == timer->high)
-	{
-	    if ((tv.tv_usec - timer->low) < notificationDelay)
-		return 0;
-	}
-	else if ((tv.tv_sec - timer->high) == 1)
-	{
-	    if (timer->low < tv.tv_usec)
-	    {
-		if (((1000000 - tv.tv_usec) + timer->low) < notificationDelay)
-		    return 0;
-	    }
-	}
-
-	timer->high = tv.tv_sec;
-	timer->low = tv.tv_usec;
-    }
-
-#elif defined(HAVE_FTIME)
-    struct timeb tp;
-
-    ftime(&tp);
-    if (tp.time == timer->high)
-    {
-	if ((tp.millitm - timer->low) < (notificationDelay / 1000))
-	    return 0;
-    }
-    else if ((tp.time - timer->high) == 1)
-    {
-	if (timer->low < tp.millitm)
-	{
-	    if (((1000 - tp.millitm) + timer->low) < (notificationDelay / 1000))
-		return 0;
-	}
-    }
-
-    timer->high = tp.time;
-    timer->low = tp.millitm;
-#else
-#error "Neither gettimeofday nor ftime available."
-#endif
-#endif
-    return 1;
-}

@@ -1,22 +1,16 @@
-#include <filezilla.h>
-#include "ControlSocket.h"
-#include "directorycache.h"
-#include "local_filesys.h"
-#include "local_path.h"
+#include "FileZilla.h"
 #include "logging_private.h"
-#include "proxy.h"
-#include "servercapabilities.h"
-#include "sizeformatting_base.h"
-
-#include <wx/file.h>
-#include <wx/filename.h>
-
+#include "ControlSocket.h"
 #include <idna.h>
 extern "C" {
 #include <idn-free.h>
 }
-
+#include "directorycache.h"
+#include "servercapabilities.h"
+#include "local_filesys.h"
+#include "local_path.h"
 #include <errno.h>
+#include "proxy.h"
 
 DECLARE_EVENT_TYPE(fzOBTAINLOCK, -1)
 DEFINE_EVENT_TYPE(fzOBTAINLOCK)
@@ -54,7 +48,6 @@ CControlSocket::CControlSocket(CFileZillaEnginePrivate *pEngine)
 {
 	m_pEngine = pEngine;
 	m_pCurOpData = 0;
-	m_nOpState = 0;
 	m_pCurrentServer = 0;
 	m_pTransferStatus = 0;
 	m_transferStatusSendState = 0;
@@ -93,53 +86,6 @@ enum Command CControlSocket::GetCurrentCommandId() const
 	return m_pEngine->GetCurrentCommandId();
 }
 
-void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpData *pData)
-{
-	if (m_pTransferStatus && (nErrorCode == FZ_REPLY_OK || m_pTransferStatus->madeProgress))
-	{
-		int elapsed = wxTimeSpan(wxDateTime::Now() - m_pTransferStatus->started).GetSeconds().GetLo();
-		if (elapsed <= 0)
-			elapsed = 1;
-		wxString time = wxString::Format(
-			wxPLURAL("%d second", "%d seconds", elapsed),
-			elapsed);
-		
-		wxLongLong transferred = m_pTransferStatus->currentOffset - m_pTransferStatus->startOffset;
-		wxString size = CSizeFormatBase::Format(m_pEngine->GetOptions(), transferred, true);
-
-		MessageType msgType = ::Error;
-		wxString msg;
-		if (nErrorCode == FZ_REPLY_OK)
-		{
-			msgType = Status;
-			msg = _("File transfer successful, transferred %s in %s");
-		}
-		else if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
-			msg = _("File transfer aborted by user after transferring %s in %s");
-		else if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR)
-			msg = _("Critical file transfer error after transferring %s in %s");
-		else
-			msg = _("File transfer failed after transferring %s in %s");
-		LogMessage(msgType, msg, size.c_str(), time.c_str());
-	}
-	else
-	{
-		if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
-			LogMessage(::Error, _("File transfer aborted by user"));
-		else if (nErrorCode == FZ_REPLY_OK)
-		{
-			if (pData->transferInitiated)
-				LogMessage(Status, _("File transfer successful"));
-			else
-				LogMessage(Status, _("File transfer skipped"));
-		}
-		else if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR)
-			LogMessage(::Error, _("Critical file transfer error"));
-		else
-			LogMessage(::Error, _("File transfer failed"));
-	}
-}
-
 int CControlSocket::ResetOperation(int nErrorCode)
 {
 	LogMessage(Debug_Verbose, _T("CControlSocket::ResetOperation(%d)"), nErrorCode);
@@ -168,11 +114,8 @@ int CControlSocket::ResetOperation(int nErrorCode)
 			return ResetOperation(nErrorCode);
 	}
 
-	if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR &&
-		(!m_pCurOpData || m_pCurOpData->opId != cmd_transfer))
-	{
+	if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR)
 		LogMessage(::Error, _("Critical error"));
-	}
 
 	if (m_pCurOpData)
 	{
@@ -211,7 +154,10 @@ int CControlSocket::ResetOperation(int nErrorCode)
 							m_pEngine->SendDirectoryListingNotification(pData->remotePath, false, true, false);
 					}
 				}
-				LogTransferResultMessage(nErrorCode, pData);
+				if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
+					LogMessage(::Error, _("Transfer aborted by user"));
+				else if (nErrorCode == FZ_REPLY_OK)
+					LogMessage(Status, _("File transfer successful"));
 			}
 			break;
 		default:
@@ -500,7 +446,7 @@ int CControlSocket::CheckOverwriteFile()
 	{
 		if (!pData->fileTime.IsValid())
 		{
-			if (entry.has_date())
+			if (entry.hasDate)
 			{
 				pNotification->remoteTime = entry.time;
 				pData->fileTime = entry.time;
@@ -513,10 +459,8 @@ int CControlSocket::CheckOverwriteFile()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-CFileTransferOpData::CFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path) :
+CFileTransferOpData::CFileTransferOpData() :
 	COpData(cmd_transfer),
- 	localFile(local_file), remoteFile(remote_file), remotePath(remote_path),
-	download(is_download),
 	localFileSize(-1), remoteFileSize(-1),
 	tryAbsolutePath(false), resume(false), transferInitiated(false)
 {
@@ -718,7 +662,7 @@ int CControlSocket::ParseSubcommandResult(int prevResult)
 const std::list<CControlSocket::t_lockInfo>::iterator CControlSocket::GetLockStatus()
 {
 	std::list<t_lockInfo>::iterator iter;
-	for (iter = m_lockInfoList.begin(); iter != m_lockInfoList.end(); ++iter)
+	for (iter = m_lockInfoList.begin(); iter != m_lockInfoList.end(); iter++)
 		if (iter->pControlSocket == this)
 			break;
 
@@ -762,7 +706,7 @@ bool CControlSocket::TryLockCache(enum locking_reason reason, const CServerPath&
 	m_pCurOpData->holdsLock = true;
 
 	// Try to find other instance holding the lock
-	for (std::list<t_lockInfo>::const_iterator iter = m_lockInfoList.begin(); iter != own; ++iter)
+	for (std::list<t_lockInfo>::const_iterator iter = m_lockInfoList.begin(); iter != own; iter++)
 	{
 		if (*m_pCurrentServer != *iter->pControlSocket->m_pCurrentServer)
 			continue;
@@ -789,7 +733,7 @@ bool CControlSocket::IsLocked(enum locking_reason reason, const CServerPath& dir
 		return true;
 
 	// Try to find other instance holding the lock
-	for (std::list<t_lockInfo>::const_iterator iter = m_lockInfoList.begin(); iter != own; ++iter)
+	for (std::list<t_lockInfo>::const_iterator iter = m_lockInfoList.begin(); iter != own; iter++)
 	{
 		if (*m_pCurrentServer != *iter->pControlSocket->m_pCurrentServer)
 			continue;
@@ -835,7 +779,7 @@ void CControlSocket::UnlockCache()
 		LogMessage(Debug_Warning, _T("UnlockCache called with !m_pCurrentServer"));
 		return;
 	}
-	for (std::list<t_lockInfo>::const_iterator iter = m_lockInfoList.begin(); iter != m_lockInfoList.end(); ++iter)
+	for (std::list<t_lockInfo>::const_iterator iter = m_lockInfoList.begin(); iter != m_lockInfoList.end(); iter++)
 	{
 		if (!iter->pControlSocket->m_pCurrentServer)
 		{
@@ -871,7 +815,7 @@ enum CControlSocket::locking_reason CControlSocket::ObtainLockFromEvent()
 	if (!own->waiting)
 		return lock_unknown;
 
-	for (std::list<t_lockInfo>::const_iterator iter = m_lockInfoList.begin(); iter != own; ++iter)
+	for (std::list<t_lockInfo>::const_iterator iter = m_lockInfoList.begin(); iter != own; iter++)
 	{
 		if (*m_pCurrentServer != *iter->pControlSocket->m_pCurrentServer)
 			continue;
@@ -1005,7 +949,7 @@ bool CRealControlSocket::Send(const char *buffer, int len)
 		}
 
 		if (written)
-			m_pEngine->SetActive(CFileZillaEngine::send);
+			m_pEngine->SetActive(false);
 
 		if (written < len)
 		{
@@ -1105,7 +1049,7 @@ void CRealControlSocket::OnSend()
 		if (written)
 		{
 			SetAlive();
-			m_pEngine->SetActive(CFileZillaEngine::send);
+			m_pEngine->SetActive(false);
 		}
 
 		if (written == m_nSendBufferLen)
@@ -1143,7 +1087,8 @@ int CRealControlSocket::Connect(const CServer &server)
 	if (server.GetEncodingType() == ENCODING_CUSTOM)
 		m_pCSConv = new wxCSConv(server.GetCustomEncoding());
 
-	delete m_pCurrentServer;
+	if (m_pCurrentServer)
+		delete m_pCurrentServer;
 	m_pCurrentServer = new CServer(server);
 
 	// International domain names
@@ -1184,7 +1129,7 @@ int CRealControlSocket::ContinueConnect()
 	{
 		if (m_pCurOpData && m_pCurOpData->opId == cmd_connect)
 		{
-			CConnectOpData* pData(static_cast<CConnectOpData*>(m_pCurOpData));
+			CConnectOpData* pData = (CConnectOpData*)m_pCurOpData;
 			host = ConvertDomainName(pData->host);
 			port = pData->port;
 		}
@@ -1358,16 +1303,9 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			{
 				wxLongLong size = entry.size;
 				pData->remoteFileSize = size.GetLo() + ((wxFileOffset)size.GetHi() << 32);
-				if (entry.has_date())
-					pData->fileTime = entry.time;
 
 				if (CheckOverwriteFile() != FZ_REPLY_OK)
 					break;
-			}
-			else
-			{
-				pData->fileTime = wxDateTime();
-				pData->remoteFileSize = -1;
 			}
 
 			SendNextCommand();
@@ -1412,7 +1350,7 @@ void CControlSocket::CreateLocalDir(const wxString &local_file)
 	}
 
 	CLocalPath last_successful;
-	for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); ++iter)
+	for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); iter++)
 	{
 		local_path.AddSegment(*iter);
 

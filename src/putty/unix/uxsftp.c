@@ -205,7 +205,6 @@ WFile *open_existing_wfile(char *name, uint64 *size)
 
     ret = snew(WFile);
     ret->fd = fd;
-    ret->name = dupstr(name);
 
     if (size) {
 	struct stat statbuf;

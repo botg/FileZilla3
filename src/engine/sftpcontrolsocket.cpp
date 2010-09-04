@@ -1,24 +1,19 @@
-#include <filezilla.h>
-
+#include "FileZilla.h"
+#include "sftpcontrolsocket.h"
+#include <wx/process.h>
+#include <wx/txtstrm.h>
 #include "directorycache.h"
 #include "directorylistingparser.h"
 #include "pathcache.h"
+#include "servercapabilities.h"
+#include <wx/tokenzr.h>
 #include "local_filesys.h"
 #include "proxy.h"
-#include "servercapabilities.h"
-#include "sftpcontrolsocket.h"
-#include "threadex.h"
-
-#include <wx/filename.h>
-#include <wx/process.h>
-#include <wx/tokenzr.h>
-#include <wx/txtstrm.h>
 
 class CSftpFileTransferOpData : public CFileTransferOpData
 {
 public:
-	CSftpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
-		: CFileTransferOpData(is_download, local_file, remote_file, remote_path)
+	CSftpFileTransferOpData()
 	{
 	}
 };
@@ -37,11 +32,7 @@ struct sftp_message
 {
 	sftpEventTypes type;
 	wxString text;
-	union
-	{
-		sftpRequestTypes reqType;
-		int value;
-	};
+	sftpRequestTypes reqType;
 };
 
 DECLARE_EVENT_TYPE(fzEVT_SFTP, -1)
@@ -100,42 +91,6 @@ protected:
 		wxCommandEvent evt(fzEVT_SFTP, wxID_ANY);
 		if (sendEvent)
 			wxPostEvent(m_pOwner, evt);
-	}
-
-	int ReadNumber(wxInputStream* pInputStream, bool &error)
-	{
-		int number = 0;
-
-		while(!pInputStream->Eof())
-		{
-			char c;
-			pInputStream->Read(&c, 1);
-			if (pInputStream->LastRead() != 1)
-			{
-				if (pInputStream->Eof())
-					m_pOwner->LogMessage(Debug_Warning, _T("Unexpected EOF."));
-				else
-					m_pOwner->LogMessage(Debug_Warning, _T("Uknown input stream error"));
-				error = true;
-				return 0;
-			}
-
-			if (c == '\n')
-				break;
-			else if (c >= '0' && c <= '9')
-			{
-				number *= 10;
-				number += c - '0';
-			}
-		}
-		if (pInputStream->Eof())
-		{
-			m_pOwner->LogMessage(Debug_Warning, _T("Unexpected EOF."));
-			error = true;
-			return 0;
-		}
-
-		return number;
 	}
 
 	wxString ReadLine(wxInputStream* pInputStream, bool &error)
@@ -279,16 +234,13 @@ protected:
 				{
 					sftp_message* message = new sftp_message;
 					message->type = (sftpEventTypes)eventType;
-					message->value = ReadNumber(pInputStream, error);
-					if (error)
+					message->text = ReadLine(pInputStream, error);
+					if (pInputStream->LastRead() <= 0 || message->text == _T(""))
 					{
 						delete message;
 						goto loopexit;
 					}
-					if (!message->value)
-						delete message;
-					else
-						SendMessage(message);
+					SendMessage(message);
 				}
 				break;
 			default:
@@ -701,6 +653,9 @@ void CSftpControlSocket::OnSftpEvent(wxCommandEvent& event)
 		case sftpRead:
 		case sftpWrite:
 			{
+				long number = 0;
+				message->text.ToLong(&number);
+				
 				if (m_pTransferStatus && !m_pTransferStatus->madeProgress)
 				{
 					if (m_pCurOpData && m_pCurOpData->opId == cmd_transfer)
@@ -708,7 +663,7 @@ void CSftpControlSocket::OnSftpEvent(wxCommandEvent& event)
 						CSftpFileTransferOpData *pData = static_cast<CSftpFileTransferOpData *>(m_pCurOpData);
 						if (pData->download)
 						{
-							if (message->value > 0)
+							if (number > 0)
 								SetTransferStatusMadeProgress();
 						}
 						else
@@ -719,14 +674,14 @@ void CSftpControlSocket::OnSftpEvent(wxCommandEvent& event)
 					}
 				}
 
-				UpdateTransferStatus(message->value);
+				UpdateTransferStatus(number);
 			}
 			break;
 		case sftpRecv:
-			SetActive(CFileZillaEngine::recv);
+			SetActive(true);
 			break;
 		case sftpSend:
-			SetActive(CFileZillaEngine::send);
+			SetActive(false);
 			break;
 		case sftpUsedQuotaRecv:
 			OnQuotaRequest(CRateLimiter::inbound);
@@ -977,7 +932,7 @@ int CSftpControlSocket::List(CServerPath path /*=CServerPath()*/, wxString subDi
 	pData->path = path;
 	pData->subDir = subDir;
 	pData->refresh = (flags & LIST_FLAG_REFRESH) != 0;
-	pData->fallback_to_current = !path.IsEmpty() && (flags & LIST_FLAG_FALLBACK_CURRENT) != 0;
+	pData->fallback_to_current = (flags & LIST_FLAG_FALLBACK_CURRENT) != 0;
 
 	int res = ChangeDir(path, subDir, (flags & LIST_FLAG_LINK) != 0);
 	if (res != FZ_REPLY_OK)
@@ -1057,18 +1012,11 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 				if (date.IsValid())
 				{
 					date.MakeTimezone(wxDateTime::GMT0);
-					wxASSERT(pData->directoryListing[pData->mtime_index].has_date());
+					wxASSERT(pData->directoryListing[pData->mtime_index].hasTime);
 					wxDateTime listTime = pData->directoryListing[pData->mtime_index].time;
 					listTime -= wxTimeSpan(0, m_pCurrentServer->GetTimezoneOffset(), 0);
 
 					int serveroffset = (date - listTime).GetSeconds().GetLo();
-					if (!pData->directoryListing[pData->mtime_index].has_seconds())
-					{
-						// Round offset to full minutes
-						if (serveroffset < 0)
-							serveroffset -= 59;
-						serveroffset -= serveroffset % 60;
-					}
 
 					wxDateTime now = wxDateTime::Now();
 					wxDateTime now_utc = now.ToTimezone(wxDateTime::GMT0);
@@ -1083,7 +1031,7 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 					for (int i = 0; i < count; i++)
 					{
 						CDirentry& entry = pData->directoryListing[i];
-						if (!entry.has_time())
+						if (!entry.hasTime)
 							continue;
 
 						entry.time += span;
@@ -1642,9 +1590,13 @@ int CSftpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 		delete m_pCurOpData;
 	}
 
-	CSftpFileTransferOpData *pData = new CSftpFileTransferOpData(download, localFile, remoteFile, remotePath);
+	CSftpFileTransferOpData *pData = new CSftpFileTransferOpData;
 	m_pCurOpData = pData;
 
+	pData->localFile = localFile;
+	pData->remotePath = remotePath;
+	pData->remoteFile = remoteFile;
+	pData->download = download;
 	pData->transferSettings = transferSettings;
 
 	wxLongLong size;
@@ -1700,17 +1652,18 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			}
 			else
 			{
-				if (entry.is_unsure())
+				if (entry.unsure)
 					pData->opState = filetransfer_waitlist;
 				else
 				{
 					if (matchedCase)
 					{
 						pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
-						if (entry.has_date())
+						if (entry.hasDate)
 							pData->fileTime = entry.time;
 
-						if (pData->download && !entry.has_time() &&
+						if (pData->download &&
+							(!entry.hasDate || !entry.hasTime) &&
 							m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 						{
 							pData->opState = filetransfer_mtime;
@@ -1766,13 +1719,14 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			}
 			else
 			{
-				if (matchedCase && !entry.is_unsure())
+				if (matchedCase && !entry.unsure)
 				{
 					pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
-					if (!entry.has_date())
+					if (entry.hasDate)
 						pData->fileTime = entry.time;
 
-					if (pData->download && !entry.has_time() &&
+					if (pData->download &&
+						(!entry.hasDate || !entry.hasTime) &&
 						m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 					{
 						pData->opState = filetransfer_mtime;
@@ -2767,10 +2721,10 @@ int CSftpControlSocket::ListCheckTimezoneDetection()
 		const int count = pData->directoryListing.GetCount();
 		for (int i = 0; i < count; i++)
 		{
-			if (!pData->directoryListing[i].has_time())
+			if (!pData->directoryListing[i].hasTime)
 				continue;
 
-			if (pData->directoryListing[i].is_link())
+			if (pData->directoryListing[i].link)
 				continue;
 
 			pData->opState = list_mtime;

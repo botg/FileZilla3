@@ -3,7 +3,6 @@
 
 #include "systemimagelist.h"
 #include "state.h"
-#include "treectrlex.h"
 
 class CQueueView;
 
@@ -11,7 +10,7 @@ class CQueueView;
 class CVolumeDescriptionEnumeratorThread;
 #endif
 
-class CLocalTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler
+class CLocalTreeView : public wxTreeCtrl, CSystemImageList, CStateEventHandler
 {
 	DECLARE_CLASS(CLocalTreeView)
 
@@ -85,6 +84,8 @@ protected:
 	wxString GetDirFromItem(wxTreeItemId item);
 
 	CQueueView* m_pQueueView;
+
+	bool m_setSelection;
 
 	wxTreeItemId m_contextMenuItem;
 	wxTreeItemId m_dropHighlight;

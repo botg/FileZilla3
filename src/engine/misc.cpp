@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include <gnutls/gnutls.h>
 
 bool VerifySetDate(wxDateTime& date, int year, wxDateTime::Month month, int day, int hour /*=0*/, int minute /*=0*/, int second /*=0*/)
@@ -154,12 +154,10 @@ wxString GetIPV6LongForm(wxString short_address)
 	return buffer;
 }
 
-int DigitHexToDecNum(wxChar c)
+static int DigitHexToDecNum(wxChar c)
 {
 	if (c >= 'a')
 		return c - 'a' + 10;
-	if (c >= 'A')
-		return c - 'A' + 10;
 	else
 		return c - '0';
 }

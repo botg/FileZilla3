@@ -135,7 +135,7 @@ struct t_EngineData;
 class CFileItem : public CQueueItem
 {
 public:
-	CFileItem(CServerItem* parent, bool queued, bool download, const CLocalPath& localPath, const wxString& localFile,
+	CFileItem(CServerItem* parent, bool queued, bool download, const wxString& localFile,
 			const wxString& remoteFile, const CServerPath& remotePath, wxLongLong size);
 	virtual ~CFileItem();
 
@@ -145,35 +145,17 @@ public:
 
 	wxString GetLocalFile() const { return m_localFile; }
 	wxString GetRemoteFile() const { return m_remoteFile; }
-	const CLocalPath& GetLocalPath() const { return m_localPath; }
-	const CServerPath& GetRemotePath() const { return m_remotePath; }
+	CServerPath GetRemotePath() const { return m_remotePath; }
 	wxLongLong GetSize() const { return m_size; }
 	void SetSize(wxLongLong size) { m_size = size; }
-	inline bool Download() const { return flags & flag_download; }
-	
-	inline bool queued() const { return (flags & flag_queued) != 0; }
-	inline void set_queued(bool q)
-	{
-		if (q)
-			flags |= flag_queued;
-		else
-			flags &= ~flag_queued;
-	}
-
-	inline bool pending_remove() const { return (flags & flag_remove) != 0; }
-	inline void set_pending_remove(bool remove)
-	{
-		if (remove)
-			flags |= flag_remove;
-		else
-			flags &= ~flag_remove;
-	}
+	bool Download() const { return m_download; }
+	bool Queued() const { return m_queued; }
 
 	wxString GetIndent() { return m_indent; }
 
 	virtual enum QueueItemType GetType() const { return QueueItemType_File; }
 
-	bool IsActive() const { return (flags & flag_active) != 0; }
+	bool IsActive() const { return m_active; }
 	virtual void SetActive(bool active);
 	
 	virtual void SaveItem(TiXmlElement* pElement) const;
@@ -184,7 +166,9 @@ public:
 	void SetLocalFile(const wxString &file);
 	void SetRemoteFile(const wxString &file);
 
+	bool m_queued;
 	int m_errorCount;
+	bool m_remove;
 	CEditHandler::fileType m_edit;
 
 	wxString m_statusMessage;
@@ -195,41 +179,25 @@ public:
 
 	enum CFileExistsNotification::OverwriteAction m_defaultFileExistsAction;
 
-	inline bool made_progress() const { return (flags & flag_made_progress) != 0; }
-	inline void set_made_progress(bool made_progress)
-	{
-		if (made_progress)
-			flags |= flag_made_progress;
-		else
-			flags &= ~flag_made_progress;
-	}
+	bool m_madeProgress;
 
 	enum CFileExistsNotification::OverwriteAction m_onetime_action;
 
 protected:
-	enum
-	{
-		flag_download = 0x01,
-		flag_active = 0x02,
-		flag_made_progress = 0x04,
-		flag_queued = 0x08,
-		flag_remove = 0x10
-	};
-	int flags;
-
 	enum QueuePriority m_priority;
 
+	bool m_download;
 	wxString m_localFile;
 	wxString m_remoteFile;
-	const CLocalPath m_localPath;
-	const CServerPath m_remotePath;
+	CServerPath m_remotePath;
 	wxLongLong m_size;
+	bool m_active;
 };
 
 class CFolderItem : public CFileItem
 {
 public:
-	CFolderItem(CServerItem* parent, bool queued, const CLocalPath& localPath);
+	CFolderItem(CServerItem* parent, bool queued, const wxString& localFile);
 	CFolderItem(CServerItem* parent, bool queued, const CServerPath& remotePath, const wxString& remoteFile);
 	
 	virtual enum QueueItemType GetType() const { return QueueItemType_Folder; }
@@ -242,21 +210,20 @@ public:
 class CFolderScanItem : public CQueueItem
 {
 public:
-	CFolderScanItem(CServerItem* parent, bool queued, bool download, const CLocalPath& localPath, const CServerPath& remotePath);
+	CFolderScanItem(CServerItem* parent, bool queued, bool download, const wxString& localPath, const CServerPath& remotePath);
 	virtual ~CFolderScanItem() { }
 
 	virtual enum QueueItemType GetType() const { return QueueItemType_FolderScan; }
-	CLocalPath GetLocalPath() const { return m_localPath; }
+	wxString GetLocalPath() const { return m_localPath; }
 	CServerPath GetRemotePath() const { return m_remotePath; }
 	bool Download() const { return m_download; }
+	bool Queued() const { return m_queued; }
 	int GetCount() const { return m_count; }
 	virtual bool TryRemoveAll();
 
-	bool queued() const { return m_queued; }
-	void set_queued(bool q) { m_queued = q; }
-
 	wxString m_statusMessage;
 
+	bool m_queued;
 	volatile bool m_remove;
 	bool m_active;
 
@@ -265,12 +232,11 @@ public:
 	enum CFileExistsNotification::OverwriteAction m_defaultFileExistsAction;
 
 	bool m_dir_is_empty;
-	CLocalPath m_current_local_path;
+	wxString m_current_local_path;
 	CServerPath m_current_remote_path;
 
 protected:
-	bool m_queued;
-	CLocalPath m_localPath;
+	wxString m_localPath;
 	CServerPath m_remotePath;
 	bool m_download;
 };
@@ -304,8 +270,6 @@ public:
 	virtual void CommitChanges();
 
 	wxString GetTitle() const { return m_title; }
-
-	int GetFileCount() const { return m_fileCount; }
 
 protected:
 

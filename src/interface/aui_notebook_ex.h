@@ -20,10 +20,6 @@ public:
 	void Highlight(size_t page, bool highlight = true);
 	bool Highlighted(size_t page) const;
 
-	void OnNavigationKey(wxNavigationKeyEvent& event);
-
-	void AdvanceTab(bool forward);
-
 protected:
 	std::vector<bool> m_highlighted;
 

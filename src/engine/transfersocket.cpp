@@ -1,4 +1,10 @@
-#include <filezilla.h>
+#include <wx/defs.h>
+#ifdef __WXMSW__
+// For AF_INET6
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
+#include "FileZilla.h"
 #include "transfersocket.h"
 #include "ftpcontrolsocket.h"
 #include "directorylistingparser.h"
@@ -6,6 +12,9 @@
 #include "iothread.h"
 #include "tlssocket.h"
 #include <errno.h>
+#ifndef __WXMSW__
+#include <sys/socket.h>
+#endif
 #include "proxy.h"
 #include "servercapabilities.h"
 
@@ -104,7 +113,7 @@ wxString CTransferSocket::SetupActiveTransfer(const wxString& ip)
 	}
 
 	wxString portArguments;
-	if (m_pSocketServer->GetAddressFamily() == CSocket::ipv6)
+	if (m_pSocketServer->GetAddressFamily() == AF_INET6)
 	{
 		portArguments = wxString::Format(_T("|2|%s|%d|"), ip.c_str(), port);
 	}
@@ -287,12 +296,7 @@ void CTransferSocket::OnReceive()
 
 			if (numread > 0)
 			{
-				if (!m_pDirectoryListingParser->AddData(pBuffer, numread))
-				{
-					TransferEnd(transfer_failure);
-					return;
-				}
-
+				m_pDirectoryListingParser->AddData(pBuffer, numread);
 				m_pEngine->SetActive(CFileZillaEngine::recv);
 				if (!m_madeProgress)
 				{

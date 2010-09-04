@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "manual_transfer.h"
 #include "local_filesys.h"
 #include "auto_ascii_files.h"
@@ -357,16 +357,7 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 	else
 		COptions::Get()->SetOption(OPTION_ASCIIBINARY, 0);
 
-	wxString name;
-	CLocalPath localPath(local_file, &name);
-
-	if (name.empty())
-	{
-		wxMessageBox(_("Local file is not a valid filename."), _("Manual transfer"), wxICON_EXCLAMATION);
-		return;
-	}
-
-	m_pQueueView->QueueFile(!start, download, localPath, name, remote_file, path, *m_pServer, -1);
+	m_pQueueView->QueueFile(!start, download, local_file, remote_file, path, *m_pServer, -1);
 
 	// Restore old data type
 	COptions::Get()->SetOption(OPTION_ASCIIBINARY, old_data_type);
@@ -439,7 +430,7 @@ bool CManualTransfer::VerifyServer()
 		return false;
 	}
 
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 0 &&
+	if (COptions::Get()->GetDefaultVal(DEFAULT_KIOSKMODE) != 0 &&
 		(logon_type == ACCOUNT || logon_type == NORMAL))
 	{
 		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetFocus();
@@ -455,9 +446,11 @@ bool CManualTransfer::VerifyServer()
 	if (protocol != UNKNOWN)
 		server.SetProtocol(protocol);
 
+	unsigned long port;
+	XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue().ToULong(&port);
 	CServerPath path;
 	wxString error;
-	if (!server.ParseUrl(host, XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue(), _T(""), _T(""), error, path))
+	if (!server.ParseUrl(host, port, _T(""), _T(""), error, path))
 	{
 		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
 		wxMessageBox(error);

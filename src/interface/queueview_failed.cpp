@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "queue.h"
 #include "queueview_failed.h"
 #include "edithandler.h"
@@ -116,12 +116,12 @@ void CQueueViewFailed::OnRemoveSelected(wxCommandEvent& event)
 			CFileItem* pFileItem = (CFileItem*)pItem;
 			if (pFileItem->m_edit == CEditHandler::remote && pEditHandler)
 			{
+				wxFileName fn(pFileItem->GetLocalFile());
 				if (pFileItem->m_edit == CEditHandler::local)
 				{
-					wxString fullPath(pFileItem->GetLocalPath().GetPath() + pFileItem->GetLocalFile());
-					enum CEditHandler::fileState state = pEditHandler->GetFileState(fullPath);
+					enum CEditHandler::fileState state = pEditHandler->GetFileState(pFileItem->GetLocalFile());
 					if (state == CEditHandler::upload_and_remove_failed)
-						pEditHandler->Remove(fullPath);
+						pEditHandler->Remove(pFileItem->GetLocalFile());
 				}
 				else
 				{
@@ -180,7 +180,7 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 	if (selectedItems.empty())
 		return;
 
-	CQueueView* pQueueView = m_pQueue->GetQueueView();
+	CQueueViewBase* pQueueView = m_pQueue->GetQueueView();
 
 	while (!selectedItems.empty())
 	{
@@ -199,7 +199,7 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 				pFileItem->m_errorCount = 0;
 				pFileItem->m_statusMessage.Clear();
 
-				if (!pFileItem->Download() && !wxFileName::FileExists(pFileItem->GetLocalPath().GetPath() + pFileItem->GetLocalFile()))
+				if (!pFileItem->Download() && !wxFileName::FileExists(pFileItem->GetLocalFile()))
 				{
 					failedToRequeueAll = true;
 					RemoveItem(pItem, true, false, false);
@@ -274,7 +274,7 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 			pFileItem->m_errorCount = 0;
 			pFileItem->m_statusMessage.Clear();
 
-			if (!pFileItem->Download() && !wxFileName::FileExists(pFileItem->GetLocalPath().GetPath() + pFileItem->GetLocalFile()))
+			if (!pFileItem->Download() && !wxFileName::FileExists(pFileItem->GetLocalFile()))
 			{
 				failedToRequeueAll = true;
 				RemoveItem(pItem, true, false, false);
@@ -356,9 +356,6 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 
 	pQueueView->CommitChanges();
 
-	if (pQueueView->IsActive())
-		pQueueView->AdvanceQueue(false);
-	
 	DisplayNumberQueuedFiles();
 	SaveSetItemCount(m_itemCount);
 	RefreshListOnly();
@@ -372,7 +369,7 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 
 void CQueueViewFailed::OnChar(wxKeyEvent& event)
 {
-	if (event.GetKeyCode() == WXK_DELETE || event.GetKeyCode() == WXK_NUMPAD_DELETE)
+	if (event.GetKeyCode() == WXK_DELETE)
 	{
 		wxCommandEvent cmdEvt;
 		OnRemoveSelected(cmdEvt);

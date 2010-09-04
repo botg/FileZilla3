@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "led.h"
 #include "filezillaapp.h"
 
@@ -6,9 +6,11 @@
 #define new DEBUG_NEW
 #endif
 
+#define TIMER_ID (wxID_HIGHEST + 1)
+
 BEGIN_EVENT_TABLE(CLed, wxWindow)
 	EVT_PAINT(CLed::OnPaint)
-	EVT_TIMER(wxID_ANY, CLed::OnTimer)
+	EVT_TIMER(TIMER_ID, CLed::OnTimer)
 #ifdef __WXMSW__
 	EVT_ERASE_BACKGROUND(CLed::OnEraseBackground)
 #endif
@@ -27,9 +29,11 @@ CLed::CLed(wxWindow *parent, unsigned int index)
 
 	m_ledState = LED_OFF;
 
-	m_timer.SetOwner(this);
+	m_timer.SetOwner(this, TIMER_ID);
 
 	m_loaded = false;
+
+	m_pEngine = 0;
 
 	wxImage image;
 	if (!image.LoadFile(wxGetApp().GetResourceDir() + _T("leds.png"), wxBITMAP_TYPE_PNG))
@@ -76,16 +80,16 @@ void CLed::Unset()
 
 void CLed::OnTimer(wxTimerEvent& event)
 {
-	if (!m_timer.IsRunning())
-		return;
-
-	if (event.GetId() != m_timer.GetId())
+	if (event.GetId() != TIMER_ID)
 	{
 		event.Skip();
 		return;
 	}
 
-	if (!CFileZillaEngine::IsActive((enum CFileZillaEngine::_direction)m_index))
+	if (!m_timer.IsRunning())
+		return;
+
+	if (!m_pEngine || !m_pEngine->IsActive((enum CFileZillaEngine::_direction)m_index))
 	{
 		Unset();
 		m_timer.Stop();
@@ -111,3 +115,8 @@ void CLed::OnEraseBackground(wxEraseEvent& event)
 {
 }
 #endif
+
+void CLed::SetEngine(CFileZillaEngine *pEngine)
+{
+	m_pEngine = pEngine;
+}

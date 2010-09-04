@@ -1,8 +1,6 @@
 #ifndef __FILEZILLAENGINEPRIVATE_H__
 #define __FILEZILLAENGINEPRIVATE_H__
 
-#include "timeex.h"
-
 enum EngineNotificationType
 {
 	engineCancel,
@@ -105,16 +103,16 @@ protected:
 	// Everything related to the retry code
 	// ------------------------------------
 
-	void RegisterFailedLoginAttempt(const CServer& server, bool critical);
+	void RegisterFailedLoginAttempt(const CServer& server);
 
 	// Get the amount of time to wait till next reconnection attempt in milliseconds
 	unsigned int GetRemainingReconnectDelay(const CServer& server);
 
 	struct t_failedLogins
 	{
-		CServer server;
+		wxString host;
+		unsigned int port;
 		wxDateTime time;
-		bool critical;
 	};
 	static std::list<t_failedLogins> m_failedLogins;
 	int m_retryCount;

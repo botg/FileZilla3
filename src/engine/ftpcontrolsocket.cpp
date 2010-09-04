@@ -1,24 +1,28 @@
-#include <filezilla.h>
-
-#include "directorycache.h"
-#include "directorylistingparser.h"
-#include "externalipresolver.h"
+#include <wx/defs.h>
+#ifdef __WXMSW__
+// For AF_INET6
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
+#include "FileZilla.h"
 #include "ftpcontrolsocket.h"
 #include "transfersocket.h"
+#include "directorylistingparser.h"
+#include "directorycache.h"
 #include "iothread.h"
+#include <wx/regex.h>
+#include "externalipresolver.h"
 #include "servercapabilities.h"
 #include "tlssocket.h"
 #include "pathcache.h"
-#include "local_filesys.h"
-#include "proxy.h"
-
-#include <wx/filename.h>
-#include <wx/log.h>
-#include <wx/regex.h>
-#include <wx/tokenzr.h>
-
 #include <algorithm>
+#include <wx/tokenzr.h>
+#include "local_filesys.h"
 #include <errno.h>
+#ifndef __WXMSW__
+#include <sys/socket.h>
+#endif
+#include "proxy.h"
 
 #define LOGON_WELCOME	0
 #define LOGON_AUTH_TLS	1
@@ -34,6 +38,32 @@
 #define LOGON_OPTSMLST	11
 #define LOGON_CUSTOMCOMMANDS 12
 #define LOGON_DONE		13
+
+#ifdef __WXMSW__
+
+// Define values for SIO_KEEPALIVE_VALS
+
+#ifndef IOC_VENDOR
+#define IOC_VENDOR 0x18000000
+#endif
+
+#ifndef _WSAIOW
+#define _WSAIOW(x, y)	(IOC_IN|(x)|(y))
+#endif
+
+#ifndef SIO_KEEPALIVE_VALS
+#define SIO_KEEPALIVE_VALS _WSAIOW(IOC_VENDOR, 4)
+
+struct tcp_keepalive
+{
+	u_long  onoff;
+	u_long  keepalivetime;
+	u_long  keepaliveinterval;
+};
+
+#endif
+
+#endif //__WXMSW__
 
 BEGIN_EVENT_TABLE(CFtpControlSocket, CRealControlSocket)
 EVT_FZ_EXTERNALIPRESOLVE(wxID_ANY, CFtpControlSocket::OnExternalIPAddress)
@@ -55,8 +85,8 @@ CFtpTransferOpData::CFtpTransferOpData()
 	binary = true;
 }
 
-CFtpFileTransferOpData::CFtpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
-	: CFileTransferOpData(is_download, local_file, remote_file, remote_path)
+CFtpFileTransferOpData::CFtpFileTransferOpData(const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
+	: CFileTransferOpData(local_file, remote_file, remote_path)
 {
 	pIOThread = 0;
 	fileDidExist = true;
@@ -200,8 +230,6 @@ CFtpControlSocket::CFtpControlSocket(CFileZillaEnginePrivate *pEngine) : CRealCo
 
 CFtpControlSocket::~CFtpControlSocket()
 {
-	DoClose();
-
 	m_idleTimer.Stop();
 }
 
@@ -319,8 +347,6 @@ void CFtpControlSocket::ParseLine(wxString line)
 				CServerCapabilities::SetCapability(*m_pCurrentServer, size_command, yes);
 			else if (up == _T(" TVFS"))
 				CServerCapabilities::SetCapability(*m_pCurrentServer, tvfs_support, yes);
-			else if (up == _T(" REST STREAM"))
-				CServerCapabilities::SetCapability(*m_pCurrentServer, rest_stream, yes);
 		}
 		else if (pData->opState == LOGON_WELCOME)
 		{
@@ -743,6 +769,7 @@ int CFtpControlSocket::LogonParseResponse()
 			{
 				DoClose(code == 5 ? FZ_REPLY_CRITICALERROR : 0);
 				return FZ_REPLY_DISCONNECTED;
+				return false;
 			}
 		}
 		else
@@ -823,7 +850,7 @@ int CFtpControlSocket::LogonParseResponse()
 
 			int error = FZ_REPLY_DISCONNECTED;
 			if (cmd.type == pass && code == 5)
-				error |= FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED;
+				error |= FZ_REPLY_PASSWORDFAILED;
 			DoClose(error);
 			return FZ_REPLY_ERROR;
 		}
@@ -1011,10 +1038,7 @@ int CFtpControlSocket::LogonParseResponse()
 						fact = facts.Left(delim - 1);
 					}
 					else
-					{
-						enabled = false;
 						fact = facts.Left(delim);
-					}
 					facts = facts.Mid(delim + 1);
 
 					if (fact == _T("type") ||
@@ -1646,12 +1670,12 @@ int CFtpControlSocket::ListParseResponse()
 		const wxChar *res = date.ParseFormat(m_Response.Mid(4), _T("%Y%m%d%H%M%S"));
 		if (res && date.IsValid())
 		{
-			wxASSERT(pData->directoryListing[pData->mdtm_index].has_date());
+			wxASSERT(pData->directoryListing[pData->mdtm_index].hasTimestamp != CDirentry::timestamp_none);
 			wxDateTime listTime = pData->directoryListing[pData->mdtm_index].time;
 			listTime -= wxTimeSpan(0, m_pCurrentServer->GetTimezoneOffset(), 0);
 
 			int serveroffset = (date - listTime).GetSeconds().GetLo();
-			if (!pData->directoryListing[pData->mdtm_index].has_seconds())
+			if (pData->directoryListing[pData->mdtm_index].hasTimestamp != CDirentry::timestamp_seconds)
 			{
 				// Round offset to full minutes
 				if (serveroffset < 0)
@@ -1672,7 +1696,7 @@ int CFtpControlSocket::ListParseResponse()
 			for (int i = 0; i < count; i++)
 			{
 				CDirentry& entry = pData->directoryListing[i];
-				if (!entry.has_time())
+				if (entry.hasTimestamp < CDirentry::timestamp_time)
 					continue;
 
 				entry.time += span;
@@ -1715,7 +1739,7 @@ int CFtpControlSocket::ListCheckTimezoneDetection(CDirectoryListing& listing)
 			const int count = listing.GetCount();
 			for (int i = 0; i < count; i++)
 			{
-				if (!listing[i].is_dir() && listing[i].has_time())
+				if (!listing[i].dir && listing[i].hasTimestamp >= CDirentry::timestamp_time)
 				{
 					pData->opState = list_mdtm;
 					pData->directoryListing = listing;
@@ -2218,9 +2242,10 @@ int CFtpControlSocket::FileTransfer(const wxString localFile, const CServerPath 
 		delete m_pCurOpData;
 	}
 
-	CFtpFileTransferOpData *pData = new CFtpFileTransferOpData(download, localFile, remoteFile, remotePath);
+	CFtpFileTransferOpData *pData = new CFtpFileTransferOpData(localFile, remoteFile, remotePath);
 	m_pCurOpData = pData;
 
+	pData->download = download;
 	pData->transferSettings = transferSettings;
 	pData->binary = transferSettings.binary;
 
@@ -2379,18 +2404,18 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			}
 			else
 			{
-				if (entry.is_unsure())
+				if (entry.unsure)
 					pData->opState = filetransfer_waitlist;
 				else
 				{
 					if (matchedCase)
 					{
 						pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
-						if (entry.has_date())
+						if (entry.hasTimestamp != CDirentry::timestamp_none)
 							pData->fileTime = entry.time;
 
 						if (pData->download &&
-							!entry.has_time() &&
+							entry.hasTimestamp < CDirentry::timestamp_time &&
 							m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 							CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
 						{
@@ -2448,14 +2473,14 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			}
 			else
 			{
-				if (matchedCase && !entry.is_unsure())
+				if (matchedCase && !entry.unsure)
 				{
 					pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
-					if (entry.has_date())
+					if (entry.hasTimestamp != CDirentry::timestamp_none)
 						pData->fileTime = entry.time;
 
 					if (pData->download &&
-						!entry.has_time() &&
+						entry.hasTimestamp < CDirentry::timestamp_time &&
 						m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 						CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
 					{
@@ -2685,17 +2710,6 @@ int CFtpControlSocket::FileTransferSend()
 				else
 					startOffset = 0;
 
-				if (CServerCapabilities::GetCapability(*m_pCurrentServer, rest_stream) == yes)
-				{
-					// Use REST + STOR if resuming
-					pData->resumeOffset = startOffset;
-				}
-				else
-				{
-					// Play it safe, use APPE if resuming
-					pData->resumeOffset = 0;
-				}
-
 				wxFileOffset len = pFile->Length();
 				InitTransferStatus(len, startOffset, false);
 			}
@@ -2717,15 +2731,7 @@ int CFtpControlSocket::FileTransferSend()
 		if (pData->download)
 			cmd = _T("RETR ");
 		else if (pData->resume)
-		{
-			if (CServerCapabilities::GetCapability(*m_pCurrentServer, rest_stream) == yes)
-				cmd = _T("STOR "); // In this case REST gets sent since resume offset was set earlier
-			else
-			{
-				wxASSERT(pData->resumeOffset == 0);
-				cmd = _T("APPE ");
-			}
-		}
+			cmd = _T("APPE ");
 		else
 			cmd = _T("STOR ");
 		cmd += pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath);
@@ -2846,8 +2852,6 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 				else
 				{
 					pData->remoteFile = pFileExistsNotification->newName;
-					pData->remoteFileSize = -1;
-					pData->fileTime = wxDateTime();
 
 					CDirectoryCache cache;
 
@@ -2857,37 +2861,19 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 					if (!cache.LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dir_did_exist, matched_case) ||
 						!matched_case)
 					{
-						if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
-							CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
-						{
-							pData->opState = filetransfer_mdtm;
-						}
+						pData->opState = filetransfer_size;
 					}
 					else // found and matched case
 					{
-						if (matched_case)
-						{
-							pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
-							if (entry.has_date())
-								pData->fileTime = entry.time;
+						wxLongLong size = entry.size;
+						pData->remoteFileSize = size.GetLo() + ((wxFileOffset)size.GetHi() << 32);
 
-							if (pData->download &&
-								!entry.has_time() &&
-								m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
-								CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
-							{
-								pData->opState = filetransfer_mdtm;
-							}
-							else
-							{
-								if (CheckOverwriteFile() != FZ_REPLY_OK)
-									break;
-							}
-						}
-						else
-							pData->opState = filetransfer_size;
+						if (CheckOverwriteFile() != FZ_REPLY_OK)
+							break;
 					}
+
 					SendNextCommand();
+
 				}
 				break;
 			default:
@@ -2926,12 +2912,6 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 
 			CCertificateNotification* pCertificateNotification = reinterpret_cast<CCertificateNotification *>(pNotification);
 			m_pTlsSocket->TrustCurrentCert(pCertificateNotification->m_trusted);
-
-			if (!pCertificateNotification->m_trusted)
-			{
-				DoClose(FZ_REPLY_CRITICALERROR);
-				return false;
-			}
 
 			if (m_pCurOpData && m_pCurOpData->opId == cmd_connect &&
 				m_pCurOpData->opState == LOGON_AUTH_WAIT)
@@ -2984,10 +2964,7 @@ int CFtpControlSocket::RawCommandSend()
 
 	CDirectoryCache cache;
 	cache.InvalidateServer(*m_pCurrentServer);
-	CPathCache::InvalidateServer(*m_pCurrentServer);
 	m_CurrentPath.Clear();
-
-	m_lastTypeBinary = -1;
 
 	CRawCommandOpData *pData = static_cast<CRawCommandOpData *>(m_pCurOpData);
 
@@ -3828,7 +3805,7 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 	const wxString peerIP = m_pSocket->GetPeerIP();
 	if (!IsRoutableAddress(pData->host, m_pSocket->GetAddressFamily()) && IsRoutableAddress(peerIP, m_pSocket->GetAddressFamily()))
 	{
-		if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || pData->bTriedActive)
+		if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) || pData->bTriedActive)
 		{
 			LogMessage(Status, _("Server sent passive reply with unroutable address. Using server address instead."));
 			LogMessage(Debug_Info, _T("  Reply: %s, peer: %s"), pData->host.c_str(), peerIP.c_str());
@@ -3841,12 +3818,6 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 			return false;
 		}
 	}
-	else if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) == 2)
-	{
-		// Always use server address
-		pData->host = peerIP;
-	}
-		
 
 	return true;
 }
@@ -3855,7 +3826,7 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 {
 	// Local IP should work. Only a complete moron would use IPv6
 	// and NAT at the same time.
-	if (m_pSocket->GetAddressFamily() != CSocket::ipv6)
+	if (m_pSocket->GetAddressFamily() != AF_INET6)
 	{
 		int mode = m_pEngine->GetOptions()->GetOptionVal(OPTION_EXTERNALIPMODE);
 
@@ -3897,7 +3868,7 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 				LogMessage(::Debug_Info, _("Retrieving external IP address from %s"), resolverAddress.c_str());
 
 				m_pIPResolver = new CExternalIPResolver(this);
-				m_pIPResolver->GetExternalIP(resolverAddress, CSocket::ipv4);
+				m_pIPResolver->GetExternalIP(resolverAddress);
 				if (!m_pIPResolver->Done())
 				{
 					LogMessage(::Debug_Verbose, _T("Waiting for resolver thread"));
@@ -3928,7 +3899,7 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 
 getLocalIP:
 
-	address = m_pSocket->GetLocalIP(true);
+	address = m_pSocket->GetLocalIP();
 	if (address == _T(""))
 	{
 		LogMessage(::Error, _("Failed to retrieve local ip address."), 1);
@@ -4051,7 +4022,7 @@ int CFtpControlSocket::TransferParseResponse()
 		if (pData->bPasv)
 		{
 			bool parsed;
-			if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
+			if (m_pSocket->GetAddressFamily() == AF_INET6)
 				parsed = ParseEpsvResponse(pData);
 			else
 				parsed = ParsePasvResponse(pData);
@@ -4184,7 +4155,7 @@ int CFtpControlSocket::TransferSend()
 		if (pData->bPasv)
 		{
 			pData->bTriedPasv = true;
-			if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
+			if (m_pSocket->GetAddressFamily() == AF_INET6)
 				cmd = _T("EPSV");
 			else
 				cmd = _T("PASV");
@@ -4201,7 +4172,7 @@ int CFtpControlSocket::TransferSend()
 				if (portArgument != _T(""))
 				{
 					pData->bTriedActive = true;
-					if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
+					if (m_pSocket->GetAddressFamily() == AF_INET6)
 						cmd = _T("EPRT " + portArgument);
 					else
 						cmd = _T("PORT " + portArgument);
@@ -4219,7 +4190,7 @@ int CFtpControlSocket::TransferSend()
 			pData->bTriedActive = true;
 			pData->bTriedPasv = true;
 			pData->bPasv = true;
-			if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
+			if (m_pSocket->GetAddressFamily() == AF_INET6)
 				cmd = _T("EPSV");
 			else
 				cmd = _T("PASV");

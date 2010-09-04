@@ -1,20 +1,22 @@
 #ifndef __QUICKCONNECTBAR_H__
 #define __QUICKCONNECTBAR_H__
 
-class CMainFrame;
+class CState;
 class CQuickconnectBar : public wxPanel
 {
 public:
 	CQuickconnectBar();
 	virtual~CQuickconnectBar();
 
-	bool Create(CMainFrame* pParent);
+	bool Create(wxWindow* pParent, CState* pState);
 
 	void ClearFields();
 
 protected:
 	// Only valid while menu is being displayed
 	std::list<CServer> m_recentServers;
+
+	CState* m_pState;
 
 	DECLARE_EVENT_TABLE();
 	void OnQuickconnect(wxCommandEvent& event);
@@ -26,8 +28,6 @@ protected:
 	wxTextCtrl* m_pUser;
 	wxTextCtrl* m_pPass;
 	wxTextCtrl* m_pPort;
-
-	CMainFrame *m_pMainFrame;
 };
 
 

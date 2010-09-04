@@ -1,7 +1,7 @@
                                FileZilla Client
                                ----------------
 
-                      Copyright (C) 2004-2010  Tim Kosse
+                      Copyright (C) 2004-2009  Tim Kosse
                          http://filezilla-project.org
 
 Overview
@@ -34,8 +34,6 @@ Features
 - HTTP/1.1, SOCKS5 and FTP Proxy support
 - Logging to file
 - Synchronized directory browsing
-- Remote file search
-- Tabbed interface to connect to multiple servers
 
 Supported systems
 -----------------

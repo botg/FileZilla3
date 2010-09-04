@@ -15,7 +15,6 @@ public:
 
 	enum t_option
 	{
-		logontype,
 		site
 	};
 

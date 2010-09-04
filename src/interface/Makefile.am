@@ -6,8 +6,6 @@ INCLUDES = -I$(srcdir)/../include
 # this is the program that gets installed.  it's name is used for all
 # of the other Makefile.am variables
 
-AUTOMAKE_OPTIONS = subdir-objects
-
 bin_PROGRAMS = filezilla
 
 # the application source, library search path, and link libraries
@@ -22,7 +20,6 @@ filezilla_SOURCES = aboutdialog.cpp \
 		cmdline.cpp \
 		commandqueue.cpp \
 		conditionaldialog.cpp \
-		context_control.cpp \
 		customheightlistctrl.cpp \
 		defaultfileexistsdlg.cpp \
 		dialogex.cpp \
@@ -49,11 +46,29 @@ filezilla_SOURCES = aboutdialog.cpp \
 		loginmanager.cpp \
 		Mainfrm.cpp \
 		manual_transfer.cpp \
-		menu_bar.cpp \
 		netconfwizard.cpp \
-		option_change_event_handler.cpp \
 		Options.cpp \
-		power_management.cpp \
+		optionspage.cpp \
+		optionspage_connection.cpp \
+		optionspage_connection_active.cpp \
+		optionspage_connection_ftp.cpp \
+		optionspage_connection_passive.cpp \
+		optionspage_connection_sftp.cpp \
+		optionspage_dateformatting.cpp \
+		optionspage_debug.cpp \
+		optionspage_edit.cpp \
+		optionspage_fileexists.cpp \
+		optionspage_filelists.cpp \
+		optionspage_filetype.cpp \
+		optionspage_ftpproxy.cpp \
+		optionspage_interface.cpp \
+		optionspage_language.cpp \
+		optionspage_logging.cpp \
+		optionspage_proxy.cpp \
+		optionspage_sizeformatting.cpp \
+		optionspage_themes.cpp \
+		optionspage_transfer.cpp \
+		optionspage_updatecheck.cpp \
 		queue.cpp \
 		QueueView.cpp \
 		queueview_failed.cpp \
@@ -64,33 +79,9 @@ filezilla_SOURCES = aboutdialog.cpp \
 		RemoteListView.cpp \
 		RemoteTreeView.cpp \
 		search.cpp \
-		settings/optionspage.cpp \
-		settings/optionspage_connection.cpp \
-		settings/optionspage_connection_active.cpp \
-		settings/optionspage_connection_ftp.cpp \
-		settings/optionspage_connection_passive.cpp \
-		settings/optionspage_connection_sftp.cpp \
-		settings/optionspage_dateformatting.cpp \
-		settings/optionspage_debug.cpp \
-		settings/optionspage_edit.cpp \
-		settings/optionspage_edit_associations.cpp \
-		settings/optionspage_fileexists.cpp \
-		settings/optionspage_filelists.cpp \
-		settings/optionspage_filetype.cpp \
-		settings/optionspage_ftpproxy.cpp \
-		settings/optionspage_interface.cpp \
-		settings/optionspage_language.cpp \
-		settings/optionspage_logging.cpp \
-		settings/optionspage_proxy.cpp \
-		settings/optionspage_sizeformatting.cpp \
-		settings/optionspage_themes.cpp \
-		settings/optionspage_transfer.cpp \
-		settings/optionspage_updatecheck.cpp \
-		settings/settingsdialog.cpp \
+		settingsdialog.cpp \
 		sftp_crypt_info_dlg.cpp \
 		sitemanager.cpp \
-		sizeformatting.cpp \
-		speedlimits_dialog.cpp \
 		splitter.cpp \
 		state.cpp \
 		statusbar.cpp \
@@ -98,18 +89,13 @@ filezilla_SOURCES = aboutdialog.cpp \
 		StatusView.cpp \
 		systemimagelist.cpp \
 		themeprovider.cpp \
-		toolbar.cpp \
-		treectrlex.cpp \
 		updatewizard.cpp \
 		verifycertdialog.cpp \
 		verifyhostkeydialog.cpp \
 		view.cpp \
 		viewheader.cpp \
-		volume_enumerator.cpp \
-		welcome_dialog.cpp \
 		window_state_manager.cpp \
 		wrapengine.cpp \
-		xh_menu_ex.cpp \
 		xh_toolb_ex.cpp \
 		xmlfunctions.cpp
  
@@ -128,7 +114,6 @@ noinst_HEADERS = aboutdialog.h \
 		 cmdline.h \
 		 commandqueue.h \
 		 conditionaldialog.h \
-		 context_control.h \
 		 customheightlistctrl.h \
 		 defaultfileexistsdlg.h \
 		 dialogex.h \
@@ -139,7 +124,6 @@ noinst_HEADERS = aboutdialog.h \
 		 fileexistsdlg.h \
 		 filelistctrl.h \
 		 filelist_statusbar.h \
-		 filezilla.h \
 		 filezillaapp.h \
 		 filter.h \
 		 filter_conditions_dialog.h \
@@ -156,11 +140,29 @@ noinst_HEADERS = aboutdialog.h \
 		 loginmanager.h \
 		 Mainfrm.h \
 		 manual_transfer.h \
-		 menu_bar.h \
 		 netconfwizard.h \
-		 option_change_event_handler.h \
 		 Options.h \
-		 power_management.h \
+		 optionspage.h \
+		 optionspage_connection.h \
+		 optionspage_connection_active.h \
+		 optionspage_connection_ftp.h \
+		 optionspage_connection_passive.h \
+		 optionspage_connection_sftp.h \
+		 optionspage_dateformatting.h \
+		 optionspage_debug.h \
+		 optionspage_edit.h \
+		 optionspage_fileexists.h \
+		 optionspage_filelists.h \
+		 optionspage_filetype.h \
+		 optionspage_ftpproxy.h \
+		 optionspage_interface.h \
+		 optionspage_language.h \
+		 optionspage_logging.h \
+		 optionspage_proxy.h \
+		 optionspage_sizeformatting.h \
+		 optionspage_themes.h \
+		 optionspage_transfer.h \
+		 optionspage_updatecheck.h \
 		 prefix.h \
 		 queue.h \
 		 QueueView.h \
@@ -172,33 +174,9 @@ noinst_HEADERS = aboutdialog.h \
 		 RemoteListView.h \
 		 RemoteTreeView.h \
 		 search.h \
-		 settings/optionspage.h \
-		 settings/optionspage_connection.h \
-		 settings/optionspage_connection_active.h \
-		 settings/optionspage_connection_ftp.h \
-		 settings/optionspage_connection_passive.h \
-		 settings/optionspage_connection_sftp.h \
-		 settings/optionspage_dateformatting.h \
-		 settings/optionspage_debug.h \
-		 settings/optionspage_edit.h \
-		 settings/optionspage_edit_associations.h \
-		 settings/optionspage_fileexists.h \
-		 settings/optionspage_filelists.h \
-		 settings/optionspage_filetype.h \
-		 settings/optionspage_ftpproxy.h \
-		 settings/optionspage_interface.h \
-		 settings/optionspage_language.h \
-		 settings/optionspage_logging.h \
-		 settings/optionspage_proxy.h \
-		 settings/optionspage_sizeformatting.h \
-		 settings/optionspage_themes.h \
-		 settings/optionspage_transfer.h \
-		 settings/optionspage_updatecheck.h \
-		 settings/settingsdialog.h \
+		 settingsdialog.h \
 		 sftp_crypt_info_dlg.h \
 		 sitemanager.h \
-		 sizeformatting.h \
-		 speedlimits_dialog.h \
 		 splitter.h \
 		 state.h \
 		 statuslinectrl.h \
@@ -206,18 +184,13 @@ noinst_HEADERS = aboutdialog.h \
 		 StatusView.h \
 		 systemimagelist.h \
 		 themeprovider.h \
-		 toolbar.h \
-		 treectrlex.h \
 		 updatewizard.h \
 		 verifycertdialog.h \
 		 verifyhostkeydialog.h \
 		 view.h \
 		 viewheader.h \
-		 volume_enumerator.h \
-		 welcome_dialog.h \
 		 window_state_manager.h \
 		 wrapengine.h \
-		 xh_menu_ex.h \
 		 xh_toolb_ex.h \
 		 xmlfunctions.h
 
@@ -248,10 +221,6 @@ if MINGW
 filezilla_LDFLAGS += -lole32 -luuid -lnetapi32 -lmpr
 endif
 
-# GTK+ libs, empty if not using wxGTK
-filezilla_CPPFLAGS += $(LIBGTK_CFLAGS)
-filezilla_LDFLAGS += $(LIBGTK_LIBS)
-
 if MINGW
 filezilla_DEPENDENCIES += resources/filezilla.o
 endif
@@ -273,22 +242,3 @@ $(top_builddir)/FileZilla.app/Contents/MacOS/filezilla$(EXEEXT): filezilla
 	mkdir -p $(top_builddir)/FileZilla.app/Contents/Resources
 	$(MAKE) -C resources mac-copy-resources
 	cp -f filezilla $(top_builddir)/FileZilla.app/Contents/MacOS/filezilla
-	cp -f $(top_srcdir)/COPYING $(top_builddir)/FileZilla.app/COPYING
-	mkdir -p $(top_builddir)/FileZilla.app/docs
-	cp -f $(top_srcdir)/docs/fzdefaults.xml.example $(top_builddir)/FileZilla.app/docs/fzdefaults.xml.example
-	cp -f $(top_srcdir)/docs/*.man $(top_builddir)/FileZilla.app/docs
-
-CLEANFILES = filezilla.h.gch
-
-if ENABLE_PRECOMP
-
-BUILT_SOURCES = filezilla.h.gch
-
-include ./$(DEPDIR)/filezilla.Po
-
-filezilla.h.gch: filezilla.h
-	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filezilla_CPPFLAGS) $(CPPFLAGS) $(filezilla_CXXFLAGS) $(CXXFLAGS) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o "$@" $<; \
-	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-
-endif
-

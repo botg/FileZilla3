@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 
 #if FZ_MANUALUPDATECHECK
 
@@ -11,25 +11,8 @@
 #ifdef __WXMSW__
 #include <wx/dynlib.h> // Used by GetDownloadDir
 #endif //__WXMSW__
-#include "dialogex.h"
 
-#include <wx/gauge.h>
-
-// This is ugly but does the job
-#define SHA512_STANDALONE
-typedef unsigned int uint32;
-#include "../putty/int64.h"
-#include "../putty/sshsh512.c"
-
-#if 0
-// Used inside of wx to create the next/back buttons on the wizard.
-// Listed here so that they are included in the translations
-_("&Next >");
-_("< &Back");
-_("&Finish");
-#endif
-
-#define MAXCHECKPROGRESS 11 // Maximum value of progress bar
+#define MAXCHECKPROGRESS 10 // Maximum value of progress bar
 
 BEGIN_EVENT_TABLE(CUpdateWizard, wxWizard)
 EVT_CHECKBOX(wxID_ANY, CUpdateWizard::OnCheck)
@@ -38,80 +21,14 @@ EVT_WIZARD_PAGE_CHANGED(wxID_ANY, CUpdateWizard::OnPageChanged)
 EVT_FZ_NOTIFICATION(wxID_ANY, CUpdateWizard::OnEngineEvent)
 EVT_TIMER(wxID_ANY, CUpdateWizard::OnTimer)
 EVT_WIZARD_FINISHED(wxID_ANY, CUpdateWizard::OnFinish)
-EVT_WIZARD_CANCEL(wxID_ANY, CUpdateWizard::OnCancel)
 END_EVENT_TABLE()
-
-static wxChar s_update_cert[] = _T("-----BEGIN CERTIFICATE-----\n\
-MIIFsTCCA5ugAwIBAgIESnXLbzALBgkqhkiG9w0BAQ0wSTELMAkGA1UEBhMCREUx\n\
-GjAYBgNVBAoTEUZpbGVaaWxsYSBQcm9qZWN0MR4wHAYDVQQDExVmaWxlemlsbGEt\n\
-cHJvamVjdC5vcmcwHhcNMDkwODAyMTcyMjU2WhcNMzEwNjI4MTcyMjU4WjBJMQsw\n\
-CQYDVQQGEwJERTEaMBgGA1UEChMRRmlsZVppbGxhIFByb2plY3QxHjAcBgNVBAMT\n\
-FWZpbGV6aWxsYS1wcm9qZWN0Lm9yZzCCAh8wCwYJKoZIhvcNAQEBA4ICDgAwggIJ\n\
-AoICAJqWXy7YzVP5pOk8VB9bd/ROC9SVbAxJiFHh0I0/JmyW+jSfzFCYWr1DKGVv\n\
-Oui+qiUsaSgjWTh/UusnVu4Q4Lb00k7INRF6MFcGFkGNmOZPk4Qt0uuWMtsxiFek\n\
-9QMPWSYs+bxk+M0u0rNOdAblsIzeV16yhfUQDtrJxPWbRpuLgp9/4/oNbixet7YM\n\
-pvwlns2o1KXcsNcBcXraux5QmnD4oJVYbTY2qxdMVyreA7dxd40c55F6FvA+L36L\n\
-Nv54VwRFSqY12KBG4I9Up+c9OQ9HMN0zm0FhYtYeKWzdMIRk06EKAxO7MUIcip3q\n\
-7v9eROPnKM8Zh4dzkWnCleirW8EKFEm+4+A8pDqirMooiQqkkMesaJDV361UCoVo\n\
-fRhqfK+Prx0BaJK/5ZHN4tmgU5Tmq+z2m7aIKwOImj6VF3somVvmh0G/othnU2MH\n\
-GB7qFrIUMZc5VhrAwmmSA2Z/w4+0ToiR+IrdGmDKz3cVany3EZAzWRJUARaId9FH\n\
-v/ymA1xcFAKmfxsjGNlNpXd7b8UElS8+ccKL9m207k++IIjc0jUPgrM70rU3cv5M\n\
-Kevp971eHLhpWa9vrjbz/urDzBg3Dm8XEN09qwmABfIEnhm6f7oz2bYXjz73ImYj\n\
-rZsogz+Jsx3NWhHFUD42iA4ZnxHIEgchD/TAihpbdrEhgmdvAgMBAAGjgacwgaQw\n\
-EgYDVR0TAQH/BAgwBgEB/wIBAjAmBgNVHREEHzAdgRthZG1pbkBmaWxlemlsbGEt\n\
-cHJvamVjdC5vcmcwDwYDVR0PAQH/BAUDAwcGADAdBgNVHQ4EFgQUd4w2verFjXAn\n\
-CrNLor39nFtemNswNgYDVR0fBC8wLTAroCmgJ4YlaHR0cHM6Ly9jcmwuZmlsZXpp\n\
-bGxhLXByb2plY3Qub3JnL2NybDALBgkqhkiG9w0BAQ0DggIBAF3fmV/Bs4amV78d\n\
-uhe5PkW7yTO6iCfKJVDB22kXPvL0rzZn4SkIZNoac8Xl5vOoRd6k+06i3aJ78w+W\n\
-9Z0HK1jUdjW7taYo4bU58nAp3Li+JwjE/lUBNqSKSescPjdZW0KzIIZls91W30yt\n\
-tGq85oWAuyVprHPlr2uWLg1q4eUdF6ZAz4cZ0+9divoMuk1HiWxi1Y/1fqPRzUFf\n\
-UGK0K36iPPz2ktzT7qJYXRfC5QDoX7tCuoDcO5nccVjDypRKxy45O5Ucm/fywiQW\n\
-NQfz/yQAmarQSCfDjNcHD1rdJ0lx9VWP6xi+Z8PGSlR9eDuMaqPVAE1DLHwMMTTZ\n\
-93PbfP2nvgbElgEki28LUalyVuzvrKcu/rL1LnCJA4jStgE/xjDofpYwgtG4ZSnE\n\
-KgNy48eStvNZbGhwn2YvrxyKmw58WSQG9ArOCHoLcWnpedSZuTrPTLfgNUx7DNbo\n\
-qJU36tgxiO0XLRRSetl7jkSIO6U1okVH0/tvstrXEWp4XwdlmoZf92VVBrkg3San\n\
-fA5hBaI2gpQwtpyOJzwLzsd43n4b1YcPiyzhifJGcqRCBZA1uArNsH5iG6z/qHXp\n\
-KjuMxZu8aM8W2gp8Yg8QZfh5St/nut6hnXb5A8Qr+Ixp97t34t264TBRQD6MuZc3\n\
-PqQuF7sJR6POArUVYkRD/2LIWsB7\n\
------END CERTIFICATE-----\n\
-");
-
-
-class CUpdateWizardOptions : public COptionsBase
-{
-public:
-	virtual int GetOptionVal(unsigned int nID)
-	{
-		return COptions::Get()->GetOptionVal(nID);
-	}
-
-	virtual wxString GetOption(unsigned int nID)
-	{
-		if (nID == OPTION_INTERNAL_ROOTCERT)
-			return s_update_cert;
-
-		return COptions::Get()->GetOption(nID);
-	}
-
-	virtual bool SetOption(unsigned int nID, int value)
-	{
-		return COptions::Get()->SetOption(nID, value);
-	}
-
-	virtual bool SetOption(unsigned int nID, wxString value)
-	{
-		return COptions::Get()->SetOption(nID, value);
-	}
-};
 
 CUpdateWizard::CUpdateWizard(wxWindow* pParent)
 	: m_parent(pParent)
 {
 	m_pEngine = new CFileZillaEngine;
 
-	m_update_options = new CUpdateWizardOptions();
-
-	m_pEngine->Init(this, m_update_options);
+	m_pEngine->Init(this, COptions::Get());
 
 	m_inTransfer = false;
 	m_skipPageChanging = false;
@@ -123,7 +40,6 @@ CUpdateWizard::CUpdateWizard(wxWindow* pParent)
 
 	wxString version(PACKAGE_VERSION, wxConvLocal);
 	version.Replace(_T(" "), _T("%20"));
-	m_urlProtocol = HTTPS;
 	m_urlServer = _T("update.filezilla-project.org");
 	m_urlFile = wxString::Format(_T("/updatecheck.php?platform=%s&version=%s"), host.c_str(), version.c_str());
 #if defined(__WXMSW__) || defined(__WXMAC__)
@@ -132,30 +48,19 @@ CUpdateWizard::CUpdateWizard(wxWindow* pParent)
 	m_urlFile += osVersion;
 #endif
 
-#ifdef __WXMSW__
-	if (wxIsPlatform64Bit())
-		m_urlFile += _T("&osarch=64");
-	else
-		m_urlFile += _T("&osarch=32");
-#endif
-
-	m_statusTimer.SetOwner(this);
-	m_autoCheckTimer.SetOwner(this);
-	m_busy_timer.SetOwner(this);
+	m_statusTimer.SetOwner(this, 0);
+	m_autoCheckTimer.SetOwner(this, 1);
 
 	m_autoUpdateCheckRunning = false;
 
 	m_loaded = false;
 	m_updateShown = false;
-	m_menuUpdated = false;
 	m_start_check = false;
-	m_successfully_downloaded = false;
 }
 
 CUpdateWizard::~CUpdateWizard()
 {
 	delete m_pEngine;
-	delete m_update_options;
 }
 
 bool CUpdateWizard::Load()
@@ -275,7 +180,7 @@ GUID VISTASHIT_FOLDERID_Downloads = { 0x374de290, 0x123f, 0x4565, 0x91, 0x64, 0x
 extern "C" typedef HRESULT (WINAPI *tSHGetKnownFolderPath)(const GUID& rfid, DWORD dwFlags, HANDLE hToken, PWSTR *ppszPath);
 #endif
 
-CLocalPath CUpdateWizard::GetDownloadDir() const
+wxString CUpdateWizard::GetDownloadDir()
 {
 #ifdef __WXMSW__
 	// Old Vista has a profile directory for downloaded files,
@@ -293,76 +198,11 @@ CLocalPath CUpdateWizard::GetDownloadDir() const
 		{
 			wxString dir = path;
 			CoTaskMemFree(path);
-			return CLocalPath(dir);
+			return dir;
 		}
 	}
 #endif
-	return CLocalPath(wxStandardPaths::Get().GetDocumentsDir());
-}
-
-bool CUpdateWizard::SetLocalFile()
-{
-	wxString filename = m_urlFile;
-	int pos = filename.Find('/', true);
-	if (pos != -1)
-		filename = filename.Mid(pos + 1);
-
-	const CLocalPath defaultDownloadDir = GetDownloadDir();
-	CLocalPath downloadDir(COptions::Get()->GetOption(OPTION_UPDATECHECK_DOWNLOADDIR));
-	if (downloadDir.empty() || !downloadDir.Exists())
-		downloadDir = defaultDownloadDir;
-	
-	const int flags = wxFD_SAVE | wxFD_OVERWRITE_PROMPT;
-
-	const wxString& ext = filename.Right(4);
-	wxString type;
-	if (ext == _T(".exe"))
-		type = _("Executable");
-	if (ext == _T(".bz2"))
-		type = _("Archive");
-	else
-		type = _("Package");
-
-	wxString filter = wxString::Format(_T("%s (*%s)|*%s"), type.c_str(), ext.c_str(), ext.c_str());
-
-	wxFileDialog dialog(this, _("Select download location for package"), downloadDir.GetPath(), filename, filter, flags);
-	if (dialog.ShowModal() != wxID_OK)
-		return false;
-
-	wxString targetFile;
-	if (!downloadDir.SetPath(dialog.GetPath(), &targetFile))
-	{
-		wxMessageBox(_("Error, file name cannot be parsed."));
-		return false;
-	}
-
-	if (downloadDir != defaultDownloadDir)
-		COptions::Get()->SetOption(OPTION_UPDATECHECK_DOWNLOADDIR, downloadDir.GetPath());
-	else
-		COptions::Get()->SetOption(OPTION_UPDATECHECK_DOWNLOADDIR, _T(""));
-
-	{
-		wxLogNull log;
-		wxRemoveFile(downloadDir.GetPath() + targetFile);
-	}
-
-	if (wxFileName::FileExists(downloadDir.GetPath() + targetFile))
-	{
-		wxMessageBox(_("Error, local file exists but cannot be removed"));
-		return false;
-	}
-
-	const wxString file = downloadDir.GetPath() + targetFile + _T(".tmp");
-	m_localFile = file;
-
-	int i = 1;
-	while (wxFileName::FileExists(m_localFile))
-	{
-		i++;
-		m_localFile = file + wxString::Format(_T("%d"), i);
-	}
-
-	return true;
+	return wxStandardPaths::Get().GetDocumentsDir();
 }
 
 void CUpdateWizard::OnPageChanging(wxWizardEvent& event)
@@ -380,12 +220,34 @@ void CUpdateWizard::OnPageChanging(wxWizardEvent& event)
 	}
 	if (event.GetPage() == m_pages[1] && m_pages[1]->GetNext())
 	{
-		if (!SetLocalFile())
+		wxString filename = m_urlFile;
+		int pos = filename.Find('/', true);
+		if (pos != -1)
+			filename = filename.Mid(pos + 1);
+
+		const wxString defaultDir = GetDownloadDir();
+
+		const int flags = wxFD_SAVE | wxFD_OVERWRITE_PROMPT;
+
+		const wxString& ext = filename.Right(4);
+		wxString type;
+		if (ext == _T(".exe"))
+			type = _("Executable");
+		if (ext == _T(".bz2"))
+			type = _("Archive");
+		else
+			type = _("Package");
+
+		wxString filter = wxString::Format(_T("%s (*%s)|*%s"), type.c_str(), ext.c_str(), ext.c_str());
+
+		wxFileDialog dialog(this, _("Select download location for package"), defaultDir, filename, filter, flags);
+		if (dialog.ShowModal() != wxID_OK)
 		{
 			event.Veto();
 			m_skipPageChanging = false;
 			return;
 		}
+		m_localFile = dialog.GetPath();
 	}
 	
 	m_skipPageChanging = false;
@@ -412,13 +274,13 @@ void CUpdateWizard::OnPageChanged(wxWizardEvent& event)
 	m_currentPage = 2;
 
 	wxStaticText *pText = XRCCTRL(*this, "ID_DOWNLOADTEXT", wxStaticText);
-	wxString text = wxString::Format(_("Downloading %s"), (CServer::GetPrefixFromProtocol(m_urlProtocol) + _T("://") + m_urlServer + m_urlFile).c_str());
+	wxString text = wxString::Format(_("Downloading %s"), wxString(_T("http://") + m_urlServer + m_urlFile).c_str());
 	text.Replace(_T("&"), _T("&&"));
 	pText->SetLabel(text);
 
 	m_inTransfer = false;
 
-	int res = m_pEngine->Command(CConnectCommand(CServer(m_urlProtocol, DEFAULT, m_urlServer, (m_urlProtocol == HTTPS) ? 443 : 80)));
+	int res = m_pEngine->Command(CConnectCommand(CServer(HTTP, DEFAULT, m_urlServer, 80)));
 	if (res == FZ_REPLY_OK)
 	{
 		XRCCTRL(*this, "ID_DOWNLOADPROGRESSTEXT", wxStaticText)->SetLabel(_("Connecting to server"));
@@ -443,12 +305,6 @@ void CUpdateWizard::FailedTransfer()
 	if (!m_loaded)
 		return;
 
-	if (m_localFile != _T(""))
-	{
-		wxLogNull log;
-		wxRemoveFile(m_localFile);
-	}
-
 	if (!m_currentPage)
 		XRCCTRL(*this, "ID_FAILURE", wxStaticText)->SetLabel(_("Failed to check for newer version of FileZilla."));
 	else
@@ -466,8 +322,6 @@ void CUpdateWizard::FailedTransfer()
 	pNext->Enable();
 	wxButton* pPrev = wxDynamicCast(FindWindow(wxID_BACKWARD), wxButton);
 	pPrev->Disable();
-
-	XRCCTRL(*this, "ID_LOG", wxTextCtrl)->ChangeValue(m_update_log);
 }
 
 void CUpdateWizard::OnEngineEvent(wxEvent& event)
@@ -527,27 +381,6 @@ void CUpdateWizard::OnEngineEvent(wxEvent& event)
 						m_pages[2]->GetSizer()->Layout();
 					}
 				}
-
-				wxString label;
-				switch (pLogMsg->msgType)
-				{
-				case Error:
-					label = _("Error:");
-					break;
-				case Status:
-					label = _("Status:");
-					break;
-				case Command:
-					label = _("Command:");
-					break;
-				case Response:
-					label = _("Response:");
-					break;
-				default:
-					break;
-				}
-				if (label != _T(""))
-					m_update_log += label + _T(" ") + pLogMsg->msg + _T("\n");
 			}
 			break;
 		case nId_operation:
@@ -588,14 +421,6 @@ void CUpdateWizard::OnEngineEvent(wxEvent& event)
 				}
 				else if (m_currentPage == 2)
 				{
-					if (!VerifyChecksum())
-						break;
-
-					int pos = m_localFile.Find('.', true);
-					wxASSERT(pos > 0);
-					wxRenameFile(m_localFile, m_localFile.Left(pos));
-					m_localFile = m_localFile.Left(pos);
-
 					wxStaticText* pText = XRCCTRL(*this, "ID_DOWNLOADCOMPLETE", wxStaticText);
 					wxASSERT(pText);
 
@@ -606,13 +431,11 @@ void CUpdateWizard::OnEngineEvent(wxEvent& event)
 #ifdef __WXMSW__
 					pText->SetLabel(_("The most recent version has been downloaded. Click on Finish to close FileZilla and to start the installation."));
 #else
-					pText->SetLabel(_("The most recent version has been downloaded. Please install it the same way you installed this version."));
-#endif
+					pText->SetLabel(_("The most recent version has been downloaded. Please install like you did install this version."));
 
+#endif
 					pText->Show();
 					RewrapPage(2);
-
-					m_successfully_downloaded = true;
 				}
 			}
 			break;
@@ -659,11 +482,6 @@ void CUpdateWizard::OnEngineEvent(wxEvent& event)
 				{
 					reinterpret_cast<CFileExistsNotification *>(pData)->overwriteAction = CFileExistsNotification::overwrite;
 				}
-				else if (pData->GetRequestID() == reqId_certificate)
-				{
-					CCertificateNotification* pCertNotification = (CCertificateNotification*)pData;
-					pCertNotification->m_trusted = true;
-				}
 				m_pEngine->SetAsyncRequestReply(pData);
 			}
 			break;
@@ -688,12 +506,11 @@ void CUpdateWizard::OnEngineEvent(wxEvent& event)
 
 void CUpdateWizard::ParseData()
 {
-	const wxLongLong ownVersionNumber = CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion());
+	const wxULongLong ownVersionNumber = CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion());
 
 	wxString newVersion;
-	wxLongLong newVersionNumber = -1;
+	wxULongLong newVersionNumber = 0;
 	wxString newUrl;
-	wxString newChecksum;
 
 	while (m_data != _T(""))
 	{
@@ -739,18 +556,12 @@ void CUpdateWizard::ParseData()
 		line = line.Mid(pos + 1);
 
 		// Extract URL
+		pos = line.Find(' ');
+		if (pos != -1)
+			continue;
 		wxString url = line;
 		if (url == _T("none"))
 			url = _T("");
-
-		pos = url.Find(' ');
-		if (pos < 1)
-			newChecksum.clear();
-		else
-		{
-			newChecksum = url.Mid(pos + 1);
-			url = url.Left(pos);
-		}
 
 		if (type == _T("nightly"))
 		{
@@ -777,8 +588,7 @@ void CUpdateWizard::ParseData()
 		}
 		else
 		{
-			wxLongLong v = CBuildInfo::ConvertToVersionNumber(versionOrDate);
-			if (v <= ownVersionNumber)
+			if (CBuildInfo::ConvertToVersionNumber(versionOrDate) <= ownVersionNumber)
 				continue;
 		}
 
@@ -816,7 +626,7 @@ void CUpdateWizard::ParseData()
 	}
 	else
 	{
-		PrepareUpdateAvailablePage(newVersion, newUrl, newChecksum);
+		PrepareUpdateAvailablePage(newVersion, newUrl);
 
 		m_skipPageChanging = true;
 		ShowPage(m_pages[1]);
@@ -832,7 +642,7 @@ void CUpdateWizard::ParseData()
 
 void CUpdateWizard::OnTimer(wxTimerEvent& event)
 {
-	if (event.GetId() == m_statusTimer.GetId())
+	if (!event.GetId())
 	{
 		bool changed;
 		CTransferStatus status;
@@ -858,8 +668,6 @@ void CUpdateWizard::OnTimer(wxTimerEvent& event)
 			StartUpdateCheck();
 		}
 	}
-	else if (event.GetId() == m_busy_timer.GetId())
-		DisplayUpdateAvailability(true);
 }
 
 void CUpdateWizard::SetTransferStatus(const CTransferStatus* pStatus)
@@ -923,7 +731,7 @@ void CUpdateWizard::OnFinish(wxWizardEvent& event)
 #ifdef __WXMSW__
 	if (m_currentPage == 2)
 	{
-		wxExecute(_T("\"") + m_localFile +  _T("\" /update"));
+		wxExecute(m_localFile);
 		CMainFrame* pFrame = (CMainFrame*)m_parent;
 		pFrame->Close();
 	}
@@ -972,11 +780,7 @@ bool CUpdateWizard::CanAutoCheckForUpdateNow()
 		// Last check in future
 		return true;
 	
-	int days;
-	if (CBuildInfo::GetBuildType() == _T("official") && CBuildInfo::IsUnstable())
-		days = 3600 * 24;
-	else
-		days = COptions::Get()->GetOptionVal(OPTION_UPDATECHECK_INTERVAL) * 3600 * 24;
+	const int days = COptions::Get()->GetOptionVal(OPTION_UPDATECHECK_INTERVAL) * 3600 * 24;
 	if (span.GetSeconds() >= days)
 		return true;
 
@@ -990,7 +794,7 @@ void CUpdateWizard::StartUpdateCheck()
 	if (COptions::Get()->GetOptionVal(OPTION_UPDATECHECK_CHECKBETA) != 0)
 		m_urlFile += _T("&beta=1");
 
-	int res = m_pEngine->Command(CConnectCommand(CServer(m_urlProtocol, DEFAULT, m_urlServer, (m_urlProtocol == HTTPS) ? 443 : 80)));
+	int res = m_pEngine->Command(CConnectCommand(CServer(HTTP, DEFAULT, m_urlServer, 80)));
 	if (res == FZ_REPLY_OK)
 	{
 		if (m_loaded)
@@ -1006,8 +810,11 @@ void CUpdateWizard::StartUpdateCheck()
 		FailedTransfer();
 }
 
-void CUpdateWizard::DisplayUpdateAvailability(bool showDialog)
+void CUpdateWizard::DisplayUpdateAvailability(bool showDialog, bool forceMenu /*=false*/)
 {
+	if (m_updateShown && !forceMenu)
+		return;
+
 	COptions* pOptions = COptions::Get();
 
 	if (CBuildInfo::GetVersion() == _T("custom build"))
@@ -1017,54 +824,37 @@ void CUpdateWizard::DisplayUpdateAvailability(bool showDialog)
 	if (newVersion == _T(""))
 		return;
 
-	wxLongLong v = CBuildInfo::ConvertToVersionNumber(newVersion);
-	if (v <= CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion()))
+	if (CBuildInfo::ConvertToVersionNumber(newVersion) <= CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion()))
 	{
 		pOptions->SetOption(OPTION_UPDATECHECK_NEWVERSION, _T(""));
 		return;
 	}
 
-	if (!m_menuUpdated)
-	{
-		m_menuUpdated = true;
-
 #ifdef __WXMSW__
-		// All open menus need to be closed or app will become unresponsive.
-		::EndMenu();
+	// All open menus need to be closed or app will become unresponsive.
+	::EndMenu();
 #endif
 
-		CMainFrame* pFrame = (CMainFrame*)m_parent;
+	m_updateShown = true;
 
-		wxMenu* pMenu = new wxMenu();
-		const wxString& name = wxString::Format(_("&Version %s"), pOptions->GetOption(OPTION_UPDATECHECK_NEWVERSION).c_str());
-		pMenu->Append(XRCID("ID_CHECKFORUPDATES"), name);
-		wxMenuBar* pMenuBar = pFrame->GetMenuBar();
-		if (pMenuBar)
-			pMenuBar->Append(pMenu, _("&New version available!"));
-	}
+	CMainFrame* pFrame = (CMainFrame*)m_parent;
+		
+	wxMenu* pMenu = new wxMenu();
+	const wxString& name = wxString::Format(_("&Version %s"), pOptions->GetOption(OPTION_UPDATECHECK_NEWVERSION).c_str());
+	pMenu->Append(XRCID("ID_CHECKFORUPDATES"), name);
+	wxMenuBar* pMenuBar = pFrame->GetMenuBar();
+	if (pMenuBar)
+		pMenuBar->Append(pMenu, _("&New version available!"));
 
-	if (showDialog && !m_updateShown)
+	if (showDialog)
 	{
-		if (wxDialogEx::ShownDialogs())
-		{
-			m_busy_timer.Start(1000, true);
-			return;
-		}
-
-		m_updateShown = true;
-
-#ifdef __WXMSW__
-		// All open menus need to be closed or app will become unresponsive.
-		::EndMenu();
-#endif
-
 		CUpdateWizard dlg(m_parent);
 		if (dlg.Load())
 			dlg.Run();
 	}
 }
 
-void CUpdateWizard::PrepareUpdateAvailablePage(const wxString &newVersion, wxString newUrl, const wxString& newChecksum)
+void CUpdateWizard::PrepareUpdateAvailablePage(const wxString &newVersion, wxString newUrl)
 {
 	XRCCTRL(*this, "ID_VERSION", wxStaticText)->SetLabel(newVersion);
 
@@ -1097,10 +887,8 @@ void CUpdateWizard::PrepareUpdateAvailablePage(const wxString &newVersion, wxStr
 			XRCCTRL(*this, "ID_UPDATEDESC2", wxStaticText)->SetLabel(_("Alternatively, visit http://filezilla-project.org to download the most recent version."));
 			XRCCTRL(*this, "ID_UPDATEDESC2", wxStaticText)->Show();
 
-			m_urlProtocol = HTTP;
 			m_urlServer = newUrl.Left(pos);
 			m_urlFile = newUrl.Mid(pos);
-			m_update_checksum = newChecksum;
 		}
 		if (m_news == _T(""))
 		{
@@ -1157,119 +945,6 @@ void CUpdateWizard::PrepareUpdateCheckPage()
 	wxStaticText *pText = XRCCTRL(*this, "ID_CHECKINGTEXTPROGRESS", wxStaticText);
 	pText->Show();
 	pText->SetLabel(_("Resolving hostname"));
-}
-
-bool CUpdateWizard::VerifyChecksum()
-{
-	if (m_localFile == _T("") || m_update_checksum == _T(""))
-		return true;
-
-	if (m_update_checksum.Left(7).CmpNoCase(_T("sha512 ")))
-	{
-		// Unknown hash algorithm? Fail
-		FailedChecksum();
-		return false;
-	}
-	m_update_checksum = m_update_checksum.Mid(7);
-	SHA512_State state;
-	SHA512_Init(&state);
-
-	wxFile f;
-	{
-		wxLogNull null;
-		if (!f.Open(m_localFile))
-		{
-			FailedChecksum();
-			return false;
-		}
-	}
-	char buffer[65536];
-	size_t read;
-	while ((read = f.Read(buffer, sizeof(buffer))) > 0)
-	{
-		SHA512_Bytes(&state, buffer, read);
-	}
-	if (read < 0)
-	{
-		FailedChecksum();
-		return false;
-	}
-	f.Close();
-
-	unsigned char raw_digest[64];
-	SHA512_Final(&state, raw_digest);
-
-	wxString digest;
-
-	for (unsigned int i = 0; i < sizeof(raw_digest); i++)
-	{
-		unsigned char l = raw_digest[i] >> 4;
-		unsigned char r = raw_digest[i] & 0x0F;
-
-		if (l > 9)
-			digest += 'a' + l - 10;
-		else
-			digest += '0' + l;
-
-		if (r > 9)
-			digest += 'a' + r - 10;
-		else
-			digest += '0' + r;
-	}
-
-	if (m_update_checksum.CmpNoCase(digest))
-	{
-		FailedChecksum();
-		return false;
-	}
-
-	return true;
-}
-
-void CUpdateWizard::FailedChecksum()
-{
-	m_inTransfer = false;
-
-	if (m_localFile == _T(""))
-		return;
-	else
-	{
-		wxLogNull log;
-		wxRemoveFile(m_localFile);
-	}
-
-	wxString label = _("Checksum mismatch of downloaded file.");
-	XRCCTRL(*this, "ID_FAILURE", wxStaticText)->SetLabel(label);
-
-	XRCCTRL(*this, "ID_MISMATCH1", wxStaticText)->Show();
-	XRCCTRL(*this, "ID_MISMATCH2", wxStaticText)->Show();
-	XRCCTRL(*this, "ID_MISMATCH3", wxStaticText)->Show();
-	XRCCTRL(*this, "ID_MISMATCH4", wxStaticText)->Show();
-	
-	((wxWizardPageSimple*)GetCurrentPage())->SetNext(m_pages[3]);
-	m_pages[3]->SetPrev((wxWizardPageSimple*)GetCurrentPage());	
-
-	m_skipPageChanging = true;
-	ShowPage(m_pages[3]);
-	m_currentPage = 3;
-	m_skipPageChanging = false;
-
-	wxButton* pNext = wxDynamicCast(FindWindow(wxID_FORWARD), wxButton);
-	pNext->Enable();
-	wxButton* pPrev = wxDynamicCast(FindWindow(wxID_BACKWARD), wxButton);
-	pPrev->Disable();
-
-	XRCCTRL(*this, "ID_LOG", wxTextCtrl)->ChangeValue(m_update_log);
-
-	RewrapPage(3);
-}
-
-void CUpdateWizard::OnCancel(wxWizardEvent& event)
-{
-	delete m_pEngine;
-	m_pEngine = 0;
-	if (m_localFile != _T("") && !m_successfully_downloaded)
-		wxRemoveFile(m_localFile);
 }
 
 #endif //FZ_MANUALUPDATECHECK

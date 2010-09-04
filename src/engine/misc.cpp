@@ -1,4 +1,13 @@
-#include <filezilla.h>
+#include <wx/defs.h>
+#ifdef __WXMSW__
+// For AF_INET6
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
+#include "FileZilla.h"
+#ifndef __WXMSW__
+#include <sys/socket.h>
+#endif
 #include <gnutls/gnutls.h>
 
 bool VerifySetDate(wxDateTime& date, int year, wxDateTime::Month month, int day, int hour /*=0*/, int minute /*=0*/, int second /*=0*/)
@@ -154,19 +163,17 @@ wxString GetIPV6LongForm(wxString short_address)
 	return buffer;
 }
 
-int DigitHexToDecNum(wxChar c)
+static int DigitHexToDecNum(wxChar c)
 {
 	if (c >= 'a')
 		return c - 'a' + 10;
-	if (c >= 'A')
-		return c - 'A' + 10;
 	else
 		return c - '0';
 }
 
-bool IsRoutableAddress(const wxString& address, enum CSocket::address_family family)
+bool IsRoutableAddress(const wxString& address, int family)
 {
-	if (family == CSocket::ipv6)
+	if (family == AF_INET6)
 	{
 		wxString long_address = GetIPV6LongForm(address);
 		if (long_address.empty())
@@ -188,7 +195,7 @@ bool IsRoutableAddress(const wxString& address, enum CSocket::address_family fam
 						DigitHexToDecNum(long_address[32]) * 16 + DigitHexToDecNum(long_address[33]),
 						DigitHexToDecNum(long_address[35]) * 16 + DigitHexToDecNum(long_address[36]),
 						DigitHexToDecNum(long_address[37]) * 16 + DigitHexToDecNum(long_address[38]));
-				return IsRoutableAddress(ipv4, CSocket::ipv4);
+				return IsRoutableAddress(ipv4, AF_INET);
 			}
 
 			return true;

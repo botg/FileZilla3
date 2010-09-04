@@ -1,11 +1,9 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "dialogex.h"
 
 BEGIN_EVENT_TABLE(wxDialogEx, wxDialog)
 EVT_CHAR_HOOK(wxDialogEx::OnChar)
 END_EVENT_TABLE()
-
-int wxDialogEx::m_shown_dialogs = 0;
 
 void wxDialogEx::OnChar(wxKeyEvent& event)
 {
@@ -69,26 +67,5 @@ int wxDialogEx::ShowModal()
 	// Could happen during drag&drop with notification dialogs.
 	::ReleaseCapture();
 #endif
-
-	m_shown_dialogs++;
-
-	int ret = wxDialog::ShowModal();
-
-	m_shown_dialogs--;
-
-	return ret;
-}
-
-bool wxDialogEx::ReplaceControl(wxWindow* old, wxWindow* wnd)
-{
-	wxSizerItem* pSizerItem = GetSizer()->GetItem(old, true);
-	if (!pSizerItem)
-		return false;
-
-	pSizerItem->SetWindow(wnd);
-	wnd->SetContainingSizer(old->GetContainingSizer());
-	old->SetContainingSizer(0);
-	old->Destroy();
-
-	return true;
+	return wxDialog::ShowModal();
 }

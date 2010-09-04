@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "themeprovider.h"
 #include "filezillaapp.h"
 #include "Options.h"
@@ -9,8 +9,6 @@ CThemeProvider::CThemeProvider()
 	wxArtProvider::Push(this);
 
 	m_themePath = GetThemePath();
-
-	RegisterOption(OPTION_THEME);
 }
 
 wxBitmap CThemeProvider::CreateBitmap(const wxArtID& id, const wxArtClient& client, const wxSize& size)
@@ -252,23 +250,10 @@ wxString CThemeProvider::GetThemePath()
 {
 	const wxString& resourceDir = wxGetApp().GetResourceDir();
 	wxString themePath = resourceDir + COptions::Get()->GetOption(OPTION_THEME);
-	if (wxFile::Exists(themePath + _T("theme.xml")))
-		return themePath;
-
-    themePath = resourceDir + _T("opencrystal/");
-	if (wxFile::Exists(themePath + _T("theme.xml")))
-		return themePath;
-
-	wxASSERT(wxFile::Exists(resourceDir + _T("theme.xml")));
-	return resourceDir;
-}
-
-void CThemeProvider::OnOptionChanged(int option)
-{
-	wxASSERT(option == OPTION_THEME);
-
-	m_themePath = GetThemePath();
-
-	wxArtProvider::Remove(this);
-	wxArtProvider::Push(this);
+	if (!wxFile::Exists(themePath + _T("theme.xml")))
+	{
+	    themePath = resourceDir;
+		wxASSERT(wxFile::Exists(themePath + _T("theme.xml")));
+	}
+	return themePath;
 }

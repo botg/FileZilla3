@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "bookmarks_dialog.h"
 #include "sitemanager.h"
 #include "ipcmutex.h"
@@ -273,8 +273,6 @@ int CBookmarksDialog::ShowModal(const wxString &local_path, const CServerPath &r
 	SetMinSize(GetSizer()->GetMinSize() + size - clientSize);
 	SetClientSize(minSize);
 
-	m_pTree->SelectItem(m_bookmarks_global);
-
 	return wxDialogEx::ShowModal();
 }
 
@@ -306,7 +304,7 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 		CBookmarkItemData *data = (CBookmarkItemData *)m_pTree->GetItemData(child);
 		wxASSERT(data);
 
-		TiXmlElement *pBookmark = pDocument->LinkEndChild(new TiXmlElement("Bookmark"))->ToElement();
+		TiXmlElement *pBookmark = pDocument->InsertEndChild(TiXmlElement("Bookmark"))->ToElement();
 		AddTextElement(pBookmark, "Name", m_pTree->GetItemText(child));
 		if (!data->m_local_dir.empty())
 			AddTextElement(pBookmark, "LocalDir", data->m_local_dir);
@@ -439,13 +437,6 @@ bool CBookmarksDialog::Verify()
 		return false;
 	}
 
-	bool sync = XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->GetValue();
-	if (sync && (localPath.empty() || remotePathRaw.empty()))
-	{
-		wxMessageBox(_("You need to enter both a local and a remote path to enable synchronized browsing for this bookmark."), _("New bookmark"), wxICON_EXCLAMATION, this);
-		return false;
-	}
-
 	return true;
 }
 
@@ -474,8 +465,6 @@ void CBookmarksDialog::UpdateBookmark()
 	}
 
 	data->m_local_dir = XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->GetValue();
-
-	data->m_sync = XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->GetValue();
 }
 
 void CBookmarksDialog::DisplayBookmark()
@@ -511,8 +500,6 @@ void CBookmarksDialog::DisplayBookmark()
 
 	XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->ChangeValue(data->m_remote_dir.GetPath());
 	XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->ChangeValue(data->m_local_dir);
-
-	XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->SetValue(data->m_sync);
 }
 
 void CBookmarksDialog::OnNewBookmark(wxCommandEvent& event)
@@ -815,27 +802,19 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 		return false;
 	}
 
-	TiXmlElement *pInsertBefore = 0;
 	TiXmlElement *pBookmark;
 	for (pBookmark = pDocument->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark"))
 	{
 		wxString remote_dir_raw;
-
-		wxString old_name = GetTextElement(pBookmark, "Name");
 	
-		if (!name.CmpNoCase(old_name))
+		if (!name.CmpNoCase(GetTextElement(pBookmark, "Name")))
 		{
 			wxMessageBox(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);
 			return false;
 		}
-		if (name < old_name && !pInsertBefore)
-			pInsertBefore = pBookmark;
 	}
 
-	if (pInsertBefore)
-		pBookmark = pDocument->InsertBeforeChild(pInsertBefore, TiXmlElement("Bookmark"))->ToElement();
-	else
-		pBookmark = pDocument->LinkEndChild(new TiXmlElement("Bookmark"))->ToElement();
+	pBookmark = pDocument->InsertEndChild(TiXmlElement("Bookmark"))->ToElement();
 	AddTextElement(pBookmark, "Name", name);
 	if (!local_dir.empty())
 		AddTextElement(pBookmark, "LocalDir", local_dir);

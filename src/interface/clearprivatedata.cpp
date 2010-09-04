@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "clearprivatedata.h"
 #include "Mainfrm.h"
 #include "recentserverlist.h"
@@ -7,11 +7,11 @@
 #include "commandqueue.h"
 #include "Options.h"
 #include "ipcmutex.h"
+#include "filezillaapp.h"
 #include "queue.h"
-#include "recursive_operation.h"
 
 BEGIN_EVENT_TABLE(CClearPrivateDataDialog, wxDialogEx)
-EVT_TIMER(wxID_ANY, CClearPrivateDataDialog::OnTimer)
+EVT_TIMER(1, CClearPrivateDataDialog::OnTimer)
 END_EVENT_TABLE()
 
 CClearPrivateDataDialog::CClearPrivateDataDialog(CMainFrame* pMainFrame)
@@ -63,32 +63,20 @@ void CClearPrivateDataDialog::Show()
 	
 	if (pCheck->GetValue())
 	{
-		bool asked = false;
-
-		const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
-
-		for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); iter++)
+		CState* pState = m_pMainFrame->GetState();
+		if (pState->IsRemoteConnected() || !pState->IsRemoteIdle())
 		{
-			CState* pState = *iter;
-			if (pState->IsRemoteConnected() || !pState->IsRemoteIdle())
-			{
-				if (!asked)
-				{
-					int res = wxMessageBox(_("Reconnect information cannot be cleared while connected to a server.\nIf you continue, your connection will be disconnected."), _("Clear private data"), wxOK | wxCANCEL);
-					if (res != wxOK)
-						return;
-					asked = true;
-				}
+			int res = wxMessageBox(_("Reconnect information cannot be cleared while connected to a server.\nIf you continue, your connection will be disconnected."), _("Clear private data"), wxOK | wxCANCEL);
+			if (res != wxOK)
+				return;
 
-				pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
-				if (!pState->m_pCommandQueue->Cancel())
-				{
-					m_timer.SetOwner(this);
-					m_timer.Start(250, true);
-				}
-				else
-					pState->Disconnect();
+			if (!pState->m_pCommandQueue->Cancel())
+			{
+				m_timer.SetOwner(this);
+				m_timer.Start(250, true);
 			}
+			else
+				pState->m_pCommandQueue->ProcessCommand(new CDisconnectCommand());
 		}
 
 		// Doesn't harm to do it now, but has to be repeated later just to be safe
@@ -98,7 +86,7 @@ void CClearPrivateDataDialog::Show()
 	if (pSitemanagerCheck->GetValue())
 	{
 		CInterProcessMutex sitemanagerMutex(MUTEX_SITEMANAGERGLOBAL, false);
-		while (sitemanagerMutex.TryLock() == 0)
+		while (!sitemanagerMutex.TryLock())
 		{
 			int res = wxMessageBox(_("The Site Manager is opened in another instance of FileZilla 3.\nPlease close it or the data cannot be deleted."), _("Clear private data"), wxOK | wxCANCEL);
 			if (res != wxYES)
@@ -120,24 +108,18 @@ void CClearPrivateDataDialog::Show()
 
 void CClearPrivateDataDialog::OnTimer(wxTimerEvent& event)
 {
-	const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
+	CState* pState = m_pMainFrame->GetState();
 
-	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); iter++)
+	if (pState->IsRemoteConnected() || !pState->IsRemoteIdle())
 	{
-		CState* pState = *iter;
-
-		if (pState->IsRemoteConnected() || !pState->IsRemoteIdle())
-		{
-			if (!pState->m_pCommandQueue->Cancel())
-				return;
-
-			pState->Disconnect();
-		}
-
-		if (pState->IsRemoteConnected() || !pState->IsRemoteIdle())
+		if (!pState->m_pCommandQueue->Cancel())
 			return;
 
+		pState->m_pCommandQueue->ProcessCommand(new CDisconnectCommand());
 	}
+
+	if (pState->IsRemoteConnected() || !pState->IsRemoteIdle())
+		return;
 
 	m_timer.Stop();
 	ClearReconnect();
@@ -157,26 +139,18 @@ bool CClearPrivateDataDialog::ClearReconnect()
 	COptions::Get()->SetLastServer(CServer());
 	COptions::Get()->SetOption(OPTION_LASTSERVERPATH, _T(""));
 
-	const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); iter++)
-	{
-		CState* pState = *iter;
-
-		pState->SetLastServer(CServer(), CServerPath());
-	}
-
 	return true;
 }
 
 void CClearPrivateDataDialog::RemoveXmlFile(const wxString& name)
 {
 	{
-		wxFileName fn(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), name + _T(".xml"));
+		wxFileName fn(wxGetApp().GetSettingsDir(), name + _T(".xml"));
 		if (fn.FileExists())
 			wxRemoveFile(fn.GetFullPath());
 	}
 	{
-		wxFileName fn(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), name + _T("xml~"));
+		wxFileName fn(wxGetApp().GetSettingsDir(), name + _T("xml~"));
 		if (fn.FileExists())
 			wxRemoveFile(fn.GetFullPath());
 	}

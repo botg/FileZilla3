@@ -6,35 +6,30 @@
 
 enum t_filterType
 {
-	filter_name = 0x01,
-	filter_size = 0x02,
-	filter_attributes = 0x04,
-	filter_permissions = 0x08,
-	filter_path = 0x10,
-	filter_date = 0x20,
-	filter_time = 0x40,
-#ifdef __WXMSW__
-	filter_meta = filter_attributes,
-	filter_foreign = filter_permissions,
-#else
-	filter_meta = filter_permissions,
-	filter_foreign = filter_attributes
-#endif
+	name,
+	size,
+	attributes,
+	permissions,
+	path,
+
+	filterType_size
 };
 
 class CFilterCondition
 {
 public:
 	CFilterCondition();
+	CFilterCondition(const CFilterCondition& cond);
 
+	virtual ~CFilterCondition();
 	enum t_filterType type;
 	int condition;
-
-	wxString strValue; // All other types
-	wxLongLong value; // If type is size
-	wxDateTime date; // If type is date
+	wxString strValue;
+	wxLongLong value;
 	bool matchCase;
-	CSharedPointer<const wxRegEx> pRegEx;
+	wxRegEx* pRegEx;
+
+	CFilterCondition& operator=(const CFilterCondition& cond);
 };
 
 class CFilter
@@ -59,7 +54,6 @@ public:
 	std::vector<CFilterCondition> filters;
 
 	bool HasConditionOfType(enum t_filterType type) const;
-	bool IsLocalFilter() const;
 };
 
 class CFilterSet
@@ -70,30 +64,22 @@ public:
 	std::vector<bool> remote;
 };
 
-class TiXmlElement;
 class CFilterManager
 {
 public:
 	CFilterManager();
 
 	// Note: Under non-windows, attributes are permissions
-	bool FilenameFiltered(const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, const wxDateTime* date) const;
-	bool FilenameFiltered(const std::list<CFilter> &filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, const wxDateTime* date) const;
-	static bool FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, wxLongLong size, int attributes, const wxDateTime* date);
+	bool FilenameFiltered(const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes) const;
 	static bool HasActiveFilters(bool ignore_disabled = false);
 
 	bool HasSameLocalAndRemoteFilters() const;
 
 	static void ToggleFilters();
 
-	std::list<CFilter> GetActiveFilters(bool local);
-
-	static bool CompileRegexes(CFilter& filter);
-
-	static bool LoadFilter(TiXmlElement* pElement, CFilter& filter);
-
 protected:
 	static bool CompileRegexes();
+	bool FilenameFilteredByFilter(const wxString& name, const wxString& path, bool dir, wxLongLong size, unsigned int filterIndex, int attributes) const;
 
 	static void LoadFilters();
 	static bool m_loaded;
@@ -114,8 +100,6 @@ public:
 	virtual ~CFilterDialog() { }
 
 	bool Create(CMainFrame* parent);
-
-	static void SaveFilter(TiXmlElement* pElement, const CFilter& filter);
 
 protected:
 

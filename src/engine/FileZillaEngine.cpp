@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "ControlSocket.h"
 #include "directorycache.h"
 
@@ -147,8 +147,7 @@ bool CFileZillaEngine::SetAsyncRequestReply(CAsyncRequestNotification *pNotifica
 		return false;
 
 	m_pControlSocket->SetAlive();
-	if (!m_pControlSocket->SetAsyncRequestReply(pNotification))
-		return false;
+	m_pControlSocket->SetAsyncRequestReply(pNotification);
 
 	return true;
 }

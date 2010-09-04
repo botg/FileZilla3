@@ -36,18 +36,13 @@ public:
 
 	wxImageList* GetSystemImageList() { return m_pImageList; }
 
-	int GetIconIndex(enum filetype type, const wxString& fileName = _T(""), bool physical = true, bool symlink = false);
-
-#ifdef __WXMSW__
-	int GetLinkOverlayIndex();
-#endif
+	int GetIconIndex(enum filetype type, const wxString& fileName = _T(""), bool physical = true);
 
 protected:
 	wxImageListEx *m_pImageList;
 
 #ifndef __WXMSW__
 	std::map<wxString, int> m_iconCache;
-	std::map<wxString, int> m_iconSymlinkCache;
 #endif
 };
 

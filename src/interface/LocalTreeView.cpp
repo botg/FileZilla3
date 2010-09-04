@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "LocalTreeView.h"
 #include "queue.h"
 #include "filezillaapp.h"
@@ -17,7 +17,6 @@
 #include <wx/msw/registry.h>
 #include <shlobj.h>
 #include <dbt.h>
-#include "volume_enumerator.h"
 #endif
 
 class CTreeItemData : public wxTreeItemData
@@ -84,8 +83,8 @@ public:
 		if (!hit)
 			return wxDragNone;
 
-		const CLocalPath path(GetDirFromItem(hit));
-		if (path.empty() || !path.IsWriteable())
+		wxString dir = GetDirFromItem(hit);
+		if (dir == _T("") || !CState::LocalDirIsWriteable(dir))
 			return wxDragNone;
 
 		if (!GetData())
@@ -96,7 +95,7 @@ public:
 			pDragDropManager->pDropTarget = m_pLocalTreeView;
 
 		if (m_pDataObject->GetReceivedFormat() == m_pFileDataObject->GetFormat())
-			m_pLocalTreeView->m_pState->HandleDroppedFiles(m_pFileDataObject, path, def == wxDragCopy);
+			m_pLocalTreeView->m_pState->HandleDroppedFiles(m_pFileDataObject, dir, def == wxDragCopy);
 		else
 		{
 			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId())
@@ -111,7 +110,7 @@ public:
 				return wxDragNone;
 			}
 
-			if (!m_pLocalTreeView->m_pState->DownloadDroppedFiles(m_pRemoteDataObject, path))
+			if (!m_pLocalTreeView->m_pState->DownloadDroppedFiles(m_pRemoteDataObject, dir))
 				return wxDragNone;
 		}
 
@@ -126,8 +125,8 @@ public:
 		if (!hit)
 			return false;
 
-		const wxString dir = GetDirFromItem(hit);
-		if (dir == _T("") || !CLocalPath(dir).IsWriteable())
+		wxString dir = GetDirFromItem(hit);
+		if (dir == _T("") || !CState::LocalDirIsWriteable(dir))
 			return false;
 
 		return true;
@@ -198,20 +197,16 @@ protected:
 	wxDataObjectComposite* m_pDataObject;
 };
 
-IMPLEMENT_CLASS(CLocalTreeView, wxTreeCtrlEx)
+IMPLEMENT_CLASS(CLocalTreeView, wxTreeCtrl)
 
-BEGIN_EVENT_TABLE(CLocalTreeView, wxTreeCtrlEx)
+BEGIN_EVENT_TABLE(CLocalTreeView, wxTreeCtrl)
 EVT_TREE_ITEM_EXPANDING(wxID_ANY, CLocalTreeView::OnItemExpanding)
-#ifdef __WXMSW__
-EVT_TREE_SEL_CHANGING(wxID_ANY, CLocalTreeView::OnSelectionChanging)
-#endif
 EVT_TREE_SEL_CHANGED(wxID_ANY, CLocalTreeView::OnSelectionChanged)
 EVT_TREE_BEGIN_DRAG(wxID_ANY, CLocalTreeView::OnBeginDrag)
 #ifndef __WXMSW__
 EVT_KEY_DOWN(CLocalTreeView::OnKeyDown)
 #else
 EVT_COMMAND(-1, fzEVT_VOLUMESENUMERATED, CLocalTreeView::OnVolumesEnumerated)
-EVT_COMMAND(-1, fzEVT_VOLUMEENUMERATED, CLocalTreeView::OnVolumesEnumerated)
 #endif //__WXMSW__
 EVT_TREE_ITEM_MENU(wxID_ANY, CLocalTreeView::OnContextMenu)
 EVT_MENU(XRCID("ID_UPLOAD"), CLocalTreeView::OnMenuUpload)
@@ -222,11 +217,10 @@ EVT_MENU(XRCID("ID_MKDIR"), CLocalTreeView::OnMenuMkdir)
 EVT_TREE_BEGIN_LABEL_EDIT(wxID_ANY, CLocalTreeView::OnBeginLabelEdit)
 EVT_TREE_END_LABEL_EDIT(wxID_ANY, CLocalTreeView::OnEndLabelEdit)
 EVT_CHAR(CLocalTreeView::OnChar)
-EVT_MENU(XRCID("ID_OPEN"), CLocalTreeView::OnMenuOpen)
 END_EVENT_TABLE()
 
 CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState *pState, CQueueView *pQueueView)
-	: wxTreeCtrlEx(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxTR_EDIT_LABELS | wxTR_LINES_AT_ROOT | wxTR_HAS_BUTTONS | wxNO_BORDER),
+	: wxTreeCtrl(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxTR_EDIT_LABELS | wxTR_LINES_AT_ROOT | wxTR_HAS_BUTTONS | wxNO_BORDER),
 	CSystemImageList(16),
 	CStateEventHandler(pState),
 	m_pQueueView(pQueueView)
@@ -238,6 +232,8 @@ CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState *pState, 
 	pState->RegisterHandler(this, STATECHANGE_LOCAL_DIR);
 	pState->RegisterHandler(this, STATECHANGE_APPLYFILTER);
 
+	m_setSelection = false;
+
 	SetImageList(GetSystemImageList());
 
 #ifdef __WXMSW__
@@ -245,12 +241,7 @@ CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState *pState, 
 
 	CreateRoot();
 #else
-	wxTreeItemId root = AddRoot(_T("/"));
-	SetItemImage(root, GetIconIndex(dir), wxTreeItemIcon_Normal);
-	SetItemImage(root, GetIconIndex(opened_dir), wxTreeItemIcon_Selected);
-	SetItemImage(root, GetIconIndex(dir), wxTreeItemIcon_Expanded);
-	SetItemImage(root, GetIconIndex(opened_dir), wxTreeItemIcon_SelectedExpanded);
-
+	AddRoot(_T("/"), GetIconIndex(dir), GetIconIndex(opened_dir));
 	SetDir(_T("/"));
 #endif
 
@@ -276,7 +267,9 @@ void CLocalTreeView::SetDir(wxString localDir)
 	{
 		// TODO: UNC path, don't display it yet
 		m_currentDir = _T("");
-		SafeSelectItem(wxTreeItemId());
+		m_setSelection = true;
+		SelectItem(wxTreeItemId());
+		m_setSelection = false;
 		return;
 	}
 	m_currentDir = localDir;
@@ -284,7 +277,9 @@ void CLocalTreeView::SetDir(wxString localDir)
 #ifdef __WXMSW__
 	if (localDir == _T("\\"))
 	{
-		SafeSelectItem(m_drives);
+		m_setSelection = true;
+		SelectItem(m_drives);
+		m_setSelection = false;
 		return;
 	}
 #endif
@@ -293,7 +288,9 @@ void CLocalTreeView::SetDir(wxString localDir)
 	wxTreeItemId parent = GetNearestParent(subDirs);
 	if (!parent)
 	{
-		SafeSelectItem(wxTreeItemId());
+		m_setSelection = true;
+		SelectItem(wxTreeItemId());
+		m_setSelection = false;
 		return;
 	}
 
@@ -301,19 +298,25 @@ void CLocalTreeView::SetDir(wxString localDir)
 	{
 		wxTreeItemIdValue value;
 		wxTreeItemId child = GetFirstChild(parent, value);
+		if (child && GetItemText(child) == _T(""))
+			DisplayDir(parent, localDir);
 
-		//Not needed, item stays unexpanded
-		//if (child && GetItemText(child) == _T(""))
-		//	DisplayDir(parent, localDir);
-
-		SafeSelectItem(parent);
+		m_setSelection = true;
+		SelectItem(parent);
+		m_setSelection = false;
+		if (parent != GetRootItem())
+			Expand(GetItemParent(parent));
 		return;
 	}
 	wxTreeItemId item = MakeSubdirs(parent, localDir.Left(localDir.Length() - subDirs.Length()), subDirs);
 	if (!item)
 		return;
 
-	SafeSelectItem(item);
+	m_setSelection = true;
+	SelectItem(item);
+	m_setSelection = false;
+	if (item != GetRootItem())
+		Expand(GetItemParent(item));
 }
 
 wxTreeItemId CLocalTreeView::GetNearestParent(wxString& localDir)
@@ -474,13 +477,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 					return;
 
 				const wxString fullName = dirname + knownSubdir;
-				item = AppendItem(parent, knownSubdir, GetIconIndex(::dir, fullName),
-#ifdef __WXMSW__
-						-1
-#else
-						GetIconIndex(opened_dir, fullName)
-#endif
-					);
+				item = AppendItem(parent, knownSubdir, GetIconIndex(::dir, fullName), GetIconIndex(opened_dir, fullName));
 				CheckSubdirStatus(item, fullName);
 			}
 			else
@@ -507,8 +504,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 	int attributes;
 	bool is_dir;
 	const wxLongLong size(-1);
-	wxDateTime date;
-	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes))
+	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, 0, &attributes))
 	{
 		wxASSERT(is_dir);
 		if (file == _T(""))
@@ -524,34 +520,20 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 		if (file != knownSubdir)
 #endif
 		{
-			if (filter.FilenameFiltered(file, dirname, true, size, true, attributes, date.IsValid() ? &date : 0))
+			if (filter.FilenameFiltered(file, dirname, true, size, true, attributes))
 				continue;
 		}
 		else
 			matchedKnown = true;
 
-		wxTreeItemId item = AppendItem(parent, file, GetIconIndex(::dir, fullName),
-#ifdef __WXMSW__
-				-1
-#else
-				GetIconIndex(opened_dir, fullName)
-#endif
-			);
-
+		wxTreeItemId item = AppendItem(parent, file, GetIconIndex(::dir, fullName), GetIconIndex(opened_dir, fullName));
 		CheckSubdirStatus(item, fullName);
 	}
 
 	if (!matchedKnown && knownSubdir != _T(""))
 	{
 		const wxString fullName = dirname + knownSubdir;
-		wxTreeItemId item = AppendItem(parent, knownSubdir, GetIconIndex(::dir, fullName),
-#ifdef __WXMSW__
-				-1
-#else
-				GetIconIndex(opened_dir, fullName)
-#endif
-			);
-
+		wxTreeItemId item = AppendItem(parent, knownSubdir, GetIconIndex(::dir, fullName), GetIconIndex(opened_dir, fullName));
 		CheckSubdirStatus(item, fullName);
 	}
 
@@ -573,8 +555,7 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 	int attributes;
 	bool is_dir;
 	const wxLongLong size(-1);
-	wxDateTime date;
-	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes))
+	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, 0, &attributes))
 	{
 		wxASSERT(is_dir);
 		if (file == _T(""))
@@ -583,7 +564,7 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 			continue;
 		}
 
-		if (filter.FilenameFiltered(file, dirname, true, size, true, attributes, date.IsValid() ? &date : 0))
+		if (filter.FilenameFiltered(file, dirname, true, size, true, attributes))
 			continue;
 
 		return file;
@@ -621,8 +602,7 @@ wxTreeItemId CLocalTreeView::MakeSubdirs(wxTreeItemId parent, wxString dirname, 
 		dirname += segment + separator;
 	}
 
-	// Not needed, stays unexpanded by default
-	// DisplayDir(parent, dirname);
+	DisplayDir(parent, dirname);
 	return parent;
 }
 
@@ -782,8 +762,7 @@ void CLocalTreeView::Refresh()
 		bool was_link;
 		bool is_dir;
 		int attributes;
-		wxDateTime date;
-		while (local_filesystem.GetNextFile(file, was_link, is_dir, 0, &date, &attributes))
+		while (local_filesystem.GetNextFile(file, was_link, is_dir, 0, 0, &attributes))
 		{
 			if (file == _T(""))
 			{
@@ -791,7 +770,7 @@ void CLocalTreeView::Refresh()
 				continue;
 			}
 
-			if (filter.FilenameFiltered(file, dir.dir, true, size, true, attributes, date.IsValid() ? &date : 0))
+			if (filter.FilenameFiltered(file, dir.dir, true, size, true, attributes))
 				continue;
 
 			dirs.push_back(file);
@@ -845,14 +824,7 @@ void CLocalTreeView::Refresh()
 			else if (cmp < 0)
 			{
 				wxString fullname = dir.dir + *iter + separator;
-				wxTreeItemId newItem = AppendItem(dir.item, *iter, GetIconIndex(::dir, fullname),
-#ifdef __WXMSW__
-						-1
-#else
-						GetIconIndex(opened_dir, fullname)
-#endif
-					);
-
+				wxTreeItemId newItem = AppendItem(dir.item, *iter, GetIconIndex(::dir, fullname), GetIconIndex(opened_dir, fullname));
 				CheckSubdirStatus(newItem, fullname);
 				iter++;
 				inserted = true;
@@ -871,14 +843,7 @@ void CLocalTreeView::Refresh()
 		while (iter != dirs.rend())
 		{
 			wxString fullname = dir.dir + *iter + separator;
-			wxTreeItemId newItem = AppendItem(dir.item, *iter, GetIconIndex(::dir, fullname),
-#ifdef __WXMSW__
-					-1
-#else
-					GetIconIndex(opened_dir, fullname)
-#endif
-				);
-
+			wxTreeItemId newItem = AppendItem(dir.item, *iter, GetIconIndex(::dir, fullname), GetIconIndex(opened_dir, fullname));
 			CheckSubdirStatus(newItem, fullname);
 			iter++;
 			inserted = true;
@@ -930,10 +895,10 @@ int CLocalTreeView::OnCompareItems(const wxTreeItemId& item1, const wxTreeItemId
 #endif
 }
 
-void CLocalTreeView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CLocalTreeView::OnStateChange(enum t_statechange_notifications notification, const wxString& data)
 {
 	if (notification == STATECHANGE_LOCAL_DIR)
-		SetDir(m_pState->GetLocalDir().GetPath());
+		SetDir(m_pState->GetLocalDir());
 	else
 	{
 		wxASSERT(notification == STATECHANGE_APPLYFILTER);
@@ -1092,11 +1057,8 @@ void CLocalTreeView::OnVolumesEnumerated(wxCommandEvent& event)
 	std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo> volumeInfo;
 	volumeInfo = m_pVolumeEnumeratorThread->GetVolumes();
 
-	if (event.GetEventType() == fzEVT_VOLUMESENUMERATED)
-	{
-		delete m_pVolumeEnumeratorThread;
-		m_pVolumeEnumeratorThread = 0;
-	}
+	delete m_pVolumeEnumeratorThread;
+	m_pVolumeEnumeratorThread = 0;
 
 	for (std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo>::const_iterator iter = volumeInfo.begin(); iter != volumeInfo.end(); iter++)
 	{
@@ -1117,6 +1079,158 @@ void CLocalTreeView::OnVolumesEnumerated(wxCommandEvent& event)
 	}
 }
 
+DEFINE_EVENT_TYPE(fzEVT_VOLUMESENUMERATED)
+
+CVolumeDescriptionEnumeratorThread::CVolumeDescriptionEnumeratorThread(wxEvtHandler* pEvtHandler)
+	: wxThreadEx(wxTHREAD_JOINABLE),
+	  m_pEvtHandler(pEvtHandler)
+{
+	m_failure = false;
+	m_stop = false;
+	m_running = true;
+
+	if (Create() != wxTHREAD_NO_ERROR)
+	{
+		m_running = false;
+		m_failure = true;
+	}
+	Run();
+}
+
+CVolumeDescriptionEnumeratorThread::~CVolumeDescriptionEnumeratorThread()
+{
+	m_stop = true;
+	Wait();
+
+	for (std::list<t_VolumeInfoInternal>::const_iterator iter = m_volumeInfo.begin(); iter != m_volumeInfo.end(); iter++)
+	{
+		delete [] iter->pVolume;
+		delete [] iter->pVolumeName;
+	}
+	m_volumeInfo.clear();
+}
+
+wxThread::ExitCode CVolumeDescriptionEnumeratorThread::Entry()
+{
+	if (!GetDrives())
+		m_failure = true;
+
+	m_running = false;
+
+	wxCommandEvent evt(fzEVT_VOLUMESENUMERATED);
+	m_pEvtHandler->AddPendingEvent(evt);
+
+	return 0;
+}
+
+bool CVolumeDescriptionEnumeratorThread::GetDrives()
+{
+	long drivesToHide = 0;
+	// Adhere to the NODRIVES group policy
+	wxRegKey key(_T("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"));
+	if (key.Exists())
+	{
+		if (!key.HasValue(_T("NoDrives")) || !key.QueryValue(_T("NoDrives"), &drivesToHide))
+			drivesToHide = 0;
+	}
+
+	int len = GetLogicalDriveStrings(0, 0);
+	if (!len)
+		return false;
+
+	wxChar* drives = new wxChar[len + 1];
+
+	if (!GetLogicalDriveStrings(len, drives))
+	{
+		delete [] drives;
+		return false;
+	}
+
+	const wxChar* pDrive = drives;
+	while (*pDrive)
+	{
+		if (m_stop)
+		{
+			delete [] drives;
+			return false;
+		}
+
+		// Check if drive should be hidden by default
+		if (pDrive[0] != 0 && pDrive[1] == ':')
+		{
+			int bit = 0;
+			char letter = pDrive[0];
+			if (letter >= 'A' && letter <= 'Z')
+				bit = 1 << (letter - 'A');
+			if (letter >= 'a' && letter <= 'z')
+				bit = 1 << (letter - 'a');
+
+			if (drivesToHide & bit)
+			{
+				pDrive += wxStrlen(pDrive) + 1;
+				continue;
+			}
+		}
+
+		int len = wxStrlen(pDrive);
+		wxChar* pVolume = new wxChar[len + 1];
+		wxStrcpy(pVolume, pDrive);
+		if (pVolume[len - 1] == '\\')
+			pVolume[len - 1] = 0;
+		if (!*pVolume)
+		{
+			delete [] pVolume;
+			pDrive += len + 1;
+			continue;
+		}
+
+		// Get the label of the drive
+		wxChar* pVolumeName = new wxChar[501];
+		int oldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
+		BOOL res = GetVolumeInformation(pDrive, pVolumeName, 500, 0, 0, 0, 0, 0);
+		SetErrorMode(oldErrorMode);
+		if (res && pVolumeName[0])
+		{
+			t_VolumeInfoInternal volumeInfo;
+			volumeInfo.pVolume = pVolume;
+			volumeInfo.pVolumeName = pVolumeName;
+			m_volumeInfo.push_back(volumeInfo);
+		}
+		else
+		{
+			delete [] pVolumeName;
+			delete [] pVolume;
+		}
+
+		pDrive += wxStrlen(pDrive) + 1;
+	}
+
+	delete [] drives;
+
+	return true;
+}
+
+std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo> CVolumeDescriptionEnumeratorThread::GetVolumes()
+{
+	std::list<t_VolumeInfo> volumeInfo;
+
+	if (m_running)
+		return volumeInfo;
+
+	for (std::list<t_VolumeInfoInternal>::const_iterator iter = m_volumeInfo.begin(); iter != m_volumeInfo.end(); iter++)
+	{
+		t_VolumeInfo info;
+		info.volume = iter->pVolume;
+		delete [] iter->pVolume;
+		info.volumeName = iter->pVolumeName;
+		delete [] iter->pVolumeName;
+		volumeInfo.push_back(info);
+	}
+	m_volumeInfo.clear();
+
+	return volumeInfo;
+}
+
 #endif
 
 void CLocalTreeView::OnContextMenu(wxTreeEvent& event)
@@ -1129,11 +1243,14 @@ void CLocalTreeView::OnContextMenu(wxTreeEvent& event)
 	if (!pMenu)
 		return;
 
-	const CLocalPath path(GetDirFromItem(m_contextMenuItem));
+	const wxString& path = GetDirFromItem(m_contextMenuItem);
 
-	const bool hasParent = path.HasParent();
-	const bool writeable = path.IsWriteable();
-
+	bool hasParent = m_pState->LocalDirHasParent(path);
+	const bool writeable = m_pState->LocalDirIsWriteable(path);
+#ifdef __WXMSW__
+	if (path.Len() == 3 && path.Mid(1) == _T(":\\"))
+		hasParent = false;
+#endif
 	const bool remoteConnected = m_pState->IsRemoteConnected() && !m_pState->GetRemotePath().IsEmpty();
 
 	pMenu->Enable(XRCID("ID_UPLOAD"), hasParent && remoteConnected);
@@ -1151,10 +1268,15 @@ void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 	if (!m_contextMenuItem.IsOk())
 		return;
 
-	CLocalPath path(GetDirFromItem(m_contextMenuItem));
+	wxString path = GetDirFromItem(m_contextMenuItem);
 
-	if (!path.HasParent())
+	if (!m_pState->LocalDirHasParent(path))
 		return;
+
+#ifdef __WXMSW__
+	if (path.Len() == 3 && path.Mid(1) == _T(":\\"))
+		return;
+#endif
 
 	if (!m_pState->IsRemoteConnected())
 		return;
@@ -1167,6 +1289,8 @@ void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 	if (!remotePath.ChangePath(GetItemText(m_contextMenuItem)))
 		return;
 
+	if (path.Last() == wxFileName::GetPathSeparator())
+		path.RemoveLast();
 	m_pQueueView->QueueFolder(event.GetId() == XRCID("ID_ADDTOQUEUE"), false, path, remotePath, server);
 }
 
@@ -1179,7 +1303,7 @@ void CLocalTreeView::OnMenuMkdir(wxCommandEvent& event)
 	if (path.Last() != wxFileName::GetPathSeparator())
 		path += wxFileName::GetPathSeparator();
 
-	if (!CLocalPath(path).IsWriteable())
+	if (!m_pState->LocalDirIsWriteable(path))
 	{
 		wxBell();
 		return;
@@ -1229,8 +1353,16 @@ void CLocalTreeView::OnMenuRename(wxCommandEvent& event)
 	}
 #endif
 
-	CLocalPath path(GetDirFromItem(m_contextMenuItem));
-	if (!path.HasParent() || !path.IsWriteable())
+	wxString path = GetDirFromItem(m_contextMenuItem);
+
+#ifdef __WXMSW__
+	if (path.Len() == 3 && path.Mid(1) == _T(":\\"))
+	{
+		wxBell();
+		return;
+	}
+#endif
+	if (!m_pState->LocalDirHasParent(path) || !m_pState->LocalDirIsWriteable(path))
 	{
 		wxBell();
 		return;
@@ -1246,9 +1378,13 @@ void CLocalTreeView::OnMenuDelete(wxCommandEvent& event)
 
 	wxString path = GetDirFromItem(m_contextMenuItem);
 
-	CLocalPath local_path(path);
-	if (!local_path.HasParent() || !local_path.IsWriteable())
+	if (!m_pState->LocalDirHasParent(path) || !m_pState->LocalDirIsWriteable(path))
 		return;
+
+#ifdef __WXMSW__
+	if (path.Len() == 3 && path.Mid(1) == _T(":\\"))
+		return;
+#endif
 
 	if (!CLocalFileSystem::RecursiveDelete(path, this))
 		wxGetApp().DisplayEncodingWarning();
@@ -1291,9 +1427,17 @@ void CLocalTreeView::OnBeginLabelEdit(wxTreeEvent& event)
 	}
 #endif
 
-	CLocalPath path(GetDirFromItem(item));
+	wxString path = GetDirFromItem(item);
 
-	if (!path.HasParent() || !path.IsWriteable())
+#ifdef __WXMSW__
+	if (path.Len() == 3 && path.Mid(1) == _T(":\\"))
+	{
+		wxBell();
+		event.Veto();
+		return;
+	}
+#endif
+	if (!m_pState->LocalDirHasParent(path) || !m_pState->LocalDirIsWriteable(path))
 	{
 		wxBell();
 		event.Veto();
@@ -1325,8 +1469,15 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 
 	wxString path = GetDirFromItem(item);
 
-	CLocalPath local_path(path);
-	if (!local_path.HasParent() || !local_path.IsWriteable())
+#ifdef __WXMSW__
+	if (path.Len() == 3 && path.Mid(1) == _T(":\\"))
+	{
+		wxBell();
+		event.Veto();
+		return;
+	}
+#endif
+	if (!m_pState->LocalDirHasParent(path) || !m_pState->LocalDirIsWriteable(path))
 	{
 		wxBell();
 		event.Veto();
@@ -1406,7 +1557,7 @@ void CLocalTreeView::OnChar(wxKeyEvent& event)
 	wxCommandEvent cmdEvt;
 	if (event.GetKeyCode() == WXK_F2)
 		OnMenuRename(cmdEvt);
-	else if (event.GetKeyCode() == WXK_DELETE || event.GetKeyCode() == WXK_NUMPAD_DELETE)
+	else if (event.GetKeyCode() == WXK_DELETE)
 		OnMenuDelete(cmdEvt);
 	else
 		event.Skip();
@@ -1427,7 +1578,7 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 			CFilterManager filter;
 
 			const int attributes = S_IRUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
-			if (!filter.FilenameFiltered(_T("localhost"), path, true, size, true, attributes, 0))
+			if (!filter.FilenameFiltered(_T("localhost"), path, true, size, true, attributes))
 			{
 				if (!child)
 					AppendItem(item, _T(""));
@@ -1447,15 +1598,14 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 			bool wasLink;
 			int attributes;
 			enum CLocalFileSystem::local_fileType type;
-			wxDateTime date;
 			if (path.Last() == CLocalFileSystem::path_separator)
-				type = CLocalFileSystem::GetFileInfo(path + pData->m_known_subdir, wasLink, 0, &date, &attributes);
+				type = CLocalFileSystem::GetFileInfo(path + pData->m_known_subdir, wasLink, 0, 0, &attributes);
 			else
-				type = CLocalFileSystem::GetFileInfo(path + CLocalFileSystem::path_separator + pData->m_known_subdir, wasLink, 0, &date, &attributes);
+				type = CLocalFileSystem::GetFileInfo(path + CLocalFileSystem::path_separator + pData->m_known_subdir, wasLink, 0, 0, &attributes);
 			if (type == CLocalFileSystem::dir)
 			{
 				CFilterManager filter;
-				if (!filter.FilenameFiltered(pData->m_known_subdir, path, true, size, true, attributes, date.IsValid() ? &date : 0))
+				if (!filter.FilenameFiltered(pData->m_known_subdir, path, true, size, true, attributes))
 					return true;
 			}
 		}
@@ -1599,36 +1749,4 @@ void CLocalTreeView::RemoveDrive(wxChar drive)
 	Delete(driveItem);
 }
 
-void CLocalTreeView::OnSelectionChanging(wxTreeEvent& event)
-{
-	// On-demand open icon for selected items
-	wxTreeItemId item = event.GetItem();
-
-	if (!item)
-		return;
-
-	if (GetItemImage(item, wxTreeItemIcon_Selected) == -1)
-	{
-		int icon = GetIconIndex(opened_dir, GetDirFromItem(item));
-		SetItemImage(item, icon, wxTreeItemIcon_Selected);
-		SetItemImage(item, icon, wxTreeItemIcon_SelectedExpanded);
-	}
-}
-
 #endif
-
-void CLocalTreeView::OnMenuOpen(wxCommandEvent& event)
-{
-	if (!m_contextMenuItem.IsOk())
-		return;
-
-	wxString path = GetDirFromItem(m_contextMenuItem);
-	if (path == _T(""))
-		return;
-
-	wxString url = CState::GetAsURL(path);
-	if (url == _T(""))
-		return;
-
-	wxLaunchDefaultBrowser(url);
-}

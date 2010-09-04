@@ -1,15 +1,10 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "wrapengine.h"
+#include <wx/wizard.h>
 #include "filezillaapp.h"
 #include "ipcmutex.h"
 #include "xmlfunctions.h"
 #include "buildinfo.h"
-#include "Options.h"
-
-#include <wx/statbox.h>
-#include <wx/wizard.h>
-
-bool CWrapEngine::m_use_cache = true;
 
 #define WRAPDEBUG 0
 #if wxUSE_UNICODE
@@ -228,48 +223,100 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 	int wrapAfter = -1;
 	int start = 0;
 	unsigned int lineLength = 0;
-
-	bool url = false;
 	for (int i = 0; i <= strLen; i++)
 	{
-		if ((text[i] == ':' && text[i + 1] == '/' && text[i + 2] == '/') || // absolute
-			(text[i] == '/' && (!i || text[i - 1] == ' '))) // relative
-			url = true;
 		if (text[i] != ' ' && text[i] != 0)
-		{
-			// If url, wrap on slashes and ampersands, but not first slash of something://
-			if (!url ||
-				 ((text[i] != '/' || text[i + 1] == '/') && (text[i] != '&' || text[i + 1] == '&') && text[i] != '?'))
 			continue;
-		}
 
 		wxString segment;
 		if (wrapAfter == -1)
 		{
-			if (text[i] == '/' || text[i] == '?' || text[i] == '&')
-				segment = text.Mid(start, i - start + 1);
-			else
-				segment = text.Mid(start, i - start);
+			segment = text.Mid(start, i - start);
 			wrapAfter = i;
 		}
 		else
-		{
-			if (text[i] == '/' || text[i] == '?' || text[i] == '&')
-				segment = text.Mid(wrapAfter + 1, i - wrapAfter);
-			else
-				segment = text.Mid(wrapAfter + 1, i - wrapAfter - 1);
-		}
+			segment = text.Mid(wrapAfter + 1, i - wrapAfter - 1);
 
 		segment = wxStripMenuCodes(segment);
 		parent->GetTextExtent(segment, &width, &height, 0, 0, &m_font);
+
+		if ((unsigned int)width > maxLength)
+		{
+			// Something quite long. Perhaps it's a URL we can wrap at slashes?
+
+			while (segment != _T(""))
+			{
+				// Find longest possible subsegment
+				// which can be appended to current line, if there is a current line
+				unsigned int j;
+				int best = -1;
+
+				for (j = 1; j < segment.Len() - 1; j++)
+				{
+					if (segment[j] == '/' && segment[j + 1] != '/')
+					{
+						wxString left = segment.Left(j + 1);
+						int lwidth;
+						parent->GetTextExtent(left, &lwidth, &height, 0, 0, &m_font);
+						if ((unsigned)lwidth <= maxLength)
+						{
+							if (lineLength && lineLength + spaceWidth + lwidth > maxLength)
+							{
+								if (best == -1)
+								{
+									best = j;
+									width = lwidth;
+								}
+
+								break;
+							}
+
+							best = j;
+							width = lwidth;
+						}
+						else
+							break;
+					}
+				}
+				if (best == -1)
+				{
+					// No suitable slash found
+					return false;
+				}
+
+				if (wrappedText != _T(""))
+					wrappedText += _T("\n");
+
+				if (lineLength)
+					wrappedText += text.Mid(start, wrapAfter - start);
+
+				if (lineLength && lineLength + spaceWidth + width > maxLength)
+					wrappedText += _T("\n");
+				else
+					wrappedText += _T(" ");
+				lineLength = 0;
+
+				wrappedText += segment.Left(best + 1);
+				segment = segment.Mid(best + 1);
+
+				parent->GetTextExtent(wrappedText, &width, &height, 0, 0, &m_font);
+				parent->GetTextExtent(segment, &width, &height);
+				if ((unsigned)width <= maxLength)
+				{
+					break;
+				}
+			}
+
+			start = i - segment.Len();
+			wrapAfter = i;
+			lineLength = 0;
+		}
 
 		if (lineLength + spaceWidth + width > maxLength)
 		{
 			if (wrappedText != _T(""))
 				wrappedText += _T("\n");
 			wrappedText += text.Mid(start, wrapAfter - start);
-			if (text[wrapAfter] != ' ' && text[wrapAfter] != '\0')
-				wrappedText += text[wrapAfter];
 			if (width + spaceWidth >= (int)maxLength)
 			{
 				if (wrappedText != _T(""))
@@ -292,7 +339,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 			if (wrappedText != _T(""))
 				wrappedText += _T("\n");
 			wrappedText += text.Mid(start, i - start);
-			if (text[i] != ' ' && text[i] != '\0')
+			if (text[i] != ' ')
 				wrappedText += text[i];
 			start = i + 1;
 			wrapAfter = -1;
@@ -305,9 +352,6 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 			lineLength += width;
 			wrapAfter = i;
 		}
-
-		if (text[i] == ' ')
-			url = false;
 	}
 	if (start < strLen)
 	{
@@ -340,7 +384,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, int id, unsigned long maxLength)
 	#define plvl { for (int i = 0; i < level; i++) printf(" "); }
 #endif
 
-int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
+bool CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 {
 	// This function auto-wraps static texts.
 	
@@ -354,10 +398,8 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 #if WRAPDEBUG >= 3
 		plvl printf("Leave: max <= 0\n");
 #endif
-		return wrap_failed;
+		return false;
 	}
-
-	int result = 0;
 
 	for (unsigned int i = 0; i < sizer->GetChildren().GetCount(); i++)
 	{
@@ -402,12 +444,11 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 				{
 #if WRAPDEBUG >= 3
 					plvl printf("Leave: WrapText failed\n");
-#endif		
-					return result | wrap_failed;
+#endif				
+					return false;
 				}
 				text->SetLabel(str);
 
-				result |= wrap_didwrap;
 				continue;
 			}
 
@@ -426,14 +467,12 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 					wxNotebookPage* page = book->GetPage(i);
 					wxRect pageRect = page->GetRect();
 					int pageMax = max - rect.GetLeft() - pageRect.GetLeft() - rborder - rect.GetWidth() + maxPageWidth;
-
-					result |= WrapRecursive(wnd, page->GetSizer(), pageMax);
-					if (result & wrap_failed)
+					if (!WrapRecursive(wnd, page->GetSizer(), pageMax))
 					{
 #if WRAPDEBUG >= 3
 						plvl printf("Leave: WrapRecursive on notebook page failed\n");
 #endif
-						return result;
+						return false;
 					}
 				}
 				continue;
@@ -455,16 +494,16 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 #if WRAPDEBUG >= 3
 			level++;
 #endif
-			result |= WrapRecursive(0, subSizer, max - rborder - subBorder);
+			bool res = WrapRecursive(0, subSizer, max - rborder - subBorder);
 #if WRAPDEBUG >= 3
 			level--;
 #endif
-			if (result & wrap_failed)
+			if (!res)
 			{
 #if WRAPDEBUG >= 3
 				plvl printf("Leave: WrapRecursive on sizer failed\n");
 #endif
-				return result;
+				return false;
 			}
 		}
 	}
@@ -474,39 +513,14 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 #endif
 
 
-	return result;
+	return true;
 }
 
 bool CWrapEngine::WrapRecursive(wxWindow* wnd, double ratio, const char* name /*=""*/, wxSize canvas /*=wxSize()*/, wxSize minRequestedSize /*wxSize()*/)
 {
 	std::vector<wxWindow*> windows;
 	windows.push_back(wnd);
-	return (WrapRecursive(windows, ratio, name, canvas, minRequestedSize) & wrap_failed) == 0;
-}
-
-void CWrapEngine::UnwrapRecursive_Wrapped(const std::list<int> &wrapped, std::vector<wxWindow*> &windows, bool remove_fitting /*=false*/)
-{
-	unsigned int i = 0;
-	for (std::list<int>::const_iterator iter = wrapped.begin();
-		iter != wrapped.end();
-		iter++)
-	{
-		UnwrapRecursive(windows[i], windows[i]->GetSizer());
-		windows[i]->GetSizer()->Layout();
-
-		if (!(*iter & wrap_didwrap) && !(*iter & wrap_failed))
-		{
-			if (!(*iter) && remove_fitting)
-			{
-				// Page didn't need to be wrapped with current wrap offset,
-				// remove it since desired width will only be larger in further wrappings.
-				windows.erase(windows.begin() + i);
-				continue;
-			}
-		}
-		
-		i++;
-	}
+	return WrapRecursive(windows, ratio, name, canvas, minRequestedSize);
 }
 
 bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, const char* name /*=""*/, wxSize canvas /*=wxSize()*/, wxSize minRequestedSize /*wxSize()*/)
@@ -522,19 +536,17 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 
 			pSizer->Layout();
 			
-#ifdef __WXMAC__
-			const int offset = 6;
-#elif defined(__WXGTK__)
+			#ifdef __WXMAC__
 			const int offset = 4;
 #else
 			const int offset = 0;
 #endif
 
 #ifdef __WXDEBUG__
-			int res =
+			bool res =
 #endif
 			WrapRecursive(*iter, pSizer, maxWidth - offset);
-			wxASSERT(!(res & wrap_failed));
+			wxASSERT(res);
 			pSizer->Layout();
 			pSizer->Fit(*iter);
 			wxSize size = pSizer->GetMinSize();
@@ -542,8 +554,6 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 		}
 		return true;
 	}
-
-	std::vector<wxWindow*> all_windows = windows;
 
 	wxSize size = minRequestedSize;
 
@@ -579,54 +589,41 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 #if WRAPDEBUG > 0	
 	printf("Target ratio: %f\n", (float)ratio);
 	printf("Canvas: % 4d % 4d\n", canvas.x, canvas.y);
-	printf("Initial min and max: %d %d\n", min, max);
 #endif
 
 	while (true)
 	{
-		std::list<int> didwrap;
 
 		wxSize size = minRequestedSize;
 		for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); iter++)
 		{
 			wxSizer* pSizer = (*iter)->GetSizer();
 #ifdef __WXMAC__
-			const int offset = 6;
-#elif defined(__WXGTK__)
 			const int offset = 4;
 #else
 			const int offset = 0;
 #endif
-			int res = WrapRecursive(*iter, pSizer, desiredWidth - offset);
-			if (res & wrap_didwrap)
-				pSizer->Layout();
-			didwrap.push_back(res);
-			wxSize minSize = pSizer->GetMinSize();
-			if (minSize.x > desiredWidth)
-				res |= wrap_failed;
-			size.IncTo(minSize);
-			if (res & wrap_failed)
-				break;
+			WrapRecursive(*iter, pSizer, desiredWidth - offset);
+			pSizer->Layout();
+			size.IncTo(pSizer->GetMinSize());
 		}
 
 #if WRAPDEBUG > 0
-	    printf("Current: % 4d % 4d   desiredWidth: %d, min: %d, max: %d\n", size.GetWidth(), size.GetHeight(), desiredWidth, min, max);
+	    printf("Current: % 4d % 4d   desiredWidth: %d\n", size.GetWidth(), size.GetHeight(), desiredWidth);
 #endif
 		if (size.GetWidth() > desiredWidth)
 		{
 			// Wrapping failed
-
-			UnwrapRecursive_Wrapped(didwrap, windows, true);
-
 			min = desiredWidth;
 			if (max - min < 5)
 				break;
-
 			desiredWidth = (min + max) / 2;
 
-#if WRAPDEBUG > 0
-			printf("Wrapping failed, new min: %d\n", min);
-#endif
+			for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); iter++)
+			{
+				UnwrapRecursive(*iter, (*iter)->GetSizer());
+				(*iter)->GetSizer()->Layout();
+			}
 			continue;
 		}
 		actualWidth = size.GetWidth();
@@ -638,8 +635,6 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 
 		if (newRatio < ratio)
 		{
-			UnwrapRecursive_Wrapped(didwrap, windows, true);
-
 			if (ratio - newRatio < bestRatioDiff)
 			{
 				bestRatioDiff = ratio - newRatio;
@@ -653,7 +648,6 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 		}
 		else if (newRatio > ratio)
 		{
-			UnwrapRecursive_Wrapped(didwrap, windows);
 			if (newRatio - ratio < bestRatioDiff)
 			{
 				bestRatioDiff = newRatio - ratio;
@@ -666,8 +660,6 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 		}
 		else
 		{
-			UnwrapRecursive_Wrapped(didwrap, windows);
-
 			bestRatioDiff = ratio - newRatio;
 			bestWidth = actualWidth;
 			break;
@@ -677,26 +669,25 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 			break;
 		desiredWidth = (min + max) / 2;
 
+		for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); iter++)
+		{
+			UnwrapRecursive(*iter, (*iter)->GetSizer());
+			(*iter)->GetSizer()->Layout();
+		}
+
 		currentRatio = newRatio;
 	}
-#if WRAPDEBUG > 0		
-		printf("Performing final wrap with bestwidth %d\n", bestWidth);
-#endif		
-	for (std::vector<wxWindow*>::iterator iter = all_windows.begin(); iter != all_windows.end(); iter++)
+	for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); iter++)
 	{
-		wxSizer *pSizer = (*iter)->GetSizer();
+		wxSizer* pSizer = (*iter)->GetSizer();
+		UnwrapRecursive(*iter, pSizer);
+		pSizer->Layout();
 
-		int res = WrapRecursive(*iter, pSizer, bestWidth);
-
-		if (res & wrap_didwrap)
-		{
-			pSizer->Layout();
-			pSizer->Fit(*iter);
-		}
-#ifdef __WXDEBUG__
+		WrapRecursive(*iter, pSizer, bestWidth);
+		pSizer->Layout();
+		pSizer->Fit(*iter);
 		size = pSizer->GetMinSize();
 		wxASSERT(size.x <= bestWidth);
-#endif
 	}
 
 	SetWidthToCache(name, bestWidth);
@@ -792,9 +783,6 @@ bool CWrapEngine::UnwrapRecursive(wxWindow* wnd, wxSizer* sizer)
 
 int CWrapEngine::GetWidthFromCache(const char* name)
 {
-	if (!m_use_cache)
-		return 0;
-
 	if (!name || !*name)
 		return 0;
 
@@ -802,7 +790,7 @@ int CWrapEngine::GetWidthFromCache(const char* name)
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("layout.xml"));
 	TiXmlElement* pDocument = GetXmlFile(file);
 
 	if (!pDocument)
@@ -816,8 +804,6 @@ int CWrapEngine::GetWidthFromCache(const char* name)
 	}
 
 	wxString language = wxGetApp().GetCurrentLanguageCode();
-	if (language.empty())
-		language = _T("default");
 
 	TiXmlElement* pLanguage = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
 	if (!pLanguage)
@@ -842,9 +828,6 @@ int CWrapEngine::GetWidthFromCache(const char* name)
 
 void CWrapEngine::SetWidthToCache(const char* name, int width)
 {
-	if (!m_use_cache)
-		return;
-
 	if (!name || !*name)
 		return;
 
@@ -852,7 +835,7 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("layout.xml"));
 	TiXmlElement* pDocument = GetXmlFile(file);
 
 	if (!pDocument)
@@ -866,8 +849,6 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 	}
 
 	wxString language = wxGetApp().GetCurrentLanguageCode();
-	if (language.empty())
-		language = _T("default");
 
 	TiXmlElement* pLanguage = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
 	if (!pLanguage)
@@ -879,7 +860,7 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 	TiXmlElement* pDialog = FindElementWithAttribute(pLanguage, "Dialog", "name", name);
 	if (!pDialog)
 	{
-		pDialog = pLanguage->LinkEndChild(new TiXmlElement("Dialog"))->ToElement();
+		pDialog = pLanguage->InsertEndChild(TiXmlElement("Dialog"))->ToElement();
 		pDialog->SetAttribute("name", name);
 	}
 
@@ -935,14 +916,13 @@ bool CWrapEngine::LoadCache()
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
-	CXmlFile xml(file);
-	TiXmlElement* pDocument = xml.Load();
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("layout.xml"));
+	TiXmlElement* pDocument = GetXmlFile(file);
 
 	if (!pDocument)
 	{
-		m_use_cache = false;
-		wxMessageBox(xml.GetError(), _("Error loading xml file"), wxICON_ERROR);
+		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed."), file.GetFullPath().c_str());
+		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
@@ -951,7 +931,7 @@ bool CWrapEngine::LoadCache()
 
 	TiXmlElement* pElement = pDocument->FirstChildElement("Layout");
 	if (!pElement)
-		pElement = pDocument->LinkEndChild(new TiXmlElement("Layout"))->ToElement();
+		pElement = pDocument->InsertEndChild(TiXmlElement("Layout"))->ToElement();
 
 	const wxString buildDate = CBuildInfo::GetBuildDateString();
 	if (GetTextAttribute(pElement, "Builddate") != buildDate)
@@ -972,7 +952,7 @@ bool CWrapEngine::LoadCache()
 
 	TiXmlElement* pResources = pElement->FirstChildElement("Resources");
 	if (!pResources)
-		pResources = pElement->LinkEndChild(new TiXmlElement("Resources"))->ToElement();
+		pResources = pElement->InsertEndChild(TiXmlElement("Resources"))->ToElement();
 
 	wxString resourceDir = wxGetApp().GetResourceDir();
 	wxDir dir(resourceDir);
@@ -992,7 +972,7 @@ bool CWrapEngine::LoadCache()
 		TiXmlElement* resourceElement = FindElementWithAttribute(pResources, "xrc", "file", xrc.mb_str());
 		if (!resourceElement)
 		{
-			resourceElement = pResources->LinkEndChild(new TiXmlElement("xrc"))->ToElement();
+			resourceElement = pResources->InsertEndChild(TiXmlElement("xrc"))->ToElement();
 			resourceElement->SetAttribute("file", xrc.mb_str());
 			resourceElement->SetAttribute("date", ticks.ToString().mb_str());
 			cacheValid = false;
@@ -1028,7 +1008,7 @@ bool CWrapEngine::LoadCache()
 	TiXmlElement* languageElement = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
 	if (!languageElement)
 	{
-		languageElement = pElement->LinkEndChild(new TiXmlElement("Language"))->ToElement();
+		languageElement = pElement->InsertEndChild(TiXmlElement("Language"))->ToElement();
 		languageElement->SetAttribute("id", language.mb_str());
 	}
 
@@ -1042,7 +1022,7 @@ bool CWrapEngine::LoadCache()
 
 	TiXmlElement* pFontElement = languageElement->FirstChildElement("Font");
 	if (!pFontElement)
-		pFontElement = languageElement->LinkEndChild(new TiXmlElement("Font"))->ToElement();
+		pFontElement = languageElement->InsertEndChild(TiXmlElement("Font"))->ToElement();
 
 	if (GetTextAttribute(pFontElement, "font") != fontDesc)
 	{
@@ -1089,21 +1069,14 @@ bool CWrapEngine::LoadCache()
 			languageElement->RemoveChild(dialog);
 	}
 
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
-	{
-		m_use_cache = cacheValid;
-		return true;
-	}
-
 	wxString error;
-	if (!xml.Save(&error))
+	if (!SaveXmlFile(file, pDocument, &error))
 	{
-		m_use_cache = false;
-
 		wxString msg = wxString::Format(_("Could not write \"%s\": %s"), file.GetFullPath().c_str(), error.c_str());
 		wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 
+	delete pDocument->GetDocument();
 
 	return true;
 }
@@ -1114,14 +1087,14 @@ void CWrapEngine::ClearCache()
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
+	wxFileName file(wxGetApp().GetSettingsDir(), _T("layout.xml"));
 	if (file.FileExists())
 		wxRemoveFile(file.GetFullPath());
 }
 
 void CWrapEngine::CheckLanguage()
 {
-#if wxUSE_UNICODE
+	#if wxUSE_UNICODE
 	// Just don't bother with wrapping on anything other than UCS-2
 	// FIXME: Use charset conversion routines to convert into UCS-2 and back into
 	//        local charset if not using unicode.

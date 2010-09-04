@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "state.h"
 #include "commandqueue.h"
 #include "FileZillaEngine.h"
@@ -6,310 +6,135 @@
 #include "Mainfrm.h"
 #include "queue.h"
 #include "filezillaapp.h"
+#include "RemoteListView.h"
 #include "recursive_operation.h"
 #include "statusbar.h"
-#include "local_filesys.h"
-#include "listingcomparison.h"
-
-CContextManager CContextManager::m_the_context_manager;
-
-CContextManager::CContextManager()
-{
-	m_current_context = -1;
-}
-
-CContextManager* CContextManager::Get()
-{
-	return &m_the_context_manager;
-}
-
-CState* CContextManager::CreateState(CMainFrame* pMainFrame)
-{
-	wxASSERT(pMainFrame);
-
-	CState* pState = new CState(pMainFrame);
-
-	m_contexts.push_back(pState);
-
-	NotifyHandlers(pState, STATECHANGE_NEWCONTEXT, _T(""), 0, false);
-
-	return pState;
-}
-
-void CContextManager::DestroyState(CState* pState)
-{
-	for (unsigned int i = 0; i < m_contexts.size(); i++)
-	{
-		if (m_contexts[i] != pState)
-			continue;
-
-		m_contexts.erase(m_contexts.begin() + i);
-		if ((int)i < m_current_context)
-			m_current_context--;
-		else if ((int)i == m_current_context)
-		{
-			if (i >= m_contexts.size())
-				m_current_context--;
-			NotifyHandlers(GetCurrentContext(), STATECHANGE_CHANGEDCONTEXT, _T(""), 0, false);
-		}
-
-		break;
-	}
-
-	NotifyHandlers(pState, STATECHANGE_REMOVECONTEXT, _T(""), 0, false);
-	delete pState;
-}
-
-void CContextManager::SetCurrentContext(CState* pState)
-{
-	if (GetCurrentContext() == pState)
-		return;
-
-	for (unsigned int i = 0; i < m_contexts.size(); i++)
-	{
-		if (m_contexts[i] != pState)
-			continue;
-
-		m_current_context = i;
-		NotifyHandlers(GetCurrentContext(), STATECHANGE_CHANGEDCONTEXT, _T(""), 0, false);
-	}
-}
-
-void CContextManager::DestroyAllStates()
-{
-	m_current_context = -1;
-	NotifyHandlers(GetCurrentContext(), STATECHANGE_CHANGEDCONTEXT, _T(""), 0, false);
-
-	while (!m_contexts.empty())
-	{
-		CState* pState = m_contexts.back();
-		m_contexts.pop_back();
-
-		NotifyHandlers(pState, STATECHANGE_REMOVECONTEXT, _T(""), 0, false);
-		delete pState;
-	}
-}
-
-void CContextManager::RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool current_only, bool blockable)
-{
-	wxASSERT(pHandler);
-	wxASSERT(notification != STATECHANGE_MAX && notification != STATECHANGE_NONE);
-
-	std::list<t_handler> &handlers = m_handlers[notification];
-	std::list<t_handler>::const_iterator iter;
-	for (iter = handlers.begin(); iter != handlers.end(); iter++)
-	{
-		if (iter->pHandler == pHandler)
-			return;
-	}
-
-	t_handler handler;
-	handler.pHandler = pHandler;
-	handler.blockable = blockable;
-	handler.current_only = current_only;
-	handlers.push_back(handler);
-}
-
-void CContextManager::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification)
-{
-	wxASSERT(pHandler);
-	wxASSERT(notification != STATECHANGE_MAX);
-
-	if (notification == STATECHANGE_NONE)
-	{
-		for (int i = 0; i < STATECHANGE_MAX; i++)
-		{
-			std::list<t_handler> &handlers = m_handlers[i];
-			for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); iter++)
-			{
-				if (iter->pHandler == pHandler)
-				{
-					handlers.erase(iter);
-					break;
-				}
-			}
-		}
-	}
-	else
-	{
-		std::list<t_handler> &handlers = m_handlers[notification];
-		for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); iter++)
-		{
-			if (iter->pHandler == pHandler)
-			{
-				handlers.erase(iter);
-				return;
-			}
-		}
-	}
-}
-
-size_t CContextManager::HandlerCount(t_statechange_notifications notification) const
-{
-	wxASSERT(notification != STATECHANGE_NONE && notification != STATECHANGE_MAX);
-	return m_handlers[notification].size();
-}
-
-void CContextManager::NotifyHandlers(CState* pState, t_statechange_notifications notification, const wxString& data, const void* data2, bool blocked)
-{
-	wxASSERT(notification != STATECHANGE_NONE && notification != STATECHANGE_MAX);
-
-	const std::list<t_handler> &handlers = m_handlers[notification];
-	for (std::list<t_handler>::const_iterator iter = handlers.begin(); iter != handlers.end(); iter++)
-	{
-		if (blocked && iter->blockable)
-			continue;
-
-		if (iter->current_only && pState != GetCurrentContext())
-			continue;
-
-		iter->pHandler->OnStateChange(pState, notification, data, data2);
-	}
-}
-
-CState* CContextManager::GetCurrentContext()
-{
-	if (m_current_context == -1)
-		return 0;
-
-	return m_contexts[m_current_context];
-}
-
-void CContextManager::NotifyAllHandlers(enum t_statechange_notifications notification, const wxString& data /*=_T("")*/, const void* data2 /*=0*/)
-{
-	for (unsigned int i = 0; i < m_contexts.size(); i++)
-		m_contexts[i]->NotifyHandlers(notification, data, data2);
-}
-
-void CContextManager::NotifyGlobalHandlers(enum t_statechange_notifications notification, const wxString& data /*=_T("")*/, const void* data2 /*=0*/)
-{
-	const std::list<t_handler> &handlers = m_handlers[notification];
-	for (std::list<t_handler>::const_iterator iter = handlers.begin(); iter != handlers.end(); iter++)
-		iter->pHandler->OnStateChange(0, notification, data, data2);
-}
 
 CState::CState(CMainFrame* pMainFrame)
 {
-	memset(m_blocked, 0, sizeof(m_blocked));
-
 	m_pMainFrame = pMainFrame;
 
 	m_pDirectoryListing = 0;
 	m_pServer = 0;
-	m_title = _("Not connected");
 	m_successful_connect = 0;
 
 	m_pEngine = 0;
 	m_pCommandQueue = 0;
-	m_pComparisonManager = new CComparisonManager(this);
 
 	m_pRecursiveOperation = new CRecursiveOperation(this);
-
-	m_sync_browse.is_changing = false;
-	m_sync_browse.compare = false;
-
-	m_localDir.SetPath(CLocalPath::path_separator);
-
-	m_pCertificate = 0;
-	m_pSftpEncryptionInfo = 0;
 }
 
 CState::~CState()
 {
+	delete m_pDirectoryListing;
 	delete m_pServer;
-	
-	delete m_pCertificate;
-	delete m_pSftpEncryptionInfo;
 
-	delete m_pComparisonManager;
 	delete m_pCommandQueue;
 	delete m_pEngine;
 
 	// Unregister all handlers
 	for (int i = 0; i < STATECHANGE_MAX; i++)
 	{
-		for (std::list<t_handler>::iterator iter = m_handlers[i].begin(); iter != m_handlers[i].end(); iter++)
-		{
-			iter->pHandler->m_pState = 0;
-		}
+		for (std::list<CStateEventHandler*>::iterator iter = m_handlers[i].begin(); iter != m_handlers[i].end(); iter++)
+			(*iter)->m_pState = 0;
 	}
 
 	delete m_pRecursiveOperation;
 }
 
-CLocalPath CState::GetLocalDir() const
+wxString CState::GetLocalDir() const
 {
 	return m_localDir;
 }
 
-bool CState::SetLocalDir(const wxString& dir, wxString *error /*=0*/)
+wxString CState::Canonicalize(wxString oldDir, wxString newDir, wxString *error /*=0*/)
 {
-	if (m_sync_browse.is_changing)
-	{
-		wxMessageBox(_T("Cannot change directory, there already is a synchronized browsing operation in progress."), _("Synchronized browsing"));
-		return false;
-	}
-
-	CLocalPath p(m_localDir);
 #ifdef __WXMSW__
-	if (dir == _T("..") && !p.HasParent() && p.HasLogicalParent())
+	if (newDir == _T("\\") || newDir == _T("/") || newDir == _T(""))
+		return _T("\\");
+
+	// "Go up one level" is a little bit difficult under Windows due to
+	// things like "My Computer" and "Desktop"
+	if (newDir == _T(".."))
 	{
-		// Parent of C:\ is drive list
-		if (!p.MakeParent())
-			return false;
+		newDir = oldDir;
+		if (newDir != _T("\\"))
+		{
+			newDir.RemoveLast();
+			int pos = newDir.Find('\\', true);
+			if (pos == -1)
+				return _T("\\");
+			else
+				newDir = newDir.Left(pos + 1);
+		}
 	}
 	else
 #endif
-	if (!p.ChangePath(dir))
-		return false;
-
-	if (!p.Exists(error))
-		return false;
-
-	if (!m_sync_browse.local_root.empty())
 	{
-		wxASSERT(m_pServer);
-		
-		if (p != m_sync_browse.local_root && !p.IsSubdirOf(m_sync_browse.local_root))
+		wxFileName dir(newDir, _T(""));
 		{
-			wxString msg = wxString::Format(_("The local directory '%s' is not below the synchronization root (%s).\nDisable synchronized browsing and continue changing the local directory?"),
-					p.GetPath().c_str(),
-					m_sync_browse.local_root.GetPath().c_str());
-			if (wxMessageBox(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
-				return false;
-			SetSyncBrowse(false);
+			wxLogNull noLog;
+			if (!dir.MakeAbsolute(oldDir))
+				return _T("");
 		}
-		else if (!IsRemoteIdle())
+		newDir = dir.GetFullPath();
+		if (newDir.Right(1) != wxFileName::GetPathSeparator())
+			newDir += wxFileName::GetPathSeparator();
+	}
+
+	// Check for partial UNC paths
+	if (newDir.Left(2) == _T("\\\\"))
+	{
+		int pos = newDir.Mid(2).Find('\\');
+		if (pos == -1 || pos + 3 == (int)newDir.Len())
 		{
-			wxString msg(_("A remote operation is in progress and synchronized browsing is enabled.\nDisable synchronized browsing and continue changing the local directory?"));
-			if (wxMessageBox(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
-				return false;
-			SetSyncBrowse(false);
+			// Partial UNC path, no share given
+			return newDir;
 		}
-		else
+
+		pos = newDir.Mid(pos + 3).Find('\\');
+		if (pos == -1)
 		{
-			CServerPath remote_path = GetSynchronizedDirectory(p);
-			if (remote_path.IsEmpty())
-			{
-				SetSyncBrowse(false);
-				wxString msg = wxString::Format(_("Could not obtain corresponding remote directory for the local directory '%s'.\nSynchronized browsing has been disabled."),
-					p.GetPath().c_str());
-				wxMessageBox(msg, _("Synchronized browsing"));
-				return false;
-			}
-
-			m_sync_browse.is_changing = true;
-			m_sync_browse.compare = m_pComparisonManager->IsComparing();
-			CListCommand *pCommand = new CListCommand(remote_path);
-			m_pCommandQueue->ProcessCommand(pCommand);
-
-			return true;
+			// Partial UNC path, no full share yet, skip further processing
+			return _T("");
 		}
 	}
-	
-	m_localDir = p;
 
-	COptions::Get()->SetOption(OPTION_LASTLOCALDIR, m_localDir.GetPath());
+	if (!wxDir::Exists(newDir))
+	{
+		if (!error)
+			return _T("");
+
+		*error = wxString::Format(_("'%s' does not exist or cannot be accessed."), newDir.c_str());
+
+#ifdef __WXMSW__
+		if (newDir[0] == '\\')
+			return _T("");
+
+		// Check for removable drive, display a more specific error message in that case
+		if (::GetLastError() != ERROR_NOT_READY)
+			return _T("");
+		int type = GetDriveType(newDir.Left(3));
+		if (type == DRIVE_REMOVABLE || type == DRIVE_CDROM)
+
+			*error = wxString::Format(_("Cannot access '%s', no media inserted or drive not ready."), newDir.c_str());
+#endif
+
+		return _T("");
+	}
+
+	return newDir;
+}
+
+bool CState::SetLocalDir(wxString dir, wxString *error /*=0*/)
+{
+	dir = Canonicalize(m_localDir, dir, error);
+	if (dir == _T(""))
+		return false;
+
+	m_localDir = dir;
+
+	COptions::Get()->SetOption(OPTION_LASTLOCALDIR, dir);
 
 	NotifyHandlers(STATECHANGE_LOCAL_DIR);
 
@@ -320,14 +145,15 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 {
 	if (!pDirectoryListing)
 	{
-		SetSyncBrowse(false);
 		if (modified)
 			return false;
 
 		if (m_pDirectoryListing)
 		{
+			const CDirectoryListing* pOldListing = m_pDirectoryListing;
 			m_pDirectoryListing = 0;
 			NotifyHandlers(STATECHANGE_REMOTE_DIR);
+			delete pOldListing;
 		}
 		return true;
 	}
@@ -344,7 +170,7 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 		}
 	}
 	else
-		m_last_path = pDirectoryListing->path;
+		COptions::Get()->SetOption(OPTION_LASTSERVERPATH, pDirectoryListing->path.GetSafePath());
 
 	if (m_pDirectoryListing && m_pDirectoryListing->path == pDirectoryListing->path &&
         pDirectoryListing->m_failed)
@@ -354,6 +180,7 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 		return true;
 	}
 
+	const CDirectoryListing *pOldListing = m_pDirectoryListing;
 	m_pDirectoryListing = pDirectoryListing;
 
 	if (!modified)
@@ -361,52 +188,12 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 	else
 		NotifyHandlers(STATECHANGE_REMOTE_DIR_MODIFIED);
 
-	if (m_sync_browse.is_changing && !modified)
-	{
-		m_sync_browse.is_changing = false;
-		if (m_pDirectoryListing->path != m_sync_browse.remote_root && !m_pDirectoryListing->path.IsSubdirOf(m_sync_browse.remote_root, false))
-		{
-			SetSyncBrowse(false);
-			wxString msg = wxString::Format(_("Current remote directory (%s) is not below the synchronization root (%s).\nSynchronized browsing has been disabled."),
-					m_pDirectoryListing->path.GetPath().c_str(),
-					m_sync_browse.remote_root.GetPath().c_str());
-			wxMessageBox(msg, _("Synchronized browsing"));
-		}
-		else
-		{
-			CLocalPath local_path = GetSynchronizedDirectory(m_pDirectoryListing->path);
-			if (local_path.empty())
-			{
-				SetSyncBrowse(false);
-				wxString msg = wxString::Format(_("Could not obtain corresponding local directory for the remote directory '%s'.\nSynchronized browsing has been disabled."),
-					m_pDirectoryListing->path.GetPath().c_str());
-				wxMessageBox(msg, _("Synchronized browsing"));
-				return true;
-			}
+	delete pOldListing;
 
-			wxString error;
-			if (!local_path.Exists(&error))
-			{
-				SetSyncBrowse(false);
-				wxString msg = error + _T("\n") + _("Synchronized browsing has been disabled.");
-				wxMessageBox(msg, _("Synchronized browsing"));
-				return true;
-			}
-
-			m_localDir = local_path;
-
-			COptions::Get()->SetOption(OPTION_LASTLOCALDIR, m_localDir.GetPath());
-
-			NotifyHandlers(STATECHANGE_LOCAL_DIR);
-
-			if (m_sync_browse.compare)
-				m_pComparisonManager->CompareListings();
-		}
-	}
 	return true;
 }
 
-CSharedPointer<const CDirectoryListing> CState::GetRemoteDir() const
+const CDirectoryListing *CState::GetRemoteDir() const
 {
 	return m_pDirectoryListing;
 }
@@ -426,52 +213,40 @@ void CState::RefreshLocal()
 
 void CState::RefreshLocalFile(wxString file)
 {
-	wxString file_name;
-	CLocalPath path(file, &file_name);
-	if (path.empty())
+	wxFileName fn(file);
+	if (!fn.IsOk())
+		return;
+	if (!fn.IsAbsolute())
 		return;
 
-	if (file_name.empty())
+	wxString path = fn.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR);
+	if (path == _T(""))
+		return;
+
+	if (path == m_localDir)
 	{
-		if (!path.HasParent())
+		file = fn.GetFullName();
+		if (file == _T(""))
 			return;
-		path.MakeParent(&file_name);
-		wxASSERT(!file_name.empty());
 	}
-
-	if (path != m_localDir)
-		return;
-
-	NotifyHandlers(STATECHANGE_LOCAL_REFRESH_FILE, file_name);
-}
-
-void CState::LocalDirCreated(const CLocalPath& path)
-{
-	if (!path.IsSubdirOf(m_localDir))
-		return;
-
-	wxString next_segment = path.GetPath().Mid(m_localDir.GetPath().Len());
-	int pos = next_segment.Find(CLocalPath::path_separator);
-	if (pos <= 0)
+	else if (path.Left(m_localDir.Len()) == m_localDir)
 	{
-		// Shouldn't ever come true
-		return;
+		path = path.Mid(m_localDir.Len());
+		int pos = path.Find(wxFileName::GetPathSeparator());
+		if (pos < 1)
+			return;
+
+		file = path.Left(pos);
 	}
 
-	// Current local path is /foo/
-	// Called with /foo/bar/baz/
-	// -> Refresh /foo/bar/
-	next_segment = next_segment.Left(pos);
-	NotifyHandlers(STATECHANGE_LOCAL_REFRESH_FILE, next_segment);
+	NotifyHandlers(STATECHANGE_LOCAL_REFRESH_FILE, file);
 }
 
 void CState::SetServer(const CServer* server)
 {
 	if (m_pServer)
 	{
-		if (server && *server == *m_pServer &&
-			server->GetName() == m_pServer->GetName() &&
-			server->MaximumMultipleConnections() == m_pServer->MaximumMultipleConnections())
+		if (server &&  *server == *m_pServer)
 		{
 			// Nothing changes
 			return;
@@ -479,32 +254,25 @@ void CState::SetServer(const CServer* server)
 
 		SetRemoteDir(0);
 		delete m_pServer;
-		delete m_pCertificate;
-		m_pCertificate = 0;
-		delete m_pSftpEncryptionInfo;
-		m_pSftpEncryptionInfo = 0;
-	}
-	if (server)
-	{
-		if (m_last_server != *server)
-			m_last_path.Clear();
-		m_last_server = *server;
-
-		m_pServer = new CServer(*server);
-
-		const wxString& name = server->GetName();
-		if (!name.IsEmpty())
-			m_title = name + _T(" - ") + server->FormatServer();
-		else
-			m_title = server->FormatServer();
-	}
-	else
-	{
-		m_pServer = 0;
-		m_title = _("Not connected");
 	}
 
 	m_successful_connect = false;
+
+	CStatusBar* const pStatusBar = m_pMainFrame->GetStatusBar();
+	if (pStatusBar)
+	{
+		pStatusBar->DisplayDataType(server);
+		pStatusBar->DisplayEncrypted(server);
+	}
+
+	if (server)
+		m_pServer = new CServer(*server);
+	else
+	{
+		if (m_pServer)
+			m_pMainFrame->SetTitle(_T("FileZilla"));
+		m_pServer = 0;
+	}
 
 	NotifyHandlers(STATECHANGE_SERVER);
 }
@@ -514,41 +282,29 @@ const CServer* CState::GetServer() const
 	return m_pServer;
 }
 
-wxString CState::GetTitle() const
-{
-	return m_title;
-}
-
-bool CState::Connect(const CServer& server, const CServerPath& path /*=CServerPath()*/)
+bool CState::Connect(const CServer& server, bool askBreak, const CServerPath& path /*=CServerPath()*/)
 {
 	if (!m_pEngine)
 		return false;
 	if (m_pEngine->IsConnected() || m_pEngine->IsBusy() || !m_pCommandQueue->Idle())
+	{
+		if (askBreak)
+			if (wxMessageBox(_("Break current connection?"), _T("FileZilla"), wxYES_NO | wxICON_QUESTION) != wxYES)
+				return false;
 		m_pCommandQueue->Cancel();
-	m_pRecursiveOperation->StopRecursiveOperation();
-	SetSyncBrowse(false);
+	}
 
 	m_pCommandQueue->ProcessCommand(new CConnectCommand(server));
-	m_pCommandQueue->ProcessCommand(new CListCommand(path, _T(""), LIST_FLAG_FALLBACK_CURRENT));
+	m_pCommandQueue->ProcessCommand(new CListCommand(path, _T(""),LIST_FLAG_FALLBACK_CURRENT));
 
-	SetServer(&server);
+	COptions::Get()->SetLastServer(server);
+	COptions::Get()->SetOption(OPTION_LASTSERVERPATH, path.GetSafePath());
 
-	return true;
-}
-
-bool CState::Disconnect()
-{
-	if (!m_pEngine)
-		return false;
-
-	if (!IsRemoteConnected())
-		return true;
-	
-	if (!IsRemoteIdle())
-		return false;
-
-	SetServer(0);
-	m_pCommandQueue->ProcessCommand(new CDisconnectCommand());
+	const wxString& name = server.GetName();
+	if (!name.IsEmpty())
+		m_pMainFrame->SetTitle(name + _T(" - ") + server.FormatServer() + _T(" - FileZilla"));
+	else
+		m_pMainFrame->SetTitle(server.FormatServer() + _T(" - FileZilla"));
 
 	return true;
 }
@@ -562,7 +318,7 @@ bool CState::CreateEngine()
 	m_pEngine = new CFileZillaEngine();
 	m_pEngine->Init(m_pMainFrame, COptions::Get());
 
-	m_pCommandQueue = new CCommandQueue(m_pEngine, m_pMainFrame, this);
+	m_pCommandQueue = new CCommandQueue(m_pEngine, m_pMainFrame);
 
 	return true;
 }
@@ -575,26 +331,20 @@ void CState::DestroyEngine()
 	m_pEngine = 0;
 }
 
-void CState::RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool blockable /*=true*/)
+void CState::RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification)
 {
 	wxASSERT(pHandler);
-	wxASSERT(pHandler->m_pState == this);
-	if (pHandler->m_pState != this)
-		return;
 	wxASSERT(notification != STATECHANGE_MAX && notification != STATECHANGE_NONE);
 
-	std::list<t_handler> &handlers = m_handlers[notification];
-	std::list<t_handler>::const_iterator iter;
+	std::list<CStateEventHandler*> &handlers = m_handlers[notification];
+	std::list<CStateEventHandler*>::const_iterator iter;
 	for (iter = handlers.begin(); iter != handlers.end(); iter++)
 	{
-		if (iter->pHandler == pHandler)
+		if (*iter == pHandler)
 			return;
 	}
 
-	t_handler handler;
-	handler.pHandler = pHandler;
-	handler.blockable = blockable;
-	handlers.push_back(handler);
+	handlers.push_back(pHandler);
 }
 
 void CState::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification)
@@ -606,10 +356,10 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_
 	{
 		for (int i = 0; i < STATECHANGE_MAX; i++)
 		{
-			std::list<t_handler> &handlers = m_handlers[i];
-			for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); iter++)
+			std::list<CStateEventHandler*> &handlers = m_handlers[i];
+			for (std::list<CStateEventHandler*>::iterator iter = handlers.begin(); iter != handlers.end(); iter++)
 			{
-				if (iter->pHandler == pHandler)
+				if (*iter == pHandler)
 				{
 					handlers.erase(iter);
 					break;
@@ -619,10 +369,10 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_
 	}
 	else
 	{
-		std::list<t_handler> &handlers = m_handlers[notification];
-		for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); iter++)
+		std::list<CStateEventHandler*> &handlers = m_handlers[notification];
+		for (std::list<CStateEventHandler*>::iterator iter = handlers.begin(); iter != handlers.end(); iter++)
 		{
-			if (iter->pHandler == pHandler)
+			if (*iter == pHandler)
 			{
 				handlers.erase(iter);
 				return;
@@ -631,61 +381,32 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_
 	}
 }
 
-void CState::BlockHandlers(enum t_statechange_notifications notification)
-{
-	wxASSERT(notification != STATECHANGE_MAX);
-
-	if (notification == STATECHANGE_NONE)
-	{
-		for (int i = 0; i < STATECHANGE_MAX; i++)
-			m_blocked[i] = true;
-	}
-	else
-		m_blocked[notification] = true;
-}
-
-void CState::UnblockHandlers(enum t_statechange_notifications notification)
-{
-	wxASSERT(notification != STATECHANGE_MAX);
-
-	if (notification == STATECHANGE_NONE)
-	{
-		for (int i = 0; i < STATECHANGE_MAX; i++)
-			m_blocked[i] = false;
-	}
-	else
-		m_blocked[notification] = false;
-
-}
-
-void CState::NotifyHandlers(enum t_statechange_notifications notification, const wxString& data /*=_T("")*/, const void* data2 /*=0*/)
+void CState::NotifyHandlers(enum t_statechange_notifications notification, const wxString& data /*=_T("")*/)
 {
 	wxASSERT(notification != STATECHANGE_NONE && notification != STATECHANGE_MAX);
 
-	const std::list<t_handler> &handlers = m_handlers[notification];
-	for (std::list<t_handler>::const_iterator iter = handlers.begin(); iter != handlers.end(); iter++)
+	const std::list<CStateEventHandler*> &handlers = m_handlers[notification];
+	for (std::list<CStateEventHandler*>::const_iterator iter = handlers.begin(); iter != handlers.end(); iter++)
 	{
-		if (m_blocked[notification] && iter->blockable)
-			continue;
-
-		iter->pHandler->OnStateChange(this, notification, data, data2);
+		(*iter)->OnStateChange(notification, data);
 	}
-
-	CContextManager::Get()->NotifyHandlers(this, notification, data, data2, m_blocked[notification]);
 }
 
 CStateEventHandler::CStateEventHandler(CState* pState)
-	: m_pState(pState)
 {
+	wxASSERT(pState);
+
+	if (!pState)
+		return;
+
+	m_pState = pState;
 }
 
 CStateEventHandler::~CStateEventHandler()
 {
-	CContextManager::Get()->UnregisterHandler(this, STATECHANGE_NONE);
-
-	const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); iter++)
-		(*iter)->UnregisterHandler(this, STATECHANGE_NONE);
+	if (!m_pState)
+		return;
+	m_pState->UnregisterHandler(this, STATECHANGE_NONE);
 }
 
 void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const wxString& subdir, bool queueOnly)
@@ -711,31 +432,35 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 
 	for (unsigned int i = 0; i < files.Count(); i++)
 	{
-		wxLongLong size;
-		bool is_link;
-		CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileInfo(files[i], is_link, &size, 0, 0);
-		if (type == CLocalFileSystem::file)
+		if (wxFile::Exists(files[i]))
 		{
-			wxString localFile;
-			const CLocalPath localPath(files[i], &localFile);
-			m_pMainFrame->GetQueue()->QueueFile(queueOnly, false, localPath, localFile, localFile, path, *m_pServer, size);
+			const wxFileName name(files[i]);
+			const wxLongLong size = name.GetSize().GetValue();
+			m_pMainFrame->GetQueue()->QueueFile(queueOnly, false, files[i], name.GetFullName(), path, *m_pServer, size);
 			m_pMainFrame->GetQueue()->QueueFile_Finish(!queueOnly);
 		}
-		else if (type == CLocalFileSystem::dir)
+		else if (wxDir::Exists(files[i]))
 		{
-			CLocalPath localPath(files[i]);
-			if (localPath.HasParent())
+			wxString dir = files[i];
+			if (dir.Last() == wxFileName::GetPathSeparator() && dir.Len() > 1)
+				dir.RemoveLast();
+			int pos = dir.Find(wxFileName::GetPathSeparator(), true);
+			if (pos != -1 && pos != (int)dir.Len() - 1)
 			{
+				wxString lastSegment = dir.Mid(pos + 1);
 				CServerPath target = path;
-				target.AddSegment(localPath.GetLastSegment());
-				m_pMainFrame->GetQueue()->QueueFolder(queueOnly, false, localPath, target, *m_pServer);
+				target.AddSegment(lastSegment);
+				m_pMainFrame->GetQueue()->QueueFolder(queueOnly, false, dir, target, *m_pServer);
 			}
 		}
 	}
 }
 
-void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const CLocalPath& path, bool copy)
+void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, wxString path, bool copy)
 {
+	if (path.Last() != wxFileName::GetPathSeparator())
+		path += wxFileName::GetPathSeparator();
+
 	const wxArrayString &files = pFileDataObject->GetFilenames();
 	if (!files.Count())
 		return;
@@ -746,8 +471,6 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 	for (unsigned int i = 0; i < files.Count(); i++)
 		len += files[i].Len() + 1;
 
-	// SHFILEOPSTRUCT's pTo and pFrom accept null-terminated lists
-	// of null-terminated filenames.
 	wxChar* from = new wxChar[len];
 	wxChar* p = from;
 	for (unsigned int i = 0; i < files.Count(); i++)
@@ -755,11 +478,11 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 		wxStrcpy(p, files[i]);
 		p += files[i].Len() + 1;
 	}
-	*p = 0; // End of list
+	*p = 0;
 
-	wxChar* to = new wxChar[path.GetPath().Len() + 2];
-	wxStrcpy(to, path.GetPath());
-	to[path.GetPath().Len() + 1] = 0; // End of list
+	wxChar* to = new wxChar[path.Len() + 2];
+	wxStrcpy(to, path);
+	to[path.Len() + 1] = 0;
 
 	SHFILEOPSTRUCT op = {0};
 	op.pFrom = from;
@@ -773,32 +496,29 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 #else
 	for (unsigned int i = 0; i < files.Count(); i++)
 	{
-		const wxString& file(files[i]);
-
-		wxLongLong size;
-		bool is_link;
-		CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileInfo(file, is_link, &size, 0, 0);
-		if (type == CLocalFileSystem::file)
+		const wxString& file = files[i];
+		if (wxFile::Exists(file))
 		{
-			wxString name;
-			CLocalPath sourcePath(file, &name);
-			if (name.empty())
+			int pos = file.Find(wxFileName::GetPathSeparator(), true);
+			if (pos == -1 || pos == (int)file.Len() - 1)
 				continue;
+			const wxString& name = file.Mid(pos + 1);
 			if (copy)
-				wxCopyFile(file, path.GetPath() + name);
+				wxCopyFile(file, path + name);
 			else
-				wxRenameFile(file, path.GetPath() + name);
+				wxRenameFile(file, path + name);
 		}
-		else if (type == CLocalFileSystem::dir)
+		else if (wxDir::Exists(file))
 		{
 			if (copy)
-				RecursiveCopy(CLocalPath(file), path);
+				RecursiveCopy(file, path);
 			else
 			{
-				CLocalPath sourcePath(file);
-				if (!sourcePath.HasParent())
+				int pos = file.Find(wxFileName::GetPathSeparator(), true);
+				if (pos == -1 || pos == (int)file.Len() - 1)
 					continue;
-				wxRenameFile(file, path.GetPath() + sourcePath.GetLastSegment());
+				const wxString& name = file.Mid(pos + 1);
+				wxRenameFile(file, path + name);
 			}
 		}
 	}
@@ -807,65 +527,66 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 	RefreshLocal();
 }
 
-bool CState::RecursiveCopy(CLocalPath source, const CLocalPath& target)
+bool CState::RecursiveCopy(wxString source, wxString target)
 {
-	if (source.empty() || target.empty())
+	if (source == _T(""))
 		return false;
 
-	if (source == target)
+	if (target == _T(""))
 		return false;
 
-	if (source.IsParentOf(target))
+	if (target.Last() != wxFileName::GetPathSeparator())
+		target += wxFileName::GetPathSeparator();
+
+	if (source.Last() == wxFileName::GetPathSeparator())
+		source.RemoveLast();
+
+	if (source + wxFileName::GetPathSeparator() == target)
 		return false;
 
-	if (!source.HasParent())
+	if (target.Len() > source.Len() && source == target.Left(source.Len()) && target[source.Len()] == wxFileName::GetPathSeparator())
 		return false;
 
-	wxString last_segment;
-	if (!source.MakeParent(&last_segment))
+	int pos = source.Find(wxFileName::GetPathSeparator(), true);
+	if (pos == -1 || pos == (int)source.Len() - 1)
 		return false;
 
 	std::list<wxString> dirsToVisit;
-	dirsToVisit.push_back(last_segment + CLocalPath::path_separator);
+	dirsToVisit.push_back(source.Mid(pos + 1) + wxFileName::GetPathSeparator());
+	source = source.Left(pos + 1);
 
 	// Process any subdirs which still have to be visited
 	while (!dirsToVisit.empty())
 	{
 		wxString dirname = dirsToVisit.front();
 		dirsToVisit.pop_front();
-		wxMkdir(target.GetPath() + dirname);
-
-		CLocalFileSystem fs;
-		if (!fs.BeginFindFiles(source.GetPath() + dirname, false))
+		wxMkdir(target + dirname);
+		wxDir dir;
+		if (!dir.Open(source + dirname))
 			continue;
 
-		bool is_dir, is_link;
 		wxString file;
-		while (fs.GetNextFile(file, is_link, is_dir, 0, 0, 0))
+		for (bool found = dir.GetFirst(&file); found; found = dir.GetNext(&file))
 		{
 			if (file == _T(""))
 			{
 				wxGetApp().DisplayEncodingWarning();
 				continue;
 			}
-
-			if (is_dir)
+			if (wxFileName::DirExists(source + dirname + file))
 			{
-				if (is_link)
-					continue;
-
-				const wxString subDir = dirname + file + CLocalPath::path_separator;
+				const wxString subDir = dirname + file + wxFileName::GetPathSeparator();
 				dirsToVisit.push_back(subDir);
 			}
 			else
-				wxCopyFile(source.GetPath() + dirname + file, target.GetPath() + dirname + file);
+				wxCopyFile(source + dirname + file, target + dirname + file);
 		}
 	}
 
 	return true;
 }
 
-bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, const CLocalPath& path, bool queueOnly /*=false*/)
+bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, wxString path, bool queueOnly /*=false*/)
 {
 	bool hasDirs = false;
 	bool hasFiles = false;
@@ -880,7 +601,7 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 
 	if (hasDirs)
 	{
-		if (!IsRemoteConnected() || !IsRemoteIdle())
+		if (!m_pEngine->IsConnected() || m_pEngine->IsBusy() || !m_pCommandQueue->Idle())
 			return false;
 	}
 
@@ -890,23 +611,7 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 	if (!hasDirs)
 		return true;
 
-	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); iter++)
-	{
-		if (!iter->dir)
-			continue;
-
-		CLocalPath newPath(path);
-		newPath.AddSegment(CQueueView::ReplaceInvalidCharacters(iter->name));
-		m_pRecursiveOperation->AddDirectoryToVisit(pRemoteDataObject->GetServerPath(), iter->name, newPath, iter->link);
-	}
-
-	if (m_pComparisonManager->IsComparing())
-		m_pComparisonManager->ExitComparisonMode();
-
-	CFilterManager filter;
-	m_pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download, pRemoteDataObject->GetServerPath(), filter.GetActiveFilters(false));
-
-	return true;
+	return m_pMainFrame->GetRemoteListView()->DownloadDroppedFiles(pRemoteDataObject, path, queueOnly);
 }
 
 bool CState::IsRemoteConnected() const
@@ -926,6 +631,42 @@ bool CState::IsRemoteIdle() const
 		return true;
 
 	return m_pCommandQueue->Idle();
+}
+
+bool CState::LocalDirHasParent(const wxString& dir)
+{
+#ifdef __WXMSW__
+	if (dir.Left(2) == _T("\\\\"))
+	{
+		int pos = dir.Mid(2).Find('\\');
+		if (pos == -1 || pos + 3 == (int)dir.Len())
+			return false;
+	}
+	if (dir == _T("\\") || dir == _T("//"))
+		return false;
+#endif
+
+	if (dir == _T("/"))
+		return false;
+
+	return true;
+}
+
+bool CState::LocalDirIsWriteable(const wxString& dir)
+{
+#ifdef __WXMSW__
+	if (dir == _T("\\") || dir == _T("//"))
+		return false;
+
+	if (dir.Left(2) == _T("\\\\"))
+	{
+		int pos = dir.Mid(2).Find('\\');
+		if (pos == -1 || pos + 3 == (int)dir.Len())
+			return false;
+	}
+#endif
+
+	return true;
 }
 
 wxString CState::GetAsURL(const wxString& dir)
@@ -984,207 +725,4 @@ wxString CState::GetAsURL(const wxString& dir)
 #endif
 
 	return _T("file://") + encoded;
-}
-
-void CState::ListingFailed(int error)
-{
-	m_sync_browse.is_changing = false;
-
-	// Let the recursive operation handler know if a LIST command failed,
-	// so that it may issue the next command in recursive operations.
-	m_pRecursiveOperation->ListingFailed(error);
-}
-
-void CState::LinkIsNotDir(const CServerPath& path, const wxString& subdir)
-{
-	m_sync_browse.is_changing = false;
-
-	NotifyHandlers(STATECHANGE_REMOTE_LINKNOTDIR, subdir, &path);
-}
-
-bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=_T("")*/, int flags /*=0*/, bool ignore_busy /*=false*/)
-{
-	if (!m_pServer || !m_pCommandQueue)
-		return false;
-
-	if (!m_sync_browse.local_root.empty())
-	{
-		CServerPath p(path);
-		if (!subdir.empty() && !p.ChangePath(subdir))
-		{
-			wxString msg = wxString::Format(_("Could not get full remote path."));
-			wxMessageBox(msg, _("Synchronized browsing"));
-			return false;
-		}
-
-		if (p != m_sync_browse.remote_root && !p.IsSubdirOf(m_sync_browse.remote_root, false))
-		{
-			wxString msg = wxString::Format(_("The remote directory '%s' is not below the synchronization root (%s).\nDisable synchronized browsing and continue changing the remote directory?"),
-					p.GetPath().c_str(),
-					m_sync_browse.remote_root.GetPath().c_str());
-			if (wxMessageBox(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
-				return false;
-			SetSyncBrowse(false);
-		}
-		else if (!IsRemoteIdle() && !ignore_busy)
-		{
-			wxString msg(_("Another remote operation is already in progress, cannot change directory now."));
-			wxMessageBox(msg, _("Synchronized browsing"), wxICON_EXCLAMATION);
-			return false;
-		}
-		else
-		{
-			wxString error;
-			CLocalPath local_path = GetSynchronizedDirectory(p);
-			if (local_path.empty())
-			{
-				wxString msg = wxString::Format(_("Could not obtain corresponding local directory for the remote directory '%s'.\nDisable synchronized browsing and continue changing the remote directory?"),
-					p.GetPath().c_str());
-				if (wxMessageBox(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
-					return false;
-				SetSyncBrowse(false);
-			}
-			else if (!local_path.Exists(&error))
-			{
-				wxString msg = error + _T("\n") + _("Disable synchronized browsing and continue changing the remote directory?");
-				if (wxMessageBox(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
-					return false;
-				SetSyncBrowse(false);
-			}
-			else
-			{
-				m_sync_browse.is_changing = true;
-				m_sync_browse.compare = m_pComparisonManager->IsComparing();
-			}
-		}
-	}
-
-	CListCommand *pCommand = new CListCommand(path, subdir, flags);
-	m_pCommandQueue->ProcessCommand(pCommand);
-
-	return true;
-}
-
-bool CState::SetSyncBrowse(bool enable, const CServerPath& assumed_remote_root /*=CServerPath()*/)
-{
-	if (enable != m_sync_browse.local_root.empty())
-		return enable;
-
-	if (!enable)
-	{
-		wxASSERT(assumed_remote_root.IsEmpty());
-		m_sync_browse.local_root.clear();
-		m_sync_browse.remote_root.Clear();
-		m_sync_browse.is_changing = false;
-
-		NotifyHandlers(STATECHANGE_SYNC_BROWSE);
-		return false;
-	}
-
-	if (!m_pDirectoryListing && assumed_remote_root.IsEmpty())
-	{
-		NotifyHandlers(STATECHANGE_SYNC_BROWSE);
-		return false;
-	}
-
-	m_sync_browse.is_changing = false;
-	m_sync_browse.local_root = m_localDir;
-
-	if (assumed_remote_root.IsEmpty())
-		m_sync_browse.remote_root = m_pDirectoryListing->path;
-	else
-	{
-		m_sync_browse.remote_root = assumed_remote_root;
-		m_sync_browse.is_changing = true;
-		m_sync_browse.compare = false;
-	}
-
-	while (m_sync_browse.local_root.HasParent() && m_sync_browse.remote_root.HasParent() &&
-		m_sync_browse.local_root.GetLastSegment() == m_sync_browse.remote_root.GetLastSegment())
-	{
-		m_sync_browse.local_root.MakeParent();
-		m_sync_browse.remote_root = m_sync_browse.remote_root.GetParent();
-	}
-
-	NotifyHandlers(STATECHANGE_SYNC_BROWSE);
-	return true;
-}
-
-CLocalPath CState::GetSynchronizedDirectory(CServerPath remote_path)
-{
-	std::list<wxString> segments;
-	while (remote_path.HasParent() && remote_path != m_sync_browse.remote_root)
-	{
-		segments.push_front(remote_path.GetLastSegment());
-		remote_path = remote_path.GetParent();
-	}
-	if (remote_path != m_sync_browse.remote_root)
-		return CLocalPath();
-
-	CLocalPath local_path = m_sync_browse.local_root;
-	for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); iter++)
-		local_path.AddSegment(*iter);
-
-	return local_path;
-}
-
-
-CServerPath CState::GetSynchronizedDirectory(CLocalPath local_path)
-{
-	std::list<wxString> segments;
-	while (local_path.HasParent() && local_path != m_sync_browse.local_root)
-	{
-		wxString last;
-		local_path.MakeParent(&last);
-		segments.push_front(last);
-	}
-	if (local_path != m_sync_browse.local_root)
-		return CServerPath();
-
-	CServerPath remote_path = m_sync_browse.remote_root;
-	for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); iter++)
-		remote_path.AddSegment(*iter);
-
-	return remote_path;
-}
-
-bool CState::RefreshRemote()
-{
-	if (!m_pCommandQueue)
-		return false;
-	
-	if (!IsRemoteConnected() || !IsRemoteIdle())
-		return false;
-
-	return ChangeRemoteDir(GetRemotePath(), _T(""), LIST_FLAG_REFRESH);
-}
-
-bool CState::GetSecurityInfo(CCertificateNotification *& pInfo)
-{
-	pInfo = m_pCertificate;
-	return m_pCertificate != 0;
-}
-
-bool CState::GetSecurityInfo(CSftpEncryptionNotification *& pInfo)
-{
-	pInfo = m_pSftpEncryptionInfo;
-	return m_pSftpEncryptionInfo != 0;
-}
-
-void CState::SetSecurityInfo(CCertificateNotification const& info)
-{
-	delete m_pCertificate;
-	m_pCertificate = 0;
-	delete m_pSftpEncryptionInfo;
-	m_pSftpEncryptionInfo = 0;
-	m_pCertificate = new CCertificateNotification(info);
-}
-
-void CState::SetSecurityInfo(CSftpEncryptionNotification const& info)
-{
-	delete m_pCertificate;
-	m_pCertificate = 0;
-	delete m_pSftpEncryptionInfo;
-	m_pSftpEncryptionInfo = 0;
-	m_pSftpEncryptionInfo = new CSftpEncryptionNotification(info);
 }

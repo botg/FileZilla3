@@ -1,11 +1,5 @@
-#include <filezilla.h>
-
+#include "FileZilla.h"
 #include "logging_private.h"
-
-#ifdef __WXMSW__
-#include <wx/filename.h>
-#endif
-#include <wx/log.h>
 
 #include <errno.h>
 
@@ -213,7 +207,7 @@ void CLogging::InitLogFile() const
 	m_prefixes[Error] = _("Error:");
 	m_prefixes[Command] = _("Command:");
 	m_prefixes[Response] = _("Response:");
-	m_prefixes[Debug_Warning] = _("Trace:");
+	m_prefixes[Debug_Warning] = _("Trace");
 	m_prefixes[Debug_Info] = m_prefixes[Debug_Warning];
 	m_prefixes[Debug_Verbose] = m_prefixes[Debug_Warning];
 	m_prefixes[Debug_Debug] = m_prefixes[Debug_Warning];
@@ -273,7 +267,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 					CloseHandle(hMutex);
 
 					m_log_fd = INVALID_HANDLE_VALUE;
-					LogMessage(Error, _("Could not open log file: %s"), error.c_str());
+					LogMessage(Error, _("Could not open log file: %s"), error);
 					return;
 				}
 
@@ -304,7 +298,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				CloseHandle(hMutex);
 
 				if (error != _T(""))
-					LogMessage(Error, _("Could not open log file: %s"), error.c_str());
+					LogMessage(Error, _("Could not open log file: %s"), error);
 			}
 		}
 		DWORD len = (DWORD)strlen((const char*)utf8);

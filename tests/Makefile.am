@@ -9,7 +9,6 @@ check_PROGRAMS = $(TESTS)
 test_SOURCES =  test.cpp \
 		ipaddress.cpp \
 		dirparsertest.cpp \
-		localpathtest.cpp \
 		serverpathtest.cpp
 
 test_CPPFLAGS = $(WX_CPPFLAGS)

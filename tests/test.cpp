@@ -1,10 +1,9 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include <iostream>
 #include <string>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>
 #include <locale.h>
-#include <wx/init.h>
 	
 int main(int argc, char* argv[])
 {

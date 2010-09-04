@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "locale_initializer.h"
 #ifdef HAVE_LIBTINYXML
 #include <tinyxml.h>
@@ -96,7 +96,7 @@ bool CInitializer::SetLocaleReal(const std::string& locale)
 #else
 	std::string str("LC_ALL=");
 	str += locale;
-	putenv(str.c_str());
+	putenv(str.c_ctr());
 #endif
 	return true;
 }

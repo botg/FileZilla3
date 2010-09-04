@@ -1,12 +1,5 @@
-#include <filezilla.h>
-
+#include "FileZilla.h"
 #include "local_filesys.h"
-
-#include <wx/dir.h>
-#ifdef __WXMSW__
-#include <wx/filename.h>
-#endif
-#include <wx/msgdlg.h>
 
 #ifdef __WXMSW__
 const wxChar CLocalFileSystem::path_separator = '\\';
@@ -510,8 +503,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 		else
 		{
 			is_dir = false;
-			if (size)
-				*size = wxLongLong(m_find_data.nFileSizeHigh, m_find_data.nFileSizeLow);
+			*size = wxLongLong(m_find_data.nFileSizeHigh, m_find_data.nFileSizeLow);
 		}
 
 		m_found = FindNextFile(m_hFind, &m_find_data) != 0;

@@ -61,19 +61,12 @@ void compare_req_rreq(struct sftp_request *req, struct sftp_request *rreq)
  * Attempt to canonify a pathname starting from the pwd. If
  * canonification fails, at least fall back to returning a _valid_
  * pathname (though it may be ugly, eg /home/simon/../foobar).
- *
- * If parent_only is non-zero, only the parent will be canonified.
- * e.g. if called with foo/bar/baz, only foo/bar/ will be canonicied
- * and baz appended to the result. This is needed to delete symbolic
- * links as FXP_REALPATH would resolve the link if called with the
- * full path.
  */
-char *canonify(char *name, int parent_only)
+char *canonify(char *name)
 {
     char *fullname, *canonname;
     struct sftp_packet *pktin;
     struct sftp_request *req, *rreq;
-    char* suffix = NULL;
 
     if (name[0] == '/') {
 	fullname = dupstr(name);
@@ -86,37 +79,14 @@ char *canonify(char *name, int parent_only)
 	fullname = dupcat(pwd, slash, name, NULL);
     }
 
-    if (parent_only) {
-        suffix = strrchr(fullname, '/');
-	if (!suffix) {
-	    /* Cosmic rays make this happen */
-	    return NULL;
-	}
-	else if (suffix == fullname) {
-	    return fullname;
-	}
-	else {
-	    *suffix = 0;
-	    suffix = dupstr(++suffix);
-	}
-    }
-
     sftp_register(req = fxp_realpath_send(fullname));
     rreq = sftp_find_request(pktin = sftp_recv());
     compare_req_rreq(req, rreq);
     canonname = fxp_realpath_recv(pktin, rreq);
 
     if (canonname) {
-	char* ret;
 	sfree(fullname);
-	if (!suffix)
-	    return canonname;
-	if (*canonname && canonname[strlen(canonname) - 1] == '/')
-	    canonname[strlen(canonname) - 1] = 0;
-	ret = dupcat(canonname, "/", suffix, NULL);
-	sfree(canonname);
-	sfree(suffix);
-	return ret;
+	return canonname;
     } else {
 	/*
 	 * Attempt number 2. Some FXP_REALPATH implementations
@@ -158,16 +128,7 @@ char *canonify(char *name, int parent_only)
 	    !strcmp(fullname + i, "/.") ||	/* ends in /. */
 	    !strcmp(fullname + i, "/..") ||	/* ends in /.. */
 	    !strcmp(fullname, "/")) {
-
-	    if (!suffix)
-		return fullname;
-
-	    if (*fullname && fullname[strlen(fullname) - 1] == '/')
-	        fullname[strlen(fullname) - 1] = 0;
-	    returnname = dupcat(fullname, "/", suffix, NULL);
-	    sfree(fullname);
-	    sfree(suffix);
-	    return returnname;
+	    return fullname;
 	}
 
 	/*
@@ -188,16 +149,7 @@ char *canonify(char *name, int parent_only)
 	    /* Even that failed. Restore our best guess at the
 	     * constructed filename and give up */
 	    fullname[i] = '/';	/* restore slash and last component */
-
-	    if (!suffix)
-		return fullname;
-
-	    if (*fullname && fullname[strlen(fullname) - 1] == '/')
-	        fullname[strlen(fullname) - 1] = 0;
-	    returnname = dupcat(fullname, "/", suffix, NULL);
-	    sfree(fullname);
-	    sfree(suffix);
-	    return returnname;
+	    return fullname;
 	}
 
 	/*
@@ -206,11 +158,9 @@ char *canonify(char *name, int parent_only)
 	 */
 	returnname = dupcat(canonname,
 			    canonname[strlen(canonname) - 1] ==
-			    '/' ? "" : "/", fullname + i + 1, (!suffix || fullname[i + strlen(fullname + i + 1)] == '/') ? "" : "/", suffix, NULL);
+			    '/' ? "" : "/", fullname + i + 1, NULL);
 	sfree(fullname);
 	sfree(canonname);
-	if (suffix)
-	    sfree(suffix);
 	return returnname;
     }
 }
@@ -277,8 +227,6 @@ int sftp_get_file(char *fname, char *outfname, int recurse, int restart)
     uint64 offset;
     WFile *file;
     int ret, shown_err = FALSE;
-    _fztimer timer;
-    int winterval;
 
     /*
      * In recursive mode, see if we're dealing with a directory.
@@ -500,9 +448,6 @@ int sftp_get_file(char *fname, char *outfname, int recurse, int restart)
 
     fzprintf(sftpStatus, "remote:%s => local:%s", fname, outfname);
 
-    fz_timer_init(&timer);
-    winterval = 0;
-
     /*
      * FIXME: we can use FXP_FSTAT here to get the file size, and
      * thus put up a progress bar.
@@ -523,49 +468,42 @@ int sftp_get_file(char *fname, char *outfname, int recurse, int restart)
 		fzprintf(sftpError, "error while reading: %s", fxp_error());
 		shown_err = TRUE;
 	    }
+            ret = 0;
 	}
 
 	while (xfer_download_data(xfer, &vbuf, &len)) {
 	    unsigned char *buf = (unsigned char *)vbuf;
 
 	    wpos = 0;
-	    while (file && wpos < len) {
+	    while (wpos < len) {
 		wlen = write_to_file(file, buf + wpos, len - wpos);
 		if (wlen <= 0) {
-		    fzprintf(shown_err ? sftpStatus : sftpError, "error while writing local file");
-		    shown_err = TRUE;
-		    close_wfile(file);
-		    file = 0;
+		    fzprintf(sftpError, "error while writing local file");
+		    ret = 0;
+		    xfer_set_error(xfer);
 		    break;
 		}
+		else
+		    fzprintf(sftpWrite, "%d", wlen);
 		wpos += wlen;
 	    }
 	    if (wpos < len) {	       /* we had an error */
+		ret = 0;
 		xfer_set_error(xfer);
 	    }
-	    winterval += wpos;
+
 	    sfree(vbuf);
 	}
-
-	if (fz_timer_check(&timer)) {
-	    fzprintf(sftpWrite, "%d", winterval);
-	    winterval = 0;
-	}
-
     }
 
     xfer_cleanup(xfer);
 
-    if (file)
-	close_wfile(file);
+    close_wfile(file);
 
     sftp_register(req = fxp_close_send(fh));
     rreq = sftp_find_request(pktin = sftp_recv());
     compare_req_rreq(req, rreq);
     fxp_close_recv(pktin, rreq);
-
-    if (shown_err)
-	ret = 0;
 
     return ret;
 }
@@ -794,9 +732,6 @@ int sftp_put_file(char *fname, char *outfname, int recurse, int restart)
 	}
     }
 
-    if (err)
-	ret = 0;
-
     xfer_cleanup(xfer);
 
     sftp_register(req = fxp_close_send(fh));
@@ -853,7 +788,7 @@ SftpWildcardMatcher *sftp_begin_wildcard_matching(char *name)
 	return NULL;
     }
 
-    cdir = canonify(unwcdir, 0);
+    cdir = canonify(unwcdir);
 
     sftp_register(req = fxp_opendir_send(cdir));
     rreq = sftp_find_request(pktin = sftp_recv());
@@ -956,7 +891,7 @@ void sftp_finish_wildcard_matching(SftpWildcardMatcher *swcm)
  * argument and iterate over every matching file. Used in several
  * PSFTP commands (rmdir, rm,	, mv).
  */
-int wildcard_iterate(char *filename, int (*func)(void *, char *), void *ctx, int canonify_parent_only)
+int wildcard_iterate(char *filename, int (*func)(void *, char *), void *ctx)
 {
     char *unwcfname, *newname, *cname;
     int is_wc, ret;
@@ -975,7 +910,7 @@ int wildcard_iterate(char *filename, int (*func)(void *, char *), void *ctx, int
 	ret = 1;
 
 	while ( (newname = sftp_wildcard_get_filename(swcm)) != NULL ) {
-	    cname = canonify(newname, canonify_parent_only);
+	    cname = canonify(newname);
 	    if (!cname) {
 		fzprintf(sftpError, "%s: canonify: %sn", newname, fxp_error());
 		ret = 0;
@@ -992,7 +927,7 @@ int wildcard_iterate(char *filename, int (*func)(void *, char *), void *ctx, int
 
 	sftp_finish_wildcard_matching(swcm);
     } else {
-	cname = canonify(unwcfname, canonify_parent_only);
+	cname = canonify(unwcfname);
 	if (!cname) {
 	    fzprintf(sftpError, "%s: canonify: %s", filename, fxp_error());
 	    ret = 0;
@@ -1196,7 +1131,7 @@ int sftp_cmd_ls(struct sftp_command *cmd)
 	dir = unwcdir;
     }
 
-    cdir = canonify(dir, 0);
+    cdir = canonify(dir);
     if (!cdir) {
 	fzprintf(sftpError, "%s: canonify: %s", dir, fxp_error());
 	sfree(unwcdir);
@@ -1296,7 +1231,7 @@ int sftp_cmd_cd(struct sftp_command *cmd)
     if (cmd->nwords < 2)
 	dir = dupstr(homedir);
     else
-	dir = canonify(cmd->words[1], 0);
+	dir = canonify(cmd->words[1]);
 
     if (!dir) {
 	fzprintf(sftpError, "%s: canonify: %s", dir, fxp_error());
@@ -1409,7 +1344,7 @@ int sftp_general_get(struct sftp_command *cmd, int restart, int multiple)
 	}
 
 	while (origwfname) {
-	    fname = canonify(origwfname, 0);
+	    fname = canonify(origwfname);
 
 	    if (!fname) {
 		fzprintf(sftpError, "%s: canonify: %s", origwfname, fxp_error());
@@ -1523,7 +1458,7 @@ int sftp_general_put(struct sftp_command *cmd, int restart, int multiple)
 	    else
 		origoutfname = stripslashes(wfname, 1);
 
-	    outfname = canonify(origoutfname, 0);
+	    outfname = canonify(origoutfname);
 	    if (!outfname) {
 		fzprintf(sftpError, "%s: canonify: %s", origoutfname, fxp_error());
 		if (wcm) {
@@ -1593,7 +1528,7 @@ int sftp_cmd_mkdir(struct sftp_command *cmd)
 
     ret = 1;
     for (i = 1; i < cmd->nwords; i++) {
-	dir = canonify(cmd->words[i], 0);
+	dir = canonify(cmd->words[i]);
 	if (!dir) {
 	    fzprintf(sftpError, "%s: canonify: %s", dir, fxp_error());
 	    return 0;
@@ -1653,7 +1588,7 @@ int sftp_cmd_rmdir(struct sftp_command *cmd)
 
     ret = 1;
     for (i = 1; i < cmd->nwords; i++)
-	ret &= wildcard_iterate(cmd->words[i], sftp_action_rmdir, NULL, 0);
+	ret &= wildcard_iterate(cmd->words[i], sftp_action_rmdir, NULL);
 
     return ret;
 }
@@ -1700,7 +1635,7 @@ int sftp_cmd_rm(struct sftp_command *cmd)
 
     ret = 1;
     for (i = 1; i < cmd->nwords; i++)
-	ret &= wildcard_iterate(cmd->words[i], sftp_action_rm, NULL, 1);
+	ret &= wildcard_iterate(cmd->words[i], sftp_action_rm, NULL);
 
     return ret;
 }
@@ -1746,7 +1681,7 @@ static int sftp_action_mv(void *vctx, char *srcfname)
 	p = srcfname + strlen(srcfname);
 	while (p > srcfname && p[-1] != '/') p--;
 	newname = dupcat(ctx->dstfname, "/", p, NULL);
-	newcanon = canonify(newname, 0);
+	newcanon = canonify(newname);
 	if (!newcanon) {
 	    fzprintf(sftpError, "%s: canonify: %s", newname, fxp_error());
 	    sfree(newname);
@@ -1793,7 +1728,7 @@ int sftp_cmd_mv(struct sftp_command *cmd)
 	return 0;
     }
 
-    ctx->dstfname = canonify(cmd->words[cmd->nwords-1], 0);
+    ctx->dstfname = canonify(cmd->words[cmd->nwords-1]);
     if (!ctx->dstfname) {
 	fzprintf(sftpError, "%s: canonify: %s", ctx->dstfname, fxp_error());
 	return 0;
@@ -1817,7 +1752,7 @@ int sftp_cmd_mv(struct sftp_command *cmd)
      */
     ret = 1;
     for (i = 1; i < cmd->nwords-1; i++)
-	ret &= wildcard_iterate(cmd->words[i], sftp_action_mv, ctx, 1);
+	ret &= wildcard_iterate(cmd->words[i], sftp_action_mv, ctx);
 
     sfree(ctx->dstfname);
 
@@ -1997,7 +1932,7 @@ int sftp_cmd_chmod(struct sftp_command *cmd)
 
     ret = 1;
     for (i = 2; i < cmd->nwords; i++)
-	ret &= wildcard_iterate(cmd->words[i], sftp_action_chmod, ctx, 0);
+	ret &= wildcard_iterate(cmd->words[i], sftp_action_chmod, ctx);
 
     if (ret)
 	fznotify1(sftpDone, 1);
@@ -2080,7 +2015,7 @@ static int sftp_cmd_chmtime(struct sftp_command *cmd)
 
     ret = 1;
     for (i = 2; i < cmd->nwords; i++)
-	ret &= wildcard_iterate(cmd->words[i], sftp_action_chmtime, &mtime, 0);
+	ret &= wildcard_iterate(cmd->words[i], sftp_action_chmtime, &mtime);
 
     if (ret)
 	fznotify1(sftpDone, 1);
@@ -2116,7 +2051,7 @@ static int sftp_cmd_mtime(struct sftp_command *cmd)
 	return 0;
     }
 
-    cname = canonify(unwcfname, 0);
+    cname = canonify(unwcfname);
     sfree(unwcfname);
     if (!cname) {
 	fzprintf(sftpError, "%s: canonify: %s", filename, fxp_error());
@@ -2629,11 +2564,6 @@ struct sftp_command *sftp_getcmd(FILE *fp, int mode, int modeflags)
 	cmd->words = sresize(cmd->words, cmd->wordssize, char *);
 	cmd->words[0] = dupstr("!");
 	cmd->words[1] = dupstr(p+1);
-    } else if (*p == '#') {
-	/*
-	 * Special case: comment. Entire line is ignored.
-	 */
-	cmd->nwords = cmd->wordssize = 0;
     } else {
 
 	/*
@@ -3451,12 +3381,4 @@ int psftp_main(int argc, char *argv[])
     }
 
     return 0;
-}
-
-void notify_remote_exit(void *frontend)
-{
-    int exitcode = back->exitcode(backhandle);
-
-    if (exitcode > 0 && exitcode != INT_MAX)
-	connection_fatal(frontend, "Connection closed by server with exitcode %d", exitcode);
 }

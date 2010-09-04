@@ -43,6 +43,7 @@ noinst_HEADERS = fzprintf.h \
 		 fzsftp.h \
 		 int64.h misc.h network.h proxy.h psftp.h putty.h \
 		 puttymem.h puttyps.h sftp.h ssh.h \
+		 sshgss.h \
 		 storage.h tree234.h
 
 if USE_RESOURCEFILE
@@ -54,7 +55,7 @@ INCLUDES = -I$(srcdir)/$(FRONTEND) -I../../config.h
 fzsftp_LDADD = libfzputtycommon.a
 
 if SFTP_UNIX
-  libfzputtycommon_a_CPPFLAGS = $(AM_CPPFLAGS) -DNO_GSSAPI -D_FILE_OFFSET_BITS=64
+  libfzputtycommon_a_CPPFLAGS = $(AM_CPPFLAGS) -D_FILE_OFFSET_BITS=64
 
   fzsftp_SOURCES += time.c
   fzsftp_LDADD += unix/libfzsftp_ux.a unix/libfzputtycommon_ux.a
@@ -66,13 +67,13 @@ if SFTP_UNIX
 endif
 
 if SFTP_MINGW
-  libfzputtycommon_a_CPPFLAGS = $(AM_CPPFLAGS) -DNO_GSSAPI -D_WINDOWS
+  libfzputtycommon_a_CPPFLAGS = $(AM_CPPFLAGS) -D_WINDOWS
 
   fzsftp_SOURCES += pproxy.c
   fzsftp_CPPFLAGS = $(AM_CPPFLAGS) -D_WINDOWS -DNO_GSSAPI
   fzsftp_LDADD += windows/libfzsftp_win.a windows/libfzputtycommon_win.a $(RESOURCEFILE)
 
-  fzputtygen_CPPFLAGS = $(AM_CPPFLAGS) -D_WINDOWS -DNO_GSSAPI
+  fzputtygen_CPPFLAGS = $(AM_CPPFLAGS) -D_WINDOWS
   fzputtygen_LDADD = windows/libfzputtycommon_win.a libfzputtycommon.a $(RESOURCEFILE)
 endif
 

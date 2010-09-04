@@ -1,9 +1,10 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "import.h"
 #include "xmlfunctions.h"
 #include "ipcmutex.h"
 #include "Options.h"
 #include "queue.h"
+#include "filezillaapp.h"
 
 CImportDialog::CImportDialog(wxWindow* parent, CQueueView* pQueueView)
 	: m_parent(parent), m_pQueueView(pQueueView)
@@ -22,25 +23,23 @@ void CImportDialog::Show()
 
 	wxFileName fn(dlg.GetPath());
 	const wxString& path = fn.GetPath();
-	const wxString& settings(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR));
+	const wxString& settings = wxGetApp().GetSettingsDir();
 	if (path == settings)
 	{
 		wxMessageBox(_("You cannot import settings from FileZilla's own settings directory."), _("Error importing"), wxICON_ERROR, m_parent);
 		return;
 	}
 
-	TiXmlDocument* xmlDocument = new TiXmlDocument();
-	xmlDocument->SetCondenseWhiteSpace(false);
-
-	if (!LoadXmlDocument(xmlDocument, dlg.GetPath()))
+	TiXmlDocument xmlDocument;
+	xmlDocument.SetCondenseWhiteSpace(false);
+	if (!xmlDocument.LoadFile(dlg.GetPath().mb_str()))
 	{
-		delete xmlDocument;
 		wxMessageBox(_("Cannot load file, not a valid XML file."), _("Error importing"), wxICON_ERROR, m_parent);
 		return;
 	}
 
-	TiXmlElement* fz3Root = xmlDocument->FirstChildElement("FileZilla3");
-	TiXmlElement* fz2Root = xmlDocument->FirstChildElement("FileZilla");
+	TiXmlElement* fz3Root = xmlDocument.FirstChildElement("FileZilla3");
+	TiXmlElement* fz2Root = xmlDocument.FirstChildElement("FileZilla");
 
 	if (fz3Root)
 	{
@@ -60,10 +59,7 @@ void CImportDialog::Show()
 			Fit();
 
 			if (ShowModal() != wxID_OK)
-			{
-				delete xmlDocument;
 				return;
-			}
 
 			if (queue && XRCCTRL(*this, "ID_QUEUE", wxCheckBox)->IsChecked())
 			{
@@ -83,7 +79,6 @@ void CImportDialog::Show()
 			
 			wxMessageBox(_("The selected categories have been imported."), _("Import successful"), wxOK, this);
 
-			delete xmlDocument;
 			return;
 		}
 	}
@@ -98,12 +93,9 @@ void CImportDialog::Show()
 			if (res == wxYES)
 				ImportLegacySites(fz2Root->FirstChildElement("Sites"));
 
-			delete xmlDocument;
 			return;
 		}
 	}
-
-	delete xmlDocument;
 
 	wxMessageBox(_("File does not contain any importable data."), _("Error importing"), wxICON_ERROR, m_parent);
 }
@@ -124,7 +116,7 @@ bool CImportDialog::ImportLegacySites(TiXmlElement* pSites)
 
 	TiXmlElement* pCurrentSites = pDocument->FirstChildElement("Servers");
 	if (!pCurrentSites)
-		pCurrentSites = pDocument->LinkEndChild(new TiXmlElement("Servers"))->ToElement();
+		pCurrentSites = pDocument->InsertEndChild(TiXmlElement("Servers"))->ToElement();
 
 	if (!ImportLegacySites(pSites, pCurrentSites))
 		return false;
@@ -234,7 +226,7 @@ bool CImportDialog::ImportLegacySites(TiXmlElement* pSitesToImport, TiXmlElement
 			newName = wxString::Format(_T("%s %d"), name.c_str(), i++);
 		}
 
-		TiXmlElement* pServer = pExistingSites->LinkEndChild(new TiXmlElement("Server"))->ToElement();
+		TiXmlElement* pServer = pExistingSites->InsertEndChild(TiXmlElement("Server"))->ToElement();
 		AddTextElement(pServer, newName);
 
 		AddTextElement(pServer, "Host", host);
@@ -293,7 +285,7 @@ TiXmlElement* CImportDialog::GetFolderWithName(TiXmlElement* pElement, const wxS
 			return pChild;
 	}
 
-	pChild = pElement->LinkEndChild(new TiXmlElement("Folder"))->ToElement();
+	pChild = pElement->InsertEndChild(TiXmlElement("Folder"))->ToElement();
 	AddTextElement(pChild, name);
 
 	return pChild;
@@ -315,7 +307,7 @@ bool CImportDialog::ImportSites(TiXmlElement* pSites)
 
 	TiXmlElement* pCurrentSites = pDocument->FirstChildElement("Servers");
 	if (!pCurrentSites)
-		pCurrentSites = pDocument->LinkEndChild(new TiXmlElement("Servers"))->ToElement();
+		pCurrentSites = pDocument->InsertEndChild(TiXmlElement("Servers"))->ToElement();
 
 	if (!ImportSites(pSites, pCurrentSites))
 		return false;

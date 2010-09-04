@@ -7,7 +7,6 @@
 #include "putty.h"
 #include "psftp.h"
 #include "int64.h"
-#include "ssh.h"
 
 char *get_ttymode(void *frontend, const char *mode) { return NULL; }
 
@@ -19,12 +18,6 @@ int get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 	ret = console_get_userpass_input(p, in, inlen);
     return ret;
 }
-
-void platform_get_x11_auth(struct X11Display *display, const Config *cfg)
-{
-    /* Do nothing, therefore no auth. */
-}
-const int platform_uses_x11_unix_by_default = TRUE;
 
 /* ----------------------------------------------------------------------
  * File access abstraction.
@@ -124,9 +117,9 @@ char *psftp_getcwd(void)
 }
 
 #define TIME_POSIX_TO_WIN(t, ft) (*(LONGLONG*)&(ft) = \
-	((LONGLONG) (t) + (LONGLONG) 11644473600LL) * (LONGLONG) 10000000)
+	((LONGLONG) (t) + (LONGLONG) 11644473600) * (LONGLONG) 10000000)
 #define TIME_WIN_TO_POSIX(ft, t) ((t) = (unsigned long) \
-	((*(LONGLONG*)&(ft)) / (LONGLONG) 10000000 - (LONGLONG) 11644473600LL))
+	((*(LONGLONG*)&(ft)) / (LONGLONG) 10000000 - (LONGLONG) 11644473600))
 
 struct RFile {
     HANDLE h;
@@ -168,13 +161,12 @@ RFile *open_existing_file(char *name, uint64 *size,
 
 int read_from_file(RFile *f, void *buffer, int length)
 {
-    int ret;
-    DWORD read;
+    int ret, read;
     ret = ReadFile(f->h, buffer, length, &read, NULL);
     if (!ret)
 	return -1;		       /* error */
     else
-	return (int)read;
+	return read;
 }
 
 void close_rfile(RFile *f)
@@ -234,13 +226,12 @@ WFile *open_existing_wfile(char *name, uint64 *size)
 
 int write_to_file(WFile *f, void *buffer, int length)
 {
-    int ret;
-    DWORD written;
+    int ret, written;
     ret = WriteFile(f->h, buffer, length, &written, NULL);
     if (!ret)
 	return -1;		       /* error */
     else
-	return (int)written;
+	return written;
 }
 
 void set_file_times(WFile *f, unsigned long mtime, unsigned long atime)

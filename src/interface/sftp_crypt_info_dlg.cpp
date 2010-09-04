@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "sftp_crypt_info_dlg.h"
 #include "dialogex.h"
 

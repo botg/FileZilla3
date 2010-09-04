@@ -28,11 +28,9 @@ public:
 	
 	bool HasFileName() const { return m_fileName.IsOk(); }
 	
-	// Sets error description on failure
 	TiXmlElement* Load(const wxString& name);
 	TiXmlElement* Load(const wxFileName& fileName = wxFileName());
 
-	wxString GetError() const { return m_error; }
 	int GetRawDataLength();
 	void GetRawDataHere(char* p); // p has to big enough to hold at least GetRawDataLength() bytes
 
@@ -52,8 +50,6 @@ protected:
 	wxFileName m_fileName;
 	TiXmlDocument* m_pDocument;
 	TiXmlPrinter *m_pPrinter;
-
-	wxString m_error;
 };
 
 // Convert the given string into an UTF-8 string. Returned string has to be deleted manually.
@@ -97,7 +93,7 @@ bool GetTextElementBool(TiXmlElement* node, const char* name, bool defValue = fa
 
 // Opens the specified XML file if it exists or creates a new one otherwise.
 // Returns 0 on error.
-TiXmlElement* GetXmlFile(wxFileName file, bool create = true, wxString *error = 0);
+TiXmlElement* GetXmlFile(wxFileName file, bool create = true);
 
 // Save the XML document to the given file
 bool SaveXmlFile(const wxFileName& file, TiXmlNode* node, wxString* error = 0, bool move = false);
@@ -106,6 +102,6 @@ bool SaveXmlFile(const wxFileName& file, TiXmlNode* node, wxString* error = 0, b
 void SetServer(TiXmlElement *node, const CServer& server);
 bool GetServer(TiXmlElement *node, CServer& server);
 
-bool LoadXmlDocument(TiXmlDocument* pXmlDocument, const wxString& file, wxString* error = 0);
+TiXmlDocument* LoadXmlDocument(const wxString& file);
 
 #endif //__XMLFUNCTIONS_H__

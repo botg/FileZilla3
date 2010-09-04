@@ -9,13 +9,11 @@ public:
 	enum t_switches
 	{
 		sitemanager,
-		close,
-		version
+		close
 	};
 
 	enum t_option
 	{
-		logontype,
 		site
 	};
 

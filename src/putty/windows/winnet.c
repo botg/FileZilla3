@@ -77,8 +77,69 @@ struct Socket_tag {
     Actual_Socket parent, child;
 
     // Remember last notification time to avoid spamming FZ
-    _fztimer send_timer, recv_timer;
+    FILETIME lastSendNotification;
+    FILETIME lastRecvNotification;
 };
+
+// 1/10th of a second
+const static unsigned int notificationDelay = 10000000 / 10;
+
+static void SendNotification(Actual_Socket s)
+{
+    SYSTEMTIME sNow;
+    FILETIME fNow;
+    unsigned int diff;
+    GetSystemTime(&sNow);
+    SystemTimeToFileTime(&sNow, &fNow);
+
+    diff = fNow.dwHighDateTime - s->lastSendNotification.dwHighDateTime;
+    if (!diff)
+    {
+	if ((fNow.dwLowDateTime - s->lastSendNotification.dwLowDateTime) < notificationDelay)
+	    return;
+    }
+    else if (diff == 1)
+    {
+        if (fNow.dwLowDateTime < s->lastSendNotification.dwLowDateTime)
+        {
+	    return;
+	    if (((0xFFFFFFFF - s->lastSendNotification.dwLowDateTime) + fNow.dwLowDateTime) < notificationDelay)
+    		return;
+        }
+    }
+
+    s->lastSendNotification = fNow;
+
+    fznotify(sftpSend);
+}
+
+static void RecvNotification(Actual_Socket s)
+{
+    SYSTEMTIME sNow;
+    FILETIME fNow;
+    unsigned int diff;
+    GetSystemTime(&sNow);
+    SystemTimeToFileTime(&sNow, &fNow);
+
+    diff = fNow.dwHighDateTime - s->lastRecvNotification.dwHighDateTime;
+    if (!diff)
+    {
+	if ((fNow.dwLowDateTime - s->lastRecvNotification.dwLowDateTime) < notificationDelay)
+	    return;
+    }
+    else if (diff == 1)
+    {
+        if (fNow.dwLowDateTime < s->lastRecvNotification.dwLowDateTime)
+	{
+    	    if (((0xFFFFFFFF - s->lastRecvNotification.dwLowDateTime) + fNow.dwLowDateTime) < notificationDelay)
+		return;
+	}
+    }
+
+    s->lastRecvNotification = fNow;
+
+    fznotify(sftpRecv);
+}
 
 struct SockAddr_tag {
     int refcount;
@@ -795,8 +856,6 @@ Socket sk_register(void *sock, Plug plug)
     ret->pending_error = 0;
     ret->parent = ret->child = NULL;
     ret->addr = NULL;
-    fz_timer_init(&ret->send_timer);
-    fz_timer_init(&ret->recv_timer);
 
     ret->s = (SOCKET)sock;
 
@@ -876,12 +935,6 @@ static DWORD try_connect(Actual_Socket sock)
     if (sock->keepalive) {
 	BOOL b = TRUE;
 	p_setsockopt(s, SOL_SOCKET, SO_KEEPALIVE, (void *) &b, sizeof(b));
-    }
-
-    /* Enable window scaling */
-    {
-	int size_read = 4194304;
-	p_setsockopt(s, SOL_SOCKET, SO_RCVBUF, (const char*)&size_read, sizeof(size_read));
     }
 
     /*
@@ -1059,8 +1112,6 @@ Socket sk_new(SockAddr addr, int port, int privport, int oobinline,
     ret->addr = addr;
     START_STEP(ret->addr, ret->step);
     ret->s = INVALID_SOCKET;
-    fz_timer_init(&ret->send_timer);
-    fz_timer_init(&ret->recv_timer);
 
     err = 0;
     do {
@@ -1115,8 +1166,6 @@ Socket sk_newlistener(char *srcaddr, int port, Plug plug, int local_host_only,
     ret->pending_error = 0;
     ret->parent = ret->child = NULL;
     ret->addr = NULL;
-    fz_timer_init(&ret->send_timer);
-    fz_timer_init(&ret->recv_timer);
 
     /*
      * Translate address_family from platform-independent constants
@@ -1338,8 +1387,7 @@ void try_send(Actual_Socket s)
 	    }
 	} else {
 	    UpdateQuota(1, nsent);
-	    if (fz_timer_check(&s->send_timer))
-		fznotify(sftpSend);
+	    SendNotification(s);
 	    if (s->sending_oob) {
 		if (nsent < len) {
 		    memmove(s->oobdata, s->oobdata+nsent, len-nsent);
@@ -1485,8 +1533,7 @@ int select_result(WPARAM wParam, LPARAM lParam)
 	    return plug_closing(s->plug, NULL, 0, 0);
 	} else {
 	    UpdateQuota(0, ret);
-	    if (fz_timer_check(&s->recv_timer))
-		fznotify(sftpRecv);
+	    RecvNotification(s);
 	    return plug_receive(s->plug, atmark ? 0 : 1, buf, ret);
 	}
 	break;
@@ -1509,8 +1556,7 @@ int select_result(WPARAM wParam, LPARAM lParam)
 	    fatalbox("%s", str);
 	} else {
 	    UpdateQuota(0, ret);
-	    if (fz_timer_check(&s->recv_timer))
-		fznotify(sftpRecv);
+	    RecvNotification(s);
 	    return plug_receive(s->plug, 2, buf, ret);
 	}
 	break;
@@ -1539,7 +1585,7 @@ int select_result(WPARAM wParam, LPARAM lParam)
 	    } else {
 		if (ret)
 		{
-		    fznotify(sftpRecv);
+		    RecvNotification(s);
 		    open &= plug_receive(s->plug, 0, buf, ret);
 		}
 		else

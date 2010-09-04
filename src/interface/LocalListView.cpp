@@ -1,7 +1,6 @@
-#include <filezilla.h>
-
 #define FILELISTCTRL_INCLUDE_TEMPLATE_DEFINITION
 
+#include "FileZilla.h"
 #include "LocalListView.h"
 #include "queue.h"
 #include "filezillaapp.h"
@@ -14,13 +13,13 @@
 #ifdef __WXMSW__
 #include "lm.h"
 #include <wx/msw/registry.h>
-#include "volume_enumerator.h"
+#else
+#include <langinfo.h>
 #endif
 #include "edithandler.h"
 #include "dragdropmanager.h"
 #include "local_filesys.h"
 #include "filelist_statusbar.h"
-#include "sizeformatting.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -238,20 +237,17 @@ BEGIN_EVENT_TABLE(CLocalListView, CFileListCtrl<CLocalFileData>)
 	EVT_MENU(XRCID("ID_DELETE"), CLocalListView::OnMenuDelete)
 	EVT_MENU(XRCID("ID_RENAME"), CLocalListView::OnMenuRename)
 	EVT_KEY_DOWN(CLocalListView::OnKeyDown)
+	EVT_LIST_BEGIN_LABEL_EDIT(wxID_ANY, CLocalListView::OnBeginLabelEdit)
+	EVT_LIST_END_LABEL_EDIT(wxID_ANY, CLocalListView::OnEndLabelEdit)
 	EVT_LIST_BEGIN_DRAG(wxID_ANY, CLocalListView::OnBeginDrag)
 	EVT_MENU(XRCID("ID_OPEN"), CLocalListView::OnMenuOpen)
 	EVT_MENU(XRCID("ID_EDIT"), CLocalListView::OnMenuEdit)
 	EVT_MENU(XRCID("ID_ENTER"), CLocalListView::OnMenuEnter)
-#ifdef __WXMSW__
-	EVT_COMMAND(-1, fzEVT_VOLUMESENUMERATED, CLocalListView::OnVolumesEnumerated)
-	EVT_COMMAND(-1, fzEVT_VOLUMEENUMERATED, CLocalListView::OnVolumesEnumerated)
-#endif
-	EVT_MENU(XRCID("ID_CONTEXT_REFRESH"), CLocalListView::OnMenuRefresh)
 END_EVENT_TABLE()
 
 CLocalListView::CLocalListView(wxWindow* pParent, CState *pState, CQueueView *pQueue)
 	: CFileListCtrl<CLocalFileData>(pParent, pState, pQueue),
-	CStateEventHandler(pState)
+	CSystemImageList(16), CStateEventHandler(pState)
 {
 	m_pState->RegisterHandler(this, STATECHANGE_LOCAL_DIR);
 	m_pState->RegisterHandler(this, STATECHANGE_APPLYFILTER);
@@ -261,7 +257,7 @@ CLocalListView::CLocalListView(wxWindow* pParent, CState *pState, CQueueView *pQ
 
 	const unsigned long widths[4] = { 120, 80, 100, 120 };
 
-	AddColumn(_("Filename"), wxLIST_FORMAT_LEFT, widths[0], true);
+	AddColumn(_("Filename"), wxLIST_FORMAT_LEFT, widths[0]);
 	AddColumn(_("Filesize"), wxLIST_FORMAT_RIGHT, widths[1]);
 	AddColumn(_("Filetype"), wxLIST_FORMAT_LEFT, widths[2]);
 	AddColumn(_("Last modified"), wxLIST_FORMAT_LEFT, widths[3]);
@@ -272,10 +268,8 @@ CLocalListView::CLocalListView(wxWindow* pParent, CState *pState, CQueueView *pQ
 	SetImageList(GetSystemImageList(), wxIMAGE_LIST_SMALL);
 
 #ifdef __WXMSW__
-	m_pVolumeEnumeratorThread = 0;
-#endif
-
 	InitHeaderImageList();
+#endif
 
 	SetDropTarget(new CLocalListViewDropTarget(this));
 
@@ -288,16 +282,10 @@ CLocalListView::~CLocalListView()
 {
 	wxString str = wxString::Format(_T("%d %d"), m_sortDirection, m_sortColumn);
 	COptions::Get()->SetOption(OPTION_LOCALFILELIST_SORTORDER, str);
-
-#ifdef __WXMSW__
-	delete m_pVolumeEnumeratorThread;
-#endif
 }
 
 bool CLocalListView::DisplayDir(wxString dirname)
 {
-	CancelLabelEdit();
-
 	wxString focused;
 	std::list<wxString> selectedNames;
 	if (m_dir != dirname)
@@ -399,7 +387,7 @@ regular_dir:
 			data.hasTime = data.lastModified.IsValid();
 
 			m_fileData.push_back(data);
-			if (!filter.FilenameFiltered(data.name, dirname, data.dir, data.size, true, data.attributes, data.hasTime ? &data.lastModified : 0))
+			if (!filter.FilenameFiltered(data.name, dirname, data.dir, data.size, true, data.attributes))
 			{
 				if (data.dir)
 					totalDirCount++;
@@ -449,6 +437,197 @@ regular_dir:
 	RefreshListOnly();
 
 	return true;
+}
+
+wxString FormatSize(const wxLongLong& size, bool add_bytes_suffix, int format, bool thousands_separator, int num_decimal_places)
+{
+	if (!format)
+	{
+		static wxString sep;
+		static bool separator_initialized = false;
+		if (!separator_initialized)
+		{
+			separator_initialized = true;
+#ifdef __WXMSW__
+			wxChar tmp[5];
+			int count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_STHOUSAND, tmp, 5);
+			if (count)
+				sep = tmp;
+#else
+			char* chr = nl_langinfo(THOUSEP);
+			if (chr && *chr)
+			{
+#if wxUSE_UNICODE
+				sep = wxString(chr, wxConvLibc);
+#else
+				sep = chr;
+#endif
+			}
+#endif
+		}
+
+		wxString tmp = size.ToString();
+		const int len = tmp.Len();
+		if (len <= 3 || !thousands_separator || sep.empty())
+		{
+			if (!add_bytes_suffix)
+				return tmp;
+			else
+			{
+				const int last = (size % 1000000).GetLo();
+				return wxString::Format(wxPLURAL("%s byte", "%s bytes", last), tmp.c_str());
+			}
+		}
+
+		wxString result;
+		int i = (len - 1) % 3 + 1;
+		result = tmp.Left(i);
+		while (i < len)
+		{
+			result += sep + tmp.Mid(i, 3);
+			i += 3;
+		}
+		if (!add_bytes_suffix)
+			return result;
+		else
+		{
+			const int last = (size % 1000000).GetLo();
+			return wxString::Format(wxPLURAL("%s byte", "%s bytes", last), result.c_str());
+		}
+	}
+
+	wxString places;
+
+	int divider;
+	if (format == 3)
+		divider = 1000;
+	else
+		divider = 1024;
+
+	// Exponent (2^(10p) or 10^(3p) depending on option
+	int p = 0;
+
+	wxLongLong r = size;
+	int remainder = 0;
+	bool clipped = false;
+	while (r > divider && p < 6)
+	{
+		const wxLongLong rr = r / divider;
+		if (remainder != 0)
+			clipped = true;
+		remainder = (r - rr * divider).GetLo();
+		r = rr;
+		p++;
+	}
+	if (!num_decimal_places)
+	{
+		if (remainder != 0 || clipped)
+			r++;
+	}
+	else if (p) // Don't add decimal places on exact bytes
+	{
+		if (format != 3)
+		{
+			// Binary, need to convert 1024 into range from 1-1000
+			if (clipped)
+			{
+				remainder++;
+				clipped = false;
+			}
+			remainder = (int)ceil((double)remainder * 1000 / 1024);
+		}
+
+		int max;
+		switch (num_decimal_places)
+		{
+		default:
+		case 1:
+			max = 9;
+			divider = 100;
+			break;
+		case 2:
+			max = 99;
+			divider = 10;
+			break;
+		case 3:
+			max = 999;
+			break;
+		}
+
+		if (num_decimal_places != 3)
+		{
+			if (remainder % divider)
+				clipped = true;
+			remainder /= divider;
+		}
+
+		if (clipped)
+			remainder++;
+		if (remainder > max)
+		{
+			r++;
+			remainder = 0;
+		}
+
+		places.Printf(_T("%d"), remainder);
+		const int len = places.Len();
+		for (int i = len; i < num_decimal_places; i++)
+			places = _T("0") + places;
+	}
+
+	wxString result = r.ToString();
+	if (places != _T(""))
+	{
+#ifdef __WXMSW__
+		wxChar sep[5];
+		int count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, sep, 5);
+		if (!count)
+		{
+			sep[0] = '.';
+			sep[1] = 0;
+		}
+#else
+		wxString sep;
+		char* chr = nl_langinfo(RADIXCHAR);
+		if (!chr || !*chr)
+			sep = _T(".");
+		else
+		{
+#if wxUSE_UNICODE
+			sep = wxString(chr, wxConvLibc);
+#else
+			sep = chr;
+#endif
+		}
+#endif
+
+		result += sep;
+		result += places;
+	}
+	result += ' ';
+	if (!p)
+		return result + _T("B");
+
+	// We stop at Exa. If someone has files bigger than that, he can afford to
+	// make a donation to have this changed ;)
+	wxChar prefix[] = { ' ', 'K', 'M', 'G', 'T', 'P', 'E' };
+
+	result += prefix[p];
+	if (format == 1)
+		result += 'i';
+	result += 'B';
+
+	return result;
+}
+
+wxString FormatSize(const wxLongLong& size, bool add_bytes_suffix = false)
+{
+	COptions* const pOptions = COptions::Get();
+	const int format = pOptions->GetOptionVal(OPTION_SIZE_FORMAT);
+	const bool thousands_separator = pOptions->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
+	const int num_decimal_places = pOptions->GetOptionVal(OPTION_SIZE_DECIMALPLACES);
+
+	return FormatSize(size, add_bytes_suffix, format, thousands_separator, num_decimal_places);
 }
 
 // See comment to OnGetItemText
@@ -528,6 +707,9 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 		{
 			// Enter action
 
+			if (IsComparing())
+				ExitComparisonMode();
+
 			wxString error;
 			if (!m_pState->SetLocalDir(data->name, &error))
 			{
@@ -580,9 +762,11 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 		return;
 	}
 
+	wxFileName fn(m_dir, data->name);
+
 	const bool queue_only = action == 1;
 
-	m_pQueue->QueueFile(queue_only, false, CLocalPath(m_dir), data->name, data->name, path, *pServer, data->size);
+	m_pQueue->QueueFile(queue_only, false, fn.GetFullPath(), data->name, path, *pServer, data->size);
 	m_pQueue->QueueFile_Finish(true);
 }
 
@@ -607,6 +791,9 @@ void CLocalListView::OnMenuEnter(wxCommandEvent &event)
 		wxBell();
 		return;
 	}
+
+	if (IsComparing())
+		ExitComparisonMode();
 
 	wxString error;
 	if (!m_pState->SetLocalDir(data->name, &error))
@@ -646,7 +833,7 @@ void CLocalListView::DisplayDrives()
 
 	int count = m_fileData.size();
 	int drive_count = 0;
-	while (*pDrive)
+	while(*pDrive)
 	{
 		// Check if drive should be hidden by default
 		if (pDrive[0] != 0 && pDrive[1] == ':')
@@ -674,7 +861,18 @@ void CLocalListView::DisplayDrives()
 		CLocalFileData data;
 		data.flags = normal;
 		data.name = path;
-		data.label = data.name;
+
+		// Get the label of the drive
+		wxChar* pVolumeName = new wxChar[501];
+		int oldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
+		BOOL res = GetVolumeInformation(pDrive, pVolumeName, 500, 0, 0, 0, 0, 0);
+		SetErrorMode(oldErrorMode);
+		if (res && pVolumeName[0])
+			data.label = data.name + _T(" (") + pVolumeName + _T(")");
+		else
+			data.label = data.name;
+		delete [] pVolumeName;
+
 		data.dir = true;
 		data.icon = -2;
 		data.size = -1;
@@ -690,16 +888,6 @@ void CLocalListView::DisplayDrives()
 
 	if (m_pFilelistStatusBar)
 		m_pFilelistStatusBar->SetDirectoryContents(0, drive_count, 0, false, 0);
-
-	if (!m_pVolumeEnumeratorThread)
-	{
-		m_pVolumeEnumeratorThread = new CVolumeDescriptionEnumeratorThread(this);
-		if (m_pVolumeEnumeratorThread->Failed())
-		{
-			delete m_pVolumeEnumeratorThread;
-			m_pVolumeEnumeratorThread = 0;
-		}
-	}
 }
 
 void CLocalListView::DisplayShares(wxString computer)
@@ -1061,7 +1249,7 @@ void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 	const bool connected = m_pState->IsRemoteConnected();
 	if (!connected)
 	{
-		pMenu->Enable(XRCID("ID_EDIT"), COptions::Get()->GetOptionVal(OPTION_EDIT_TRACK_LOCAL) == 0);
+		pMenu->Enable(XRCID("ID_EDIT"), false);
 		pMenu->Enable(XRCID("ID_UPLOAD"), false);
 		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
 	}
@@ -1102,15 +1290,19 @@ void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 	{
 		pMenu->Delete(XRCID("ID_ENTER"));
 		pMenu->Enable(XRCID("ID_RENAME"), false);
+		pMenu->Enable(XRCID("ID_OPEN"), false);
+		pMenu->Enable(XRCID("ID_EDIT"), false);
 	}
 	else
 	{
 		// Exactly one item selected
-		if (!selectedDir)
+		if (selectedDir)
+			pMenu->Enable(XRCID("ID_EDIT"), false);
+		else
 			pMenu->Delete(XRCID("ID_ENTER"));
 	}
-	if (selectedDir)
-		pMenu->Enable(XRCID("ID_EDIT"), false);
+	if (fillCount)
+		pMenu->Enable(XRCID("ID_OPEN"), false);
 
 	PopupMenu(pMenu);
 	delete pMenu;
@@ -1165,13 +1357,15 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 		{
 			path.ChangePath(data->name);
 
-			CLocalPath localPath(m_dir);
-			localPath.AddSegment(data->name);
-			m_pQueue->QueueFolder(event.GetId() == XRCID("ID_ADDTOQUEUE"), false, localPath, path, *pServer);
+			wxFileName fn(m_dir, _T(""));
+			fn.AppendDir(data->name);
+			m_pQueue->QueueFolder(event.GetId() == XRCID("ID_ADDTOQUEUE"), false, fn.GetPath(), path, *pServer);
 		}
 		else
 		{
-			m_pQueue->QueueFile(queue_only, false, CLocalPath(m_dir), data->name, data->name, path, *pServer, data->size);
+			wxFileName fn(m_dir, data->name);
+
+			m_pQueue->QueueFile(queue_only, false, fn.GetFullPath(), data->name, path, *pServer, data->size);
 			added = true;
 		}
 	}
@@ -1265,14 +1459,8 @@ void CLocalListView::OnMenuRename(wxCommandEvent& event)
 
 void CLocalListView::OnKeyDown(wxKeyEvent& event)
 {
-#ifdef __WXMAC__
-#define CursorModifierKey wxMOD_CMD
-#else
-#define CursorModifierKey wxMOD_ALT
-#endif
-
 	const int code = event.GetKeyCode();
-	if (code == WXK_DELETE || code == WXK_NUMPAD_DELETE)
+	if (code == WXK_DELETE)
 	{
 		if (GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) == -1)
 		{
@@ -1288,34 +1476,50 @@ void CLocalListView::OnKeyDown(wxKeyEvent& event)
 		wxCommandEvent tmp;
 		OnMenuRename(tmp);
 	}
-	else if (code == WXK_RIGHT && event.GetModifiers() == CursorModifierKey)
+	else if (code == WXK_BACK)
 	{
-		wxListEvent evt;
-		evt.m_itemIndex = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
-		OnItemActivated(evt);
-	}
-	else if (code == WXK_DOWN && event.GetModifiers() == CursorModifierKey)
-	{
-		wxCommandEvent cmdEvent;
-		OnMenuUpload(cmdEvent);
+		if (!m_hasParent)
+		{
+			wxBell();
+			return;
+		}
+
+		if (IsComparing())
+			ExitComparisonMode();
+
+		wxString error;
+		if (!m_pState->SetLocalDir(_T(".."), &error))
+		{
+			if (error != _T(""))
+				wxMessageBox(error, _("Failed to change directory"), wxICON_INFORMATION);
+			else
+				wxBell();
+		}
 	}
 	else
 		event.Skip();
 }
 
-bool CLocalListView::OnBeginRename(const wxListEvent& event)
+void CLocalListView::OnBeginLabelEdit(wxListEvent& event)
 {
 	if (!m_pState->GetLocalDir().IsWriteable())
-		return false;
+	{
+		event.Veto();
+		return;
+	}
 
 	if (event.GetIndex() == 0 && m_hasParent)
-		return false;
+	{
+		event.Veto();
+		return;
+	}
 
 	const CLocalFileData * const data = GetData(event.GetIndex());
 	if (!data || data->flags == fill)
-		return false;
-
-	return true;
+	{
+		event.Veto();
+		return;
+	}
 }
 
 bool Rename(wxWindow* parent, wxString dir, wxString from, wxString to)
@@ -1369,21 +1573,50 @@ bool Rename(wxWindow* parent, wxString dir, wxString from, wxString to)
 #endif
 }
 
-bool CLocalListView::OnAcceptRename(const wxListEvent& event)
+void CLocalListView::OnEndLabelEdit(wxListEvent& event)
 {
+#ifdef __WXMAC__
+	int item = event.GetIndex();
+	if (item != -1)
+	{
+		int from = item;
+		int to = item;
+		if (from)
+			from--;
+		if (to < GetItemCount() - 1)
+			to++;
+		RefreshItems(from, to);
+	}
+#endif
+
+	if (event.IsEditCancelled())
+		return;
+
 	const int index = event.GetIndex();
 	if (!index && m_hasParent)
-		return false;
+	{
+		event.Veto();
+		return;
+	}
 
 	if (event.GetLabel() == _T(""))
-		return false;
+	{
+		event.Veto();
+		return;
+	}
 
 	if (!m_pState->GetLocalDir().IsWriteable())
-		return false;
+	{
+		event.Veto();
+		return;
+	}
 
 	CLocalFileData *const data = GetData(event.GetIndex());
 	if (!data || data->flags == fill)
-		return false;
+	{
+		event.Veto();
+		return;
+	}
 
 	wxString newname = event.GetLabel();
 #ifdef __WXMSW__
@@ -1391,18 +1624,18 @@ bool CLocalListView::OnAcceptRename(const wxListEvent& event)
 #endif
 
 	if (newname == data->name)
-		return false;
+		return;
 
 	if (!Rename(this, m_dir, data->name, newname))
-		return false;
-
-	data->name = newname;
+		event.Veto();
+	else
+	{
+		data->name = newname;
 #ifdef __WXMSW__
-	data->label = data->name;
+		data->label = data->name;
 #endif
-	m_pState->RefreshLocal();
-
-	return true;
+		m_pState->RefreshLocal();
+	}
 }
 
 void CLocalListView::ApplyCurrentFilter()
@@ -1436,7 +1669,7 @@ void CLocalListView::ApplyCurrentFilter()
 		const CLocalFileData& data = m_fileData[i];
 		if (data.flags == fill)
 			continue;
-		if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes, data.hasTime ? &data.lastModified : 0))
+		if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes))
 		{
 			hidden++;
 			continue;
@@ -1579,7 +1812,7 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 	}
 }
 
-void CLocalListView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CLocalListView::OnStateChange(enum t_statechange_notifications notification, const wxString& data)
 {
 	if (notification == STATECHANGE_LOCAL_DIR)
 		DisplayDir(m_pState->GetLocalDir().GetPath());
@@ -1636,8 +1869,6 @@ void CLocalListView::OnBeginDrag(wxListEvent& event)
 		return;
 	}
 
-	CLabelEditBlocker(*this);
-
 	wxDropSource source(this);
 	source.SetData(obj);
 	int res = source.DoDragDrop(wxDrag_AllowMove);
@@ -1673,10 +1904,8 @@ void CLocalListView::RefreshFile(const wxString& file)
 	data.hasTime = data.lastModified.IsValid();
 
 	CFilterManager filter;
-	if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes, data.hasTime ? &data.lastModified : 0))
+	if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes))
 		return;
-
-	CancelLabelEdit();
 
 	// Look if file data already exists
 	unsigned int i = 0;
@@ -1939,7 +2168,7 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 		if (data->size < 0)
 			return _T("");
 		else
-			return CSizeFormat::Format(data->size);
+			return FormatSize(data->size);
 	}
 	else if (column == 2)
 	{
@@ -1966,138 +2195,114 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 
 void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 {
-	CServer server;
-	CServerPath path;
-
-	if (!m_pState->GetServer())
+	const CServer* const pServer = m_pState->GetServer();
+	if (!pServer)
 	{
-		if (COptions::Get()->GetOptionVal(OPTION_EDIT_TRACK_LOCAL))
-		{
-			wxMessageBox(_("Cannot edit file, not connected to any server."), _("Editing failed"), wxICON_EXCLAMATION);
-			return;
-		}
-	}
-	else
-	{
-		server = *m_pState->GetServer();
-
-		path = m_pState->GetRemotePath();
-		if (path.IsEmpty())
-		{
-			wxMessageBox(_("Cannot edit file, remote path unknown."), _("Editing failed"), wxICON_EXCLAMATION);
-			return;
-		}
+		wxMessageBox(_("Cannot edit file, not connected to any server."), _("Editing failed"), wxICON_EXCLAMATION);
+		return;
 	}
 
-	std::list<CLocalFileData> selected_item_list;
-
-	long item = -1;
-	while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
+	const CServerPath& path = m_pState->GetRemotePath();
+	if (path.IsEmpty())
 	{
-		if (!item && m_hasParent)
-		{
-			wxBell();
-			return;
-		}
-
-		const CLocalFileData *data = GetData(item);
-		if (!data)
-			continue;
-
-		if (data->dir)
-		{
-			wxBell();
-			return;
-		}
-
-		if (data->flags == fill)
-			continue;
-
-		selected_item_list.push_back(*data);
+		wxMessageBox(_("Cannot edit file, remote path unknown."), _("Editing failed"), wxICON_EXCLAMATION);
+		return;
 	}
 
-	CEditHandler* pEditHandler = CEditHandler::Get();
-
-	if (selected_item_list.empty())
+	long item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+	if (item < 1)
 	{
 		wxBell();
 		return;
 	}
 
-	if (selected_item_list.size() > 10)
+	if (GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) != -1)
 	{
-
-		CConditionalDialog dlg(this, CConditionalDialog::many_selected_for_edit, CConditionalDialog::yesno);
-		dlg.SetTitle(_("Confirmation needed"));
-		dlg.AddText(_("You have selected more than 10 files for editing, do you really want to continue?"));
-
-		if (!dlg.Run())
-			return;
+		wxBell();
+		return;
 	}
 
-	for (std::list<CLocalFileData>::const_iterator data = selected_item_list.begin(); data != selected_item_list.end(); data++)
+	if (!item && m_hasParent)
 	{
-		wxFileName fn(m_dir, data->name);
+		wxBell();
+		return;
+	}
 
-		bool dangerous = false;
-		bool program_exists = false;
-		wxString cmd = pEditHandler->CanOpen(CEditHandler::local, fn.GetFullPath(), dangerous, program_exists);
+	CEditHandler* pEditHandler = CEditHandler::Get();
+
+	CLocalFileData *data = GetData(item);
+	if (!data)
+	{
+		wxBell();
+		return;
+	}
+
+	if (data->dir || data->flags == fill)
+	{
+		wxBell();
+		return;
+	}
+
+	wxFileName fn(m_dir, data->name);
+
+	bool dangerous = false;
+	bool program_exists = false;
+	wxString cmd = pEditHandler->CanOpen(CEditHandler::local, fn.GetFullPath(), dangerous, program_exists);
+	if (cmd.empty())
+	{
+		CNewAssociationDialog dlg(this);
+		if (!dlg.Show(fn.GetFullName()))
+			return;
+		cmd = pEditHandler->CanOpen(CEditHandler::local, fn.GetFullPath(), dangerous, program_exists);
 		if (cmd.empty())
 		{
-			CNewAssociationDialog dlg(this);
-			if (!dlg.Show(fn.GetFullName()))
-				continue;
-			cmd = pEditHandler->CanOpen(CEditHandler::local, fn.GetFullPath(), dangerous, program_exists);
-			if (cmd.empty())
-			{
-				wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
-				continue;
-			}
+			wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
+			return;
 		}
-		if (!program_exists)
+	}
+	if (!program_exists)
+	{
+		wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), fn.GetFullPath().c_str(), cmd.c_str());
+		wxMessageBox(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
+		return;
+	}
+	if (dangerous)
+	{
+		int res = wxMessageBox(_("The selected file would be executed directly.\nThis can be dangerous and damage your system.\nDo you really want to continue?"), _("Dangerous filetype"), wxICON_EXCLAMATION | wxYES_NO);
+		if (res != wxYES)
 		{
-			wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), fn.GetFullPath().c_str(), cmd.c_str());
-			wxMessageBox(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
-			continue;
+			wxBell();
+			return;
 		}
-		if (dangerous)
+	}
+
+	CEditHandler::fileState state = pEditHandler->GetFileState(fn.GetFullPath());
+	switch (state)
+	{
+	case CEditHandler::upload:
+	case CEditHandler::upload_and_remove:
+		wxMessageBox(_("A file with that name is already being transferred."), _("Cannot view / edit selected file"), wxICON_EXCLAMATION);
+		return;
+	case CEditHandler::edit:
 		{
-			int res = wxMessageBox(_("The selected file would be executed directly.\nThis can be dangerous and damage your system.\nDo you really want to continue?"), _("Dangerous filetype"), wxICON_EXCLAMATION | wxYES_NO);
+			int res = wxMessageBox(wxString::Format(_("A file with that name is already being edited. Do you want to reopen '%s'?"), fn.GetFullPath().c_str()), _("Selected file already being edited"), wxICON_QUESTION | wxYES_NO);
 			if (res != wxYES)
 			{
 				wxBell();
-				continue;
+				return;
 			}
+			pEditHandler->StartEditing(fn.GetFullPath());
+			return;
 		}
+	default:
+		break;
+	}
 
-		CEditHandler::fileState state = pEditHandler->GetFileState(fn.GetFullPath());
-		switch (state)
-		{
-		case CEditHandler::upload:
-		case CEditHandler::upload_and_remove:
-			wxMessageBox(_("A file with that name is already being transferred."), _("Cannot view/edit selected file"), wxICON_EXCLAMATION);
-			continue;
-		case CEditHandler::edit:
-			{
-				int res = wxMessageBox(wxString::Format(_("A file with that name is already being edited. Do you want to reopen '%s'?"), fn.GetFullPath().c_str()), _("Selected file already being edited"), wxICON_QUESTION | wxYES_NO);
-				if (res != wxYES)
-				{
-					wxBell();
-					continue;
-				}
-				pEditHandler->StartEditing(fn.GetFullPath());
-				continue;
-			}
-		default:
-			break;
-		}
-
-		wxString file = fn.GetFullPath();
-		if (!pEditHandler->AddFile(CEditHandler::local, file, path, server))
-		{
-			wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
-			continue;
-		}
+	wxString file = fn.GetFullPath();
+	if (!pEditHandler->AddFile(CEditHandler::local, file, path, *pServer))
+	{
+		wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
+		return;
 	}
 }
 
@@ -2109,94 +2314,78 @@ void CLocalListView::OnMenuOpen(wxCommandEvent& event)
 		wxLaunchDefaultBrowser(CState::GetAsURL(m_dir));
 		return;
 	}
-
-	std::list<CLocalFileData> selected_item_list;
-
-	item = -1;
-	while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
+	else if (item < (m_hasParent ? 1 : 0))
 	{
-		if (!item && m_hasParent)
+		wxBell();
+		return;
+	}
+
+	if (GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) != -1)
+	{
+		wxBell();
+		return;
+	}
+
+	if (!item && m_hasParent)
+	{
+		wxBell();
+		return;
+	}
+
+	CEditHandler* pEditHandler = CEditHandler::Get();
+
+	CLocalFileData *data = GetData(item);
+	if (!data)
+	{
+		wxBell();
+		return;
+	}
+
+	if (data->flags == fill)
+	{
+		wxBell();
+		return;
+	}
+
+	if (data->dir)
+	{
+		CLocalPath path(m_dir);
+		if (!path.ChangePath(data->name))
 		{
 			wxBell();
 			return;
 		}
 
-		const CLocalFileData *data = GetData(item);
-		if (!data)
-			continue;
-
-		if (data->flags == fill)
-			continue;
-
-		selected_item_list.push_back(*data);
-	}
-
-	CEditHandler* pEditHandler = CEditHandler::Get();
-	if (!pEditHandler)
-	{
-		wxBell();
+		wxLaunchDefaultBrowser(CState::GetAsURL(path.GetPath()));
 		return;
 	}
 
-	if (selected_item_list.empty())
+	wxFileName fn(m_dir, data->name);
+
+	bool program_exists = false;
+	wxString cmd = pEditHandler->GetSystemOpenCommand(fn.GetFullPath(), program_exists);
+	if (cmd == _T(""))
 	{
-		wxBell();
+		int pos = data->name.Find('.') == -1;
+		if (pos == -1 || (pos == 0 && data->name.Mid(1).Find('.') == -1))
+			cmd = pEditHandler->GetOpenCommand(fn.GetFullPath(), program_exists);
+	}
+	if (cmd == _T(""))
+	{
+		wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
 		return;
 	}
-
-	if (selected_item_list.size() > 10)
+	if (!program_exists)
 	{
-
-		CConditionalDialog dlg(this, CConditionalDialog::many_selected_for_edit, CConditionalDialog::yesno);
-		dlg.SetTitle(_("Confirmation needed"));
-		dlg.AddText(_("You have selected more than 10 files or directories to open, do you really want to continue?"));
-
-		if (!dlg.Run())
-			return;
+		wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), fn.GetFullPath().c_str(), cmd.c_str());
+		wxMessageBox(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
+		return;
 	}
+	
+	if (wxExecute(cmd))
+		return;
 
-	for (std::list<CLocalFileData>::const_iterator data = selected_item_list.begin(); data != selected_item_list.end(); data++)
-	{
-		if (data->dir)
-		{
-			CLocalPath path(m_dir);
-			if (!path.ChangePath(data->name))
-			{
-				wxBell();
-				continue;
-			}
-
-			wxLaunchDefaultBrowser(CState::GetAsURL(path.GetPath()));
-			continue;
-		}
-
-		wxFileName fn(m_dir, data->name);
-
-		bool program_exists = false;
-		wxString cmd = pEditHandler->GetSystemOpenCommand(fn.GetFullPath(), program_exists);
-		if (cmd == _T(""))
-		{
-			int pos = data->name.Find('.') == -1;
-			if (pos == -1 || (pos == 0 && data->name.Mid(1).Find('.') == -1))
-				cmd = pEditHandler->GetOpenCommand(fn.GetFullPath(), program_exists);
-		}
-		if (cmd == _T(""))
-		{
-			wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
-			continue;
-		}
-		if (!program_exists)
-		{
-			wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), fn.GetFullPath().c_str(), cmd.c_str());
-			wxMessageBox(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
-			continue;
-		}
-
-		if (wxExecute(cmd))
-			continue;
-
-		wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
-	}
+	wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
 }
 
 bool CLocalListView::ItemIsDir(int index) const
@@ -2207,71 +2396,4 @@ bool CLocalListView::ItemIsDir(int index) const
 wxLongLong CLocalListView::ItemGetSize(int index) const
 {
 	return m_fileData[index].size;
-}
-
-#ifdef __WXMSW__
-
-void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
-{
-	if (!m_pVolumeEnumeratorThread)
-		return;
-
-	std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo> volumeInfo;
-	volumeInfo = m_pVolumeEnumeratorThread->GetVolumes();
-
-	if (event.GetEventType() == fzEVT_VOLUMESENUMERATED)
-	{
-		delete m_pVolumeEnumeratorThread;
-		m_pVolumeEnumeratorThread = 0;
-	}
-
-	if (m_dir != _T("\\"))
-		return;
-
-	for (std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo>::const_iterator iter = volumeInfo.begin(); iter != volumeInfo.end(); iter++)
-	{
-		wxString drive = iter->volume;
-
-		unsigned int item, index;
-		for (item = 1; item < m_indexMapping.size(); ++item)
-		{
-			index = m_indexMapping[item];
-			if (m_fileData[index].name == drive || m_fileData[index].name.Left(drive.Len() + 1) == drive + _T(" "))
-				break;
-		}
-		if (item >= m_indexMapping.size())
-			continue;
-
-		m_fileData[index].label = drive + _T(" (") + iter->volumeName + _T(")");
-		
-		RefreshItem(item);
-	}
-}
-
-#endif
-
-void CLocalListView::OnMenuRefresh(wxCommandEvent& event)
-{
-	m_pState->RefreshLocal();
-}
-
-void CLocalListView::OnNavigationEvent(bool forward)
-{
-	if (!forward)
-	{
-		if (!m_hasParent)
-		{
-			wxBell();
-			return;
-		}
-
-		wxString error;
-		if (!m_pState->SetLocalDir(_T(".."), &error))
-		{
-			if (error != _T(""))
-				wxMessageBox(error, _("Failed to change directory"), wxICON_INFORMATION);
-			else
-				wxBell();
-		}
-	}
 }

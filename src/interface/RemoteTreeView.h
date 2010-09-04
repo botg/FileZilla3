@@ -4,10 +4,9 @@
 #include "systemimagelist.h"
 #include "state.h"
 #include "filter.h"
-#include "treectrlex.h"
 
 class CQueueView;
-class CRemoteTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler
+class CRemoteTreeView : public wxTreeCtrl, CSystemImageList, CStateEventHandler
 {
 	DECLARE_CLASS(CRemoteTreeView)
 
@@ -19,8 +18,8 @@ public:
 
 protected:
 	wxTreeItemId MakeParent(CServerPath path, bool select);
-	void SetDirectoryListing(const CSharedPointer<const CDirectoryListing> &pListing, bool modified);
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	void SetDirectoryListing(const CDirectoryListing* pListing, bool modified);
+	virtual void OnStateChange(enum t_statechange_notifications notification, const wxString& data);
 
 	void DisplayItem(wxTreeItemId parent, const CDirectoryListing& listing);
 	void RefreshItem(wxTreeItemId parent, const CDirectoryListing& listing, bool will_select_parent);
@@ -35,9 +34,8 @@ protected:
 
 	bool ListExpand(wxTreeItemId item);
 
-	void ApplyFilters();
-
 	CQueueView* m_pQueue;
+	const CDirectoryListing* m_pDirectoryListing;
 
 	void CreateImageList();
 	wxBitmap CreateIcon(int index, const wxString& overlay = _T(""));
@@ -68,7 +66,6 @@ protected:
 	void OnEndLabelEdit(wxTreeEvent& event);
 	void OnMkdir(wxCommandEvent& event);
 	void OnChar(wxKeyEvent& event);
-	void OnMenuGeturl(wxCommandEvent& event);
 
 	wxTreeItemId m_contextMenuItem;
 };

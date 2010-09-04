@@ -1,22 +1,17 @@
-#include <filezilla.h>
-
+#include "FileZilla.h"
 #include "ControlSocket.h"
 #include "httpcontrolsocket.h"
-#include "tlssocket.h"
-
-#include <wx/file.h>
-
 #include <errno.h>
 
 #define FZ_REPLY_REDIRECTED FZ_REPLY_ALREADYCONNECTED
 
 // Connect is special for HTTP: It is done on a per-command basis, so we need
 // to establish a connection before each command.
-class CHttpConnectOpData : public CConnectOpData
+class CHttpConnectOpData : public COpData
 {
 public:
 	CHttpConnectOpData()
-		: tls(false)
+		: COpData(cmd_connect)
 	{
 	}
 
@@ -24,7 +19,8 @@ public:
 	{
 	}
 
-	bool tls;
+	wxString host;
+	unsigned int port;
 };
 
 class CHttpOpData
@@ -45,8 +41,6 @@ public:
 		m_totalSize = -1;
 		m_receivedData = 0;
 	}
-
-	virtual ~CHttpOpData() {}
 
 	bool m_gotHeader;
 	int m_responseCode;
@@ -79,8 +73,8 @@ public:
 class CHttpFileTransferOpData : public CFileTransferOpData, public CHttpOpData
 {
 public:
-	CHttpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
-		: CFileTransferOpData(is_download, local_file, remote_file, remote_path), CHttpOpData(this)
+	CHttpFileTransferOpData()
+		: CHttpOpData(this)
 	{
 		pFile = 0;
 	}
@@ -97,14 +91,10 @@ CHttpControlSocket::CHttpControlSocket(CFileZillaEnginePrivate *pEngine)
 	: CRealControlSocket(pEngine)
 {
 	m_pRecvBuffer = 0;
-	m_recvBufferPos = 0;
-	m_pTlsSocket = 0;
-	m_pHttpOpData = 0;
 }
 
 CHttpControlSocket::~CHttpControlSocket()
 {
-	DoClose();
 	delete [] m_pRecvBuffer;
 }
 
@@ -185,18 +175,6 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 			}
 		}
 		break;
-	case reqId_certificate:
-		{
-			if (!m_pTlsSocket || m_pTlsSocket->GetState() != CTlsSocket::verifycert)
-			{
-				LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("No or invalid operation in progress, ignoring request reply %d"), pNotification->GetRequestID());
-				return false;
-			}
-
-			CCertificateNotification* pCertificateNotification = reinterpret_cast<CCertificateNotification *>(pNotification);
-			m_pTlsSocket->TrustCurrentCert(pCertificateNotification->m_trusted);
-		}
-		break;
 	default:
 		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Unknown request %d"), pNotification->GetRequestID());
 		ResetOperation(FZ_REPLY_INTERNALERROR);
@@ -227,7 +205,7 @@ int CHttpControlSocket::DoReceive()
 
 		unsigned int len = m_recvBufferLen - m_recvBufferPos;
 		int error;
-		int read = m_pBackend->Read(m_pRecvBuffer + m_recvBufferPos, len, error);
+		int read = m_pSocket->Read(m_pRecvBuffer + m_recvBufferPos, len, error);
 		if (read == -1)
 		{
 			if (error != EAGAIN)
@@ -237,7 +215,7 @@ int CHttpControlSocket::DoReceive()
 			return 0;
 		}
 
-		m_pEngine->SetActive(CFileZillaEngine::recv);
+		m_pEngine->SetActive(true);
 
 		if (!m_pCurOpData || m_pCurOpData->opId == cmd_connect)
 		{
@@ -294,52 +272,8 @@ int CHttpControlSocket::DoReceive()
 
 void CHttpControlSocket::OnConnect()
 {
-	wxASSERT(GetCurrentCommandId() == cmd_connect);
-
-	CHttpConnectOpData *pData = static_cast<CHttpConnectOpData *>(m_pCurOpData);
-	
-	if (pData->tls)
-	{
-		if (!m_pTlsSocket)
-		{
-			LogMessage(Status, _("Connection established, initializing TLS..."));
-
-			delete m_pBackend;
-			m_pTlsSocket = new CTlsSocket(this, m_pSocket, this);
-			m_pBackend = m_pTlsSocket;
-
-			if (!m_pTlsSocket->Init())
-			{
-				LogMessage(::Error, _("Failed to initialize TLS."));
-				DoClose();
-				return;
-			}
-
-			const wxString trusted_rootcert = m_pEngine->GetOptions()->GetOption(OPTION_INTERNAL_ROOTCERT);
-			if (trusted_rootcert != _T("") && !m_pTlsSocket->AddTrustedRootCertificate(trusted_rootcert))
-			{
-				LogMessage(::Error, _("Failed to parse trusted root cert."));
-				DoClose();
-				return;
-			}
-
-			int res = m_pTlsSocket->Handshake();
-			if (res == FZ_REPLY_ERROR)
-				DoClose();
-		}
-		else
-		{
-			LogMessage(Status, _("TLS/SSL connection established, sending HTTP request"));
-			ResetOperation(FZ_REPLY_OK);
-		}
-
-		return;
-	}
-	else
-	{
-		LogMessage(Status, _("Connection established, sending HTTP request"));
-		ResetOperation(FZ_REPLY_OK);
-	}
+	LogMessage(Status, _("Connection established, sending HTTP request"));
+	ResetOperation(FZ_REPLY_OK);
 }
 
 enum filetransferStates
@@ -369,9 +303,14 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 		delete m_pCurOpData;
 	}
 
-	CHttpFileTransferOpData *pData = new CHttpFileTransferOpData(download, localFile, remoteFile, remotePath);
+	CHttpFileTransferOpData *pData = new CHttpFileTransferOpData;
 	m_pCurOpData = pData;
 	m_pHttpOpData = pData;
+
+	pData->localFile = localFile;
+	pData->remotePath = remotePath;
+	pData->remoteFile = remoteFile;
+	pData->download = download;
 
 	if (localFile != _T(""))
 	{
@@ -384,7 +323,9 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 
 		pData->pFile = new wxFile();
 
-		CreateLocalDir(pData->localFile);
+		// Create local directory
+		wxFileName fn(pData->localFile);
+		wxFileName::Mkdir(fn.GetPath(), 0777, wxPATH_MKDIR_FULL);
 
 		if (!pData->pFile->Open(pData->localFile, wxFile::write))
 		{
@@ -396,7 +337,7 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 	else
 		pData->opState = filetransfer_transfer;
 
-	int res = InternalConnect(m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(), m_pCurrentServer->GetProtocol() == HTTPS);
+	int res = InternalConnect(m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort());
 	if (res != FZ_REPLY_OK)
 		return res;
 
@@ -441,7 +382,9 @@ int CHttpControlSocket::FileTransferSend()
 		pData->opState = filetransfer_transfer;
 		pData->pFile = new wxFile();
 
-		CreateLocalDir(pData->localFile);
+		// Create local directory
+		wxFileName fn(pData->localFile);
+		wxFileName::Mkdir(fn.GetPath(), 0777, wxPATH_MKDIR_FULL);
 
 		if (!pData->pFile->Open(pData->localFile, wxFile::write))
 		{
@@ -450,7 +393,7 @@ int CHttpControlSocket::FileTransferSend()
 			return FZ_REPLY_ERROR;
 		}
 
-		int res = InternalConnect(m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(), m_pCurrentServer->GetProtocol() == HTTPS);
+		int res = InternalConnect(m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort());
 		if (res != FZ_REPLY_OK)
 			return res;
 	}
@@ -459,10 +402,7 @@ int CHttpControlSocket::FileTransferSend()
 	wxString hostWithPort;
 	if (pData->m_newLocation == _T(""))
 	{
-		if (m_pCurrentServer->GetProtocol() == HTTPS)
-			location = _T("https://") + m_pCurrentServer->FormatHost() + pData->remotePath.FormatFilename(pData->remoteFile).c_str();
-		else
-			location = _T("http://") + m_pCurrentServer->FormatHost() + pData->remotePath.FormatFilename(pData->remoteFile).c_str();
+		location = _T("http://") + m_pCurrentServer->FormatHost() + pData->remotePath.FormatFilename(pData->remoteFile).c_str();
 		hostWithPort = wxString::Format(_T("%s:%d"), m_pCurrentServer->FormatHost(true).c_str(), m_pCurrentServer->GetPort());
 	}
 	else
@@ -483,7 +423,7 @@ int CHttpControlSocket::FileTransferSend()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-int CHttpControlSocket::InternalConnect(wxString host, unsigned short port, bool tls)
+int CHttpControlSocket::InternalConnect(wxString host, unsigned short port)
 {
 	LogMessage(Debug_Verbose, _T("CHttpControlSocket::InternalConnect()"));
 
@@ -491,7 +431,6 @@ int CHttpControlSocket::InternalConnect(wxString host, unsigned short port, bool
 	pData->pNextOpData = m_pCurOpData;
 	m_pCurOpData = pData;
 	pData->port = port;
-	pData->tls = tls;
 
 	if (!IsIpAddress(host))
 		LogMessage(Status, _("Resolving address of %s"), host.c_str());
@@ -512,8 +451,10 @@ int CHttpControlSocket::DoInternalConnect()
 	}
 
 	CHttpConnectOpData *pData = static_cast<CHttpConnectOpData *>(m_pCurOpData);
+	LogMessage(Status, _("Connecting to %s:%d..."), pData->host.c_str(), pData->port);
 
-	delete m_pBackend;
+	if (m_pBackend)
+		delete m_pBackend;
 	m_pBackend = new CSocketBackend(this, m_pSocket);
 
 	int res = m_pSocket->Connect(pData->host, pData->port);
@@ -672,18 +613,11 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					ResetHttpData(pData);
 
 					wxString host;
-					enum ServerProtocol protocol;
 					int pos;
 					if ((pos = pData->m_newLocation.Find(_T("://"))) != -1)
-					{
-						protocol = CServer::GetProtocolFromPrefix(pData->m_newLocation.Left(pos));
 						host = pData->m_newLocation.Mid(pos + 3);
-					}
 					else
-					{
-						protocol = HTTP;
 						host = pData->m_newLocation;
-					}
 
 					if ((pos = host.Find(_T("/"))) != -1)
 						host = host.Left(pos);
@@ -693,21 +627,11 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					{
 						wxString strport = host.Mid(pos + 1);
 						if (!strport.ToULong(&port) || port < 1 || port > 65535)
-						{
-							if (protocol == HTTPS)
-								port = 443;
-							else
-								port = 80;
-						}
+							port = 80;
 						host = host.Left(pos);
 					}
 					else
-					{
-						if (protocol == HTTPS)
-							port = 443;
-						else
-							port = 80;
-					}
+						port = 80;
 
 					if (host == _T(""))
 					{
@@ -721,7 +645,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					// International domain names
 					host = ConvertDomainName(host);
 
-					int res = InternalConnect(host, port, protocol == HTTPS);
+					int res = InternalConnect(host, port);
 					if (res == FZ_REPLY_WOULDBLOCK)
 						res |= FZ_REPLY_REDIRECTED;
 					return res;
@@ -930,13 +854,10 @@ int CHttpControlSocket::ResetOperation(int nErrorCode)
 
 	if (!m_pCurOpData || !m_pCurOpData->pNextOpData)
 	{
-		if (m_pBackend)
-		{
-			if (nErrorCode == FZ_REPLY_OK)
-				LogMessage(Status, _("Disconnected from server"));
-			else
-				LogMessage(::Error, _("Disconnected from server"));
-		}
+		if (nErrorCode == FZ_REPLY_OK)
+			LogMessage(Status, _("Disconnected from server"));
+		else
+			LogMessage(::Error, _("Disconnected from server"));
 		ResetSocket();
 		m_pHttpOpData = 0;
 	}
@@ -1055,10 +976,4 @@ int CHttpControlSocket::ParseSubcommandResult(int prevResult)
 	}
 
 	return FZ_REPLY_ERROR;
-}
-
-int CHttpControlSocket::Disconnect()
-{
-	DoClose();
-	return FZ_REPLY_OK;
 }

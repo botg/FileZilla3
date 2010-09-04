@@ -1,12 +1,12 @@
 #ifndef __LED_H__
 #define __LED_H__
 
-class CFileZillaEngine;
+class CState;
 class CLed : public wxWindow
 {
 public:
-	CLed(wxWindow *parent, unsigned int index);
-	virtual ~CLed();
+	CLed(wxWindow *parent, unsigned int index, CState* pState);
+	~CLed();
 
 	void Ping();
 
@@ -17,6 +17,8 @@ protected:
 	int m_index;
 	int m_ledState;
 
+	CState* m_pState;
+
 	wxBitmap m_leds[2];
 	bool m_loaded;
 
@@ -25,9 +27,6 @@ protected:
 	DECLARE_EVENT_TABLE()
 	void OnPaint(wxPaintEvent& event);
 	void OnTimer(wxTimerEvent& event);
-#ifdef __WXMSW__
-	void OnEraseBackground(wxEraseEvent& event);
-#endif
 };
 
 #endif //__LED_H__

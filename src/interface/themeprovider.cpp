@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "themeprovider.h"
 #include "filezillaapp.h"
 #include "Options.h"
@@ -9,8 +9,6 @@ CThemeProvider::CThemeProvider()
 	wxArtProvider::Push(this);
 
 	m_themePath = GetThemePath();
-
-	RegisterOption(OPTION_THEME);
 }
 
 wxBitmap CThemeProvider::CreateBitmap(const wxArtID& id, const wxArtClient& client, const wxSize& size)
@@ -53,21 +51,9 @@ wxBitmap CThemeProvider::CreateBitmap(const wxArtID& id, const wxArtClient& clie
 	for (std::list<wxString>::const_iterator iter = dirs.begin(); iter != dirs.end(); iter++)
 	{
 		wxString fileName = *iter + name + _T(".png");
-#ifdef __WXMSW__
-		// MSW toolbar only greys out disabled buttons in a visually
-		// pleasing way if the bitmap has an alpha channel. 
-		wxImage img(fileName, wxBITMAP_TYPE_PNG);
-		if (!img.Ok())
-			continue;
-
-		if (img.HasMask() && !img.HasAlpha())
-			img.InitAlpha();
-		return wxBitmap(img);
-#else
 		wxBitmap bmp(fileName, wxBITMAP_TYPE_PNG);
 		if (bmp.Ok())
 			return bmp;
-#endif
 	}
 
 	return wxNullBitmap;
@@ -252,23 +238,10 @@ wxString CThemeProvider::GetThemePath()
 {
 	const wxString& resourceDir = wxGetApp().GetResourceDir();
 	wxString themePath = resourceDir + COptions::Get()->GetOption(OPTION_THEME);
-	if (wxFile::Exists(themePath + _T("theme.xml")))
-		return themePath;
-
-    themePath = resourceDir + _T("opencrystal/");
-	if (wxFile::Exists(themePath + _T("theme.xml")))
-		return themePath;
-
-	wxASSERT(wxFile::Exists(resourceDir + _T("theme.xml")));
-	return resourceDir;
-}
-
-void CThemeProvider::OnOptionChanged(int option)
-{
-	wxASSERT(option == OPTION_THEME);
-
-	m_themePath = GetThemePath();
-
-	wxArtProvider::Remove(this);
-	wxArtProvider::Push(this);
+	if (!wxFile::Exists(themePath + _T("theme.xml")))
+	{
+	    themePath = resourceDir;
+		wxASSERT(wxFile::Exists(themePath + _T("theme.xml")));
+	}
+	return themePath;
 }

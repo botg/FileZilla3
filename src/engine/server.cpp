@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 
 struct t_protocolInfo
 {
@@ -13,7 +13,6 @@ static const t_protocolInfo protocolInfos[] = {
 	{ FTP,     _T("ftp"),   21,  false, _T("FTP - File Transfer Protocol") },
 	{ SFTP,    _T("sftp"),  22,  false, _T("SFTP - SSH File Transfer Protocol") },
 	{ HTTP,    _T("http"),  80,  false, _T("HTTP - Hypertext Transfer Protocol") },
-	{ HTTPS,   _T("https"), 443, true, wxTRANSLATE("HTTPS - HTTP over TLS") },
 	{ FTPS,    _T("ftps"),  990, true,  wxTRANSLATE("FTPS - FTP over implicit TLS/SSL") },
 	{ FTPES,   _T("ftpes"), 21,  true,  wxTRANSLATE("FTPES - FTP over explicit TLS/SSL") },
 	{ UNKNOWN, _T(""),      21,  false, _T("") }
@@ -35,22 +34,6 @@ static const wxString typeNames[SERVERTYPE_MAX] = {
 CServer::CServer()
 {
 	Initialize();
-}
-
-bool CServer::ParseUrl(wxString host, const wxString& port, wxString user, wxString pass, wxString &error, CServerPath &path)
-{
-	unsigned long nPort = 0;
-	if (!port.empty())
-	{
-		if (port.size() > 5 || !port.ToULong(&nPort) || !nPort || nPort > 65535)
-		{
-			error = _("Invalid port given. The port has to be a value from 1 to 65535.");
-			error += _T("\n");
-			error += _("You can leave the port field empty to use the default port.");
-			return false;
-		}
-	}
-	return ParseUrl(host, nPort, user, pass, error, path);
 }
 
 bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString pass, wxString &error, CServerPath &path)
@@ -442,44 +425,6 @@ bool CServer::operator!=(const CServer &op) const
 	return !(*this == op);
 }
 
-bool CServer::EqualsNoPass(const CServer &op) const
-{
-	if (m_protocol != op.m_protocol)
-		return false;
-	else if (m_type != op.m_type)
-		return false;
-	else if (m_host != op.m_host)
-		return false;
-	else if (m_port != op.m_port)
-		return false;
-	else if (m_logonType != op.m_logonType)
-		return false;
-	else if (m_logonType != ANONYMOUS)
-	{
-		if (m_user != op.m_user)
-			return false;
-	}
-	if (m_timezoneOffset != op.m_timezoneOffset)
-		return false;
-	else if (m_pasvMode != op.m_pasvMode)
-		return false;
-	else if (m_encodingType != op.m_encodingType)
-		return false;
-	else if (m_encodingType == ENCODING_CUSTOM)
-	{
-		if (m_customEncoding != op.m_customEncoding)
-			return false;
-	}
-	if (m_postLoginCommands != op.m_postLoginCommands)
-		return false;
-	if (m_bypassProxy != op.m_bypassProxy)
-		return false;
-
-	// Do not compare number of allowed multiple connections
-
-	return true;
-}
-
 CServer::CServer(enum ServerProtocol protocol, enum ServerType type, wxString host, unsigned int port, wxString user, wxString pass /*=_T("")*/, wxString account /*=_T("")*/)
 {
 	Initialize();
@@ -625,7 +570,7 @@ wxString CServer::FormatHost(bool always_omit_port /*=false*/) const
 	return host;
 }
 
-wxString CServer::FormatServer(const bool always_include_prefix /*=false*/) const
+wxString CServer::FormatServer() const
 {
 	wxString server = FormatHost();
 
@@ -639,13 +584,10 @@ wxString CServer::FormatServer(const bool always_include_prefix /*=false*/) cons
 			wxString prefix = GetPrefixFromProtocol(m_protocol);
 			if (prefix != _T(""))
 				server = prefix + _T("://") + server;
-			else if (always_include_prefix)
-				server = prefix + _T("://") + server;
 		}
 		break;
 	case FTP:
-		if (always_include_prefix ||
-			(GetProtocolFromPort(m_port) != FTP && GetProtocolFromPort(m_port) != UNKNOWN))
+		if (GetProtocolFromPort(m_port) != FTP && GetProtocolFromPort(m_port) != UNKNOWN)
 			server = _T("ftp://") + server;
 		break;
 	}
@@ -817,7 +759,7 @@ bool CServer::GetBypassProxy() const
 
 bool CServer::ProtocolHasDataTypeConcept(const enum ServerProtocol protocol)
 {
-	if (protocol == FTP || protocol == FTPS || protocol == FTPES)
+	if (protocol == FTP || protocol == FTPES || protocol == FTPES)
 		return true;
 
 	return false;

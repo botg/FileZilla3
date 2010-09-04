@@ -1,9 +1,8 @@
-#include <filezilla.h>
-#include "Options.h"
+#include "FileZilla.h"
 #include "queue.h"
 #include "queueview_failed.h"
 #include "queueview_successful.h"
-#include "sizeformatting.h"
+#include "Options.h"
 
 CQueueItem::CQueueItem()
 {
@@ -278,25 +277,22 @@ int CQueueItem::GetItemIndex() const
 	return index + pParent->GetItemIndex();
 }
 
-CFileItem::CFileItem(CServerItem* parent, bool queued, bool download,
-					 const CLocalPath& localPath, const wxString& localFile,
+CFileItem::CFileItem(CServerItem* parent, bool queued, bool download, const wxString& localFile,
 					 const wxString& remoteFile, const CServerPath& remotePath, wxLongLong size)
-	: m_localFile(localFile), m_remoteFile(remoteFile)
-	, m_localPath(localPath), m_remotePath(remotePath)
-	, m_size(size)
+	: m_localFile(localFile), m_remoteFile(remoteFile), m_remotePath(remotePath), m_size(size)
 {
 	m_parent = parent;
 	m_priority = priority_normal;
 
-	flags = 0;
-	if (download)
-		flags |= flag_download;
-	if (queued)
-		flags |= flag_queued;
+	m_download = download;
+	m_queued = queued;
+	m_active = false;
 	m_errorCount = 0;
+	m_remove = false;
 	m_pEngineData = 0;
 	m_defaultFileExistsAction = CFileExistsNotification::unknown;
 	m_edit = CEditHandler::none;
+	m_madeProgress = false;
 	m_onetime_action = CFileExistsNotification::unknown;
 }
 
@@ -326,17 +322,16 @@ enum QueuePriority CFileItem::GetPriority() const
 
 void CFileItem::SetActive(const bool active)
 {
-	if (active && !IsActive())
+	if (active && !m_active)
 	{
 		AddChild(new CStatusItem);
-		flags |= flag_active;
 	}
-	else if (!active && IsActive())
+	else if (!active && m_active)
 	{
 		CQueueItem* pItem = GetChild(0, false);
 		RemoveChild(pItem);
-		flags &= ~flag_active;
 	}
+	m_active = active;
 }
 
 void CFileItem::SaveItem(TiXmlElement* pElement) const
@@ -344,21 +339,21 @@ void CFileItem::SaveItem(TiXmlElement* pElement) const
 	if (m_edit != CEditHandler::none)
 		return;
 
-	TiXmlElement *file = pElement->LinkEndChild(new TiXmlElement("File"))->ToElement();
+	TiXmlElement file("File");
 
-	AddTextElement(file, "LocalFile", m_localPath.GetPath() + m_localFile);
-	AddTextElement(file, "RemoteFile", m_remoteFile);
-	AddTextElement(file, "RemotePath", m_remotePath.GetSafePath());
-	AddTextElementRaw(file, "Download", Download() ? "1" : "0");
+	AddTextElement(&file, "LocalFile", m_localFile);
+	AddTextElement(&file, "RemoteFile", m_remoteFile);
+	AddTextElement(&file, "RemotePath", m_remotePath.GetSafePath());
+	AddTextElementRaw(&file, "Download", m_download ? "1" : "0");
 	if (m_size != -1)
-		AddTextElement(file, "Size", m_size.ToString());
+		AddTextElement(&file, "Size", m_size.ToString());
 	if (m_errorCount)
-		AddTextElement(file, "ErrorCount", m_errorCount);
+		AddTextElement(&file, "ErrorCount", m_errorCount);
 	if (m_priority != priority_normal)
-		AddTextElement(file, "Priority", m_priority);
-	AddTextElementRaw(file, "TransferMode", m_transferSettings.binary ? "1" : "0");
-	if (m_defaultFileExistsAction != CFileExistsNotification::unknown)
-		AddTextElement(file, "OverwriteAction", m_defaultFileExistsAction);
+		AddTextElement(&file, "Priority", m_priority);
+	AddTextElementRaw(&file, "TransferMode", m_transferSettings.binary ? "1" : "0");
+
+	pElement->InsertEndChild(file);
 }
 
 bool CFileItem::TryRemoveAll()
@@ -366,7 +361,7 @@ bool CFileItem::TryRemoveAll()
 	if (!IsActive())
 		return true;
 
-	set_pending_remove(true);
+	m_remove = true;
 	return false;
 }
 
@@ -382,38 +377,35 @@ void CFileItem::SetRemoteFile(const wxString &file)
 	m_remoteFile = file;
 }
 
-CFolderItem::CFolderItem(CServerItem* parent, bool queued, const CLocalPath& localPath)
-	: CFileItem(parent, queued, true, localPath, _T(""), _T(""), CServerPath(), -1)
+CFolderItem::CFolderItem(CServerItem* parent, bool queued, const wxString& localFile)
+	: CFileItem(parent, queued, true, localFile, _T(""), CServerPath(), -1)
 {
 }
 
 CFolderItem::CFolderItem(CServerItem* parent, bool queued, const CServerPath& remotePath, const wxString& remoteFile)
-	: CFileItem(parent, queued, false, CLocalPath(), _T(""), remoteFile, remotePath, -1)
+	: CFileItem(parent, queued, false, _T(""), remoteFile, remotePath, -1)
 {
 }
 
 void CFolderItem::SaveItem(TiXmlElement* pElement) const
 {
-	TiXmlElement *file = new TiXmlElement("Folder");
+	TiXmlElement file("Folder");
 
-	if (Download())
-		AddTextElement(file, "LocalFile", m_localFile);
+	if (m_download)
+		AddTextElement(&file, "LocalFile", m_localFile);
 	else
 	{
-		AddTextElement(file, "RemoteFile", m_remoteFile);
-		AddTextElement(file, "RemotePath", m_remotePath.GetSafePath());
+		AddTextElement(&file, "RemoteFile", m_remoteFile);
+		AddTextElement(&file, "RemotePath", m_remotePath.GetSafePath());
 	}
-	AddTextElementRaw(file, "Download", Download() ? "1" : "0");
+	AddTextElementRaw(&file, "Download", m_download ? "1" : "0");
 
-	pElement->LinkEndChild(file);
+	pElement->InsertEndChild(file);
 }
 
 void CFolderItem::SetActive(const bool active)
 {
-	if (active)
-		flags |= flag_active;
-	else
-		flags &= ~flag_active;
+	m_active = active;
 }
 
 CServerItem::CServerItem(const CServer& server)
@@ -449,12 +441,12 @@ void CServerItem::AddFileItemToList(CFileItem* pItem)
 	if (!pItem)
 		return;
 
-	m_fileList[pItem->queued() ? 0 : 1][pItem->GetPriority()].push_back(pItem);
+	m_fileList[pItem->m_queued ? 0 : 1][pItem->GetPriority()].push_back(pItem);
 }
 
 void CServerItem::RemoveFileItemFromList(CFileItem* pItem)
 {
-	std::list<CFileItem*>& fileList = m_fileList[pItem->queued() ? 0 : 1][pItem->GetPriority()];
+	std::list<CFileItem*>& fileList = m_fileList[pItem->m_queued ? 0 : 1][pItem->GetPriority()];
 	for (std::list<CFileItem*>::iterator iter = fileList.begin(); iter != fileList.end(); iter++)
 	{
 		if (*iter == pItem)
@@ -564,12 +556,12 @@ void CServerItem::QueueImmediateFiles()
 		for (std::list<CFileItem*>::reverse_iterator iter = fileList.rbegin(); iter != fileList.rend(); iter++)
 		{
 			CFileItem* item = *iter;
-			wxASSERT(!item->queued());
+			wxASSERT(!item->m_queued);
 			if (item->IsActive())
 				activeList.push_front(item);
 			else
 			{
-				item->set_queued(true);
+				item->m_queued = true;
 				m_fileList[0][i].push_front(item);
 			}
 		}
@@ -579,7 +571,7 @@ void CServerItem::QueueImmediateFiles()
 
 void CServerItem::QueueImmediateFile(CFileItem* pItem)
 {
-	if (pItem->queued())
+	if (pItem->m_queued)
 		return;
 
 	std::list<CFileItem*>& fileList = m_fileList[1][pItem->GetPriority()];
@@ -588,7 +580,7 @@ void CServerItem::QueueImmediateFile(CFileItem* pItem)
 		if (*iter != pItem)
 			continue;
 
-		pItem->set_queued(true);
+		pItem->m_queued = true;
 		fileList.erase(iter);
 		m_fileList[0][pItem->GetPriority()].push_front(pItem);
 		return;
@@ -598,13 +590,13 @@ void CServerItem::QueueImmediateFile(CFileItem* pItem)
 
 void CServerItem::SaveItem(TiXmlElement* pElement) const
 {
-	TiXmlElement *server = new TiXmlElement("Server");
-	SetServer(server, m_server);
+	TiXmlElement server("Server");
+	SetServer(&server, m_server);
 
 	for (std::vector<CQueueItem*>::const_iterator iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); iter++)
-		(*iter)->SaveItem(server);
+		(*iter)->SaveItem(&server);
 
-	pElement->LinkEndChild(server);
+	pElement->InsertEndChild(server);
 }
 
 wxLongLong CServerItem::GetTotalSize(int& filesWithUnknownSize, int& queuedFiles, int& folderScanCount) const
@@ -710,7 +702,7 @@ void CServerItem::SetPriority(enum QueuePriority priority)
 
 void CServerItem::SetChildPriority(CFileItem* pItem, enum QueuePriority oldPriority, enum QueuePriority newPriority)
 {
-	int i = pItem->queued() ? 0 : 1;
+	int i = pItem->Queued() ? 0 : 1;
 
 	for (std::list<CFileItem*>::iterator iter = m_fileList[i][oldPriority].begin(); iter != m_fileList[i][oldPriority].end(); iter++)
 	{
@@ -725,7 +717,7 @@ void CServerItem::SetChildPriority(CFileItem* pItem, enum QueuePriority oldPrior
 	wxFAIL;
 }
 
-CFolderScanItem::CFolderScanItem(CServerItem* parent, bool queued, bool download, const CLocalPath& localPath, const CServerPath& remotePath)
+CFolderScanItem::CFolderScanItem(CServerItem* parent, bool queued, bool download, const wxString& localPath, const CServerPath& remotePath)
 {
 	m_parent = parent;
 
@@ -839,6 +831,9 @@ void CQueueViewBase::OnEraseBackground(wxEraseEvent& event)
 		event.Skip();
 }
 
+// Defined in LocalListView.cpp
+extern wxString FormatSize(const wxLongLong& size, bool add_bytes_suffix = false);
+
 wxString CQueueViewBase::OnGetItemText(long item, long column) const
 {
 	CQueueViewBase* pThis = const_cast<CQueueViewBase*>(this);
@@ -862,15 +857,15 @@ wxString CQueueViewBase::OnGetItemText(long item, long column) const
 			switch (column)
 			{
 			case 0:
-				return pFileItem->GetIndent() + pFileItem->GetLocalPath().GetPath() + pFileItem->GetLocalFile();
+				return pFileItem->GetIndent() + pFileItem->GetLocalFile();
 			case 1:
 				if (pFileItem->Download())
-					if (pFileItem->queued())
+					if (pFileItem->Queued())
 						return _T("<--");
 					else
 						return _T("<<--");
 				else
-					if (pFileItem->queued())
+					if (pFileItem->Queued())
 						return _T("-->");
 					else
 						return _T("-->>");
@@ -881,7 +876,7 @@ wxString CQueueViewBase::OnGetItemText(long item, long column) const
 				{
 					const wxLongLong& size = pFileItem->GetSize();
 					if (size >= 0)
-						return CSizeFormat::Format(size);
+						return FormatSize(size);
 					else
 						return _T("?");
 				}
@@ -914,15 +909,15 @@ wxString CQueueViewBase::OnGetItemText(long item, long column) const
 			switch (column)
 			{
 			case 0:
-				return _T("  ") + pFolderItem->GetLocalPath().GetPath();
+				return _T("  ") + pFolderItem->GetLocalPath();
 			case 1:
 				if (pFolderItem->Download())
-					if (pFolderItem->queued())
+					if (pFolderItem->Queued())
 						return _T("<--");
 					else
 						return _T("<<--");
 				else
-					if (pFolderItem->queued())
+					if (pFolderItem->Queued())
 						return _T("-->");
 					else
 						return _T("-->>");
@@ -943,16 +938,16 @@ wxString CQueueViewBase::OnGetItemText(long item, long column) const
 			{
 			case 0:
 				if (pFolderItem->Download())
-					return pFolderItem->GetIndent() + pFolderItem->GetLocalPath().GetPath() + pFolderItem->GetLocalFile();
+					return pFolderItem->GetIndent() + pFolderItem->GetLocalFile();
 				break;
 			case 1:
 				if (pFolderItem->Download())
-					if (pFolderItem->queued())
+					if (pFolderItem->Queued())
 						return _T("<--");
 					else
 						return _T("<<--");
 				else
-					if (pFolderItem->queued())
+					if (pFolderItem->Queued())
 						return _T("-->");
 					else
 						return _T("-->>");

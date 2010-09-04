@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "bookmarks_dialog.h"
 #include "sitemanager.h"
 #include "ipcmutex.h"
@@ -273,8 +273,6 @@ int CBookmarksDialog::ShowModal(const wxString &local_path, const CServerPath &r
 	SetMinSize(GetSizer()->GetMinSize() + size - clientSize);
 	SetClientSize(minSize);
 
-	m_pTree->SelectItem(m_bookmarks_global);
-
 	return wxDialogEx::ShowModal();
 }
 
@@ -306,7 +304,7 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 		CBookmarkItemData *data = (CBookmarkItemData *)m_pTree->GetItemData(child);
 		wxASSERT(data);
 
-		TiXmlElement *pBookmark = pDocument->LinkEndChild(new TiXmlElement("Bookmark"))->ToElement();
+		TiXmlElement *pBookmark = pDocument->InsertEndChild(TiXmlElement("Bookmark"))->ToElement();
 		AddTextElement(pBookmark, "Name", m_pTree->GetItemText(child));
 		if (!data->m_local_dir.empty())
 			AddTextElement(pBookmark, "LocalDir", data->m_local_dir);
@@ -815,27 +813,19 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 		return false;
 	}
 
-	TiXmlElement *pInsertBefore = 0;
 	TiXmlElement *pBookmark;
 	for (pBookmark = pDocument->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark"))
 	{
 		wxString remote_dir_raw;
-
-		wxString old_name = GetTextElement(pBookmark, "Name");
 	
-		if (!name.CmpNoCase(old_name))
+		if (!name.CmpNoCase(GetTextElement(pBookmark, "Name")))
 		{
 			wxMessageBox(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);
 			return false;
 		}
-		if (name < old_name && !pInsertBefore)
-			pInsertBefore = pBookmark;
 	}
 
-	if (pInsertBefore)
-		pBookmark = pDocument->InsertBeforeChild(pInsertBefore, TiXmlElement("Bookmark"))->ToElement();
-	else
-		pBookmark = pDocument->LinkEndChild(new TiXmlElement("Bookmark"))->ToElement();
+	pBookmark = pDocument->InsertEndChild(TiXmlElement("Bookmark"))->ToElement();
 	AddTextElement(pBookmark, "Name", name);
 	if (!local_dir.empty())
 		AddTextElement(pBookmark, "LocalDir", local_dir);

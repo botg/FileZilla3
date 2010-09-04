@@ -248,11 +248,6 @@ DBusHandlerResult handle_notification(DBusConnection *connection, DBusMessage *m
 
 wxDBusConnection::wxDBusConnection(int ID, wxEvtHandler * EvtHandler, bool System)
 {
-	// Make sure libdbus locks its data structures, otherwise
-	// there'll be crashes if it gets used from multiple threads
-	// at the same time
-	dbus_threads_init_default();
-
 	m_error = new wxDBusError;
 	m_connection = System ? dbus_bus_get(DBUS_BUS_SYSTEM, &(m_error->GetError())) : dbus_bus_get(DBUS_BUS_SESSION, &(m_error->GetError()));
 	if (!m_connection) {
@@ -299,10 +294,8 @@ bool wxDBusConnection::Send(DBusMessage *message, dbus_uint32_t *serial)
 bool wxDBusConnection::SendWithReply(DBusMessage *message, int timeout_milliseconds)
 {
 	DBusPendingCall * pcall = NULL;
-	m_thread->EnterCriticalSection();
 	bool result = (bool) dbus_connection_send_with_reply(m_connection, message, &pcall, timeout_milliseconds);
 	dbus_pending_call_set_notify(pcall, response_notify, (void *) this, NULL);
-	m_thread->LeaveCriticalSection();
 	m_thread->Wakeup();
 	return result;
 }

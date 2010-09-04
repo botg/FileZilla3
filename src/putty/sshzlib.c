@@ -1353,8 +1353,6 @@ int main(int argc, char **argv)
             sfree(outbuf);
         } else {
             fprintf(stderr, "decoding error\n");
-	    if (filename)
-		fclose(fp);
             return 1;
         }
     }

@@ -3,15 +3,12 @@
 
 enum ServerProtocol
 {
-	// Never change any existing values or user's saved sites will become
-	// corrupted.
 	UNKNOWN = -1,
 	FTP,
 	SFTP,
 	HTTP,
 	FTPS, // Implicit SSL
-	FTPES, // Explicit SSL
-	HTTPS
+	FTPES // Explicit SSL
 };
 
 enum ServerType
@@ -84,8 +81,7 @@ public:
 	
 	// Return true if URL could be parsed correctly, false otherwise.
 	// If parsing fails, pError is filled with the reason and the CServer instance may be left an undefined state.
-	bool ParseUrl(wxString host, unsigned int port, wxString user, wxString pass, wxString &error, CServerPath &path);
-	bool ParseUrl(wxString host, const wxString& port, wxString user, wxString pass, wxString &error, CServerPath &path);
+	bool ParseUrl(wxString host, unsigned int, wxString user, wxString pass, wxString &error, CServerPath &path);
 	
 	void SetProtocol(enum ServerProtocol serverProtocol);
 	bool SetHost(wxString Host, unsigned int port);

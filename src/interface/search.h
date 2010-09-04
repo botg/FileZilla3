@@ -8,7 +8,6 @@
 class CWindowStateManager;
 class CSearchDialogFileList;
 class CQueueView;
-class CFilelistStatusBar;
 class CSearchDialog : protected CFilterConditionsDialog, public CStateEventHandler
 {
 	friend class CSearchDialogFileList;
@@ -24,14 +23,11 @@ protected:
 
 	void SetCtrlState();
 
-	void SaveConditions();
-	void LoadConditions();
-
 	wxWindow* m_parent;
 	CSearchDialogFileList *m_results;
 	CQueueView* m_pQueue;
 
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(enum t_statechange_notifications notification, const wxString& data);
 
 	CWindowStateManager* m_pWindowStateManager;
 
@@ -50,7 +46,6 @@ protected:
 	void OnContextMenu(wxContextMenuEvent& event);
 	void OnDownload(wxCommandEvent& event);
 	void OnDelete(wxCommandEvent& event);
-	void OnCharHook(wxKeyEvent& event);
 
 	std::set<CServerPath> m_visited;
 

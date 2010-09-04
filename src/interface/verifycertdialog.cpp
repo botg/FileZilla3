@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "verifycertdialog.h"
 #include <wx/tokenzr.h>
 #include "dialogex.h"
@@ -102,16 +102,6 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotifi
 
 	m_pIssuerSizer = XRCCTRL(*m_pDlg, "ID_ISSUER_DUMMY", wxStaticText)->GetContainingSizer();
 	XRCCTRL(*m_pDlg, "ID_ISSUER_DUMMY", wxStaticText)->Destroy();
-
-	wxSize minSize(0, 0);
-	for (unsigned int i = 0; i < m_certificates.size(); ++i)
-	{
-		DisplayCert(m_pDlg, m_certificates[i]);
-		m_pDlg->Layout();
-		m_pDlg->GetSizer()->Fit(m_pDlg);
-		minSize.IncTo(m_pDlg->GetSizer()->GetMinSize());
-	}
-	m_pDlg->GetSizer()->SetMinSize(minSize);
 
 	bool warning = DisplayCert(m_pDlg, m_certificates[0]);
 
@@ -251,8 +241,7 @@ bool CVerifyCertDialog::IsTrusted(CCertificateNotification* pNotification)
 	wxASSERT(pNotification);
 
 	unsigned int len;
-	CCertificate cert =  pNotification->GetCertificates()[0];
-	const unsigned char* data = cert.GetRawData(len);
+	const unsigned char* data = pNotification->GetCertificates()[0].GetRawData(len);
 
 	return IsTrusted(data, len, false);
 }
@@ -412,7 +401,7 @@ void CVerifyCertDialog::LoadTrustedCerts(bool close /*=true*/)
 
 void CVerifyCertDialog::SetPermanentlyTrusted(const CCertificateNotification* const pNotification)
 {
-	const CCertificate certificate = pNotification->GetCertificates()[0];
+	const CCertificate &certificate = pNotification->GetCertificates()[0];
 	unsigned int len;
 	const unsigned char* const data = certificate.GetRawData(len);
 
@@ -446,9 +435,9 @@ void CVerifyCertDialog::SetPermanentlyTrusted(const CCertificateNotification* co
 
 	TiXmlElement* pCerts = pElement->FirstChildElement("TrustedCerts");
 	if (!pCerts)
-		pCerts = pElement->LinkEndChild(new TiXmlElement("TrustedCerts"))->ToElement();
+		pCerts = pElement->InsertEndChild(TiXmlElement("TrustedCerts"))->ToElement();
 
-	TiXmlElement* pCert = pCerts->LinkEndChild(new TiXmlElement("Certificate"))->ToElement();
+	TiXmlElement* pCert = pCerts->InsertEndChild(TiXmlElement("Certificate"))->ToElement();
 
 	AddTextElement(pCert, "Data", ConvertHexToString(data, len));
 

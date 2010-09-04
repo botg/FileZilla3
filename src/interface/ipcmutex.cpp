@@ -1,9 +1,8 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "ipcmutex.h"
-#include "Options.h"
+#include "filezillaapp.h"
 
 #ifndef __WXMSW__
-#include <errno.h>
 int CInterProcessMutex::m_fd = -1;
 int CInterProcessMutex::m_instanceCount = 0;
 #endif
@@ -20,7 +19,7 @@ CInterProcessMutex::CInterProcessMutex(enum t_ipcMutexType mutexType, bool initi
 	if (!m_instanceCount)
 	{
 		// Open file only if this is the first instance
-		wxFileName fn(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("lockfile"));
+		wxFileName fn(wxGetApp().GetSettingsDir(), _T("lockfile"));
 		m_fd = open(fn.GetFullPath().mb_str(), O_CREAT | O_RDWR, 0644);
 	}
 	m_instanceCount++;
@@ -46,7 +45,7 @@ CInterProcessMutex::~CInterProcessMutex()
 #endif
 }
 
-bool CInterProcessMutex::Lock()
+void CInterProcessMutex::Lock()
 {
 	wxASSERT(!m_locked);
 #ifdef __WXMSW__
@@ -62,24 +61,14 @@ bool CInterProcessMutex::Lock()
 		f.l_start = m_type;
 		f.l_len = 1;
 		f.l_pid = getpid();
-		
-		while (fcntl(m_fd, F_SETLKW, &f) == -1)
-		{
-			if (errno == EINTR) // Interrupted by signal, retry
-				continue;
-
-			// Can't do any locking in this case
-			return false;
-		}
+		fcntl(m_fd, F_SETLKW, &f);
 	}
 #endif
 
 	m_locked = true;
-
-	return true;
 }
 
-int CInterProcessMutex::TryLock()
+bool CInterProcessMutex::TryLock()
 {
 	wxASSERT(!m_locked);
 
@@ -87,14 +76,14 @@ int CInterProcessMutex::TryLock()
 	if (!hMutex)
 	{
 		m_locked = false;
-		return 0;
+		return false;
 	}
 
 	int res = ::WaitForSingleObject(hMutex, 1);
 	if (res == WAIT_OBJECT_0)
 	{
 		m_locked = true;
-		return 1;
+		return true;
 	}
 #else
 	if (m_fd >= 0)
@@ -106,30 +95,20 @@ int CInterProcessMutex::TryLock()
 		f.l_start = m_type;
 		f.l_len = 1;
 		f.l_pid = getpid();
-		while (fcntl(m_fd, F_SETLK, &f) == -1)
+		if (!fcntl(m_fd, F_SETLK, &f))
 		{
-			if (errno == EINTR) // Interrupted by signal, retry
-				continue;
-
-			if (errno == EAGAIN || errno == EACCES) // Lock held by other process
-				return 0;
-
-			// Can't do any locking in this case
-			return -1;
+			m_locked = true;
+			return true;
 		}
-
-		m_locked = true;
-		return 1;
 	}
 #endif
 
-	return 0;
+	return false;
 }
 
 void CInterProcessMutex::Unlock()
 {
-	if (!m_locked)
-		return;
+	wxASSERT(m_locked);
 	m_locked = false;
 
 #ifdef __WXMSW__

@@ -3,7 +3,6 @@
 
 #include "systemimagelist.h"
 #include "state.h"
-#include "treectrlex.h"
 
 class CQueueView;
 
@@ -11,7 +10,7 @@ class CQueueView;
 class CVolumeDescriptionEnumeratorThread;
 #endif
 
-class CLocalTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler
+class CLocalTreeView : public wxTreeCtrl, CSystemImageList, CStateEventHandler
 {
 	DECLARE_CLASS(CLocalTreeView)
 
@@ -27,7 +26,7 @@ public:
 #endif
 
 protected:
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(enum t_statechange_notifications notification, const wxString& data);
 
 	void SetDir(wxString localDir);
 	void Refresh();
@@ -55,9 +54,6 @@ protected:
 
 	DECLARE_EVENT_TABLE()
 	void OnItemExpanding(wxTreeEvent& event);
-#ifdef __WXMSW__
-	void OnSelectionChanging(wxTreeEvent& event);
-#endif
 	void OnSelectionChanged(wxTreeEvent& event);
 	void OnBeginDrag(wxTreeEvent& event);
 #ifndef __WXMSW__
@@ -74,7 +70,6 @@ protected:
 	void OnBeginLabelEdit(wxTreeEvent& event);
 	void OnEndLabelEdit(wxTreeEvent& event);
 	void OnChar(wxKeyEvent& event);
-	void OnMenuOpen(wxCommandEvent& event);
 
 #ifdef __WXMSW__
 	// React to changed drive letters
@@ -85,6 +80,8 @@ protected:
 	wxString GetDirFromItem(wxTreeItemId item);
 
 	CQueueView* m_pQueueView;
+
+	bool m_setSelection;
 
 	wxTreeItemId m_contextMenuItem;
 	wxTreeItemId m_dropHighlight;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="FileZilla"
 	ProjectGUID="{760BA430-BB7F-44AB-9542-F8705CAFF92B}"
 	RootNamespace="FileZilla"
@@ -15,6 +15,205 @@
 	<ToolFiles>
 	</ToolFiles>
 	<Configurations>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory=".\Release"
+			IntermediateDirectory=".\Release"
+			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\Release/FileZilla.tlb"
+				HeaderFileName=""
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="0"
+				EnableIntrinsicFunctions="true"
+				OmitFramePointers="true"
+				AdditionalIncludeDirectories="../include/"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough="FileZilla.h"
+				PrecompiledHeaderFile=".\Release/FileZilla.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="0"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1031"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="libidn.a wsock32.lib odbc32.lib odbccp32.lib comctl32.lib ..\lib\engine.lib"
+				OutputFile="../bin/FileZilla.exe"
+				LinkIncremental="1"
+				SuppressStartupBanner="true"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile=".\Release/FileZilla.pdb"
+				GenerateMapFile="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				OptimizeForWindows98="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory=".\Debug"
+			IntermediateDirectory=".\Debug"
+			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\Debug/FileZilla.tlb"
+				HeaderFileName=""
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="../include/"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;__WXDEBUG__;__WXMSW__"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				BufferSecurityCheck="true"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough="FileZilla.h"
+				PrecompiledHeaderFile=".\Debug/FileZilla.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1031"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="libgnutls-13.lib libidn.a odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib ..\lib\engine_debug.lib Netapi32.lib"
+				OutputFile="../bin/FileZilla_dbg.exe"
+				LinkIncremental="2"
+				SuppressStartupBanner="true"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile=".\Debug/FileZilla_dbg.pdb"
+				GenerateMapFile="true"
+				SubSystem="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
 		<Configuration
 			Name="Debug Unicode|Win32"
 			OutputDirectory="$(ConfigurationName)"
@@ -49,17 +248,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;../include/"
+				AdditionalIncludeDirectories="../include/"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;PACKAGE_VERSION=\&quot;3.0.11.1\&quot;;USED_HOST=\&quot;i586-pc-mingw32msvc\&quot;"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="filezilla.h"
-				PrecompiledHeaderFile=".\Debug Unicode/filezilla.pch"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough="FileZilla.h"
+				PrecompiledHeaderFile=".\Debug Unicode/FileZilla.pch"
 				AssemblerListingLocation=".\Debug Unicode/"
 				ObjectFile=".\Debug Unicode/"
 				ProgramDataBaseFileName=".\Debug Unicode/"
@@ -123,7 +321,6 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
-			ExcludeBuckets="5;6;8;15;16;18"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -148,12 +345,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/MP"
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="true"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories=".;../include/"
+				AdditionalIncludeDirectories="../include/"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;PACKAGE_VERSION=\&quot;3.0.1\&quot;;USED_HOST=\&quot;i586-pc-mingw32msvc\&quot;"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -166,7 +362,7 @@
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="3"
+				DebugInformationFormat="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -181,7 +377,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libgnutls-26.lib libidn.lib wsock32.lib odbc32.lib odbccp32.lib comctl32.lib ..\lib\engine_unicode.lib Netapi32.lib Winmm.lib Ws2_32.lib mpr.lib"
+				AdditionalDependencies="libgnutls-26.lib libidn.lib wsock32.lib odbc32.lib odbccp32.lib comctl32.lib ..\lib\engine_unicode.lib Netapi32.lib Winmm.lib Ws2_32.lib"
 				OutputFile="../bin/FileZilla_unicode.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -191,6 +387,201 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				OptimizeForWindows98="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Universal|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\Debug/FileZilla.tlb"
+				HeaderFileName=""
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="../include/"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;__WXDEBUG__;__WXMSW__"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				BufferSecurityCheck="true"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough="FileZilla.h"
+				PrecompiledHeaderFile=".\Debug/FileZilla.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1031"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="libidn.a odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib ..\lib\engine_debug.lib"
+				OutputFile="../bin/FileZilla_dbg.exe"
+				LinkIncremental="2"
+				SuppressStartupBanner="true"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile=".\Debug/FileZilla_dbg.pdb"
+				GenerateMapFile="true"
+				SubSystem="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug Universal|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\Debug/FileZilla.tlb"
+				HeaderFileName=""
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="../include/"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;__WXDEBUG__;__WXMSW__"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				BufferSecurityCheck="true"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough="FileZilla.h"
+				PrecompiledHeaderFile=".\Debug/FileZilla.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1031"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="libidn.a odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib ..\lib\engine_debug.lib"
+				OutputFile="../bin/FileZilla_dbg.exe"
+				LinkIncremental="2"
+				SuppressStartupBanner="true"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile=".\Debug/FileZilla_dbg.pdb"
+				GenerateMapFile="true"
+				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				TargetMachine="1"
@@ -274,10 +665,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\context_control.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\customheightlistctrl.cpp"
 				>
 			</File>
@@ -316,26 +703,10 @@
 			<File
 				RelativePath=".\filelistctrl.cpp"
 				>
-				<FileConfiguration
-					Name="Debug Unicode|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="FileZilla.cpp"
 				>
-				<FileConfiguration
-					Name="Debug Unicode|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\filter.cpp"
@@ -394,15 +765,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\menu_bar.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\netconfwizard.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\option_change_event_handler.cpp"
 				>
 			</File>
 			<File
@@ -443,10 +806,6 @@
 			</File>
 			<File
 				RelativePath=".\settings\optionspage_edit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\settings\optionspage_edit_associations.cpp"
 				>
 			</File>
 			<File
@@ -495,10 +854,6 @@
 			</File>
 			<File
 				RelativePath=".\settings\optionspage_updatecheck.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\power_management.cpp"
 				>
 			</File>
 			<File
@@ -554,14 +909,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\sizeformatting.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\speedlimits_dialog.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\splitter.cpp"
 				>
 			</File>
@@ -590,11 +937,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\toolbar.cpp"
+				RelativePath="..\tinyxml\tinystr.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\treectrlex.cpp"
+				RelativePath="..\tinyxml\tinyxml.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\tinyxml\tinyxmlerror.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\tinyxml\tinyxmlparser.cpp"
 				>
 			</File>
 			<File
@@ -622,19 +977,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\welcome_dialog.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\window_state_manager.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\wrapengine.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\xh_menu_ex.cpp"
 				>
 			</File>
 			<File
@@ -688,10 +1035,6 @@
 			</File>
 			<File
 				RelativePath=".\conditionaldialog.h"
-				>
-			</File>
-			<File
-				RelativePath=".\context_control.h"
 				>
 			</File>
 			<File
@@ -795,15 +1138,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\menu_bar.h"
-				>
-			</File>
-			<File
 				RelativePath=".\netconfwizard.h"
-				>
-			</File>
-			<File
-				RelativePath=".\option_change_event_handler.h"
 				>
 			</File>
 			<File
@@ -844,10 +1179,6 @@
 			</File>
 			<File
 				RelativePath=".\settings\optionspage_edit.h"
-				>
-			</File>
-			<File
-				RelativePath=".\settings\optionspage_edit_associations.h"
 				>
 			</File>
 			<File
@@ -896,10 +1227,6 @@
 			</File>
 			<File
 				RelativePath=".\settings\optionspage_updatecheck.h"
-				>
-			</File>
-			<File
-				RelativePath=".\power_management.h"
 				>
 			</File>
 			<File
@@ -959,14 +1286,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\sizeformatting.h"
-				>
-			</File>
-			<File
-				RelativePath=".\speedlimits_dialog.h"
-				>
-			</File>
-			<File
 				RelativePath=".\splitter.h"
 				>
 			</File>
@@ -999,14 +1318,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\toolbar.h"
-				>
-			</File>
-			<File
-				RelativePath=".\treectrlex.h"
-				>
-			</File>
-			<File
 				RelativePath=".\updatewizard.h"
 				>
 			</File>
@@ -1031,19 +1342,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\welcome_dialog.h"
-				>
-			</File>
-			<File
 				RelativePath=".\window_state_manager.h"
 				>
 			</File>
 			<File
 				RelativePath=".\wrapengine.h"
-				>
-			</File>
-			<File
-				RelativePath=".\xh_menu_ex.h"
 				>
 			</File>
 			<File
@@ -1152,10 +1455,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\ClassDiagram1.cd"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

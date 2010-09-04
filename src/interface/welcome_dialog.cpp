@@ -1,14 +1,10 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "welcome_dialog.h"
 #include "buildinfo.h"
 #include <wx/hyperlink.h>
 #include "Options.h"
 
-BEGIN_EVENT_TABLE(CWelcomeDialog, wxDialogEx)
-EVT_TIMER(wxID_ANY, CWelcomeDialog::OnTimer)
-END_EVENT_TABLE()
-
-bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=false*/)
+bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/)
 {
 	const wxString ownVersion = CBuildInfo::GetVersion();
 	wxString greetingVersion = COptions::Get()->GetOption(OPTION_GREETINGVERSION);
@@ -20,8 +16,6 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 			CBuildInfo::ConvertToVersionNumber(ownVersion) <= CBuildInfo::ConvertToVersionNumber(greetingVersion))
 		{
 			// Been there done that
-			if (delay)
-				delete this;
 			return true;
 		}
 		COptions::Get()->SetOption(OPTION_GREETINGVERSION, ownVersion);
@@ -57,19 +51,7 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 
 	GetSizer()->Fit(this);
 
-	if (delay)
-	{
-		m_delayedShowTimer.SetOwner(this);
-		m_delayedShowTimer.Start(10, true);
-	}
-	else
-		ShowModal();
+	ShowModal();
 
 	return true;
-}
-
-void CWelcomeDialog::OnTimer(wxTimerEvent& event)
-{
-	ShowModal();
-	Destroy();
 }

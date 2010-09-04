@@ -42,8 +42,7 @@ protected:
 
 	int SendTransferCommand();
 
-	CLocalPath GetDownloadDir() const;
-	bool SetLocalFile();
+	wxString GetDownloadDir();
 
 	bool VerifyChecksum();
 	void FailedChecksum();
@@ -95,8 +94,6 @@ protected:
 	bool m_start_check;
 
 	COptionsBase* m_update_options;
-
-	bool m_successfully_downloaded;
 };
 
 #endif //FZ_MANUALUPDATECHECK

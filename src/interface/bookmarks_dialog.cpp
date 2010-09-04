@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "bookmarks_dialog.h"
 #include "sitemanager.h"
 #include "ipcmutex.h"
@@ -272,8 +272,6 @@ int CBookmarksDialog::ShowModal(const wxString &local_path, const CServerPath &r
 	wxSize clientSize = GetClientSize();
 	SetMinSize(GetSizer()->GetMinSize() + size - clientSize);
 	SetClientSize(minSize);
-
-	m_pTree->SelectItem(m_bookmarks_global);
 
 	return wxDialogEx::ShowModal();
 }

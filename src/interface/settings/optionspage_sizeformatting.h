@@ -1,8 +1,6 @@
 #ifndef __OPTIONSPAGE_SIZEFORMATTING_H__
 #define __OPTIONSPAGE_SIZEFORMATTING_H__
 
-#include "../sizeformatting.h"
-
 class COptionsPageSizeFormatting : public COptionsPage
 {
 public:
@@ -14,7 +12,7 @@ public:
 	void UpdateControls();
 	void UpdateExamples();
 
-	CSizeFormat::_format GetFormat() const;
+	int GetFormat();
 
 	DECLARE_EVENT_TABLE();
 	void OnRadio(wxCommandEvent& event);

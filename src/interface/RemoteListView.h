@@ -10,7 +10,7 @@ class CChmodDialog;
 class CInfoText;
 class CRemoteListViewDropTarget;
 
-class CRemoteListView : public CFileListCtrl<CGenericFileData>, CStateEventHandler
+class CRemoteListView : public CFileListCtrl<CGenericFileData>, CSystemImageList, CStateEventHandler
 {
 	friend class CRemoteListViewDropTarget;
 	friend class CRemoteListViewSortType;
@@ -51,6 +51,7 @@ protected:
 	virtual bool ItemIsDir(int index) const;
 	virtual wxLongLong ItemGetSize(int index) const;
 
+protected:
 	bool IsItemValid(unsigned int item) const;
 	int GetItemIndex(unsigned int item) const;
 
@@ -67,8 +68,6 @@ protected:
 	void ValidateIndexMapping();
 #endif
 
-	virtual void OnNavigationEvent(bool forward);
-
 	CSharedPointer <const CDirectoryListing> m_pDirectoryListing;
 
 	// Caller is responsible to check selection is valid!
@@ -80,9 +79,6 @@ protected:
 	CInfoText* m_pInfoText;
 	void RepositionInfoText();
 	void SetInfoText();
-
-	virtual bool OnBeginRename(const wxListEvent& event);
-	virtual bool OnAcceptRename(const wxListEvent& event);
 
 #ifdef __WXMSW__
 	virtual int GetOverlayIndex(int item);
@@ -102,7 +98,7 @@ protected:
 		CServer server;
 		CServerPath remote_path;
 		wxString link;
-		CLocalPath local_path;
+		wxString local_path;
 	} *m_pLinkResolveState;
 
 	DECLARE_EVENT_TABLE()
@@ -113,13 +109,14 @@ protected:
 	void OnMenuDelete(wxCommandEvent& event);
 	void OnMenuRename(wxCommandEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
+	void OnBeginLabelEdit(wxListEvent& event);
+	void OnEndLabelEdit(wxListEvent& event);
 	void OnMenuChmod(wxCommandEvent& event);
 	void OnSize(wxSizeEvent& event);
 	void OnBeginDrag(wxListEvent& event);
 	void OnMenuEdit(wxCommandEvent& event);
 	void OnMenuEnter(wxCommandEvent& event);
 	void OnMenuGeturl(wxCommandEvent& event);
-	void OnMenuRefresh(wxCommandEvent& event);
 };
 
 #endif

@@ -158,7 +158,6 @@ class CFtpTransferOpData
 {
 public:
 	CFtpTransferOpData();
-	virtual ~CFtpTransferOpData() {}
 
 	enum TransferEndReason transferEndReason;
 	bool tranferCommandSent;
@@ -170,7 +169,7 @@ public:
 class CFtpFileTransferOpData : public CFileTransferOpData, public CFtpTransferOpData
 {
 public:
-	CFtpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path);
+	CFtpFileTransferOpData();
 	virtual ~CFtpFileTransferOpData();
 
 	CIOThread *pIOThread;

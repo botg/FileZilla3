@@ -21,8 +21,6 @@
 // requests have to be answered. Once proessed, call 
 // CFileZillaEngine::SetAsyncRequestReply to continue the current operation.
 
-#include "local_path.h"
-
 extern const wxEventType fzEVT_NOTIFICATION;
 #define EVT_FZ_NOTIFICATION(id, fn) \
     DECLARE_EVENT_TABLE_ENTRY( \
@@ -40,16 +38,15 @@ public:
 
 enum NotificationId
 {
-	nId_logmsg,				// notification about new messages for the message log
-	nId_operation,			// operation reply codes
-	nId_connection,			// connection information: connects, disconnects, timeouts etc..
-	nId_transferstatus,		// transfer information: bytes transferes, transfer speed and such
-	nId_listing,			// directory listings
-	nId_asyncrequest,		// asynchronous request
-	nId_active,				// sent if data gets either received or sent
-	nId_data,				// for memory downloads, indicates that new data is available.
-	nId_sftp_encryption,	// information about key exchange, encryption algorithms and so on for SFTP
-	nId_local_dir_created	// local directory has been created
+	nId_logmsg,			// notification about new messages for the message log
+	nId_operation,		// operation reply codes
+	nId_connection,		// connection information: connects, disconnects, timeouts etc..
+	nId_transferstatus,	// transfer information: bytes transferes, transfer speed and such
+	nId_listing,		// directory listings
+	nId_asyncrequest,	// asynchronous request
+	nId_active,			// sent if data gets either received or sent
+	nId_data,			// for memory downloads, indicates that new data is available.
+	nId_sftp_encryption	// information about key exchange, encryption algorithms and so on for SFTP
 };
 
 // Async request IDs
@@ -156,11 +153,11 @@ public:
 		ask,
 		overwrite,
 		overwriteNewer,	// Overwrite if source file is newer than target file
-		overwriteSize,	// Overwrite if source file is is different in size than target file
-		overwriteSizeOrNewer,	// Overwrite if source file is different in size or newer than target file
 		resume, // Overwrites if cannot be resumed
 		rename,
 		skip,
+		overwriteSize,	// Overwrite if source file is is different in size than target file
+		overwriteSizeOrNewer,	// Overwrite if source file is different in size or newer than target file
 
 		ACTION_COUNT
 	};
@@ -197,12 +194,12 @@ protected:
 class CActiveNotification : public CNotification
 {
 public:
-	CActiveNotification(int direction);
+	CActiveNotification(bool recv);
 	virtual ~CActiveNotification();
 	virtual enum NotificationId GetID() const;
-	int GetDirection() const { return m_direction; }
+	bool IsRecv() const;
 protected:
-	const int m_direction;
+	const bool m_recv;
 };
 
 class CTransferStatus
@@ -277,10 +274,11 @@ protected:
 	unsigned int m_len;
 };
 
-class CCertificate
+class CCertificateNotification : public CAsyncRequestNotification
 {
 public:
-	CCertificate(
+	CCertificateNotification(const CCertificateNotification& ref);
+	CCertificateNotification(const wxString& host, unsigned int port,
 		const unsigned char* rawData, unsigned int len,
 		wxDateTime activationTime, wxDateTime expirationTime,
 		const wxString& serial,
@@ -288,9 +286,14 @@ public:
 		const wxString& fingerprint_md5,
 		const wxString& fingerprint_sha1,
 		const wxString& subject,
-		const wxString& issuer);
-	CCertificate(const CCertificate& op);
-	virtual ~CCertificate();
+		const wxString& issuer,
+		const wxString& sessionCipher,
+		const wxString& sessionMac);
+	virtual ~CCertificateNotification();
+	virtual enum RequestId GetRequestID() const { return reqId_certificate; }
+
+	const wxString& GetHost() const { return m_host; }
+	unsigned int GetPort() const { return m_port; }
 
 	const unsigned char* GetRawData(unsigned int& len) const { len = m_len; return m_rawData; }
 	wxDateTime GetActivationTime() const { return m_activationTime; }
@@ -306,9 +309,17 @@ public:
 	const wxString& GetSubject() const { return m_subject; }
 	const wxString& GetIssuer() const { return m_issuer; }
 
-	CCertificate& operator=(const CCertificate &op);
+	const wxString& GetSessionCipher() const { return m_sessionCipher; }
+	const wxString& GetSessionMac() const { return m_sessionMac; }
 
-private:
+	bool m_trusted;
+
+	CCertificateNotification& operator=(const CCertificateNotification &op);
+
+protected:
+	wxString m_host;
+	unsigned int m_port;
+
 	wxDateTime m_activationTime;
 	wxDateTime m_expirationTime;
 
@@ -324,36 +335,9 @@ private:
 
 	wxString m_subject;
 	wxString m_issuer;
-};
-
-class CCertificateNotification : public CAsyncRequestNotification
-{
-public:
-	CCertificateNotification(const wxString& host, unsigned int port,
-		const wxString& sessionCipher,
-		const wxString& sessionMac,
-		const std::vector<CCertificate> &certificates);
-	virtual ~CCertificateNotification();
-	virtual enum RequestId GetRequestID() const { return reqId_certificate; }
-
-	const wxString& GetHost() const { return m_host; }
-	unsigned int GetPort() const { return m_port; }
-
-	const wxString& GetSessionCipher() const { return m_sessionCipher; }
-	const wxString& GetSessionMac() const { return m_sessionMac; }
-
-	bool m_trusted;
-
-	const std::vector<CCertificate> GetCertificates() const { return m_certificates; }
-
-protected:
-	wxString m_host;
-	unsigned int m_port;
 
 	wxString m_sessionCipher;
 	wxString m_sessionMac;
-
-	std::vector<CCertificate> m_certificates;
 };
 
 class CSftpEncryptionNotification : public CNotification
@@ -368,14 +352,6 @@ public:
 	wxString cipherServerToClient;
 	wxString macClientToServer;
 	wxString macServerToClient;
-};
-
-class CLocalDirCreatedNotification : public CNotification
-{
-public:
-	virtual enum NotificationId GetID() const { return nId_local_dir_created; }
-
-	CLocalPath dir;
 };
 
 #endif

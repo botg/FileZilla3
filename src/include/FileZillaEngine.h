@@ -26,15 +26,10 @@ public:
 	bool IsBusy() const;
 	bool IsConnected() const;
 	
-	// IsActive returns true only if data has been transferred in the
-	// given direction since the last time IsActive was called with
+	// IsActive returns true only if data has been transferred (recv)
+	// or sent (!recv) since the last time IsActive was called with
 	// the same argument.
-	enum _direction
-	{
-		send,
-		recv
-	};
-	static bool IsActive(enum _direction direction);
+	bool IsActive(bool recv);
 
 	// Returns the next pending notification.
 	// It is mandatory to call this function until it returns 0 each time you

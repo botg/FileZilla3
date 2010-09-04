@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "recentserverlist.h"
 #include "ipcmutex.h"
 #include "filezillaapp.h"
@@ -69,7 +69,7 @@ void CRecentServerList::SetMostRecentServer(const CServer& server)
 	bool relocated = false;
 	for (std::list<CServer>::iterator iter = m_mostRecentServers.begin(); iter != m_mostRecentServers.end(); iter++)
 	{
-		if (iter->EqualsNoPass(server))
+		if (*iter == server)
 		{
 			m_mostRecentServers.erase(iter);
 			m_mostRecentServers.push_front(server);
@@ -90,12 +90,12 @@ void CRecentServerList::SetMostRecentServer(const CServer& server)
 	
 	TiXmlElement* pElement = pDocument->FirstChildElement("RecentServers");
 	if (!pElement)
-		pElement = pDocument->LinkEndChild(new TiXmlElement("RecentServers"))->ToElement();
+		pElement = pDocument->InsertEndChild(TiXmlElement("RecentServers"))->ToElement();
 
 	pElement->Clear();
 	for (std::list<CServer>::const_iterator iter = m_mostRecentServers.begin(); iter != m_mostRecentServers.end(); iter++)
 	{
-		TiXmlElement* pServer = pElement->LinkEndChild(new TiXmlElement("Server"))->ToElement();
+		TiXmlElement* pServer = pElement->InsertEndChild(TiXmlElement("Server"))->ToElement();
 		SetServer(pServer, *iter);
 	}
 

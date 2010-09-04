@@ -6,9 +6,6 @@
 
 class CQueueView;
 class CLocalListViewDropTarget;
-#ifdef __WXMSW__
-class CVolumeDescriptionEnumeratorThread;
-#endif
 
 class CLocalFileData : public CGenericFileData
 {
@@ -24,7 +21,7 @@ public:
 	int attributes;
 };
 
-class CLocalListView : public CFileListCtrl<CLocalFileData>, CStateEventHandler
+class CLocalListView : public CFileListCtrl<CLocalFileData>, CSystemImageList, CStateEventHandler
 {
 	friend class CLocalListViewDropTarget;
 	friend class CLocalListViewSortType;
@@ -34,7 +31,7 @@ public:
 	virtual ~CLocalListView();
 
 protected:
-	void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	void OnStateChange(enum t_statechange_notifications notification, const wxString& data);
 	bool DisplayDir(wxString dirname);
 	void ApplyCurrentFilter();
 
@@ -79,11 +76,6 @@ protected:
 
 	void RefreshFile(const wxString& file);
 
-	virtual void OnNavigationEvent(bool forward);
-
-	virtual bool OnBeginRename(const wxListEvent& event);
-	virtual bool OnAcceptRename(const wxListEvent& event);
-
 	wxString m_dir;
 
 	wxDropTarget* m_pDropTarget;
@@ -100,15 +92,11 @@ protected:
 	void OnMenuDelete(wxCommandEvent& event);
 	void OnMenuRename(wxCommandEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
+	void OnBeginLabelEdit(wxListEvent& event);
+	void OnEndLabelEdit(wxListEvent& event);
 	void OnBeginDrag(wxListEvent& event);
 	void OnMenuOpen(wxCommandEvent& event);
 	void OnMenuEdit(wxCommandEvent& event);
-	void OnMenuEnter(wxCommandEvent& event);
-#ifdef __WXMSW__
-	void OnVolumesEnumerated(wxCommandEvent& event);
-	CVolumeDescriptionEnumeratorThread* m_pVolumeEnumeratorThread;
-#endif
-	void OnMenuRefresh(wxCommandEvent& event);
 };
 
 #endif

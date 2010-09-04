@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "conditionaldialog.h"
 #include "filezillaapp.h"
 #include "wrapengine.h"
@@ -45,9 +45,9 @@ CConditionalDialog::CConditionalDialog(wxWindow* parent, enum DialogType type, e
 		
 		wxButton* pYes = new wxButton(this, wxID_YES);
 		pYes->SetDefault();
-		pGrid->Add(pYes, 0, wxGROW);
+		pGrid->Add(pYes);
 
-		pGrid->Add(new wxButton(this, wxID_NO), 0, wxGROW);
+		pGrid->Add(new wxButton(this, wxID_NO));
 		
 		SetEscapeId(wxID_NO);
 	}

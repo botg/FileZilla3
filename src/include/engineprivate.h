@@ -1,8 +1,6 @@
 #ifndef __FILEZILLAENGINEPRIVATE_H__
 #define __FILEZILLAENGINEPRIVATE_H__
 
-#include "timeex.h"
-
 enum EngineNotificationType
 {
 	engineCancel,
@@ -17,7 +15,7 @@ class CFileZillaEnginePrivate : public wxEvtHandler
 {
 public:
 	int ResetOperation(int nErrorCode);	
-	void SetActive(int direction);
+	void SetActive(bool recv);
 
 	// Add new pending notification
 	void AddNotification(CNotification *pNotification);
@@ -77,8 +75,9 @@ protected:
 	static std::list<CFileZillaEnginePrivate*> m_engineList;
 
 	// Indicicates if data has been received/sent and whether to send any notifications
-	static int m_activeStatus[2];
-	
+	static int m_activeStatusSend;
+	static int m_activeStatusRecv;
+
 	// Remember last path used in a dirlisting.
 	CServerPath m_lastListDir;
 	CTimeEx m_lastListTime;
@@ -105,16 +104,16 @@ protected:
 	// Everything related to the retry code
 	// ------------------------------------
 
-	void RegisterFailedLoginAttempt(const CServer& server, bool critical);
+	void RegisterFailedLoginAttempt(const CServer& server);
 
 	// Get the amount of time to wait till next reconnection attempt in milliseconds
 	unsigned int GetRemainingReconnectDelay(const CServer& server);
 
 	struct t_failedLogins
 	{
-		CServer server;
+		wxString host;
+		unsigned int port;
 		wxDateTime time;
-		bool critical;
 	};
 	static std::list<t_failedLogins> m_failedLogins;
 	int m_retryCount;

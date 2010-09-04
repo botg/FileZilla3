@@ -56,7 +56,11 @@ public:
 	void FinishTransfer(bool successful, const wxString& fileName);
 	void FinishTransfer(bool successful, const wxString& fileName, const CServerPath& remotePath, const CServer& server);
 
-	void CheckForModifications(bool emitEvent = false);
+	void CheckForModifications(
+#ifdef __WXMAC__
+			bool emitEvent = false
+#endif
+		);
 
 	void SetQueue(CQueueView* pQueue) { m_pQueue = pQueue; }
 
@@ -68,7 +72,7 @@ public:
 	 * The dangerous argument will be set to true on some filetypes,
 	 * e.g. executables.
 	 */
-	wxString CanOpen(enum fileType type, const wxString& fileName, bool &dangerous, bool& program_exists);
+	bool CanOpen(enum fileType type, const wxString& fileName, bool &dangerous);
 	bool StartEditing(const wxString& file);
 	bool StartEditing(const wxString& file, const CServerPath& remotePath, const CServer& server);
 	
@@ -87,10 +91,8 @@ public:
 	bool UploadFile(const wxString& file, bool unedit);
 	bool UploadFile(const wxString& file, const CServerPath& remotePath, const CServer& server, bool unedit);
 
-	// Returns command to open the file. If association is set but
-	// program does not exist, program_exists is set to false.
-	wxString GetOpenCommand(const wxString& file, bool& program_exists);
-	wxString GetSystemOpenCommand(wxString file, bool &program_exists);
+	wxString GetOpenCommand(const wxString& file);
+	wxString GetSystemOpenCommand(const wxString& file);
 
 protected:
 	CEditHandler();
@@ -102,7 +104,7 @@ protected:
 
 	bool StartEditing(enum fileType type, t_fileData &data);
 
-	wxString GetCustomOpenCommand(const wxString& file, bool& program_exists);
+	wxString GetCustomOpenCommand(const wxString& file);
 
 	void SetTimerState();
 
@@ -118,8 +120,7 @@ protected:
 	CQueueView* m_pQueue;
 
 	wxTimer m_timer;
-	wxTimer m_busyTimer;
-	
+
 	void RemoveTemporaryFiles(const wxString& temp);
 
 	wxString GetTemporaryFile(wxString name);
@@ -136,15 +137,15 @@ protected:
 
 	DECLARE_EVENT_TABLE()
 	void OnTimerEvent(wxTimerEvent& event);
+#ifdef __WXMAC__
 	void OnChangedFileEvent(wxCommandEvent& event);
+#endif
 };
 
-class CWindowStateManager;
 class CEditHandlerStatusDialog : protected wxDialogEx
 {
 public:
 	CEditHandlerStatusDialog(wxWindow* parent);
-	virtual ~CEditHandlerStatusDialog();
 
 	virtual int ShowModal();
 
@@ -155,31 +156,11 @@ protected:
 
 	wxWindow* m_pParent;
 
-	CWindowStateManager* m_pWindowStateManager;
-
 	DECLARE_EVENT_TABLE()
 	void OnSelectionChanged(wxListEvent& event);
 	void OnUnedit(wxCommandEvent& event);
 	void OnUpload(wxCommandEvent& event);
 	void OnEdit(wxCommandEvent& event);
-};
-
-class CNewAssociationDialog : protected wxDialogEx
-{
-public:
-	CNewAssociationDialog(wxWindow* parent);
-
-	bool Show(const wxString& file);
-
-protected:
-	void SetCtrlState();
-	wxWindow* m_pParent;
-	wxString m_ext;
-
-	DECLARE_EVENT_TABLE();
-	void OnRadioButton(wxCommandEvent& event);
-	void OnOK(wxCommandEvent& event);
-	void OnBrowseEditor(wxCommandEvent& event);
 };
 
 #endif //__EDITHANDLER_H__

@@ -1,9 +1,7 @@
 #ifndef __THEMEPROVIDER_H__
 #define __THEMEPROVIDER_H__
 
-#include "option_change_event_handler.h"
-
-class CThemeProvider : public wxArtProvider, protected COptionChangeEventHandler
+class CThemeProvider : public wxArtProvider
 {
 public:
 	CThemeProvider();
@@ -20,8 +18,6 @@ protected:
 	static wxString GetThemePath();
 
 	wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client, const wxSize& size);
-
-	virtual void OnOptionChanged(int option);
 
 	wxString m_themePath;
 };

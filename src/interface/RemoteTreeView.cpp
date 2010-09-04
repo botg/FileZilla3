@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "RemoteTreeView.h"
 #include "commandqueue.h"
 #include <wx/dnd.h>
@@ -7,9 +7,6 @@
 #include "recursive_operation.h"
 #include "inputdialog.h"
 #include "dragdropmanager.h"
-#include <wx/clipbrd.h>
-#include "queue.h"
-#include "QueueView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -111,7 +108,7 @@ public:
 					dir.AddSegment(info.name);
 					if (dir == path || dir.IsParentOf(path, false))
 					{
-						wxMessageBox(_("A directory cannot be dragged into one of its subdirectories."));
+						wxMessageBox(_("A directory cannot be dragged into one if its subdirectories."));
 						return wxDragNone;
 					}
 				}
@@ -210,9 +207,9 @@ protected:
 	wxDataObjectComposite* m_pDataObject;
 };
 
-IMPLEMENT_CLASS(CRemoteTreeView, wxTreeCtrlEx)
+IMPLEMENT_CLASS(CRemoteTreeView, wxTreeCtrl)
 
-BEGIN_EVENT_TABLE(CRemoteTreeView, wxTreeCtrlEx)
+BEGIN_EVENT_TABLE(CRemoteTreeView, wxTreeCtrl)
 EVT_TREE_ITEM_EXPANDING(wxID_ANY, CRemoteTreeView::OnItemExpanding)
 EVT_TREE_SEL_CHANGED(wxID_ANY, CRemoteTreeView::OnSelectionChanged)
 EVT_TREE_ITEM_ACTIVATED(wxID_ANY, CRemoteTreeView::OnItemActivated)
@@ -230,11 +227,10 @@ EVT_TREE_BEGIN_LABEL_EDIT(wxID_ANY, CRemoteTreeView::OnBeginLabelEdit)
 EVT_TREE_END_LABEL_EDIT(wxID_ANY, CRemoteTreeView::OnEndLabelEdit)
 EVT_MENU(XRCID("ID_MKDIR"), CRemoteTreeView::OnMkdir)
 EVT_CHAR(CRemoteTreeView::OnChar)
-EVT_MENU(XRCID("ID_GETURL"), CRemoteTreeView::OnMenuGeturl)
 END_EVENT_TABLE()
 
 CRemoteTreeView::CRemoteTreeView(wxWindow* parent, wxWindowID id, CState* pState, CQueueView* pQueue)
-	: wxTreeCtrlEx(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxTR_EDIT_LABELS | wxTR_LINES_AT_ROOT | wxTR_HAS_BUTTONS | wxNO_BORDER | wxTR_HIDE_ROOT),
+	: wxTreeCtrl(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxTR_EDIT_LABELS | wxTR_LINES_AT_ROOT | wxTR_HAS_BUTTONS | wxNO_BORDER | wxTR_HIDE_ROOT),
 	CSystemImageList(16),
 	CStateEventHandler(pState)
 {
@@ -263,19 +259,21 @@ CRemoteTreeView::~CRemoteTreeView()
 	delete m_pImageList;
 }
 
-void CRemoteTreeView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CRemoteTreeView::OnStateChange(enum t_statechange_notifications notification, const wxString& data)
 {
 	if (notification == STATECHANGE_REMOTE_DIR)
-		SetDirectoryListing(pState->GetRemoteDir(), false);
+		SetDirectoryListing(m_pState->GetRemoteDir(), false);
 	else if (notification == STATECHANGE_REMOTE_DIR_MODIFIED)
-		SetDirectoryListing(pState->GetRemoteDir(), true);
+		SetDirectoryListing(m_pState->GetRemoteDir(), true);
 	else if (notification == STATECHANGE_APPLYFILTER)
 		ApplyFilters();
 }
 
-void CRemoteTreeView::SetDirectoryListing(const CSharedPointer<const CDirectoryListing> &pListing, bool modified)
+void CRemoteTreeView::SetDirectoryListing(const CDirectoryListing* pListing, bool modified)
 {
 	m_busy = true;
+
+	m_pDirectoryListing = pListing;
 
 	if (!pListing)
 	{
@@ -349,7 +347,7 @@ void CRemoteTreeView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 	m_freezeCount--;
 #endif
 	if (!modified)
-		SafeSelectItem(parent);
+		SelectItem(parent);
 #ifndef __WXMSW__
 	else
 		Refresh();
@@ -499,10 +497,10 @@ bool CRemoteTreeView::HasSubdirs(const CDirectoryListing& listing, const CFilter
 	const wxString path = listing.path.GetPath();
 	for (unsigned int i = 0; i < listing.GetCount(); i++)
 	{
-		if (!listing[i].is_dir())
+		if (!listing[i].dir)
 			continue;
 
-		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].has_date() ? &listing[i].time : 0))
+		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0))
 			continue;
 
 		return true;
@@ -520,10 +518,10 @@ void CRemoteTreeView::DisplayItem(wxTreeItemId parent, const CDirectoryListing& 
 	CFilterDialog filter;
 	for (unsigned int i = 0; i < listing.GetCount(); i++)
 	{
-		if (!listing[i].is_dir())
+		if (!listing[i].dir)
 			continue;
 
-		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].has_date() ? &listing[i].time : 0))
+		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0))
 			continue;
 
 		const wxString& name = listing[i].name;
@@ -579,10 +577,10 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 	std::list<wxString> dirs;
 	for (unsigned int i = 0; i < listing.GetCount(); i++)
 	{
-		if (!listing[i].is_dir())
+		if (!listing[i].dir)
 			continue;
 
-		if (!filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].has_date() ? &listing[i].time : 0))
+		if (!filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0))
 			dirs.push_back(listing[i].name);
 	}
 
@@ -933,7 +931,7 @@ void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 	if (!pMenu)
 		return;
 
-	const CServerPath& path = m_contextMenuItem ? GetPathFromItem(m_contextMenuItem) : CServerPath();
+	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
 	if (!m_pState->IsRemoteIdle() || path.IsEmpty())
 	{
 		pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
@@ -943,7 +941,6 @@ void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 		pMenu->Enable(XRCID("ID_CHMOD"), false);
 		pMenu->Enable(XRCID("ID_MKDIR"), false);
 		pMenu->Enable(XRCID("ID_RENAME"), false);
-		pMenu->Enable(XRCID("ID_GETURL"), false);
 	}
 	else if (!path.HasParent())
 		pMenu->Enable(XRCID("ID_RENAME"), false);
@@ -1030,14 +1027,14 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent& event)
 		// Change directory permissions
 		if (!applyType || applyType == 2)
 		{
-			wxString newPerms = pChmodDlg->GetPermissions(permissions, true);
+			wxString newPerms = pChmodDlg->GetPermissions(permissions);
 
 			m_pState->m_pCommandQueue->ProcessCommand(new CChmodCommand(path.GetParent(), name, newPerms));
 		}
 
 		if (pChmodDlg->Recursive())
 			// Start recursion
-			pRecursiveOperation->AddDirectoryToVisit(path, _T(""), CLocalPath());
+			pRecursiveOperation->AddDirectoryToVisit(path, _T(""), _T(""));
 	}
 	else
 	{
@@ -1055,8 +1052,7 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent& event)
 		const wxTreeItemId selected = GetSelection();
 		if (selected)
 			currentPath = GetPathFromItem(selected);
-		CFilterManager filter;
-		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_chmod, hasParent ? path.GetParent() : path, filter.GetActiveFilters(false), !cached, currentPath);
+		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_chmod, hasParent ? path.GetParent() : path, !cached, currentPath);
 	}
 	else
 	{
@@ -1091,10 +1087,10 @@ void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 
 	const wxString& name = GetItemText(m_contextMenuItem);
 
-	localDir.AddSegment(CQueueView::ReplaceInvalidCharacters(name));
+	localDir.AddSegment(name);
 
 	CRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
-	pRecursiveOperation->AddDirectoryToVisit(path, _T(""), localDir);
+	pRecursiveOperation->AddDirectoryToVisit(path, _T(""), localDir.GetPath());
 
 	CServerPath currentPath;
 	const wxTreeItemId selected = GetSelection();
@@ -1102,8 +1098,7 @@ void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 		currentPath = GetPathFromItem(selected);
 
 	const bool addOnly = event.GetId() == XRCID("ID_ADDTOQUEUE");
-	CFilterManager filter;
-	pRecursiveOperation->StartRecursiveOperation(addOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download, path, filter.GetActiveFilters(false), true, currentPath);
+	pRecursiveOperation->StartRecursiveOperation(addOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download, path, true, currentPath);
 }
 
 void CRemoteTreeView::OnMenuDelete(wxCommandEvent& event)
@@ -1145,8 +1140,7 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent& event)
 	if (!currentPath.IsEmpty() && (path == currentPath || path.IsParentOf(currentPath, false)))
 		currentPath = startDir;
 
-	CFilterManager filter;
-	pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_delete, startDir, filter.GetActiveFilters(false), !hasParent, currentPath);
+	pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_delete, startDir, !hasParent, currentPath);
 }
 
 void CRemoteTreeView::OnMenuRename(wxCommandEvent& event)
@@ -1344,7 +1338,7 @@ void CRemoteTreeView::OnChar(wxKeyEvent& event)
 	wxCommandEvent cmdEvt;
 	if (event.GetKeyCode() == WXK_F2)
 		OnMenuRename(cmdEvt);
-	else if (event.GetKeyCode() == WXK_DELETE || event.GetKeyCode() == WXK_NUMPAD_DELETE)
+	else if (event.GetKeyCode() == WXK_DELETE)
 		OnMenuDelete(cmdEvt);
 	else
 		event.Skip();
@@ -1391,7 +1385,7 @@ void CRemoteTreeView::ApplyFilters()
 				if (path.IsEmpty())
 					continue;
 
-				if (filter.FilenameFiltered(GetItemText(child), path.GetPath(), true, -1, false, 0, 0))
+				if (filter.FilenameFiltered(GetItemText(child), path.GetPath(), true, -1, false, 0))
 				{
 					wxTreeItemId sel = GetSelection();
 					while (sel && sel != child)
@@ -1424,41 +1418,4 @@ void CRemoteTreeView::ApplyFilters()
 			parents.push_back(dir);
 		}
 	}
-}
-
-void CRemoteTreeView::OnMenuGeturl(wxCommandEvent& event)
-{
-	if (!m_contextMenuItem)
-		return;
-
-	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
-	if (path.IsEmpty())
-	{
-		wxBell();
-		return;
-	}
-
-	const CServer *pServer = m_pState->GetServer();
-	if (!pServer)
-	{
-		wxBell();
-		return;
-	}
-
-	if (!wxTheClipboard->Open())
-	{
-		wxMessageBox(_("Could not open clipboard"), _("Could not copy URLs"), wxICON_EXCLAMATION);
-		return;
-	}
-
-	wxString url = pServer->FormatServer(true);
-	url += path.GetPath();
-
-	// Poor mans URLencode
-	url.Replace(_T(" "), _T("%20"));
-
-	wxTheClipboard->SetData(new wxURLDataObject(url));
-
-	wxTheClipboard->Flush();
-	wxTheClipboard->Close();
 }

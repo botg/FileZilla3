@@ -1,24 +1,19 @@
-#include <filezilla.h>
-
+#include "FileZilla.h"
+#include "sftpcontrolsocket.h"
+#include <wx/process.h>
+#include <wx/txtstrm.h>
 #include "directorycache.h"
 #include "directorylistingparser.h"
 #include "pathcache.h"
+#include "servercapabilities.h"
+#include <wx/tokenzr.h>
 #include "local_filesys.h"
 #include "proxy.h"
-#include "servercapabilities.h"
-#include "sftpcontrolsocket.h"
-#include "threadex.h"
-
-#include <wx/filename.h>
-#include <wx/process.h>
-#include <wx/tokenzr.h>
-#include <wx/txtstrm.h>
 
 class CSftpFileTransferOpData : public CFileTransferOpData
 {
 public:
-	CSftpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
-		: CFileTransferOpData(is_download, local_file, remote_file, remote_path)
+	CSftpFileTransferOpData()
 	{
 	}
 };
@@ -1057,12 +1052,12 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 				if (date.IsValid())
 				{
 					date.MakeTimezone(wxDateTime::GMT0);
-					wxASSERT(pData->directoryListing[pData->mtime_index].has_date());
+					wxASSERT(pData->directoryListing[pData->mtime_index].hasTimestamp != CDirentry::timestamp_none);
 					wxDateTime listTime = pData->directoryListing[pData->mtime_index].time;
 					listTime -= wxTimeSpan(0, m_pCurrentServer->GetTimezoneOffset(), 0);
 
 					int serveroffset = (date - listTime).GetSeconds().GetLo();
-					if (!pData->directoryListing[pData->mtime_index].has_seconds())
+					if (pData->directoryListing[pData->mtime_index].hasTimestamp != CDirentry::timestamp_seconds)
 					{
 						// Round offset to full minutes
 						if (serveroffset < 0)
@@ -1083,7 +1078,7 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 					for (int i = 0; i < count; i++)
 					{
 						CDirentry& entry = pData->directoryListing[i];
-						if (!entry.has_time())
+						if (entry.hasTimestamp < CDirentry::timestamp_time)
 							continue;
 
 						entry.time += span;
@@ -1642,9 +1637,13 @@ int CSftpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 		delete m_pCurOpData;
 	}
 
-	CSftpFileTransferOpData *pData = new CSftpFileTransferOpData(download, localFile, remoteFile, remotePath);
+	CSftpFileTransferOpData *pData = new CSftpFileTransferOpData;
 	m_pCurOpData = pData;
 
+	pData->localFile = localFile;
+	pData->remotePath = remotePath;
+	pData->remoteFile = remoteFile;
+	pData->download = download;
 	pData->transferSettings = transferSettings;
 
 	wxLongLong size;
@@ -1700,17 +1699,18 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			}
 			else
 			{
-				if (entry.is_unsure())
+				if (entry.unsure)
 					pData->opState = filetransfer_waitlist;
 				else
 				{
 					if (matchedCase)
 					{
 						pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
-						if (entry.has_date())
+						if (entry.hasTimestamp != CDirentry::timestamp_none)
 							pData->fileTime = entry.time;
 
-						if (pData->download && !entry.has_time() &&
+						if (pData->download &&
+							entry.hasTimestamp < CDirentry::timestamp_time &&
 							m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 						{
 							pData->opState = filetransfer_mtime;
@@ -1766,13 +1766,14 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			}
 			else
 			{
-				if (matchedCase && !entry.is_unsure())
+				if (matchedCase && !entry.unsure)
 				{
 					pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
-					if (!entry.has_date())
+					if (entry.hasTimestamp != CDirentry::timestamp_none)
 						pData->fileTime = entry.time;
 
-					if (pData->download && !entry.has_time() &&
+					if (pData->download &&
+						entry.hasTimestamp < CDirentry::timestamp_time &&
 						m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 					{
 						pData->opState = filetransfer_mtime;
@@ -2767,10 +2768,10 @@ int CSftpControlSocket::ListCheckTimezoneDetection()
 		const int count = pData->directoryListing.GetCount();
 		for (int i = 0; i < count; i++)
 		{
-			if (!pData->directoryListing[i].has_time())
+			if (pData->directoryListing[i].hasTimestamp < CDirentry::timestamp_time)
 				continue;
 
-			if (pData->directoryListing[i].is_link())
+			if (pData->directoryListing[i].link)
 				continue;
 
 			pData->opState = list_mtime;

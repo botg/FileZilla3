@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "serverpath.h"
 
 #define FTP_MVS_DOUBLE_QUOTE (wxChar)0xDC
@@ -62,6 +62,9 @@ CServerPath::CServerPath(const CServerPath &path, wxString subdir)
 	m_type = path.m_type;
 	m_bEmpty = path.m_bEmpty;
 
+	subdir.Trim(true);
+	subdir.Trim(false);
+
 	if (subdir == _T(""))
 		return;
 
@@ -103,6 +106,9 @@ bool CServerPath::SetPath(wxString &newPath, bool isFile)
 {
 	wxString path = newPath;
 	wxString file;
+
+	path.Trim(true);
+	path.Trim(false);
 
 	if (path == _T(""))
 		return false;
@@ -255,56 +261,27 @@ wxString CServerPath::GetSafePath() const
 	return safepath;
 }
 
-bool CServerPath::SetSafePath(const wxString& path)
+bool CServerPath::SetSafePath(wxString path)
 {
 	CServerPathData& data = m_data.Get();
 	m_bEmpty = true;
-	data.m_prefix.clear();
+	data.m_prefix = _T("");
 	data.m_segments.clear();
 
-	// Optimized for speed, avoid expensive wxString functions
-	// Before the optimization this function was responsible for
-	// most CPU cycles used during loading of transfer queues
-	// from file
-	const int len = (int)path.Len();
-	wxChar* begin = new wxChar[len + 1];
-	CSharedPointerArray<wxChar> tmp(begin);
-	memcpy(begin, (const wxChar*)path, (len + 1) * sizeof(wxChar));
-	wxChar* p = begin;
+	int pos = path.Find(' ');
+	if (pos < 1)
+		return false;
 
-	int type = 0;
-	do
-	{
-		if (*p < '0' || *p > '9')
-			return false;
-		type *= 10;
-		type += *p - '0';
-
-		if (type >= SERVERTYPE_MAX)
-			return false;
-		p++;
-	} while (*p != ' ');
-
+	long type;
+	if (!path.Left(pos).ToLong(&type))
+		return false;
 	m_type = (ServerType)type;
-	p++;
+	path = path.Mid(pos + 1);
 
-	int prefix_len = 0;
-	do
+	pos = path.Find(' ');
+	if (pos == -1)
 	{
-		if (*p < '0' || *p > '9')
-			return false;
-		prefix_len *= 10;
-		prefix_len += *p - '0';
-
-		if (prefix_len > 32767) // Should be sane enough
-			return false;
-		p++;
-	}
-	while (*p && *p != ' ');
-
-	if (!*p)
-	{
-		if (prefix_len != 0)
+		if (path != _T("0"))
 			return false;
 		else
 		{
@@ -313,45 +290,41 @@ bool CServerPath::SetSafePath(const wxString& path)
 			return true;
 		}
 	}
-
-	p++;
-
-	if (len - (p - begin) < prefix_len)
+	if (pos < 1)
 		return false;
-	if (prefix_len)
-	{
-		*(p + prefix_len) = 0;
-		data.m_prefix = p;
 
-		p += prefix_len + 1;
+	unsigned long len;
+	if (!path.Left(pos).ToULong(&len))
+		return false;
+	path = path.Mid(pos + 1);
+	if (path.Length() < len)
+		return false;
+
+	if (len)
+	{
+		data.m_prefix = path.Left(len);
+		path = path.Mid(len + 1);
 	}
-	
-	while (len > (p - begin))
+
+	while (path != _T(""))
 	{
-		int segment_len = 0;
-		do
+		pos = path.Find(' ');
+		if (pos == -1)
+			return false;
+		if (!pos)
 		{
-			if (*p < '0' || *p > '9')
-				return false;
-			segment_len *= 10;
-			segment_len += *p - '0';
-
-			if (segment_len > 32767) // Should be sane enough
-				return false;
-			p++;
+			path = path.Mid(1);
+			continue;
 		}
-		while (*p != ' ');
 
-		if (!segment_len)
+		if (!path.Left(pos).ToULong(&len) || !len)
 			return false;
-		p++;
-
-		if (len - (p - begin) < segment_len)
+		path = path.Mid(pos + 1);
+		if (path.Length() < len)
 			return false;
-		*(p + segment_len) = 0;
-		data.m_segments.push_back(p);
 
-		p += segment_len + 1;
+		data.m_segments.push_back(path.Left(len));
+		path = path.Mid(len + 1);
 	}
 
 	m_bEmpty = false;
@@ -437,6 +410,9 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 {
 	wxString dir = subdir;
 	wxString file;
+
+	dir.Trim(true);
+	dir.Trim(false);
 
 	if (dir == _T(""))
 	{

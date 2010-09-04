@@ -1,8 +1,8 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "listingcomparison.h"
 #include "filter.h"
 #include "Options.h"
-#include "state.h"
+#include "Mainfrm.h"
 
 CComparableListing::CComparableListing(wxWindow* pParent)
 {
@@ -70,7 +70,7 @@ bool CComparisonManager::CompareListings()
 	CFilterManager filters;
 	if (filters.HasActiveFilters() && !filters.HasSameLocalAndRemoteFilters())
 	{
-		m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
+		UpdateToolState();
 		wxMessageBox(_("Cannot compare directories, different filters for local and remote directories are enabled"), _("Directory comparison failed"), wxICON_EXCLAMATION);
 		return false;
 	}
@@ -78,13 +78,13 @@ bool CComparisonManager::CompareListings()
 	wxString error;
 	if (!m_pLeft->CanStartComparison(&error))
 	{
-		m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
+		UpdateToolState();
 		wxMessageBox(error, _("Directory comparison failed"), wxICON_EXCLAMATION);
 		return false;
 	}
 	if (!m_pRight->CanStartComparison(&error))
 	{
-		m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
+		UpdateToolState();
 		wxMessageBox(error, _("Directory comparison failed"), wxICON_EXCLAMATION);
 		return false;
 	}
@@ -97,7 +97,7 @@ bool CComparisonManager::CompareListings()
 
 	m_isComparing = true;
 
-	m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
+	UpdateToolState();
 
 	m_pLeft->StartComparison();
 	m_pRight->StartComparison();
@@ -112,11 +112,8 @@ bool CComparisonManager::CompareListings()
 
 	const int dirSortMode = COptions::Get()->GetOptionVal(OPTION_FILELIST_DIRSORT);
 
-	const bool hide_identical = COptions::Get()->GetOptionVal(OPTION_COMPARE_HIDEIDENTICAL) != 0;
-
 	bool gotLocal = m_pLeft->GetNextFile(localFile, localDir, localSize, localDate, localHasTime);
 	bool gotRemote = m_pRight->GetNextFile(remoteFile, remoteDir, remoteSize, remoteDate, remoteHasTime);
-
 	while (gotLocal && gotRemote)
 	{
 		int cmp = CompareFiles(dirSortMode, localFile, remoteFile, localDir, remoteDir);
@@ -125,23 +122,16 @@ bool CComparisonManager::CompareListings()
 			if (!mode)
 			{
 				const CComparableListing::t_fileEntryFlags flag = (localDir || localSize == remoteSize) ? CComparableListing::normal : CComparableListing::different;
-
-				if (!hide_identical || flag != CComparableListing::normal || localFile == _T(".."))
-				{
-					m_pLeft->CompareAddFile(flag);
-					m_pRight->CompareAddFile(flag);
-				}
+				m_pLeft->CompareAddFile(flag);
+				m_pRight->CompareAddFile(flag);
 			}
 			else
 			{
 				if (!localDate.IsValid() || !remoteDate.IsValid())
 				{
-					if (!hide_identical || localDate.IsValid() || remoteDate.IsValid() || localFile == _T(".."))
-					{
-						const CComparableListing::t_fileEntryFlags flag = CComparableListing::normal;
-						m_pLeft->CompareAddFile(flag);
-						m_pRight->CompareAddFile(flag);
-					}
+					const CComparableListing::t_fileEntryFlags flag = CComparableListing::normal;
+					m_pLeft->CompareAddFile(flag);
+					m_pRight->CompareAddFile(flag);
 				}
 				else
 				{
@@ -174,12 +164,8 @@ bool CComparisonManager::CompareListings()
 						localFlag = CComparableListing::newer;
 						remoteFlag = CComparableListing::normal;
 					}
-
-					if (!hide_identical || localFlag != CComparableListing::normal || remoteFlag != CComparableListing::normal || localFile == _T(".."))
-					{
-						m_pLeft->CompareAddFile(localFlag);
-						m_pRight->CompareAddFile(remoteFlag);
-					}
+					m_pLeft->CompareAddFile(localFlag);
+					m_pRight->CompareAddFile(remoteFlag);
 				}
 			}
 			gotLocal = m_pLeft->GetNextFile(localFile, localDir, localSize, localDate, localHasTime);
@@ -246,31 +232,12 @@ int CComparisonManager::CompareFiles(const int dirSortMode, const wxString& loca
 	return 0;
 }
 
-CComparisonManager::CComparisonManager(CState* pState)
-	: m_pState(pState), m_pLeft(0), m_pRight(0)
+CComparisonManager::CComparisonManager(CMainFrame* pMainFrame, CComparableListing* pLeft, CComparableListing* pRight)
+	: m_pMainFrame(pMainFrame), m_pLeft(pLeft), m_pRight(pRight)
 {
 	m_isComparing = false;
-}
-
-void CComparisonManager::SetListings(CComparableListing* pLeft, CComparableListing* pRight)
-{
-	wxASSERT((pLeft && pRight) || (!pLeft && !pRight));
-
-	if (IsComparing())
-		ExitComparisonMode();
-
-	if (m_pLeft)
-		m_pLeft->SetOther(0);
-	if (m_pRight)
-		m_pRight->SetOther(0);
-
-	m_pLeft = pLeft;
-	m_pRight = pRight;
-
-	if (m_pLeft)
-		m_pLeft->SetOther(m_pRight);
-	if (m_pRight)
-		m_pRight->SetOther(m_pLeft);
+	m_pLeft->SetOther(m_pRight);
+	m_pRight->SetOther(m_pLeft);
 }
 
 void CComparisonManager::ExitComparisonMode()
@@ -284,5 +251,16 @@ void CComparisonManager::ExitComparisonMode()
 	if (m_pRight)
 		m_pRight->OnExitComparisonMode();
 
-	m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
+	UpdateToolState();
+}
+
+void CComparisonManager::UpdateToolState()
+{
+	wxToolBar* pToolBar = m_pMainFrame->GetToolBar();
+	if (pToolBar)
+		pToolBar->ToggleTool(XRCID("ID_TOOLBAR_COMPARISON"), m_isComparing);	
+
+	wxMenuBar* pMenuBar = m_pMainFrame->GetMenuBar();
+	if (pMenuBar)
+		pMenuBar->Check(XRCID("ID_TOOLBAR_COMPARISON"), m_isComparing);
 }

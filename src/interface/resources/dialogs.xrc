@@ -6,10 +6,10 @@
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
         <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
           <object class="sizeritem">
             <object class="wxStaticBitmap" name="ID_IMAGE">
               <bitmap stock_id="wxART_INFORMATION"/>
-              <size>32,32</size>
             </object>
             <flag>wxALL</flag>
             <border>7</border>
@@ -121,12 +121,12 @@
                       <orient>wxVERTICAL</orient>
                       <object class="sizeritem">
                         <object class="wxFlexGridSizer">
+                          <cols>2</cols>
                           <object class="sizeritem">
                             <object class="wxStaticText" name="ID_SUBJECT_DUMMY">
                               <label>&lt;Dummy&gt;</label>
                             </object>
                           </object>
-                          <cols>2</cols>
                           <vgap>2</vgap>
                           <hgap>2</hgap>
                         </object>
@@ -162,7 +162,6 @@
                   </object>
                   <orient>wxHORIZONTAL</orient>
                 </object>
-                <option>1</option>
                 <flag>wxGROW</flag>
               </object>
               <object class="sizeritem">
@@ -223,17 +222,11 @@
               </object>
               <cols>1</cols>
               <vgap>5</vgap>
-              <growablecols>0</growablecols>
-              <growablerows>3</growablerows>
             </object>
-            <option>1</option>
-            <flag>wxALL|wxGROW</flag>
+            <flag>wxALL</flag>
             <border>5</border>
           </object>
-          <orient>wxHORIZONTAL</orient>
         </object>
-        <option>1</option>
-        <flag>wxGROW</flag>
       </object>
       <object class="sizeritem">
         <object class="wxBoxSizer">
@@ -264,10 +257,10 @@
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
         <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
           <object class="sizeritem">
             <object class="wxStaticBitmap" name="ID_IMAGE">
               <bitmap stock_id="wxART_INFORMATION"/>
-              <size>32,32</size>
             </object>
             <flag>wxALL</flag>
             <border>7</border>
@@ -415,7 +408,6 @@
                   </object>
                   <orient>wxHORIZONTAL</orient>
                 </object>
-                <option>1</option>
                 <flag>wxGROW</flag>
               </object>
               <object class="sizeritem">
@@ -466,17 +458,11 @@
               </object>
               <cols>1</cols>
               <vgap>5</vgap>
-              <growablecols>0</growablecols>
-              <growablerows>2</growablerows>
             </object>
-            <option>1</option>
-            <flag>wxALL|wxGROW</flag>
+            <flag>wxALL</flag>
             <border>5</border>
           </object>
-          <orient>wxHORIZONTAL</orient>
         </object>
-        <option>1</option>
-        <flag>wxGROW</flag>
       </object>
       <object class="sizeritem">
         <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
@@ -524,8 +510,7 @@
                     <flag>wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                     <border>10</border>
                     <object class="wxStaticBitmap" name="ID_FILE2_ICON">
-                      <bitmap stock_id="ART_FILE"/>
-                      <size>32,32</size>
+                      <bitmap>32x32/file.png</bitmap>
                     </object>
                   </object>
                   <object class="sizeritem">
@@ -568,8 +553,7 @@
                     <flag>wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                     <border>10</border>
                     <object class="wxStaticBitmap" name="ID_FILE1_ICON">
-                      <bitmap stock_id="ART_FILE"/>
-                      <size>32,32</size>
+                      <bitmap>32x32/file.png</bitmap>
                     </object>
                   </object>
                   <object class="sizeritem">
@@ -632,18 +616,20 @@
                     </object>
                   </object>
                   <object class="sizeritem">
-                    <object class="wxRadioButton" name="ID_ACTION7">
-                      <label>Overwrite if &amp;different size</label>
-                    </object>
                     <flag>wxLEFT|wxRIGHT|wxTOP</flag>
                     <border>5</border>
+                    <object class="wxRadioButton" name="ID_ACTION7">
+                      <label>Overwrite if different size</label>
+                      <value>0</value>
+                    </object>
                   </object>
                   <object class="sizeritem">
-                    <object class="wxRadioButton" name="ID_ACTION6">
-                      <label>Overwrite if different si&amp;ze or source newer</label>
-                    </object>
                     <flag>wxLEFT|wxRIGHT|wxTOP</flag>
                     <border>5</border>
+                    <object class="wxRadioButton" name="ID_ACTION6">
+                      <label>Overwrite if different size or source newer</label>
+                      <value>0</value>
+                    </object>
                   </object>
                   <object class="sizeritem">
                     <flag>wxLEFT|wxRIGHT|wxTOP</flag>
@@ -762,8 +748,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxTreeCtrl" name="ID_SITETREE">
-                  <focused>1</focused>
-                  <style>wxSUNKEN_BORDER|wxTR_EDIT_LABELS|wxTR_HAS_BUTTONS</style>
+                  <style>wxTR_HAS_BUTTONS|wxTR_EDIT_LABELS|wxSUNKEN_BORDER</style>
                 </object>
                 <option>1</option>
                 <flag>wxTOP|wxBOTTOM|wxGROW</flag>
@@ -830,16 +815,17 @@
                       <object class="wxBoxSizer">
                         <orient>wxVERTICAL</orient>
                         <object class="sizeritem">
-                          <object class="wxGridBagSizer">
+                          <object class="wxFlexGridSizer">
+                            <cols>2</cols>
                             <object class="sizeritem">
                               <object class="wxStaticText">
                                 <label>&amp;Host:</label>
                               </object>
                               <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                              <cellpos>0,0</cellpos>
                             </object>
                             <object class="sizeritem">
                               <object class="wxBoxSizer">
+                                <orient>wxHORIZONTAL</orient>
                                 <object class="sizeritem">
                                   <object class="wxTextCtrl" name="ID_HOST"/>
                                   <option>1</option>
@@ -858,75 +844,68 @@
                                   <flag>wxLEFT</flag>
                                   <border>5</border>
                                 </object>
-                                <orient>wxHORIZONTAL</orient>
                               </object>
                               <flag>wxGROW</flag>
-                              <cellpos>0,1</cellpos>
                             </object>
                             <object class="sizeritem">
                               <object class="wxStaticText">
-                                <label>Server &amp;Type:</label>
+                                <label>Server&amp;type:</label>
                               </object>
                               <flag>wxALL|wxALIGN_CENTRE_VERTICAL</flag>
-                              <cellpos>1,0</cellpos>
                             </object>
                             <object class="sizeritem">
                               <object class="wxChoice" name="ID_PROTOCOL">
+                                <content/>
                                 <selection>0</selection>
                               </object>
                               <flag>wxGROW</flag>
-                              <cellpos>1,1</cellpos>
                             </object>
                             <vgap>5</vgap>
                             <hgap>5</hgap>
                             <object class="sizeritem">
                               <object class="wxStaticLine"/>
-                              <option>0</option>
                               <flag>wxTOP|wxBOTTOM|wxGROW</flag>
                               <border>5</border>
-                              <cellpos>2,0</cellpos>
-                              <cellspan>0,2</cellspan>
                             </object>
-                            
+                            <object class="sizeritem">
+                              <object class="wxStaticLine"/>
+                              <flag>wxTOP|wxBOTTOM|wxGROW</flag>
+                              <border>5</border>
+                            </object>
                             <object class="sizeritem">
                               <object class="wxStaticText">
-                                <label>&amp;Logon Type:</label>
+                                <label>&amp;Logontype:</label>
                               </object>
                               <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                              <cellpos>3,0</cellpos>
                             </object>
                             <object class="sizeritem">
                               <object class="wxChoice" name="ID_LOGONTYPE">
+                                <content/>
                                 <selection>0</selection>
                               </object>
                               <flag>wxGROW</flag>
-                              <cellpos>3,1</cellpos>
                             </object>
                             <object class="sizeritem">
                               <object class="wxStaticText">
                                 <label>&amp;User:</label>
                               </object>
                               <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                              <cellpos>4,0</cellpos>
                             </object>
                             <object class="sizeritem">
                               <object class="wxTextCtrl" name="ID_USER"/>
                               <flag>wxGROW</flag>
-                              <cellpos>4,1</cellpos>
                             </object>
                             <object class="sizeritem">
                               <object class="wxStaticText">
                                 <label>Pass&amp;word:</label>
                               </object>
                               <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                              <cellpos>5,0</cellpos>
                             </object>
                             <object class="sizeritem">
                               <object class="wxTextCtrl" name="ID_PASS">
                                 <style>wxTE_PASSWORD</style>
                               </object>
                               <flag>wxGROW</flag>
-                              <cellpos>5,1</cellpos>
                             </object>
                             <vgap>5</vgap>
                             <hgap>5</hgap>
@@ -935,12 +914,10 @@
                               <object class="wxStaticText">
                                 <label>&amp;Account:</label>
                               </object>
-                              <cellpos>6,0</cellpos>
                             </object>
                             <object class="sizeritem">
                               <object class="wxTextCtrl" name="ID_ACCOUNT"/>
                               <flag>wxGROW</flag>
-                              <cellpos>6,1</cellpos>
                             </object>
                           </object>
                           <flag>wxALL|wxGROW</flag>
@@ -975,7 +952,7 @@
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
                               <object class="wxStaticText">
-                                <label>Server &amp;Type:</label>
+                                <label>Server&amp;type:</label>
                               </object>
                               <flag>wxALL|wxALIGN_CENTRE_VERTICAL</flag>
                               <border>5</border>
@@ -1101,7 +1078,7 @@
                   </object>
                   <usenotebooksizer>1</usenotebooksizer>
                   <object class="notebookpage">
-                    <label>Transfer Settings</label>
+                    <label>Transfer settings</label>
                     <object class="wxPanel">
                       <object class="wxBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -1617,9 +1594,7 @@
             <flag>wxALIGN_CENTRE_VERTICAL</flag>
           </object>
           <object class="sizeritem">
-            <object class="wxTextCtrl" name="ID_NUMERIC">
-              <focused>1</focused>
-            </object>
+            <object class="wxTextCtrl" name="ID_NUMERIC"/>
             <flag>wxLEFT|wxRIGHT</flag>
             <border>5</border>
           </object>
@@ -1720,7 +1695,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText" name="ID_COPYRIGHT">
-                  <label>&lt;Copyright 2004-2010&gt;</label>
+                  <label>&lt;Copyright 2004-2009&gt;</label>
                 </object>
                 <flag>wxTOP|wxBOTTOM</flag>
                 <border>5</border>
@@ -1852,47 +1827,6 @@
         <border>5</border>
       </object>
       <object class="sizeritem">
-        <object class="wxStaticBoxSizer">
-          <object class="sizeritem">
-            <object class="wxFlexGridSizer">
-              <cols>2</cols>
-              <object class="sizeritem">
-                <object class="wxStaticText" name="ID_SYSTEM_NAME_DESC">
-                  <label>Name:</label>
-                </object>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticText" name="ID_SYSTEM_NAME"/>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticText" name="ID_SYSTEM_VER_DESC">
-                  <label>Version:</label>
-                </object>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticText" name="ID_SYSTEM_VER"/>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticText" name="ID_SYSTEM_PLATFORM_DESC">
-                  <label>Platform:</label>
-                </object>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticText" name="ID_SYSTEM_PLATFORM"/>
-              </object>
-              <vgap>3</vgap>
-              <hgap>5</hgap>
-            </object>
-            <flag>wxALL</flag>
-            <border>5</border>
-          </object>
-          <label>Operating system</label>
-          <orient>wxVERTICAL</orient>
-        </object>
-        <flag>wxALL|wxGROW</flag>
-        <border>5</border>
-      </object>
-      <object class="sizeritem">
         <object class="wxBoxSizer">
           <object class="sizeritem">
             <object class="wxButton" name="ID_COPY">
@@ -1907,7 +1841,6 @@
             <object class="wxButton" name="wxID_OK">
               <label>OK</label>
               <default>1</default>
-              <focused>1</focused>
             </object>
           </object>
           <orient>wxHORIZONTAL</orient>
@@ -1926,7 +1859,6 @@
           <orient>wxHORIZONTAL</orient>
           <object class="sizeritem">
             <object class="wxStaticBitmap">
-              <size>32,32</size>
               <bitmap stock_id="wxART_INFORMATION"/>
             </object>
             <flag>wxALL</flag>
@@ -2029,7 +1961,6 @@
           <orient>wxHORIZONTAL</orient>
           <object class="sizeritem">
             <object class="wxStaticBitmap">
-              <size>32,32</size>
               <bitmap stock_id="wxART_WARNING"/>
             </object>
             <flag>wxALL</flag>
@@ -2047,15 +1978,10 @@
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText" name="ID_DESC">
-                  <label>The server's host key does not match the key that has been cached. This means that either the administrator has changed the host key, or you are actually trying to connect to another computer pretending to be the server.</label>
+                  <label>The server's host key does not match the key that has been cached. This means that either the administrator has changed the host key, or you are actually trying to connect to another computer pretending to be the server.\nIf the host key change was not expected, please contact the server administrator.</label>
                 </object>
                 <flag>wxALL</flag>
                 <border>5</border>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticText" name="ID_DESC2">
-                  <label>If the host key change was not expected, please contact the server administrator.</label>
-                </object>
               </object>
               <object class="sizeritem">
                 <object class="wxStaticBoxSizer">
@@ -2153,7 +2079,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxChoice" name="ID_SETS">
-                  <focused>1</focused>
+                  <content/>
                 </object>
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
@@ -2325,7 +2251,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxListBox" name="ID_FILTERS">
-                  <focused>1</focused>
+                  <content/>
                 </object>
                 <option>1</option>
                 <flag>wxTOP|wxBOTTOM|wxGROW</flag>
@@ -2732,64 +2658,143 @@
             <size>0,5</size>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticBoxSizer">
+            <object class="wxGridSizer">
               <object class="sizeritem">
-                <object class="wxFlexGridSizer">
+                <object class="wxStaticBoxSizer">
+                  <label>Downloads</label>
+                  <orient>wxVERTICAL</orient>
                   <object class="sizeritem">
-                    <object class="wxStaticText" name="ID_DOWNLOAD_ACTION_DESC">
-                      <label>&amp;Downloads:</label>
+                    <object class="wxGridSizer">
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_DL_DEFAULT">
+                          <label>Use &amp;default</label>
+                          <style>wxRB_GROUP</style>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_DL_ASK">
+                          <label>&amp;Ask for action</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_DL_OVERWRITE">
+                          <label>&amp;Overwrite</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_DL_OVERWRITEIFNEWER">
+                          <label>Ov&amp;erwrite if source newer</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_DL_OVERWRITESIZE">
+                          <label>Overwrite if different size</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_DL_OVERWRITESIZEORNEWER">
+                          <label>Overwrite if different size or source newer</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_DL_RESUME">
+                          <label>&amp;Resume</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_DL_RENAME">
+                          <label>Re&amp;name</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_DL_SKIP">
+                          <label>S&amp;kip</label>
+                        </object>
+                      </object>
+                      <cols>1</cols>
+                      <vgap>5</vgap>
                     </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
+                    <flag>wxALL</flag>
+                    <border>3</border>
                   </object>
-                  <object class="sizeritem">
-                    <object class="wxChoice" name="ID_DOWNLOAD_ACTION">
-                      <content>
-                        <item>Use default action</item>
-                        <item>Ask for action</item>
-                        <item>Overwrite file</item>
-                        <item>Overwrite file if source file newer</item>
-                        <item>Overwrite file if size differs</item>
-                        <item>Overwrite file if size differs or source file is newer</item>
-                        <item>Resume file transfer</item>
-                        <item>Rename file</item>
-                        <item>Skip file</item>
-                      </content>
-                      <focused>1</focused>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxStaticText" name="ID_UPLOAD_ACTION_DESC">
-                      <label>&amp;Uploads:</label>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxChoice" name="ID_UPLOAD_ACTION">
-                      <content>
-                        <item>Use default action</item>
-                        <item>Ask for action</item>
-                        <item>Overwrite file</item>
-                        <item>Overwrite file if source file newer</item>
-                        <item>Overwrite file if size differs</item>
-                        <item>Overwrite file if size differs or source file is newer</item>
-                        <item>Resume file transfer</item>
-                        <item>Rename file</item>
-                        <item>Skip file</item>
-                      </content>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                  </object>
-                  <cols>2</cols>
-                  <vgap>5</vgap>
-                  <hgap>5</hgap>
                 </object>
-                <flag>wxALL</flag>
-                <border>3</border>
+                <option>1</option>
+                <flag>wxALL|wxGROW</flag>
               </object>
-              <label>Default file exists action</label>
-              <orient>wxVERTICAL</orient>
+              <object class="sizeritem">
+                <object class="wxStaticBoxSizer">
+                  <label>Uploads</label>
+                  <orient>wxVERTICAL</orient>
+                  <object class="sizeritem">
+                    <object class="wxGridSizer">
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_UL_DEFAULT">
+                          <label>Use d&amp;efault</label>
+                          <value>1</value>
+                          <style>wxRB_GROUP</style>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_UL_ASK">
+                          <label>A&amp;sk for action</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_UL_OVERWRITE">
+                          <label>O&amp;verwrite</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_UL_OVERWRITEIFNEWER">
+                          <label>Over&amp;write if source newer</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_UL_OVERWRITESIZE">
+                          <label>Overwrite if different size</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_UL_OVERWRITESIZEORNEWER">
+                          <label>Overwrite if different size or source newer</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_UL_RESUME">
+                          <label>Res&amp;ume</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_UL_RENAME">
+                          <label>Rena&amp;me</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxRadioButton" name="ID_UL_SKIP">
+                          <label>Sk&amp;ip</label>
+                        </object>
+                      </object>
+                      <cols>1</cols>
+                      <vgap>5</vgap>
+                    </object>
+                    <flag>wxALL</flag>
+                    <border>3</border>
+                  </object>
+                </object>
+                <option>1</option>
+                <flag>wxGROW</flag>
+              </object>
+              <cols>2</cols>
+              <hgap>5</hgap>
+              <object class="sizeritem">
+                <object class="wxStaticText" name="ID_DUMMY">
+                  <label>&lt;dummy&gt;</label>
+                  <hidden>1</hidden>
+                </object>
+              </object>
+              <rows>2</rows>
             </object>
+            <flag>wxGROW</flag>
           </object>
           <object class="spacer">
             <size>0,5</size>
@@ -2828,6 +2833,172 @@
       </object>
     </object>
   </object>
+  <object class="wxPanel" name="ID_DEFAULTFILEEXISTS">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxStaticText">
+          <label>Select default action to perform if target file of a transfer already exists.</label>
+        </object>
+      </object>
+      <object class="spacer">
+        <size>0,5</size>
+      </object>
+      <object class="sizeritem">
+        <object class="wxGridSizer">
+          <object class="sizeritem">
+            <object class="wxStaticBoxSizer">
+              <label>Downloads</label>
+              <orient>wxVERTICAL</orient>
+              <object class="sizeritem">
+                <object class="wxFlexGridSizer">
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_DL_ASK">
+                      <label>&amp;Ask for action</label>
+                      <style>wxRB_GROUP</style>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_DL_OVERWRITE">
+                      <label>&amp;Overwrite</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_DL_OVERWRITEIFNEWER">
+                      <label>Ov&amp;erwrite if source newer</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_DL_OVERWRITESIZE">
+                      <label>Overwrite if different size</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_DL_OVERWRITESIZEORNEWER">
+                      <label>Overwrite if different size or source newer</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_DL_RESUME">
+                      <label>&amp;Resume</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_DL_RENAME">
+                      <label>Re&amp;name</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_DL_SKIP">
+                      <label>S&amp;kip</label>
+                    </object>
+                  </object>
+                  <cols>1</cols>
+                  <vgap>5</vgap>
+                </object>
+                <flag>wxALL</flag>
+                <border>3</border>
+              </object>
+            </object>
+            <option>1</option>
+            <flag>wxALL|wxGROW</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticBoxSizer">
+              <label>Uploads</label>
+              <orient>wxVERTICAL</orient>
+              <object class="sizeritem">
+                <object class="wxFlexGridSizer">
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_UL_ASK">
+                      <label>A&amp;sk for action</label>
+                      <style>wxRB_GROUP</style>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_UL_OVERWRITE">
+                      <label>O&amp;verwrite</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_UL_OVERWRITEIFNEWER">
+                      <label>Over&amp;write if source newer</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_UL_OVERWRITESIZE">
+                      <label>Overwrite if different size</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_UL_OVERWRITESIZEORNEWER">
+                      <label>Overwrite if different size or source newer</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_UL_RESUME">
+                      <label>Res&amp;ume</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_UL_RENAME">
+                      <label>Rena&amp;me</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxRadioButton" name="ID_UL_SKIP">
+                      <label>Sk&amp;ip</label>
+                    </object>
+                  </object>
+                  <cols>1</cols>
+                  <vgap>5</vgap>
+                </object>
+                <flag>wxALL</flag>
+                <border>3</border>
+              </object>
+            </object>
+            <option>1</option>
+            <flag>wxGROW</flag>
+          </object>
+          <cols>2</cols>
+          <hgap>5</hgap>
+        </object>
+        <flag>wxGROW</flag>
+      </object>
+      <object class="spacer">
+        <size>0,5</size>
+      </object>
+      <object class="sizeritem">
+        <object class="wxFlexGridSizer">
+          <cols>1</cols>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>If using 'overwrite if newer', your system time has to be synchronized with the server. If the time differs (e.g. different timezone), specify a timezone offset in the site manager.</label>
+            </object>
+          </object>
+          <object class="spacer">
+            <size>0,5</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxCheckBox" name="ID_ASCIIRESUME">
+              <label>A&amp;llow resume of ASCII files</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="ID_ASCIIRESUME_TEXT">
+              <label>Resuming ASCII files can cause problems if server uses a different line ending format than the client.</label>
+            </object>
+            <flag>wxLEFT</flag>
+            <border>18</border>
+          </object>
+          <vgap>3</vgap>
+        </object>
+      </object>
+      <object class="spacer">
+        <size>0,10</size>
+      </object>
+    </object>
+  </object>
   <object class="wxDialog" name="ID_CLEARPRIVATEDATA">
     <title>Clear private data</title>
     <object class="wxBoxSizer">
@@ -2850,7 +3021,6 @@
                     <object class="wxCheckBox" name="ID_CLEARQUICKCONNECT">
                       <label>Clear &amp;quickconnect history</label>
                       <checked>1</checked>
-                      <focused>1</focused>
                     </object>
                   </object>
                   <object class="sizeritem">
@@ -2920,7 +3090,6 @@
           <object class="sizeritem">
             <object class="wxCheckBox" name="ID_SITEMANAGER">
               <label>&amp;Export Site Manager entries</label>
-              <focused>1</focused>
             </object>
           </object>
           <object class="sizeritem">
@@ -3201,10 +3370,12 @@
     </object>
   </object>
   <object class="wxDialog" name="ID_EDITING">
+    <title>Files currently being edited</title>
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
         <object class="wxFlexGridSizer">
+          <cols>1</cols>
           <object class="sizeritem">
             <object class="wxStaticText">
               <label>The following files are currently being edited:</label>
@@ -3212,12 +3383,10 @@
           </object>
           <object class="sizeritem">
             <object class="wxListCtrl" name="ID_FILES">
-              <focused>1</focused>
               <style>wxLC_REPORT</style>
             </object>
-            <option>1</option>
             <flag>wxGROW</flag>
-            <minsize>300, 100</minsize>
+            <minsize>-1, 100</minsize>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText">
@@ -3257,6 +3426,7 @@
             </object>
             <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
           </object>
+          <vgap>5</vgap>
           <object class="sizeritem">
             <object class="wxStaticLine"/>
             <flag>wxGROW</flag>
@@ -3268,18 +3438,11 @@
             </object>
             <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
           </object>
-          <cols>1</cols>
-          <vgap>5</vgap>
-          <growablecols>0</growablecols>
-          <growablerows>1</growablerows>
         </object>
-        <option>1</option>
-        <flag>wxALL|wxGROW</flag>
+        <flag>wxALL</flag>
         <border>5</border>
       </object>
     </object>
-    <title>Files currently being edited</title>
-    <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</style>
   </object>
   <object class="wxDialog" name="ID_SFTP_ENCRYPTION">
     <title>Encryption details</title>
@@ -3508,7 +3671,6 @@
                 <object class="wxRadioButton" name="ID_DOWNLOAD">
                   <label>Download</label>
                   <value>1</value>
-                  <focused>1</focused>
                   <style>wxRB_GROUP</style>
                 </object>
                 <flag>wxALL</flag>
@@ -3896,7 +4058,6 @@
                   <object class="sizeritem">
                     <object class="wxRadioButton" name="ID_TYPE_GLOBAL">
                       <label>&amp;Global bookmark</label>
-                      <focused>1</focused>
                     </object>
                     <flag>wxRIGHT</flag>
                     <border>5</border>
@@ -4100,8 +4261,7 @@
               <object class="sizeritem">
                 <object class="wxTreeCtrl" name="ID_TREE">
                   <size>-1, 250</size>
-                  <focused>1</focused>
-                  <style>wxSUNKEN_BORDER|wxTR_EDIT_LABELS|wxTR_HAS_BUTTONS|wxTR_HIDE_ROOT</style>
+                  <style>wxTR_EDIT_LABELS|wxTR_HAS_BUTTONS|wxTR_HIDE_ROOT|wxSUNKEN_BORDER</style>
                 </object>
                 <option>1</option>
                 <flag>wxTOP|wxBOTTOM|wxGROW</flag>
@@ -4174,7 +4334,6 @@
           <object class="sizeritem">
             <object class="wxButton" name="wxID_OK">
               <label>&amp;OK</label>
-              <default>1</default>
             </object>
             <flag>wxALL|wxGROW</flag>
             <border>5</border>
@@ -4211,7 +4370,6 @@
           <object class="sizeritem">
             <object class="wxRadioButton" name="ID_USE_EDITOR">
               <label>Use &amp;default editor for text files</label>
-              <focused>1</focused>
             </object>
           </object>
           <object class="sizeritem">
@@ -4300,9 +4458,7 @@
             <flag>wxALIGN_CENTRE_VERTICAL</flag>
           </object>
           <object class="sizeritem">
-            <object class="wxTextCtrl" name="ID_PATH">
-              <focused>1</focused>
-            </object>
+            <object class="wxTextCtrl" name="ID_PATH"/>
             <flag>wxGROW|wxALIGN_CENTRE_VERTICAL</flag>
           </object>
           <object class="sizeritem">
@@ -4343,6 +4499,7 @@
         <flag>wxALL|wxGROW</flag>
         <border>5</border>
       </object>
+      
       <object class="sizeritem">
         <object class="wxFlexGridSizer">
           <object class="sizeritem">
@@ -4558,365 +4715,5 @@
         <border>5</border>
       </object>
     </object>
-  </object>
-  <object class="wxDialog" name="ID_WELCOME">
-    <object class="wxBoxSizer">
-      <orient>wxVERTICAL</orient>
-      <object class="sizeritem">
-        <object class="wxFlexGridSizer">
-          <object class="sizeritem">
-            <object class="wxBoxSizer">
-              <object class="sizeritem">
-                <object class="wxBoxSizer">
-                  <object class="sizeritem">
-                    <object class="wxStaticText" name="ID_FZVERSION">
-                      <label>&lt;FZ version&gt;</label>
-                      <font>
-                        <weight>bold</weight>
-                      </font>
-                    </object>
-                    <flag>wxBOTTOM</flag>
-                    <border>2</border>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxStaticText">
-                      <label>The free open source FTP solution</label>
-                    </object>
-                  </object>
-                  <orient>wxVERTICAL</orient>
-                </object>
-                <flag>wxALIGN_CENTRE_VERTICAL</flag>
-              </object>
-              <object class="spacer">
-                <size>20, -1</size>
-                <option>1</option>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticBitmap">
-                  <size>48,48</size>
-                  <bitmap stock_id="ART_FILEZILLA"/>
-                </object>
-                <flag>wxALIGN_CENTRE_VERTICAL</flag>
-              </object>
-              <orient>wxHORIZONTAL</orient>
-            </object>
-            <flag>wxGROW</flag>
-          </object>
-          <object class="sizeritem">
-            <object class="wxStaticLine"/>
-            <flag>wxGROW</flag>
-          </object>
-          <object class="sizeritem">
-            <object class="wxBoxSizer">
-              <object class="sizeritem">
-                <object class="wxStaticText" name="ID_HEADING_NEWS">
-                  <label>What's new</label>
-                  <font>
-                    <weight>bold</weight>
-                  </font>
-                </object>
-                <flag>wxTOP|wxBOTTOM</flag>
-                <border>2</border>
-              </object>
-              <orient>wxVERTICAL</orient>
-              <object class="sizeritem">
-                <object class="wxFlexGridSizer">
-                  <object class="sizeritem">
-                    <object class="wxHyperlinkCtrl" name="ID_LINK_NEWS">
-                      <label>&lt;news&gt;</label>
-                      <url>http://</url>
-                    </object>
-                  </object>
-                  <cols>1</cols>
-                  <vgap>2</vgap>
-                </object>
-                <flag>wxLEFT</flag>
-                <border>20</border>
-              </object>
-            </object>
-            <flag>wxTOP</flag>
-            <border>3</border>
-          </object>
-          <object class="sizeritem">
-            <object class="wxBoxSizer">
-              <object class="sizeritem">
-                <object class="wxStaticText">
-                  <label>Documentation</label>
-                  <font>
-                    <weight>bold</weight>
-                  </font>
-                </object>
-                <flag>wxTOP|wxBOTTOM</flag>
-                <border>2</border>
-              </object>
-              <object class="sizeritem">
-                <object class="wxFlexGridSizer">
-                  <object class="sizeritem">
-                    <object class="wxHyperlinkCtrl" name="ID_DOCUMENTATION_BASIC">
-                      <label>Basic usage instructions</label>
-                      <url>http://</url>
-                    </object>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxHyperlinkCtrl" name="ID_DOCUMENTATION_NETWORK">
-                      <label>Configuring FileZilla and your network</label>
-                      <url>http://</url>
-                    </object>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxHyperlinkCtrl" name="ID_DOCUMENTATION_MORE">
-                      <label>Further documentation</label>
-                      <url>http://</url>
-                    </object>
-                  </object>
-                  <cols>1</cols>
-                  <vgap>2</vgap>
-                </object>
-                <flag>wxLEFT</flag>
-                <border>20</border>
-              </object>
-              <orient>wxVERTICAL</orient>
-            </object>
-            <flag>wxTOP</flag>
-            <border>3</border>
-          </object>
-          <object class="sizeritem">
-            <object class="wxBoxSizer">
-              <object class="sizeritem">
-                <object class="wxStaticText">
-                  <label>Getting help</label>
-                  <font>
-                    <weight>bold</weight>
-                  </font>
-                </object>
-                <flag>wxTOP|wxBOTTOM</flag>
-                <border>2</border>
-              </object>
-              <object class="sizeritem">
-                <object class="wxFlexGridSizer">
-                  <object class="sizeritem">
-                    <object class="wxHyperlinkCtrl" name="ID_SUPPORT_FORUM">
-                      <label>Asking questions in the FileZilla forums</label>
-                      <url>http://</url>
-                    </object>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxHyperlinkCtrl" name="ID_SUPPORT_MORE">
-                      <label>Reporting bugs and feature requests</label>
-                      <url>http://</url>
-                    </object>
-                  </object>
-                  <cols>1</cols>
-                  <vgap>2</vgap>
-                </object>
-                <flag>wxLEFT</flag>
-                <border>20</border>
-              </object>
-              <orient>wxVERTICAL</orient>
-            </object>
-            <flag>wxTOP</flag>
-            <border>3</border>
-          </object>
-          <object class="sizeritem">
-            <object class="wxStaticText">
-              <label>You can always open this dialog again through the help menu.</label>
-            </object>
-            <flag>wxTOP</flag>
-            <border>5</border>
-          </object>
-          <object class="sizeritem">
-            <object class="wxStaticLine"/>
-            <flag>wxGROW|wxTOP|wxBOTTOM</flag>
-            <border>2</border>
-          </object>
-          <object class="sizeritem">
-            <object class="wxButton" name="wxID_OK">
-              <focused>1</focused>
-              <label>OK</label>
-              <default>1</default>
-            </object>
-            <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
-          </object>
-          <cols>1</cols>
-          <vgap>5</vgap>
-        </object>
-        <flag>wxALL</flag>
-        <border>5</border>
-      </object>
-    </object>
-    <title>Welcome to FileZilla</title>
-  </object>
-  <object class="wxDialog" name="ID_ALREADYCONNECTED">
-    <title>Already connected</title>
-    <object class="wxBoxSizer">
-      <orient>wxVERTICAL</orient>
-      <object class="sizeritem">
-        <object class="wxBoxSizer">
-          <orient>wxHORIZONTAL</orient>
-          <object class="sizeritem">
-            <object class="wxStaticBitmap">
-              <size>32,32</size>
-              <bitmap stock_id="wxART_QUESTION"/>
-            </object>
-            <flag>wxALL</flag>
-            <border>10</border>
-          </object>
-          <object class="sizeritem">
-            <object class="wxFlexGridSizer">
-              <object class="sizeritem">
-                <object class="wxStaticText">
-                  <label>FileZilla is already connected to a server.</label>
-                </object>
-              </object>
-              <object class="sizeritem">
-                <object class="wxRadioButton" name="ID_NEWTAB">
-                  <label>Establish connection in a new tab</label>
-                  <focused>1</focused>
-                  <style>wxRB_GROUP</style>
-                </object>
-              </object>
-              <object class="sizeritem">
-                <object class="wxRadioButton" name="ID_OLDTAB">
-                  <label>Abort previous connection and connect in current tab</label>
-                </object>
-              </object>
-              <cols>1</cols>
-              <vgap>5</vgap>
-            </object>
-            <flag>wxALL</flag>
-            <border>5</border>
-          </object>
-        </object>
-      </object>
-      <object class="sizeritem">
-        <object class="wxBoxSizer">
-          <object class="sizeritem">
-            <object class="wxButton" name="wxID_OK">
-              <default>1</default>
-            </object>
-            <flag>wxRIGHT</flag>
-            <border>5</border>
-          </object>
-          <object class="sizeritem">
-            <object class="wxButton" name="wxID_CANCEL">
-              <label>Cancel</label>
-            </object>
-          </object>
-          <orient>wxHORIZONTAL</orient>
-        </object>
-        <flag>wxALL|wxALIGN_CENTRE_HORIZONTAL</flag>
-        <border>5</border>
-      </object>
-    </object>
-  </object>
-  <object class="wxDialog" name="ID_SPEEDLIMITS">
-    <object class="wxBoxSizer">
-      <object class="sizeritem">
-        <object class="wxFlexGridSizer">
-          <cols>1</cols>
-          <vgap>5</vgap>
-          <object class="sizeritem">
-            <object class="wxFlexGridSizer">
-              <object class="sizeritem">
-                <object class="wxStaticBitmap">
-                  <size>48,48</size>
-                  <bitmap stock_id="ART_SPEEDLIMITS"/>
-                </object>
-              </object>
-              <object class="spacer">
-                <size>5,-1</size>
-              </object>
-              <object class="sizeritem">
-                <object class="wxFlexGridSizer">
-                  <object class="sizeritem">
-                    <object class="wxCheckBox" name="ID_ENABLE_SPEEDLIMITS">
-                      <label>&amp;Enable speed limits</label>
-                      <focused>1</focused>
-                    </object>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxFlexGridSizer">
-                      <object class="sizeritem">
-                        <object class="wxStaticText">
-                          <label>Download &amp;limit:</label>
-                        </object>
-                        <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                      </object>
-                      <object class="sizeritem">
-                        <object class="wxTextCtrl" name="ID_DOWNLOADLIMIT">
-                          <size>60,-1</size>
-                        </object>
-                      </object>
-                      <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_DOWNLOADLIMIT_UNIT">
-                          <label>(in %s/s)</label>
-                        </object>
-                        <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                      </object>
-                      <object class="sizeritem">
-                        <object class="wxStaticText">
-                          <label>U&amp;pload limit:</label>
-                        </object>
-                        <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                      </object>
-                      <object class="sizeritem">
-                        <object class="wxTextCtrl" name="ID_UPLOADLIMIT">
-                          <size>60,-1</size>
-                        </object>
-                      </object>
-                      <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_UPLOADLIMIT_UNIT">
-                          <label>(in %s/s)</label>
-                        </object>
-                        <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                      </object>
-                      <cols>3</cols>
-                      <vgap>5</vgap>
-                      <hgap>5</hgap>
-                    </object>
-                  </object>
-                  <cols>1</cols>
-                  <rows>2</rows>
-                  <vgap>5</vgap>
-                  <object class="sizeritem">
-                    <object class="wxStaticText">
-                      <label>Enter 0 for unlimited speed.</label>
-                    </object>
-                  </object>
-                </object>
-              </object>
-              <cols>3</cols>
-              <hgap>5</hgap>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <object class="wxStaticLine"/>
-            <flag>wxGROW</flag>
-          </object>
-          <object class="sizeritem">
-            <object class="wxFlexGridSizer">
-              <object class="sizeritem">
-                <object class="wxButton" name="wxID_OK">
-                  <label>OK</label>
-                  <default>1</default>
-                </object>
-              </object>
-              <object class="sizeritem">
-                <object class="wxButton" name="wxID_CANCEL">
-                  <label>&amp;Cancel</label>
-                </object>
-              </object>
-              <cols>2</cols>
-              <hgap>5</hgap>
-            </object>
-            <flag>wxALIGN_RIGHT</flag>
-          </object>
-        </object>
-        <flag>wxALL</flag>
-        <border>5</border>
-      </object>
-      <orient>wxVERTICAL</orient>
-    </object>
-    <title>Speed Limits</title>
   </object>
 </resource>

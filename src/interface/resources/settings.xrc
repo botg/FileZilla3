@@ -17,8 +17,7 @@
           </object>
           <object class="sizeritem">
             <object class="wxTreeCtrl" name="ID_TREE">
-              <focused>1</focused>
-              <style>wxSUNKEN_BORDER|wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_HIDE_ROOT</style>
+              <style>wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_HIDE_ROOT|wxSUNKEN_BORDER</style>
             </object>
             <option>1</option>
           </object>
@@ -86,50 +85,8 @@
       </object>
       <object class="sizeritem">
         <object class="wxStaticBoxSizer">
-          <object class="sizeritem">
-            <object class="wxFlexGridSizer">
-              <cols>1</cols>
-              <object class="sizeritem">
-                <object class="wxFlexGridSizer">
-                  <cols>3</cols>
-                  <object class="sizeritem">
-                    <object class="wxStaticText">
-                      <label>Time&amp;out in seconds:</label>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxTextCtrl" name="ID_TIMEOUT">
-                      <size>40,-1</size>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                  </object>
-                  <hgap>4</hgap>
-                  <object class="sizeritem">
-                    <object class="wxStaticText">
-                      <label>(5-9999, 0 to disable)</label>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                  </object>
-                </object>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticText">
-                  <label>If no data is sent or received during an operation for longer than the specified time, the connection will be closed and FileZilla will try to reconnect.</label>
-                </object>
-              </object>
-              <vgap>4</vgap>
-            </object>
-            <flag>wxBOTTOM|wxLEFT|wxRIGHT</flag>
-            <border>4</border>
-          </object>
-          <label>Timeout</label>
+          <label>Reconnection settings</label>
           <orient>wxVERTICAL</orient>
-        </object>
-        <flag>wxGROW</flag>
-      </object>
-      <object class="sizeritem">
-        <object class="wxStaticBoxSizer">
           <object class="sizeritem">
             <object class="wxFlexGridSizer">
               <cols>3</cols>
@@ -182,8 +139,6 @@
             <flag>wxBOTTOM|wxLEFT|wxRIGHT</flag>
             <border>4</border>
           </object>
-          <label>Reconnection settings</label>
-          <orient>wxVERTICAL</orient>
         </object>
         <flag>wxGROW</flag>
       </object>
@@ -632,7 +587,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxListCtrl" name="ID_KEYS">
-                  <style>wxLC_REPORT|wxSUNKEN_BORDER</style>
+                  <style>wxLC_REPORT</style>
                 </object>
                 <option>1</option>
                 <flag>wxGROW</flag>
@@ -856,17 +811,56 @@
       </object>
       <object class="sizeritem">
         <object class="wxStaticBoxSizer">
+          <label>Timeout</label>
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxFlexGridSizer">
+              <cols>1</cols>
+              <object class="sizeritem">
+                <object class="wxFlexGridSizer">
+                  <cols>3</cols>
+                  <object class="sizeritem">
+                    <object class="wxStaticText">
+                      <label>Time&amp;out in seconds:</label>
+                    </object>
+                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxTextCtrl" name="ID_TIMEOUT">
+                      <size>40,-1</size>
+                    </object>
+                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
+                  </object>
+                  <hgap>4</hgap>
+                  <object class="sizeritem">
+                    <object class="wxStaticText">
+                      <label>(5-9999, 0 to disable)</label>
+                    </object>
+                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
+                  </object>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText">
+                  <label>If no data can be sent or received during this time, the connection will be closed and FileZilla will try to reconnect.</label>
+                </object>
+              </object>
+              <vgap>4</vgap>
+            </object>
+            <flag>wxBOTTOM|wxLEFT|wxRIGHT</flag>
+            <border>4</border>
+          </object>
+        </object>
+        <flag>wxGROW</flag>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStaticBoxSizer">
           <label>Speed limits</label>
           <orient>wxVERTICAL</orient>
           <object class="sizeritem">
-            <object class="wxCheckBox" name="ID_ENABLE_SPEEDLIMITS">
-              <label>&amp;Enable speed limits</label>
-            </object>
-            <flag>wxLEFT|wxRIGHT|wxTOP</flag>
-            <border>4</border>
-          </object>
-          <object class="sizeritem">
             <object class="wxFlexGridSizer">
+              <vgap>5</vgap>
+              <hgap>5</hgap>
               <object class="sizeritem">
                 <object class="wxStaticText">
                   <label>Download &amp;limit:</label>
@@ -874,21 +868,13 @@
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
               <object class="sizeritem">
-                <object class="wxFlexGridSizer">
-                  <object class="sizeritem">
-                    <object class="wxTextCtrl" name="ID_DOWNLOADLIMIT">
-                      <size>60,-1</size>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxStaticText" name="ID_DOWNLOADLIMIT_UNIT">
-                      <label>(in %s/s)</label>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                  </object>
-                  <cols>2</cols>
-                  <hgap>5</hgap>
+                <object class="wxTextCtrl" name="ID_DOWNLOADLIMIT">
+                  <size>60,-1</size>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText">
+                  <label>(in KB/s)</label>
                 </object>
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
@@ -899,21 +885,13 @@
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
               <object class="sizeritem">
-                <object class="wxFlexGridSizer">
-                  <object class="sizeritem">
-                    <object class="wxTextCtrl" name="ID_UPLOADLIMIT">
-                      <size>60,-1</size>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxStaticText" name="ID_UPLOADLIMIT_UNIT">
-                      <label>(in %s/s)</label>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                  </object>
-                  <cols>2</cols>
-                  <hgap>5</hgap>
+                <object class="wxTextCtrl" name="ID_UPLOADLIMIT">
+                  <size>60,-1</size>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText">
+                  <label>(in KB/s)</label>
                 </object>
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
@@ -937,56 +915,7 @@
                   <label/>
                 </object>
               </object>
-              <cols>2</cols>
-              <vgap>5</vgap>
-              <hgap>5</hgap>
-            </object>
-            <flag>wxALL</flag>
-            <border>4</border>
-          </object>
-        </object>
-        <flag>wxGROW</flag>
-      </object>
-      <object class="sizeritem">
-        <object class="wxStaticBoxSizer">
-          <label>Filter invalid characters in filenames</label>
-          <orient>wxVERTICAL</orient>
-          <object class="sizeritem">
-            <object class="wxFlexGridSizer">
-              <object class="sizeritem">
-                <object class="wxCheckBox" name="ID_ENABLE_REPLACE">
-                  <label>Enable invalid character &amp;filtering</label>
-                </object>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticText">
-                  <label>When enabled, characters that are not supported by the local operating system in filenames are replaced if downloading such a file.</label>
-                </object>
-              </object>
-              <object class="sizeritem">
-                <object class="wxBoxSizer">
-                  <orient>wxHORIZONTAL</orient>
-                  <object class="sizeritem">
-                    <object class="wxStaticText">
-                      <label>&amp;Replace invalid characters with:</label>
-                    </object>
-                    <flag>wxRIGHT|wxALIGN_CENTER_VERTICAL</flag>
-                    <border>5</border>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxTextCtrl" name="ID_REPLACE"/>
-                    <flag>wxALIGN_CENTER_VERTICAL</flag>
-                    <minsize>15,-1</minsize>
-                  </object>
-                </object>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticText" name="ID_REPLACED">
-                  <label>&lt;replaced&gt;</label>
-                </object>
-              </object>
-              <cols>1</cols>
-              <vgap>5</vgap>
+              <cols>3</cols>
             </object>
             <flag>wxBOTTOM|wxLEFT|wxRIGHT</flag>
             <border>4</border>
@@ -1046,7 +975,7 @@
                   <orient>wxHORIZONTAL</orient>
                   <object class="sizeritem">
                     <object class="wxListCtrl" name="ID_EXTENSIONS">
-                      <style>wxLC_SORT_ASCENDING|wxLC_REPORT|wxLC_NO_HEADER|wxSUNKEN_BORDER</style>
+                      <style>wxLC_SORT_ASCENDING|wxLC_REPORT|wxLC_NO_HEADER</style>
                     </object>
                     <flag>wxGROW</flag>
                     <minsize>100,150</minsize>
@@ -1110,109 +1039,6 @@
         <option>1</option>
         <flag>wxTOP|wxGROW</flag>
         <border>5</border>
-      </object>
-    </object>
-  </object>
-  <object class="wxPanel" name="ID_SETTINGS_FILEEXISTS">
-    <object class="wxBoxSizer">
-      <orient>wxVERTICAL</orient>
-      <object class="sizeritem">
-        <object class="wxStaticText">
-          <label>Select default action to perform if target file of a transfer already exists.</label>
-        </object>
-      </object>
-      <object class="spacer">
-        <size>0,5</size>
-      </object>
-      <object class="sizeritem">
-        <object class="wxStaticBoxSizer">
-          <object class="sizeritem">
-            <object class="wxFlexGridSizer">
-              <object class="sizeritem">
-                <object class="wxStaticText">
-                  <label>&amp;Downloads:</label>
-                </object>
-                <flag>wxALIGN_CENTRE_VERTICAL</flag>
-              </object>
-              <object class="sizeritem">
-                <object class="wxChoice" name="ID_DOWNLOAD_ACTION">
-                  <content>
-                    <item>Ask for action</item>
-                    <item>Overwrite file</item>
-                    <item>Overwrite file if source file newer</item>
-                    <item>Overwrite file if size differs</item>
-                    <item>Overwrite file if size differs or source file is newer</item>
-                    <item>Resume file transfer</item>
-                    <item>Rename file</item>
-                    <item>Skip file</item>
-                  </content>
-                </object>
-                <flag>wxALIGN_CENTRE_VERTICAL</flag>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticText">
-                  <label>&amp;Uploads:</label>
-                </object>
-                <flag>wxALIGN_CENTRE_VERTICAL</flag>
-              </object>
-              <object class="sizeritem">
-                <object class="wxChoice" name="ID_UPLOAD_ACTION">
-                  <content>
-                    <item>Ask for action</item>
-                    <item>Overwrite file</item>
-                    <item>Overwrite file if source file newer</item>
-                    <item>Overwrite file if size differs</item>
-                    <item>Overwrite file if size differs or source file is newer</item>
-                    <item>Resume file transfer</item>
-                    <item>Rename file</item>
-                    <item>Skip file</item>
-                  </content>
-                </object>
-                <flag>wxALIGN_CENTRE_VERTICAL</flag>
-              </object>
-              <cols>2</cols>
-              <vgap>5</vgap>
-              <hgap>5</hgap>
-            </object>
-            <flag>wxALL</flag>
-            <border>3</border>
-          </object>
-          <label>Default file exists action</label>
-          <orient>wxVERTICAL</orient>
-        </object>
-        <flag>wxGROW</flag>
-      </object>
-      <object class="spacer">
-        <size>0,5</size>
-      </object>
-      <object class="sizeritem">
-        <object class="wxFlexGridSizer">
-          <cols>1</cols>
-          <object class="sizeritem">
-            <object class="wxStaticText">
-              <label>If using 'overwrite if newer', your system time has to be synchronized with the server. If the time differs (e.g. different timezone), specify a timezone offset in the site manager.</label>
-            </object>
-          </object>
-          <object class="spacer">
-            <size>0,5</size>
-          </object>
-          <object class="sizeritem">
-            <object class="wxCheckBox" name="ID_ASCIIRESUME">
-              <label>A&amp;llow resume of ASCII files</label>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <object class="wxStaticText" name="ID_ASCIIRESUME_TEXT">
-              <label>Resuming ASCII files can cause problems if server uses a different line ending format than the client.</label>
-            </object>
-            <flag>wxLEFT</flag>
-            <border>18</border>
-          </object>
-          <vgap>3</vgap>
-        </object>
-      </object>
-      <object class="spacer">
-        <size>0,10</size>
       </object>
     </object>
   </object>
@@ -1318,27 +1144,6 @@
           </object>
         </object>
         <flag>wxGROW|wxTOP</flag>
-        <border>5</border>
-      </object>
-      <object class="sizeritem">
-        <object class="wxStaticBoxSizer">
-          <object class="sizeritem">
-            <object class="wxFlexGridSizer">
-              <cols>1</cols>
-              <vgap>5</vgap>
-              <object class="sizeritem">
-                <object class="wxCheckBox" name="ID_SPEED_DISPLAY">
-                  <label>&amp;Display momentary transfer speed instead of average speed</label>
-                </object>
-              </object>
-            </object>
-            <flag>wxBOTTOM|wxLEFT|wxRIGHT</flag>
-            <border>4</border>
-          </object>
-          <label>Transfer Queue</label>
-          <orient>wxVERTICAL</orient>
-        </object>
-        <flag>wxTOP|wxGROW</flag>
         <border>5</border>
       </object>
     </object>

@@ -24,9 +24,6 @@ protected:
 
 	void SetCtrlState();
 
-	void SaveConditions();
-	void LoadConditions();
-
 	wxWindow* m_parent;
 	CSearchDialogFileList *m_results;
 	CQueueView* m_pQueue;

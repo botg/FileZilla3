@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 
 CDirectoryListing::CDirectoryListing()
 {
@@ -59,14 +59,14 @@ CDirectoryListing& CDirectoryListing::operator=(const CDirectoryListing &a)
 wxString CDirentry::dump() const
 {
 	wxString str = wxString::Format(_T("name=%s\nsize=%s\npermissions=%s\nownerGroup=%s\ndir=%d\nlink=%d\ntarget=%s\nhasTimestamp=%d\nunsure=%d\n"),
-				name.c_str(), size.ToString().c_str(), permissions.c_str(), ownerGroup.c_str(), flags & flag_dir, flags & flag_link,
-				target.c_str(), flags & flag_timestamp_mask, flags & flag_unsure);
+				name.c_str(), size.ToString().c_str(), permissions.c_str(), ownerGroup.c_str(), dir, link,
+				target.c_str(), hasTimestamp, unsure);
 
-	if (flags & flag_timestamp_date)
+	if (hasTimestamp != timestamp_none)
 		str += _T("date=") + time.FormatISODate() + _T("\n");
-	if (flags & flag_timestamp_time)
+	if (hasTimestamp >= timestamp_time)
 		str += _T("time=") + time.FormatISOTime() + _T("\n");
-	str += wxString::Format(_T("unsure=%d\n"), flags & flag_unsure);
+	str += wxString::Format(_T("unsure=%d\n"), unsure);
 	return str;
 }
 
@@ -84,15 +84,27 @@ bool CDirentry::operator==(const CDirentry &op) const
 	if (ownerGroup != op.ownerGroup)
 		return false;
 
-	if (flags != op.flags)
+	if (dir != op.dir)
 		return false;
-	
-	if (flags & flag_timestamp_date)
+
+	if (link != op.link)
+		return false;
+
+	if (target != op.target)
+		return false;
+
+	if (hasTimestamp != op.hasTimestamp)
+		return false;
+
+	if (hasTimestamp != timestamp_none)
 	{
 		if (time != op.time)
 			return false;
 	}
 	
+	if (unsure != op.unsure)
+		return false;
+
 	return true;
 }
 
@@ -148,7 +160,7 @@ void CDirectoryListing::Assign(const std::list<CDirentry> &entries)
 	
 	for (std::list<CDirentry>::const_iterator iter = entries.begin(); iter != entries.end(); iter++)
 	{
-		if (iter->is_dir())
+		if (iter->dir)
 			m_hasDirs = true;
 		if (!iter->permissions.empty())
 			m_has_usergroup = true;
@@ -171,7 +183,7 @@ bool CDirectoryListing::RemoveEntry(unsigned int index)
 
 	std::vector<CRefcountObject<CDirentry> >& entries = m_entries.Get();
 	std::vector<CRefcountObject<CDirentry> >::iterator iter = entries.begin() + index;
-	if ((*iter)->is_dir())
+	if ((*iter)->dir)
 		m_hasUnsureEntries |= CDirectoryListing::unsure_dir_removed;
 	else
 		m_hasUnsureEntries |= CDirectoryListing::unsure_file_removed;

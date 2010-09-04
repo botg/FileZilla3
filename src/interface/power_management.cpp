@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "power_management.h"
 #include "Mainfrm.h"
 #include "Options.h"
@@ -7,10 +7,7 @@
 #include "../dbus/power_management_inhibitor.h"
 #endif
 #ifdef __WXMAC__
-	// >= 10.5 Required for Power Management
-	#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-		#include <IOKit/pwr_mgt/IOPMLib.h>
-	#endif
+#include <IOKit/pwr_mgt/IOPMLib.h>
 #endif
 
 CPowerManagement* CPowerManagement::m_pPowerManagement = 0;
@@ -85,12 +82,9 @@ void CPowerManagement::DoSetBusy()
 #elif defined(WITH_LIBDBUS)
 	m_inhibitor->RequestBusy();
 #elif defined(__WXMAC__)
-	// >= 10.5 Required for Power Management
-	#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-		IOReturn success = IOPMAssertionCreate(kIOPMAssertionTypeNoIdleSleep, kIOPMAssertionLevelOn, &m_assertionID);
-		if (success != kIOReturnSuccess)
-			m_busy = false;
-	#endif
+	IOReturn success = IOPMAssertionCreate(kIOPMAssertionTypeNoIdleSleep, kIOPMAssertionLevelOn, &m_assertionID);
+	if (success != kIOReturnSuccess)
+		m_busy = false;
 #endif
 }
 
@@ -105,24 +99,6 @@ void CPowerManagement::DoSetIdle()
 #elif defined(WITH_LIBDBUS)
 	m_inhibitor->RequestIdle();
 #elif defined(__WXMAC__)
-	// >= 10.5 Required for Power Management
-	#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-		IOPMAssertionRelease(m_assertionID);
-	#endif
+	IOPMAssertionRelease(m_assertionID);
 #endif
-}
-
-bool CPowerManagement::IsSupported()
-{
-#ifdef __WXMSW__
-	return true;
-#endif
-#if defined(__WXMAC__) &&  MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-	return true;
-#endif
-#ifdef WITH_LIBDBUS
-	return true;
-#endif
-
-	return false;
 }

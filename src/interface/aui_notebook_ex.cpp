@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include <wx/aui/aui.h>
 #include "aui_notebook_ex.h"
 #include <wx/dcmirror.h>
@@ -20,12 +20,11 @@ wxColor wxAuiStepColour(const wxColor& c, int ialpha);
 class CFilterDC : public wxMirrorDC
 {
 public:
-	CFilterDC(wxDC& dc, int type, bool odd_tab_height, bool bottom)
+	CFilterDC(wxDC& dc, int type, bool odd_tab_height)
 		: wxMirrorDC(dc, false), m_original_dc(&dc), m_type(type), m_odd_tab_height(odd_tab_height)
 	{
 		m_gradient_called = 0;
 		m_rectangle_called = 0;
-		m_bottom = bottom;
 	}
 
 	virtual void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
@@ -127,14 +126,6 @@ public:
 				wxColour new_init = wxAuiStepColour(destColour, 95);
 				wxColour new_dest = wxAuiStepColour(destColour, 65);
 				m_original_dc->GradientFillLinear(r, new_init, new_dest, nDirection);
-
-				if (!m_bottom)
-				{
-					m_original_dc->SetPen(wxPen(destColour));
-					m_original_dc->DrawPoint(r.x, r.y);
-					m_original_dc->DrawPoint(r.x + r.width - 1, r.y);
-				}
-
 			}
 			else
 			{
@@ -150,15 +141,10 @@ public:
 				m_original_dc->DrawRectangle(r2);
 
 				wxColour new_dest = wxAuiStepColour(destColour, 65);
-				if (!m_bottom)
-					r.height++;
 				m_original_dc->GradientFillLinear(r, new_dest, new_dest, nDirection);
-				if (m_bottom)
-				{
-					m_original_dc->SetPen(wxPen(destColour));
-					m_original_dc->DrawPoint(r.x, r.y + r.height - 1);
-					m_original_dc->DrawPoint(r.x + r.width - 1, r.y + r.height - 1);
-				}
+				m_original_dc->SetPen(wxPen(destColour));
+				m_original_dc->DrawPoint(r.x, r.y + r.height - 1);
+				m_original_dc->DrawPoint(r.x + r.width - 1, r.y + r.height - 1);
 			}
 		}
 		else if (m_type == 2)
@@ -168,17 +154,8 @@ public:
 				m_original_dc->GradientFillLinear(rect, initialColour, destColour, nDirection);
 			else
 			{
-				wxColour new_init, new_dest;
-				if (m_bottom)
-				{
-					new_init = wxAuiStepColour(c, 70);
-					new_dest = wxAuiStepColour(c, 100);
-				}
-				else
-				{
-					new_init = wxAuiStepColour(c, 85);
-					new_dest = wxAuiStepColour(c, 100);
-				}
+				wxColour new_init = wxAuiStepColour(c, 70);
+				wxColour new_dest = wxAuiStepColour(c, 100);
 				m_original_dc->GradientFillLinear(rect, new_init, new_dest, nDirection);
 			}
 		}
@@ -193,32 +170,20 @@ protected:
 	wxDC *m_original_dc;
 	const int m_type;
 	bool m_odd_tab_height;
-	bool m_bottom;
-};
-
-struct wxAuiTabArtExData
-{
-	std::map<wxString, int> maxSizes;
 };
 
 class wxAuiTabArtEx : public wxAuiDefaultTabArt
 {
 public:
-	wxAuiTabArtEx(wxAuiNotebookEx* pNotebook, bool bottom, CSharedPointer<struct wxAuiTabArtExData> data)
+	wxAuiTabArtEx(wxAuiNotebookEx* pNotebook)
 	{
 		m_pNotebook = pNotebook;
 		m_fonts_initialized = false;
-		m_bottom = bottom;
-		m_data = data;
 	}
 
 	virtual wxAuiTabArt* Clone()
 	{
-		wxAuiTabArtEx *art = new wxAuiTabArtEx(m_pNotebook, m_bottom, m_data);
-		art->SetNormalFont(m_normal_font);
-		art->SetSelectedFont(m_selected_font);
-		art->SetMeasuringFont(m_measuring_font);
-		return art;
+		return new wxAuiTabArtEx(m_pNotebook);
 	}
 
 	virtual wxSize GetTabSize(wxDC& dc, wxWindow* wnd, const wxString& caption, const wxBitmap& bitmap, bool active, int close_button_state, int* x_extent)
@@ -229,9 +194,9 @@ public:
 		int pos;
 		if ((pos = caption.Find(_T(" ("))) != -1)
 			text = text.Left(pos);
-		std::map<wxString, int>::iterator iter = m_data->maxSizes.find(text);
-		if (iter == m_data->maxSizes.end())
-			m_data->maxSizes[text] = size.x;
+		std::map<wxString, int>::iterator iter = m_maxSizes.find(text);
+		if (iter == m_maxSizes.end())
+			m_maxSizes[text] = size.x;
 		else
 		{
 			if (iter->second > size.x)
@@ -278,29 +243,29 @@ public:
 				m_normal_font = m_original_normal_font;
 		}
 
-		CFilterDC filter_dc(dc, pane.active ? 1 : 0, m_tab_ctrl_height % 2, m_bottom);
+		CFilterDC filter_dc(dc, pane.active ? 1 : 0, m_tab_ctrl_height % 2);
 		wxAuiDefaultTabArt::DrawTab(*((wxDC*)&filter_dc), wnd, pane, in_rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
 	}
 
 	virtual void DrawBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect)
 	{
-		CFilterDC filter_dc(dc, 2, m_tab_ctrl_height % 2, m_bottom);
+		CFilterDC filter_dc(dc, 2, m_tab_ctrl_height % 2);
 		wxAuiDefaultTabArt::DrawBackground(*((wxDC*)&filter_dc), wnd, rect);
 	}
 protected:
 	wxAuiNotebookEx* m_pNotebook;
 
-	CSharedPointer<struct wxAuiTabArtExData> m_data;
+	static std::map<wxString, int> m_maxSizes;
 
 	wxFont m_original_normal_font;
 	wxFont m_highlighted_font;
 	bool m_fonts_initialized;
-	bool m_bottom;
 };
+
+std::map<wxString, int> wxAuiTabArtEx::m_maxSizes;
 
 BEGIN_EVENT_TABLE(wxAuiNotebookEx, wxAuiNotebook)
 EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, wxAuiNotebookEx::OnPageChanged)
-EVT_NAVIGATION_KEY(wxAuiNotebookEx::OnNavigationKey)
 END_EVENT_TABLE()
 
 wxAuiNotebookEx::wxAuiNotebookEx()
@@ -323,7 +288,7 @@ void wxAuiNotebookEx::RemoveExtraBorders()
 
 void wxAuiNotebookEx::SetExArtProvider()
 {
-	SetArtProvider(new wxAuiTabArtEx(this, GetWindowStyle() & wxAUI_NB_BOTTOM, new struct wxAuiTabArtExData));
+	SetArtProvider(new wxAuiTabArtEx(this));
 }
 
 bool wxAuiNotebookEx::SetPageText(size_t page_idx, const wxString& text)
@@ -385,30 +350,4 @@ void wxAuiNotebookEx::OnPageChanged(wxAuiNotebookEvent& event)
 		return;
 	
 	m_highlighted[page] = false;
-}
-
-void wxAuiNotebookEx::OnNavigationKey(wxNavigationKeyEvent& event)
-{
-	if (!event.IsWindowChange())
-	{
-		event.Skip();
-		return;
-	}
-
-	AdvanceTab(event.GetDirection());
-}
-
-void wxAuiNotebookEx::AdvanceTab(bool forward)
-{
-	int page = GetSelection();
-	if (forward)
-		page++;
-	else
-		page--;
-	if (page >= (int)GetPageCount())
-		page = 0;
-	else if (page < 0)
-		page = GetPageCount() - 1;
-
-	SetSelection(page);
 }

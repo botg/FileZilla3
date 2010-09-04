@@ -1,14 +1,17 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "led.h"
 #include "filezillaapp.h"
+#include "state.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
+#define TIMER_ID (wxID_HIGHEST + 1)
+
 BEGIN_EVENT_TABLE(CLed, wxWindow)
 	EVT_PAINT(CLed::OnPaint)
-	EVT_TIMER(wxID_ANY, CLed::OnTimer)
+	EVT_TIMER(TIMER_ID, CLed::OnTimer)
 #ifdef __WXMSW__
 	EVT_ERASE_BACKGROUND(CLed::OnEraseBackground)
 #endif
@@ -17,9 +20,11 @@ END_EVENT_TABLE()
 #define LED_OFF 1
 #define LED_ON 0
 
-CLed::CLed(wxWindow *parent, unsigned int index)
+CLed::CLed(wxWindow *parent, unsigned int index, CState* pState)
 	: wxWindow(parent, -1, wxDefaultPosition, wxSize(11, 11))
 {
+	m_pState = pState;
+
 	if (index == 1)
 		m_index = 1;
 	else
@@ -27,7 +32,7 @@ CLed::CLed(wxWindow *parent, unsigned int index)
 
 	m_ledState = LED_OFF;
 
-	m_timer.SetOwner(this);
+	m_timer.SetOwner(this, TIMER_ID);
 
 	m_loaded = false;
 
@@ -76,16 +81,22 @@ void CLed::Unset()
 
 void CLed::OnTimer(wxTimerEvent& event)
 {
-	if (!m_timer.IsRunning())
-		return;
-
-	if (event.GetId() != m_timer.GetId())
+	if (event.GetId() != TIMER_ID)
 	{
 		event.Skip();
 		return;
 	}
 
-	if (!CFileZillaEngine::IsActive((enum CFileZillaEngine::_direction)m_index))
+	if (!m_timer.IsRunning())
+		return;
+
+	if (!m_pState->m_pEngine)
+	{
+		m_timer.Stop();
+		return;
+	}
+
+	if (!m_pState->m_pEngine->IsActive(m_index == 0))
 	{
 		Unset();
 		m_timer.Stop();
@@ -96,12 +107,9 @@ void CLed::OnTimer(wxTimerEvent& event)
 
 void CLed::Ping()
 {
-	if (!m_loaded)
-		return;
-
 	if (m_timer.IsRunning())
 		return;
-	
+
 	Set();
 	m_timer.Start(100);
 }

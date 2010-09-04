@@ -28,7 +28,7 @@ public:
 
 	bool SetPath(wxString newPath);
 	bool SetPath(wxString &newPath, bool isFile);
-	bool SetSafePath(const wxString& path);
+	bool SetSafePath(wxString path);
 
 	// If ChangePath returns false, the object will be left an
 	// undefined state

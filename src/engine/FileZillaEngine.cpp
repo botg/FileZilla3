@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "ControlSocket.h"
 #include "directorycache.h"
 
@@ -147,8 +147,7 @@ bool CFileZillaEngine::SetAsyncRequestReply(CAsyncRequestNotification *pNotifica
 		return false;
 
 	m_pControlSocket->SetAlive();
-	if (!m_pControlSocket->SetAsyncRequestReply(pNotification))
-		return false;
+	m_pControlSocket->SetAsyncRequestReply(pNotification);
 
 	return true;
 }
@@ -164,15 +163,34 @@ bool CFileZillaEngine::IsPendingAsyncRequestReply(const CAsyncRequestNotificatio
 	return pNotification->requestNumber == m_asyncRequestCounter;
 }
 
-bool CFileZillaEngine::IsActive(enum CFileZillaEngine::_direction direction)
+bool CFileZillaEngine::IsActive(bool recv)
 {
-	if (m_activeStatus[direction] == 2)
+	if (recv)
 	{
-		m_activeStatus[direction] = 1;
-		return true;
+		if (m_activeStatusRecv == 2)
+		{
+			m_activeStatusRecv = 1;
+			return true;
+		}
+		else
+		{
+			m_activeStatusRecv = 0;
+			return false;
+		}
 	}
-
-	m_activeStatus[direction] = 0;
+	else
+	{
+		if (m_activeStatusSend == 2)
+		{
+			m_activeStatusSend = 1;
+			return true;
+		}
+		else
+		{
+			m_activeStatusSend = 0;
+			return false;
+		}
+	}
 	return false;
 }
 

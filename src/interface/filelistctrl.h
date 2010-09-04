@@ -9,9 +9,6 @@ class CQueueView;
 class CFileListCtrl_SortComparisonObject;
 class CState;
 class CFilelistStatusBar;
-#ifdef __WXGTK__
-class CGtkEventCallbackProxyBase;
-#endif
 
 class CGenericFileData
 {
@@ -38,10 +35,10 @@ public:
 	virtual ~CListViewSort() { } // Without this empty destructor GCC complains
 };
 
-template<class CFileData> class CFileListCtrl : public wxListCtrlEx, public CComparableListing, public CSystemImageList
+template<class CFileData> class CFileListCtrl : public wxListCtrlEx, public CComparableListing
 {
 public:
-	CFileListCtrl(wxWindow* pParent, CState *pState, CQueueView *pQueue, bool border = false);
+	CFileListCtrl(wxWindow* pParent, CState *pState, CQueueView *pQueue);
 	virtual ~CFileListCtrl();
 
 	class CSortComparisonObject : public std::binary_function<int,int,bool>
@@ -66,11 +63,8 @@ public:
 	};
 
 	void SetFilelistStatusBar(CFilelistStatusBar* pFilelistStatusBar) { m_pFilelistStatusBar = pFilelistStatusBar; }
-	CFilelistStatusBar* GetFilelistStatusBar() { return m_pFilelistStatusBar; }
 
 	void ClearSelection();
-
-	virtual void OnNavigationEvent(bool forward) {}
 
 protected:
 	CQueueView *m_pQueue;
@@ -84,16 +78,11 @@ protected:
 
 	std::map<wxString, wxString> m_fileTypeMap;
 
+#ifdef __WXMSW__
 	// Has to be set after settings the image list for the items
 	void InitHeaderImageList();
-#ifdef __WXMSW__
 	wxImageListEx *m_pHeaderImageList;
 #endif
-	struct _header_icon_index
-	{
-		int up;
-		int down;
-	} m_header_icon_index;
 
 	// The .. item
 	bool m_hasParent;
@@ -136,10 +125,6 @@ protected:
 	void SetItemCount(int count);
 #endif
 
-#ifdef __WXMSW__
-	virtual int GetOverlayIndex(int item) { return 0; }
-#endif
-
 private:
 	void SortList_UpdateSelections(bool* selections, int focus);
 
@@ -147,16 +132,14 @@ private:
 	bool m_insideSetSelection;
 
 #ifdef __WXMSW__
-	virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-	virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+	static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	WNDPROC m_prevWndproc;
+	// char* instead of CFileListCtrl<CFileData> due to bug in mingw compiler
+	static std::map<HWND, char*> m_hwnd_map;
 #else
 	int m_focusItem;
 	std::vector<bool> m_selections;
 	int m_pending_focus_processing;
-#endif
-
-#ifdef __WXGTK__
-	CSharedPointer<CGtkEventCallbackProxyBase> m_gtkEventCallbackProxy;
 #endif
 
 	DECLARE_EVENT_TABLE()

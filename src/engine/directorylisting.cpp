@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 
 CDirectoryListing::CDirectoryListing()
 {
@@ -6,8 +6,6 @@ CDirectoryListing::CDirectoryListing()
 	m_hasUnsureEntries = 0;
 	m_failed = false;
 	m_hasDirs = false;
-	m_has_perms = false;
-	m_has_usergroup = false;
 }
 
 CDirectoryListing::CDirectoryListing(const CDirectoryListing& listing)
@@ -23,10 +21,6 @@ CDirectoryListing::CDirectoryListing(const CDirectoryListing& listing)
 	m_firstListTime = listing.m_firstListTime;
 
 	m_hasDirs = listing.m_hasDirs;
-
-	m_has_perms = listing.m_has_perms;
-	m_has_usergroup = listing.m_has_usergroup;
-
 }
 
 CDirectoryListing& CDirectoryListing::operator=(const CDirectoryListing &a)
@@ -50,23 +44,20 @@ CDirectoryListing& CDirectoryListing::operator=(const CDirectoryListing &a)
 	m_searchmap_case = a.m_searchmap_case;
 	m_searchmap_nocase = a.m_searchmap_nocase;
 
-	m_has_perms = a.m_has_perms;
-	m_has_usergroup = a.m_has_usergroup;
-
 	return *this;
 }
 
 wxString CDirentry::dump() const
 {
-	wxString str = wxString::Format(_T("name=%s\nsize=%s\npermissions=%s\nownerGroup=%s\ndir=%d\nlink=%d\ntarget=%s\nhasTimestamp=%d\nunsure=%d\n"),
-				name.c_str(), size.ToString().c_str(), permissions.c_str(), ownerGroup.c_str(), flags & flag_dir, flags & flag_link,
-				target.c_str(), flags & flag_timestamp_mask, flags & flag_unsure);
+	wxString str = wxString::Format(_T("name=%s\nsize=%s\npermissions=%s\nownerGroup=%s\ndir=%d\nlink=%d\ntarget=%s\nhasDate=%d\nhasTime=%d\nunsure=%d\n"),
+				name.c_str(), size.ToString().c_str(), permissions.c_str(), ownerGroup.c_str(), dir, link,
+				target.c_str(), hasDate, hasTime, unsure);
 
-	if (flags & flag_timestamp_date)
+	if (hasDate)
 		str += _T("date=") + time.FormatISODate() + _T("\n");
-	if (flags & flag_timestamp_time)
+	if (hasTime)
 		str += _T("time=") + time.FormatISOTime() + _T("\n");
-	str += wxString::Format(_T("unsure=%d\n"), flags & flag_unsure);
+	str += wxString::Format(_T("unsure=%d\n"), unsure);
 	return str;
 }
 
@@ -84,15 +75,30 @@ bool CDirentry::operator==(const CDirentry &op) const
 	if (ownerGroup != op.ownerGroup)
 		return false;
 
-	if (flags != op.flags)
+	if (dir != op.dir)
 		return false;
-	
-	if (flags & flag_timestamp_date)
+
+	if (link != op.link)
+		return false;
+
+	if (target != op.target)
+		return false;
+
+	if (hasDate != op.hasDate)
+		return false;
+
+	if (hasTime != op.hasTime)
+		return false;
+
+	if (hasDate)
 	{
 		if (time != op.time)
 			return false;
 	}
 	
+	if (unsure != op.unsure)
+		return false;
+
 	return true;
 }
 
@@ -143,17 +149,11 @@ void CDirectoryListing::Assign(const std::list<CDirentry> &entries)
 	own_entries.reserve(m_entryCount);
 	
 	m_hasDirs = false;
-	m_has_perms = false;
-	m_has_usergroup = false;
 	
 	for (std::list<CDirentry>::const_iterator iter = entries.begin(); iter != entries.end(); iter++)
 	{
-		if (iter->is_dir())
+		if (iter->dir)
 			m_hasDirs = true;
-		if (!iter->permissions.empty())
-			m_has_usergroup = true;
-		if (!iter->ownerGroup.empty())
-			m_has_perms = true;
 		own_entries.push_back(CRefcountObject<CDirentry>(*iter));
 	}
 
@@ -171,7 +171,7 @@ bool CDirectoryListing::RemoveEntry(unsigned int index)
 
 	std::vector<CRefcountObject<CDirentry> >& entries = m_entries.Get();
 	std::vector<CRefcountObject<CDirentry> >::iterator iter = entries.begin() + index;
-	if ((*iter)->is_dir())
+	if ((*iter)->dir)
 		m_hasUnsureEntries |= CDirectoryListing::unsure_dir_removed;
 	else
 		m_hasUnsureEntries |= CDirectoryListing::unsure_file_removed;

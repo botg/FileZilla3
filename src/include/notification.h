@@ -156,11 +156,11 @@ public:
 		ask,
 		overwrite,
 		overwriteNewer,	// Overwrite if source file is newer than target file
-		overwriteSize,	// Overwrite if source file is is different in size than target file
-		overwriteSizeOrNewer,	// Overwrite if source file is different in size or newer than target file
 		resume, // Overwrites if cannot be resumed
 		rename,
 		skip,
+		overwriteSize,	// Overwrite if source file is is different in size than target file
+		overwriteSizeOrNewer,	// Overwrite if source file is different in size or newer than target file
 
 		ACTION_COUNT
 	};
@@ -277,10 +277,11 @@ protected:
 	unsigned int m_len;
 };
 
-class CCertificate
+class CCertificateNotification : public CAsyncRequestNotification
 {
 public:
-	CCertificate(
+	CCertificateNotification(const CCertificateNotification& ref);
+	CCertificateNotification(const wxString& host, unsigned int port,
 		const unsigned char* rawData, unsigned int len,
 		wxDateTime activationTime, wxDateTime expirationTime,
 		const wxString& serial,
@@ -288,9 +289,14 @@ public:
 		const wxString& fingerprint_md5,
 		const wxString& fingerprint_sha1,
 		const wxString& subject,
-		const wxString& issuer);
-	CCertificate(const CCertificate& op);
-	virtual ~CCertificate();
+		const wxString& issuer,
+		const wxString& sessionCipher,
+		const wxString& sessionMac);
+	virtual ~CCertificateNotification();
+	virtual enum RequestId GetRequestID() const { return reqId_certificate; }
+
+	const wxString& GetHost() const { return m_host; }
+	unsigned int GetPort() const { return m_port; }
 
 	const unsigned char* GetRawData(unsigned int& len) const { len = m_len; return m_rawData; }
 	wxDateTime GetActivationTime() const { return m_activationTime; }
@@ -306,9 +312,17 @@ public:
 	const wxString& GetSubject() const { return m_subject; }
 	const wxString& GetIssuer() const { return m_issuer; }
 
-	CCertificate& operator=(const CCertificate &op);
+	const wxString& GetSessionCipher() const { return m_sessionCipher; }
+	const wxString& GetSessionMac() const { return m_sessionMac; }
 
-private:
+	bool m_trusted;
+
+	CCertificateNotification& operator=(const CCertificateNotification &op);
+
+protected:
+	wxString m_host;
+	unsigned int m_port;
+
 	wxDateTime m_activationTime;
 	wxDateTime m_expirationTime;
 
@@ -324,36 +338,9 @@ private:
 
 	wxString m_subject;
 	wxString m_issuer;
-};
-
-class CCertificateNotification : public CAsyncRequestNotification
-{
-public:
-	CCertificateNotification(const wxString& host, unsigned int port,
-		const wxString& sessionCipher,
-		const wxString& sessionMac,
-		const std::vector<CCertificate> &certificates);
-	virtual ~CCertificateNotification();
-	virtual enum RequestId GetRequestID() const { return reqId_certificate; }
-
-	const wxString& GetHost() const { return m_host; }
-	unsigned int GetPort() const { return m_port; }
-
-	const wxString& GetSessionCipher() const { return m_sessionCipher; }
-	const wxString& GetSessionMac() const { return m_sessionMac; }
-
-	bool m_trusted;
-
-	const std::vector<CCertificate> GetCertificates() const { return m_certificates; }
-
-protected:
-	wxString m_host;
-	unsigned int m_port;
 
 	wxString m_sessionCipher;
 	wxString m_sessionMac;
-
-	std::vector<CCertificate> m_certificates;
 };
 
 class CSftpEncryptionNotification : public CNotification

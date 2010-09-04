@@ -9,19 +9,17 @@ dist_resources_DATA = defaultfilters.xml \
 		finished.wav \
 		leds.png menus.xrc netconfwizard.xrc \
 		quickconnectbar.xrc \
-		settings.xrc \
 		theme.xml toolbar.xrc up.png
 
 resources48dir = $(pkgdatadir)/resources/48x48
-dist_resources48_DATA = 48x48/filezilla.png \
-			48x48/speedlimits.png
+dist_resources48_DATA = 48x48/filezilla.png
 
 if USE_RESOURCEFILE
 nodist_noinst_DATA = filezilla.o
 
 filezilla.o: $(srcdir)/filezilla.rc $(srcdir)/windows_manifest.xml version.rc
 	@if [ -f $@~ ]; then rm $@~; fi
-	@WINDRES@ --include-dir=. --include-dir=$(srcdir) $(WINDRESFLAGS) $(srcdir)/filezilla.rc -D GNU_WINDRES -D HAS_VERSIONRC $@~ || rm $@~
+	@WINDRES@ --include-dir=. --include-dir=$(srcdir) $(WINDRESFLAGS) $(srcdir)/filezilla.rc -D HAS_VERSIONRC $@~ || rm $@~
 	@if [ -f $@ ]; then rm $@; fi
 	mv $@~ $@
 endif

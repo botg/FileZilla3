@@ -31,7 +31,6 @@ static int read_dev_urandom(char *buf, int len)
 	}
 	ngot += ret;
     }
-    close(fd);
 
     return 1;
 }

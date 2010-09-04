@@ -1,23 +1,9 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "Options.h"
 #include "xmlfunctions.h"
 #include "filezillaapp.h"
 #include <wx/tokenzr.h>
 #include "ipcmutex.h"
-#include "option_change_event_handler.h"
-#include "sizeformatting.h"
-
-#include <string>
-
-#ifdef __WXMSW__
-	#include <shlobj.h>
-
-	// Needed for MinGW:
-	#ifndef SHGFP_TYPE_CURRENT
-		#define SHGFP_TYPE_CURRENT 0
-	#endif
-#endif
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -30,155 +16,135 @@ enum Type
 	number
 };
 
-enum Flags
-{
-	normal,
-	internal,
-	default_only
-};
-
 struct t_Option
 {
-	const char name[30];
-	const enum Type type;
-	const wxString defaultValue; // Default values are stored as string even for numerical options
-	const Flags flags; // internal items won't get written to settings file nor loaded from there
+	char name[30];
+	enum Type type;
+	wxString defaultValue; // Default values are stored as string even for numerical options
 };
 
 static const t_Option options[OPTIONS_NUM] =
 {
-	// Note: A few options are versioned due to a changed
-	// option syntax or past, unhealthy defaults
-
 	// Engine settings
-	{ "Use Pasv mode", number, _T("1"), normal },
-	{ "Limit local ports", number, _T("0"), normal },
-	{ "Limit ports low", number, _T("6000"), normal },
-	{ "Limit ports high", number, _T("7000"), normal },
-	{ "External IP mode", number, _T("0"), normal },
-	{ "External IP", string, _T(""), normal },
-	{ "External address resolver", string, _T("http://ip.filezilla-project.org/ip.php"), normal },
-	{ "Last resolved IP", string, _T(""), normal },
-	{ "No external ip on local conn", number, _T("1"), normal },
-	{ "Pasv reply fallback mode", number, _T("0"), normal },
-	{ "Timeout", number, _T("20"), normal },
-	{ "Logging Debug Level", number, _T("0"), normal },
-	{ "Logging Raw Listing", number, _T("0"), normal },
-	{ "fzsftp executable", string, _T(""), internal },
-	{ "Allow transfermode fallback", number, _T("1"), normal },
-	{ "Reconnect count", number, _T("2"), normal },
-	{ "Reconnect delay", number, _T("5"), normal },
-	{ "Enable speed limits", number, _T("0"), normal },
-	{ "Speedlimit inbound", number, _T("100"), normal },
-	{ "Speedlimit outbound", number, _T("20"), normal },
-	{ "Speedlimit burst tolerance", number, _T("0"), normal },
-	{ "View hidden files", number, _T("0"), normal },
-	{ "Preserve timestamps", number, _T("0"), normal },
-	{ "Socket recv buffer size (v2)", number, _T("4194304"), normal }, // Make it large enough by default
+	{ "Use Pasv mode", number, _T("1") },
+	{ "Limit local ports", number, _T("0") },
+	{ "Limit ports low", number, _T("6000") },
+	{ "Limit ports high", number, _T("7000") },
+	{ "External IP mode", number, _T("0") },
+	{ "External IP", string, _T("") },
+	{ "External address resolver", string, _T("http://ip.filezilla-project.org/ip.php") },
+	{ "Last resolved IP", string, _T("") },
+	{ "No external ip on local conn", number, _T("1") },
+	{ "Pasv reply fallback mode", number, _T("0") },
+	{ "Timeout", number, _T("20") },
+	{ "Logging Debug Level", number, _T("0") },
+	{ "Logging Raw Listing", number, _T("0") },
+	{ "fzsftp executable", string, _T("") },
+	{ "Allow transfermode fallback", number, _T("1") },
+	{ "Reconnect count", number, _T("2") },
+	{ "Reconnect delay", number, _T("5") },
+	{ "Speedlimit inbound", number, _T("0") },
+	{ "Speedlimit outbound", number, _T("0") },
+	{ "Speedlimit burst tolerance", number, _T("0") },
+	{ "View hidden files", number, _T("0") },
+	{ "Preserve timestamps", number, _T("0") },
+	{ "Socket recv buffer size", number, _T("131072") }, // Make it large enough by default
 														 // to enable a large TCP window scale
-	{ "Socket send buffer size (v2)", number, _T("262144"), normal },
-	{ "FTP Keep-alive commands", number, _T("0"), normal },
-	{ "FTP Proxy type", number, _T("0"), normal },
-	{ "FTP Proxy host", string, _T(""), normal },
-	{ "FTP Proxy user", string, _T(""), normal },
-	{ "FTP Proxy password", string, _T(""), normal },
-	{ "FTP Proxy login sequence", string, _T(""), normal },
-	{ "SFTP keyfiles", string, _T(""), normal },
-	{ "Proxy type", number, _T("0"), normal },
-	{ "Proxy host", string, _T(""), normal },
-	{ "Proxy port", number, _T("0"), normal },
-	{ "Proxy user", string, _T(""), normal },
-	{ "Proxy password", string, _T(""), normal },
-	{ "Logging file", string, _T(""), normal },
-	{ "Logging filesize limit", number, _T("10"), normal },
-	{ "Trusted root certificate", string, _T(""), internal },
-	{ "Size format", number, _T("0"), normal },
-	{ "Size thousands separator", number, _T("1"), normal },
-	{ "Size decimal places", number, _T("1"), normal },
+	{ "Socket send buffer size", number, _T("131072") },
+	{ "FTP Keep-alive commands", number, _T("0") },
+	{ "FTP Proxy type", number, _T("0") },
+	{ "FTP Proxy host", string, _T("") },
+	{ "FTP Proxy user", string, _T("") },
+	{ "FTP Proxy password", string, _T("") },
+	{ "FTP Proxy login sequence", string, _T("") },
+	{ "SFTP keyfiles", string, _T("") },
+	{ "Proxy type", number, _T("0") },
+	{ "Proxy host", string, _T("") },
+	{ "Proxy port", number, _T("0") },
+	{ "Proxy user", string, _T("") },
+	{ "Proxy password", string, _T("") },
+	{ "Logging file", string, _T("") },
+	{ "Logging filesize limit", number, _T("10") },
 
 	// Interface settings
-	{ "Number of Transfers", number, _T("2"), normal },
-	{ "Ascii Binary mode", number, _T("0"), normal },
-	{ "Auto Ascii files", string, _T("am|asp|bat|c|cfm|cgi|conf|cpp|css|dhtml|diz|h|hpp|htm|html|in|inc|js|jsp|m4|mak|md5|nfo|nsi|pas|patch|php|phtml|pl|po|py|qmail|sh|shtml|sql|svg|tcl|tpl|txt|vbs|xhtml|xml|xrc"), normal },
-	{ "Auto Ascii no extension", number, _T("1"), normal },
-	{ "Auto Ascii dotfiles", number, _T("1"), normal },
-	{ "Theme", string, _T("opencrystal/"), normal },
-	{ "Language Code", string, _T(""), normal },
-	{ "Last Server Path", string, _T(""), normal },
-	{ "Concurrent download limit", number, _T("0"), normal },
-	{ "Concurrent upload limit", number, _T("0"), normal },
-	{ "Update Check", number, _T("1"), normal },
-	{ "Update Check Interval", number, _T("7"), normal },
-	{ "Last automatic update check", string, _T(""), normal },
-	{ "Update Check New Version", string, _T(""), normal },
-	{ "Update Check Check Beta", number, _T("0"), normal },
-	{ "Update Check Download Dir", string, _T(""), normal },
-	{ "Show debug menu", number, _T("0"), normal },
-	{ "File exists action download", number, _T("0"), normal },
-	{ "File exists action upload", number, _T("0"), normal },
-	{ "Allow ascii resume", number, _T("0"), normal },
-	{ "Greeting version", string, _T(""), normal },
-	{ "Onetime Dialogs", string, _T(""), normal },
-	{ "Show Tree Local", number, _T("1"), normal },
-	{ "Show Tree Remote", number, _T("1"), normal },
-	{ "File Pane Layout", number, _T("0"), normal },
-	{ "File Pane Swap", number, _T("0"), normal },
-	{ "Last local directory", string, _T(""), normal },
-	{ "Filelist directory sort", number, _T("0"), normal },
-	{ "Queue successful autoclear", number, _T("0"), normal },
-	{ "Queue column widths", string, _T(""), normal },
-	{ "Local filelist colwidths", string, _T(""), normal },
-	{ "Remote filelist colwidths", string, _T(""), normal },
-	{ "Window position and size", string, _T(""), normal },
-	{ "Splitter positions (v2)", string, _T(""), normal },
-	{ "Local filelist sortorder", string, _T(""), normal },
-	{ "Remote filelist sortorder", string, _T(""), normal },
-	{ "Time Format", string, _T(""), normal },
-	{ "Date Format", string, _T(""), normal },
-	{ "Show message log", number, _T("1"), normal },
-	{ "Show queue", number, _T("1"), normal },
-	{ "Default editor", string, _T(""), normal },
-	{ "Always use default editor", number, _T("0"), normal },
-	{ "Inherit system associations", number, _T("1"), normal },
-	{ "Custom file associations", string, _T(""), normal },
-	{ "Comparison mode", number, _T("1"), normal },
-	{ "Comparison threshold", number, _T("1"), normal },
-	{ "Site Manager position", string, _T(""), normal },
-	{ "Theme icon size", string, _T(""), normal },
-	{ "Timestamp in message log", number, _T("0"), normal },
-	{ "Sitemanager last selected", string, _T(""), normal },
-	{ "Local filelist shown columns", string, _T(""), normal },
-	{ "Remote filelist shown columns", string, _T(""), normal },
-	{ "Local filelist column order", string, _T(""), normal },
-	{ "Remote filelist column order", string, _T(""), normal },
-	{ "Filelist status bar", number, _T("1"), normal },
-	{ "Filter toggle state", number, _T("0"), normal },
-	{ "Show quickconnect bar", number, _T("1"), normal },
-	{ "Messagelog position", number, _T("0"), normal },
-	{ "Last connected site", string, _T(""), normal },
-	{ "File doubleclock action", number, _T("0"), normal },
-	{ "Dir doubleclock action", number, _T("0"), normal },
-	{ "Minimize to tray", number, _T("0"), normal },
-	{ "Search column widths", string, _T(""), normal },
-	{ "Search column shown", string, _T(""), normal },
-	{ "Search column order", string, _T(""), normal },
-	{ "Search window size", string, _T(""), normal },
-	{ "Comparison hide identical", number, _T("0"), normal },
-	{ "Search sort order", string, _T(""), normal },
-	{ "Edit track local", number, _T("1"), normal },
-	{ "Prevent idle sleep", number, _T("1"), normal },
-	{ "Filteredit window size", string, _T(""), normal },
-	{ "Enable invalid char filter", number, _T("1"), normal },
-	{ "Invalid char replace", string, _T("_"), normal },
-	{ "Already connected choice", number, _T("0"), normal },	
-	{ "Edit status dialog size", string, _T(""), normal },
-	{ "Display current speed", number, _T("0"), normal },
-	{ "Toolbar hidden", number, _T("0"), normal },
+	{ "Number of Transfers", number, _T("2") },
+	{ "Ascii Binary mode", number, _T("0") },
+	{ "Auto Ascii files", string, _T("am|asp|bat|c|cfm|cgi|conf|cpp|css|dhtml|diz|h|hpp|htm|html|in|inc|js|jsp|m4|mak|nfo|nsi|pas|patch|php|phtml|pl|po|py|qmail|sh|shtml|sql|svg|tcl|tpl|txt|vbs|xhtml|xml|xrc") },
+	{ "Auto Ascii no extension", number, _T("1") },
+	{ "Auto Ascii dotfiles", number, _T("1") },
+	{ "Theme", string, _T("opencrystal/") },
+	{ "Language Code", string, _T("") },
+	{ "Last Server Path", string, _T("") },
+	{ "Concurrent download limit", number, _T("0") },
+	{ "Concurrent upload limit", number, _T("0") },
+	{ "Update Check", number, _T("1") },
+	{ "Update Check Interval", number, _T("7") },
+	{ "Last automatic update check", string, _T("") },
+	{ "Update Check New Version", string, _T("") },
+	{ "Update Check Check Beta", number, _T("0") },
+	{ "Show debug menu", number, _T("0") },
+	{ "File exists action download", number, _T("0") },
+	{ "File exists action upload", number, _T("0") },
+	{ "Allow ascii resume", number, _T("0") },
+	{ "Greeting version", string, _T("") },
+	{ "Onetime Dialogs", string, _T("") },
+	{ "Show Tree Local", number, _T("1") },
+	{ "Show Tree Remote", number, _T("1") },
+	{ "File Pane Layout", number, _T("0") },
+	{ "File Pane Swap", number, _T("0") },
+	{ "Last local directory", string, _T("") },
+	{ "Filelist directory sort", number, _T("0") },
+	{ "Queue successful autoclear", number, _T("0") },
+	{ "Queue column widths", string, _T("") },
+	{ "Local filelist colwidths", string, _T("") },
+	{ "Remote filelist colwidths", string, _T("") },
+	{ "Window position and size", string, _T("") },
+	{ "Splitter positions (v2)", string, _T("") },
+	{ "Local filelist sortorder", string, _T("") },
+	{ "Remote filelist sortorder", string, _T("") },
+	{ "Time Format", string, _T("") },
+	{ "Date Format", string, _T("") },
+	{ "Show message log", number, _T("1") },
+	{ "Show queue", number, _T("1") },
+	{ "Size format", number, _T("0") },
+	{ "Size thousands separator", number, _T("1") },
+	{ "Default editor", string, _T("") },
+	{ "Always use default editor", number, _T("0") },
+	{ "Inherit system associations", number, _T("1") },
+	{ "Custom file associations", string, _T("") },
+	{ "Comparison mode", number, _T("1") },
+	{ "Comparison threshold", number, _T("1") },
+	{ "Site Manager position", string, _T("") },
+	{ "Theme icon size", string, _T("") },
+	{ "Timestamp in message log", number, _T("0") },
+	{ "Sitemanager last selected", string, _T("") },
+	{ "Local filelist shown columns", string, _T("") },
+	{ "Remote filelist shown columns", string, _T("") },
+	{ "Local filelist column order", string, _T("") },
+	{ "Remote filelist column order", string, _T("") },
+	{ "Filelist status bar", number, _T("1") },
+	{ "Filter toggle state", number, _T("0") },
+	{ "Size decimal places", number, _T("0") },
+	{ "Show quickconnect bar", number, _T("1") },
+	{ "Messagelog position", number, _T("0") },
+	{ "Last connected site", string, _T("") },
+	{ "File doubleclock action", number, _T("0") },
+	{ "Dir doubleclock action", number, _T("0") }
+};
 
-	// Default/internal options
-	{ "Config Location", string, _T(""), default_only },
-	{ "Kiosk mode", number, _T("0"), default_only },
-	{ "Disable update check", number, _T("0"), default_only }
+struct t_default_option
+{
+	const wxChar name[30];
+	enum Type type;
+	wxString value_str;
+	int value_number;
+};
+
+static t_default_option default_options[DEFAULTS_NUM] =
+{
+	{ _T("Config Location"), string, _T(""), 0 },
+	{ _T("Kiosk mode"), number, _T(""), 0 },
+	{ _T("Disable update check"), number, _T(""), 0 }
 };
 
 BEGIN_EVENT_TABLE(COptions, wxEvtHandler)
@@ -187,22 +153,14 @@ END_EVENT_TABLE()
 
 COptions::COptions()
 {
-	m_theOptions = this;
-	m_pXmlFile = 0;
 	m_pLastServer = 0;
 
 	m_acquired = false;
 
-	SetDefaultValues();
+	for (unsigned int i = 0; i < OPTIONS_NUM; i++)
+		m_optionsCache[i].cached = false;
 
 	m_save_timer.SetOwner(this);
-
-	std::map<std::string, int> nameOptionMap;
-	GetNameOptionMap(nameOptionMap);
-
-	LoadGlobalDefaultOptions(nameOptionMap);
-
-	InitSettingsDir();
 
 	CInterProcessMutex mutex(MUTEX_OPTIONS);
 	m_pXmlFile = new CXmlFile(_T("filezilla"));
@@ -216,22 +174,11 @@ COptions::COptions()
 	else
 		CreateSettingsXmlElement();
 
-	LoadOptions(nameOptionMap);
-}
-
-void COptions::GetNameOptionMap(std::map<std::string, int>& nameOptionMap) const
-{
-	for (int i = 0; i < OPTIONS_NUM; ++i)
-	{
-		if (options[i].flags != internal)
-			nameOptionMap.insert(std::make_pair(std::string(options[i].name), i));
-	}
+	LoadGlobalDefaultOptions();
 }
 
 COptions::~COptions()
 {
-	COptionChangeEventHandler::UnregisterAll();
-
 	delete m_pLastServer;
 	delete m_pXmlFile;
 }
@@ -244,7 +191,23 @@ int COptions::GetOptionVal(unsigned int nID)
 	if (options[nID].type != number)
 		return 0;
 
-	return m_optionsCache[nID].numValue;
+	if (m_optionsCache[nID].cached)
+		return m_optionsCache[nID].numValue;
+
+	wxString value;
+	long numValue = 0;
+	if (!GetXmlValue(nID, value))
+		options[nID].defaultValue.ToLong(&numValue);
+	else
+	{
+		value.ToLong(&numValue);
+		numValue = Validate(nID, numValue);
+	}
+
+	m_optionsCache[nID].numValue = numValue;
+	m_optionsCache[nID].cached = true;
+
+	return numValue;
 }
 
 wxString COptions::GetOption(unsigned int nID)
@@ -255,7 +218,19 @@ wxString COptions::GetOption(unsigned int nID)
 	if (options[nID].type != string)
 		return wxString::Format(_T("%d"), GetOptionVal(nID));
 
-	return m_optionsCache[nID].strValue;
+	if (m_optionsCache[nID].cached)
+		return m_optionsCache[nID].strValue;
+
+	wxString value;
+	if (!GetXmlValue(nID, value))
+		value = options[nID].defaultValue;
+	else
+		Validate(nID, value);
+
+	m_optionsCache[nID].strValue = value;
+	m_optionsCache[nID].cached = true;
+
+	return value;
 }
 
 bool COptions::SetOption(unsigned int nID, int value)
@@ -268,23 +243,16 @@ bool COptions::SetOption(unsigned int nID, int value)
 
 	value = Validate(nID, value);
 
-	if (m_optionsCache[nID].numValue == value)
-	{
-		// Nothing to do
-		return true;
-	}
-
+	m_optionsCache[nID].cached = true;
 	m_optionsCache[nID].numValue = value;
 
-	if (m_pXmlFile && options[nID].flags == normal)
+	if (m_pXmlFile)
 	{
 		SetXmlValue(nID, wxString::Format(_T("%d"), value));
 
 		if (!m_save_timer.IsRunning())
 			m_save_timer.Start(15000, true);
 	}
-
-	COptionChangeEventHandler::DoNotify(nID);
 
 	return true;
 }
@@ -305,14 +273,10 @@ bool COptions::SetOption(unsigned int nID, wxString value)
 
 	Validate(nID, value);
 
-	if (m_optionsCache[nID].strValue == value)
-	{
-		// Nothing to do
-		return true;
-	}
+	m_optionsCache[nID].cached = true;
 	m_optionsCache[nID].strValue = value;
 
-	if (m_pXmlFile && options[nID].flags == normal)
+	if (m_pXmlFile)
 	{
 		SetXmlValue(nID, value);
 
@@ -320,7 +284,6 @@ bool COptions::SetOption(unsigned int nID, wxString value)
 			m_save_timer.Start(15000, true);
 	}
 
-	COptionChangeEventHandler::DoNotify(nID);
 
 	return true;
 }
@@ -334,19 +297,21 @@ void COptions::CreateSettingsXmlElement()
 	if (element->FirstChildElement("Settings"))
 		return;
 
-	TiXmlElement *settings = new TiXmlElement("Settings");
-	element->LinkEndChild(settings);
+	TiXmlElement settings("Settings");
+	element->InsertEndChild(settings);
 
 	for (int i = 0; i < OPTIONS_NUM; i++)
 	{
+		m_optionsCache[i].cached = true;
 		if (options[i].type == string)
-			SetXmlValue(i, m_optionsCache[i].strValue);
+			m_optionsCache[i].strValue = options[i].defaultValue;
 		else
 		{
-			wxString s(wxString::Format(_T("%d"), m_optionsCache[i].numValue));
-			SetXmlValue(i, s);
+			long numValue = 0;
+			options[i].defaultValue.ToLong(&numValue);
+			m_optionsCache[i].numValue = numValue;
 		}
-		
+		SetXmlValue(i, options[i].defaultValue);
 	}
 
 	m_pXmlFile->Save();
@@ -366,7 +331,7 @@ void COptions::SetXmlValue(unsigned int nID, wxString value)
 	TiXmlElement *settings = m_pXmlFile->GetElement()->FirstChildElement("Settings");
 	if (!settings)
 	{
-		TiXmlNode *node = m_pXmlFile->GetElement()->LinkEndChild(new TiXmlElement("Settings"));
+		TiXmlNode *node = m_pXmlFile->GetElement()->InsertEndChild(TiXmlElement("Settings"));
 		if (!node)
 		{
 			delete [] utf8;
@@ -394,23 +359,73 @@ void COptions::SetXmlValue(unsigned int nID, wxString value)
 			if (strcmp(attribute, options[nID].name))
 				continue;
 
-			//setting->RemoveAttribute("type");
+			setting->RemoveAttribute("type");
 			setting->Clear();
-			//setting->SetAttribute("type", (options[nID].type == string) ? "string" : "number");
-			setting->LinkEndChild(new TiXmlText(utf8));
+			setting->SetAttribute("type", (options[nID].type == string) ? "string" : "number");
+			setting->InsertEndChild(TiXmlText(utf8));
 
 			delete [] utf8;
 			return;
 		}
 	}
 	wxASSERT(options[nID].name[0]);
-	TiXmlElement *setting = new TiXmlElement("Setting");
-	setting->SetAttribute("name", options[nID].name);
-	//setting->SetAttribute("type", (options[nID].type == string) ? "string" : "number");
-	setting->LinkEndChild(new TiXmlText(utf8));
-	settings->LinkEndChild(setting);
+	TiXmlElement setting("Setting");
+	setting.SetAttribute("name", options[nID].name);
+	setting.SetAttribute("type", (options[nID].type == string) ? "string" : "number");
+	setting.InsertEndChild(TiXmlText(utf8));
+	settings->InsertEndChild(setting);
 
 	delete [] utf8;
+}
+
+bool COptions::GetXmlValue(unsigned int nID, wxString &value, TiXmlElement *settings /*=0*/)
+{
+	if (!settings)
+	{
+		if (!m_pXmlFile)
+			return false;
+
+		settings = m_pXmlFile->GetElement()->FirstChildElement("Settings");
+		if (!settings)
+		{
+			TiXmlNode *node = m_pXmlFile->GetElement()->InsertEndChild(TiXmlElement("Settings"));
+			if (!node)
+				return false;
+			settings = node->ToElement();
+			if (!settings)
+				return false;
+		}
+	}
+
+	TiXmlNode *node = 0;
+	while ((node = settings->IterateChildren("Setting", node)))
+	{
+		TiXmlElement *setting = node->ToElement();
+		if (!setting)
+			continue;
+
+		const char *attribute = setting->Attribute("name");
+		if (!attribute)
+			continue;
+		if (strcmp(attribute, options[nID].name))
+			continue;
+
+		TiXmlNode *text = setting->FirstChild();
+		if (!text)
+		{
+			value.clear();
+			return true;
+		}
+
+		if (!text->ToText())
+			return false;
+
+		value = ConvLocal(text->Value());
+
+		return true;
+	}
+
+	return false;
 }
 
 int COptions::Validate(unsigned int nID, int value)
@@ -479,21 +494,12 @@ int COptions::Validate(unsigned int nID, int value)
 		if (value < 0 || value > 3)
 			value = 0;
 		break;
-	case OPTION_SIZE_FORMAT:
-		if (value < 0 || value >= CSizeFormat::formats_count)
-			value = 0;
-		break;
 	}
 	return value;
 }
 
 wxString COptions::Validate(unsigned int nID, wxString value)
 {
-	if (nID == OPTION_INVALID_CHAR_REPLACE)
-	{
-		if (value.Len() > 1)
-			value = _T("_");
-	}
 	return value;
 }
 
@@ -533,7 +539,7 @@ void COptions::SetServer(wxString path, const CServer& server)
 			char *utf8 = ConvUTF8(sub);
 			if (!utf8)
 				return;
-			TiXmlNode *node = element->LinkEndChild(new TiXmlElement(utf8));
+			TiXmlNode *node = element->InsertEndChild(TiXmlElement(utf8));
 			delete [] utf8;
 			if (!node || !node->ToElement())
 				return;
@@ -543,7 +549,7 @@ void COptions::SetServer(wxString path, const CServer& server)
 
 	::SetServer(element, server);
 
-	if (GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+	if (GetDefaultVal(DEFAULT_KIOSKMODE) == 2)
 		return;
 	
 	CInterProcessMutex mutex(MUTEX_OPTIONS);
@@ -618,7 +624,7 @@ bool COptions::GetLastServer(CServer& server)
 void COptions::Init()
 {
 	if (!m_theOptions)
-		new COptions(); // It sets m_theOptions internally itself
+		m_theOptions = new COptions();
 }
 
 void COptions::Destroy()
@@ -637,80 +643,17 @@ COptions* COptions::Get()
 
 void COptions::Import(TiXmlElement* pElement)
 {
-	std::map<std::string, int> nameOptionMap;
-	GetNameOptionMap(nameOptionMap);
-	LoadOptions(nameOptionMap, pElement);
-	if (!m_save_timer.IsRunning())
-		m_save_timer.Start(15000, true);
-}
-
-void COptions::LoadOptions(const std::map<std::string, int>& nameOptionMap, TiXmlElement* settings /*=0*/)
-{
-	if (!settings)
+	for (int i = 0; i < OPTIONS_NUM; i++)
 	{
-		if (!m_pXmlFile)
-			return;
-
-		settings = m_pXmlFile->GetElement()->FirstChildElement("Settings");
-		if (!settings)
-		{
-			TiXmlNode *node = m_pXmlFile->GetElement()->LinkEndChild(new TiXmlElement("Settings"));
-			if (!node)
-				return;
-			settings = node->ToElement();
-			if (!settings)
-				return;
-		}
-	}
-
-	TiXmlNode *node = 0;
-	while ((node = settings->IterateChildren("Setting", node)))
-	{
-		TiXmlElement *setting = node->ToElement();
-		if (!setting)
-			continue;
-		LoadOptionFromElement(setting, nameOptionMap, false);
-	}
-}
-
-void COptions::LoadOptionFromElement(TiXmlElement* pOption, const std::map<std::string, int>& nameOptionMap, bool allowDefault)
-{
-	const char* name = pOption->Attribute("name");
-	if (!name)
-		return;
-
-	std::map<std::string, int>::const_iterator iter = nameOptionMap.find(name);
-	if (iter != nameOptionMap.end())
-	{
-		if (!allowDefault && options[iter->second].flags == default_only)
-			return;
-
 		wxString value;
+		if (!GetXmlValue(i, value, pElement))
+			continue;
 
-		TiXmlNode *text = pOption->FirstChild();
-		if (text) {
-			if (!text->ToText())
-				return;
-
-			value = ConvLocal(text->Value());
-		}
-
-		if (options[iter->second].type == number)
-		{
-			long numValue = 0;
-			value.ToLong(&numValue);
-			numValue = Validate(iter->second, numValue);
-			m_optionsCache[iter->second].numValue = numValue;
-		}
-		else
-		{
-			value = Validate(iter->second, value);
-			m_optionsCache[iter->second].strValue = value;
-		}
+		SetOption(i, value);
 	}
 }
 
-void COptions::LoadGlobalDefaultOptions(const std::map<std::string, int>& nameOptionMap)
+void COptions::LoadGlobalDefaultOptions()
 {
 	const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
 	if (defaultsDir == _T(""))
@@ -731,8 +674,41 @@ void COptions::LoadGlobalDefaultOptions(const std::map<std::string, int>& nameOp
 
 	for (TiXmlElement* pSetting = pElement->FirstChildElement("Setting"); pSetting; pSetting = pSetting->NextSiblingElement("Setting"))
 	{
-		LoadOptionFromElement(pSetting, nameOptionMap, true);
+		wxString name = GetTextAttribute(pSetting, "name");
+		for (int i = 0; i < DEFAULTS_NUM; i++)
+		{
+			if (name != default_options[i].name)
+				continue;
+
+			wxString value = GetTextElement(pSetting);
+			if (default_options[i].type == string)
+				default_options[i].value_str = value;
+			else
+			{
+				long v = 0;
+				if (!value.ToLong(&v))
+					v = 0;
+				default_options[i].value_number = v;
+			}
+
+		}
 	}
+}
+
+int COptions::GetDefaultVal(unsigned int nID) const
+{
+	if (nID >= DEFAULTS_NUM)
+		return 0;
+
+	return default_options[nID].value_number;
+}
+
+wxString COptions::GetDefault(unsigned int nID) const
+{
+	if (nID >= DEFAULTS_NUM)
+		return _T("");
+
+	return default_options[nID].value_str;
 }
 
 void COptions::OnTimer(wxTimerEvent& event)
@@ -742,7 +718,7 @@ void COptions::OnTimer(wxTimerEvent& event)
 
 void COptions::Save()
 {
-	if (GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+	if (GetDefaultVal(DEFAULT_KIOSKMODE) == 2)
 		return;
 
 	if (!m_pXmlFile)
@@ -759,77 +735,4 @@ void COptions::SaveIfNeeded()
 
 	m_save_timer.Stop();
 	Save();
-}
-
-void COptions::InitSettingsDir()
-{
-	wxFileName fn;
-
-	wxString dir(GetOption(OPTION_DEFAULT_SETTINGSDIR));
-	if (!dir.empty())
-	{
-		wxStringTokenizer tokenizer(dir, _T("/\\"), wxTOKEN_RET_EMPTY_ALL);
-		dir = _T("");
-		while (tokenizer.HasMoreTokens())
-		{
-			wxString token = tokenizer.GetNextToken();
-			if (token[0] == '$')
-			{
-				if (token[1] == '$')
-					token = token.Mid(1);
-				else
-				{
-					wxString value;
-					if (wxGetEnv(token.Mid(1), &value))
-						token = value;
-				}
-			}
-			dir += token;
-			const wxChar delimiter = tokenizer.GetLastDelimiter();
-			if (delimiter)
-				dir += delimiter;
-		}
-
-		fn = wxFileName(dir, _T(""));
-		fn.Normalize(wxPATH_NORM_ALL, wxGetApp().GetDefaultsDir());
-	}
-	else
-	{
-#ifdef __WXMSW__
-		wxChar buffer[MAX_PATH * 2 + 1];
-
-		if (SUCCEEDED(SHGetFolderPath(0, CSIDL_APPDATA, 0, SHGFP_TYPE_CURRENT, buffer)))
-		{
-			fn = wxFileName(buffer, _T(""));
-			fn.AppendDir(_T("FileZilla"));
-		}
-		else
-		{
-			// Fall back to directory where the executable is
-			if (GetModuleFileName(0, buffer, MAX_PATH * 2))
-				fn = buffer;
-		}
-#else
-		fn = wxFileName(wxGetHomeDir(), _T(""));
-		fn.AppendDir(_T(".filezilla"));
-#endif
-	}
-	if (!fn.DirExists())
-		wxMkdir(fn.GetPath(), 0700);
-	SetOption(OPTION_DEFAULT_SETTINGSDIR, fn.GetPath());
-}
-
-void COptions::SetDefaultValues()
-{
-	for (int i = 0; i < OPTIONS_NUM; ++i)
-	{
-		if (options[i].type == string)
-			m_optionsCache[i].strValue = options[i].defaultValue;
-		else
-		{
-			long numValue = 0;
-			options[i].defaultValue.ToLong(&numValue);
-			m_optionsCache[i].numValue = numValue;
-		}
-	}
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <resource version="2.3.0.1" xmlns="http://www.wxwindows.org/wxxrc">
-  <object class="wxMenuBar" name="ID_MENUBAR" subclass="CMenuBar">
+  <object class="wxMenuBar" name="ID_MENUBAR">
     <object class="wxMenu">
       <label>&amp;File</label>
       <object class="wxMenuItem" name="ID_MENU_FILE_SITEMANAGER">
@@ -10,17 +10,6 @@
       </object>
       <object class="wxMenuItem" name="ID_MENU_FILE_COPYSITEMANAGER">
         <label>&amp;Copy current connection to Site Manager...</label>
-      </object>
-      <object class="separator"/>
-      <object class="wxMenuItem" name="ID_MENU_FILE_NEWTAB">
-        <label>New &amp;tab</label>
-        <accel>CTRL+T</accel>
-        <help>Opens a new tab</help>
-      </object>
-      <object class="wxMenuItem" name="ID_MENU_FILE_CLOSETAB">
-        <label>Cl&amp;ose tab</label>
-        <accel>CTRL+W</accel>
-        <help>Closes current tab</help>
       </object>
       <object class="separator"/>
       <object class="wxMenuItem" name="ID_EXPORT">
@@ -81,11 +70,6 @@
         <object class="wxMenuItem" name="ID_COMPARE_DATE">
           <label>Compare &amp;modification time</label>
           <radio>1</radio>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="ID_COMPARE_HIDEIDENTICAL">
-          <label>&amp;Hide identical files</label>
-          <checkable>1</checkable>
         </object>
       </object>
       <object class="wxMenuItem" name="ID_TOOLBAR_SYNCHRONIZED_BROWSING">
@@ -148,17 +132,7 @@
       <object class="wxMenuItem" name="ID_MENU_TRANSFER_PRESERVETIMES">
         <label>&amp;Preserve timestamps of transferred files</label>
         <checkable>1</checkable>
-        <accel>CTRL+U</accel>
-      </object>
-      <object class="wxMenu">
-        <object class="wxMenuItem" name="ID_MENU_TRANSFER_SPEEDLIMITS_ENABLE">
-          <label>&amp;Enable</label>
-          <checkable>1</checkable>
-        </object>
-        <object class="wxMenuItem" name="ID_MENU_TRANSFER_SPEEDLIMITS_CONFIGURE">
-          <label>&amp;Configure...</label>
-        </object>
-        <label>&amp;Speed limits</label>
+        <accel>CTRL+T</accel>
       </object>
       <object class="separator"/>
       <object class="wxMenuItem" name="ID_MENU_TRANSFER_MANUAL">
@@ -181,11 +155,6 @@
         <accel>CTRL+D</accel>
       </object>
       <object class="separator"/>
-      <object class="wxMenuItem" name="ID_MENU_SERVER_SEARCH">
-        <label>&amp;Search remote files...</label>
-        <help>Search server for files</help>
-        <accel>F3</accel>
-      </object>
       <object class="wxMenuItem" name="ID_MENU_SERVER_CMD">
         <label>Enter &amp;custom command...</label>
         <help>Send custom command to the server otherwise not available</help>
@@ -214,9 +183,6 @@
         <help>Check for newer versions of FileZilla</help>
       </object>
       <object class="separator"/>
-      <object class="wxMenuItem" name="ID_MENU_HELP_WELCOME">
-        <label>Show &amp;welcome dialog...</label>
-      </object>
       <object class="wxMenuItem" name="ID_MENU_HELP_GETTINGHELP">
         <label>&amp;Getting help...</label>
       </object>
@@ -259,9 +225,6 @@
       <label>&amp;Create directory</label>
       <help>Create a new subdirectory in the current directory</help>
     </object>
-    <object class="wxMenuItem" name="ID_CONTEXT_REFRESH">
-      <label>Re&amp;fresh</label>
-    </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="ID_DELETE">
       <label>&amp;Delete</label>
@@ -295,9 +258,6 @@
       <label>&amp;Create directory</label>
       <help>Create a new subdirectory in the current directory</help>
     </object>
-    <object class="wxMenuItem" name="ID_CONTEXT_REFRESH">
-      <label>Re&amp;fresh</label>
-    </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="ID_DELETE">
       <label>D&amp;elete</label>
@@ -306,10 +266,6 @@
     <object class="wxMenuItem" name="ID_RENAME">
       <label>&amp;Rename</label>
       <help>Rename selected files and directories</help>
-    </object>
-    <object class="wxMenuItem" name="ID_GETURL">
-      <label>C&amp;opy URL(s) to clipboard</label>
-      <help>Copy the URLs of the selected items to clipboard.</help>
     </object>
     <object class="wxMenuItem" name="ID_CHMOD">
       <label>&amp;File permissions...</label>
@@ -467,10 +423,6 @@
       <label>&amp;Rename</label>
       <help>Rename selected directory</help>
     </object>
-    <object class="wxMenuItem" name="ID_GETURL">
-      <label>C&amp;opy URL(s) to clipboard</label>
-      <help>Copy the URLs of the selected items to clipboard.</help>
-    </object>
     <object class="wxMenuItem" name="ID_CHMOD">
       <label>&amp;File Attributes...</label>
       <help>Change the file permissions.</help>
@@ -491,11 +443,6 @@
       <label>Compare &amp;modification time</label>
       <radio>1</radio>
     </object>
-    <object class="separator"/>
-    <object class="wxMenuItem" name="ID_COMPARE_HIDEIDENTICAL">
-      <label>&amp;Hide identical files</label>
-      <checkable>1</checkable>
-    </object>
   </object>
   <object class="wxMenu" name="ID_MENU_LOCALTREE">
     <object class="wxMenuItem" name="ID_UPLOAD">
@@ -507,11 +454,6 @@
       <label>&amp;Add to queue</label>
       <bitmap stock_id="ART_UPLOADADD"/>
       <help>Add selected directory to the transfer queue</help>
-    </object>
-    <object class="separator"/>
-    <object class="wxMenuItem" name="ID_OPEN">
-      <label>&amp;Open</label>
-      <help>Open directory in system's file manager</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="ID_MKDIR">
@@ -545,39 +487,6 @@
     <object class="wxMenuItem" name="ID_MENU_TRANSFER_TYPE_BINARY">
       <label>&amp;Binary</label>
       <radio>1</radio>
-    </object>
-  </object>
-  <object class="wxMenu" name="ID_MENU_SEARCH">
-    <object class="wxMenuItem" name="ID_MENU_SEARCH_DOWNLOAD">
-      <label>&amp;Download...</label>
-    </object>
-    <object class="wxMenuItem" name="ID_MENU_SEARCH_DELETE">
-      <label>D&amp;elete</label>
-    </object>
-  </object>
-  <object class="wxMenu" name="ID_MENU_TABCONTEXT">
-    <object class="wxMenuItem" name="ID_TABCONTEXT_NEW">
-      <label>&amp;Create new tab</label>
-    </object>
-    <object class="separator"/>
-    <object class="wxMenuItem" name="ID_TABCONTEXT_CLOSE">
-      <label>Cl&amp;ose tab</label>
-    </object>
-    <object class="wxMenuItem" name="ID_TABCONTEXT_CLOSEOTHERS">
-      <label>Close &amp;all other tabs</label>
-    </object>
-    <object class="separator"/>
-    <object class="wxMenuItem" name="ID_TABCONTEXT_REFRESH">
-      <label>&amp;Refresh</label>
-    </object>
-  </object>
-  <object class="wxMenu" name="ID_MENU_SPEEDLIMITCONTEXT">
-    <object class="wxMenuItem" name="ID_SPEEDLIMITCONTEXT_ENABLE">
-      <label>&amp;Enable</label>
-      <checkable>1</checkable>
-    </object>
-    <object class="wxMenuItem" name="ID_SPEEDLIMITCONTEXT_CONFIGURE">
-      <label>&amp;Configure speed limits...</label>
     </object>
   </object>
 </resource>

@@ -18,8 +18,6 @@ public:
 
 	void EnablePrefixSearch(bool enable) { m_prefixSearch_enabled = enable; }
 
-	// Reducing item count does not reset the focused item
- 	// if using the generic list control. Work around it.
 	void SaveSetItemCount(long count);
 
 	void ShowColumnEditor();
@@ -31,7 +29,7 @@ public:
 	void MoveColumn(unsigned int col, unsigned int before);
 	
 	// Do not call after calling LoadColumnSettings
-	void AddColumn(const wxString& name, int align, int initialWidth, bool fixed = false);
+	void AddColumn(const wxString& name, int align, int initialWidth);
 	
 	// LoadColumnSettings needs to be called exactly once after adding
 	// all columns
@@ -42,9 +40,6 @@ public:
 
 	// Refresh list but not header
 	void RefreshListOnly(bool eraseBackground = true);
-
-	void CancelLabelEdit();
-	void SetLabelEditBlock(bool block);
 
 #ifndef __WXMSW__
 	wxScrolledWindow* GetMainWindow();
@@ -59,9 +54,11 @@ protected:
 	virtual wxString OnGetItemText(long item, long column) const;
 	void ResetSearchPrefix();
 
+#ifdef __WXMSW__
 	// Argument is visible column index
 	int GetHeaderIconIndex(int col);
 	void SetHeaderIconIndex(int col, int icon);
+#endif //__WXMSW__
 
 private:
 	// Keyboard prefix search
@@ -74,9 +71,6 @@ private:
 	void OnMouseWheel(wxMouseEvent& event);
 	void OnSelectionChanged(wxListEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
-	void OnBeginLabelEdit(wxListEvent& event);
-	void OnEndLabelEdit(wxListEvent& event);
-	void OnColumnDragging(wxListEvent& event);
 
 	bool m_prefixSearch_enabled;
 	wxDateTime m_prefixSearch_lastKeyPress;
@@ -87,9 +81,6 @@ private:
 
 	void CreateVisibleColumnMapping();
 
-	virtual bool OnBeginRename(const wxListEvent& event);
-	virtual bool OnAcceptRename(const wxListEvent& event);
-
 	struct t_columnInfo
 	{
 		wxString name;
@@ -97,29 +88,9 @@ private:
 		int width;
 		bool shown;
 		unsigned int order;
-		bool fixed;
 	};
 	std::vector<t_columnInfo> m_columnInfo;
 	unsigned int *m_pVisibleColumnMapping;
-
-#ifdef __WXMSW__
-	virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
-	bool m_columnDragging;
-#endif
-
-#ifndef __WXMSW__
-	bool m_editing;
-#endif
-	int m_blockedLabelEditing;
-};
-
-class CLabelEditBlocker
-{
-public:
-	CLabelEditBlocker(wxListCtrlEx& listCtrl);
-	virtual ~CLabelEditBlocker();
-private:
-	wxListCtrlEx& m_listCtrl;
 };
 
 #endif //__LISTCTRLEX_H__

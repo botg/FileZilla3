@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "timeex.h"
 
 wxDateTime CTimeEx::m_lastTime = wxDateTime::Now();
@@ -9,7 +9,7 @@ CTimeEx::CTimeEx()
 	m_offset = 0;
 }
 
-CTimeEx::CTimeEx(const wxDateTime& time)
+CTimeEx::CTimeEx(wxDateTime time)
 {
 	m_time = time;
 	m_offset = 0;

@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "local_path.h"
 #ifndef __WXMSW__
 #include <errno.h>
@@ -347,11 +347,8 @@ void CLocalPath::AddSegment(const wxString& segment)
 	wxASSERT(segment.Find(_T("\\")) == -1);
 #endif
 
-	if (!segment.empty())
-	{
-		m_path += segment;
-		m_path += path_separator;
-	}
+	m_path += segment;
+	m_path += path_separator;
 }
 
 bool CLocalPath::ChangePath(const wxString& path)
@@ -416,15 +413,12 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 	{
 		// UNC path
 
-		// \\server\share\ 
-
+		// \\x\y\ shortest complete share
+		//      ^ earliest possible position of backslash indicating complete share
 		size_t pos;
-
-		// Search for backslash separating server from share
-		for (pos = 3; pos < m_path.Len(); pos++)
+		for (pos = 5; pos < m_path.Len(); pos++)
 			if (m_path[pos] == '\\')
 				break;
-		pos++;
 		if (pos >= m_path.Len())
 		{
 			// Partial UNC path
@@ -499,20 +493,12 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 
 bool CLocalPath::operator==(const CLocalPath& op) const
 {
-#ifdef __WXMSW__
-	return m_path.CmpNoCase(op.m_path) == 0;
-#else
 	return m_path == op.m_path;
-#endif
 }
 
 bool CLocalPath::operator!=(const CLocalPath& op) const
 {
-#ifdef __WXMSW__
-	return m_path.CmpNoCase(op.m_path) != 0;
-#else
 	return m_path != op.m_path;
-#endif
 }
 
 bool CLocalPath::IsParentOf(const CLocalPath &path) const
@@ -523,13 +509,8 @@ bool CLocalPath::IsParentOf(const CLocalPath &path) const
 	if (path.m_path.Len() < m_path.Len())
 		return false;
 
-#ifdef __WXMSW__
-	if (m_path.CmpNoCase(path.m_path.Left(m_path.Len())))
-		return false;
-#else
 	if (m_path != path.m_path.Left(m_path.Len()))
 		return false;
-#endif
 
 	return true;
 }
@@ -542,13 +523,8 @@ bool CLocalPath::IsSubdirOf(const CLocalPath &path) const
 	if (path.m_path.Len() > m_path.Len())
 		return false;
 
-#ifdef __WXMSW__
-	if (path.m_path.CmpNoCase(m_path.Left(path.m_path.Len())))
-		return false;
-#else
 	if (path.m_path != m_path.Left(path.m_path.Len()))
 		return false;
-#endif
 
 	return true;
 }

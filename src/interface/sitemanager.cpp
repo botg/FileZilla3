@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "sitemanager.h"
 #include "Options.h"
 #include "xmlfunctions.h"
@@ -304,10 +304,10 @@ CSiteManager::~CSiteManager()
 	}
 }
 
-bool CSiteManager::Create(wxWindow* parent, std::vector<_connected_site> *connected_sites, const CServer* pServer /*=0*/)
+bool CSiteManager::Create(wxWindow* parent, const wxString& connected_site_path, const CServer* pServer /*=0*/)
 {
 	m_pSiteManagerMutex = new CInterProcessMutex(MUTEX_SITEMANAGERGLOBAL, false);
-	if (m_pSiteManagerMutex->TryLock() == 0)
+	if (!m_pSiteManagerMutex->TryLock())
 	{
 		int answer = wxMessageBox(_("The Site Manager is opened in another instance of FileZilla 3.\nDo you want to continue? Any changes made in the Site Manager won't be saved then."),
 								  _("Site Manager already open"), wxYES_NO | wxICON_QUESTION);
@@ -347,29 +347,6 @@ bool CSiteManager::Create(wxWindow* parent, std::vector<_connected_site> *connec
 	}
 	int margin = m_pNotebook_Site->GetSize().x - m_pNotebook_Site->GetPage(0)->GetSize().x;
 	m_pNotebook_Site->GetPage(0)->GetSizer()->SetMinSize(wxSize(width - margin, 0));
-#else
-	// Make pages at least wide enough to fit all tabs
-	int width = 10; // Guessed
-	wxClientDC dc(m_pNotebook_Site);
-	for (unsigned int i = 0; i < m_pNotebook_Site->GetPageCount(); i++)
-	{
-		wxCoord w, h;
-		dc.GetTextExtent(m_pNotebook_Site->GetPageText(i), &w, &h);
-		
-		width += w;
-#ifdef __WXMAC__
-		width += 20; // Guessed
-#else
-		width += 10;
-#endif
-	}
-	
-	wxSize page_min_size = m_pNotebook_Site->GetPage(0)->GetSizer()->GetMinSize();
-	if (page_min_size.x < width)
-	{
-		page_min_size.x = width;
-		m_pNotebook_Site->GetPage(0)->GetSizer()->SetMinSize(page_min_size);
-	}
 #endif
 
 	Layout();
@@ -398,9 +375,6 @@ bool CSiteManager::Create(wxWindow* parent, std::vector<_connected_site> *connec
 	XRCCTRL(*this, "ID_TRANSFERMODE_ACTIVE", wxRadioButton)->Update();
 	XRCCTRL(*this, "ID_TRANSFERMODE_PASSIVE", wxRadioButton)->Update();
 
-	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk())
-		pTree->SelectItem(m_ownSites);
 	SetCtrlState();
 
 	m_pWindowStateManager = new CWindowStateManager(this);
@@ -409,43 +383,31 @@ bool CSiteManager::Create(wxWindow* parent, std::vector<_connected_site> *connec
 	pTree->SetDropTarget(new CSiteManagerDropTarget(this));
 
 #ifdef __WXGTK__
-	{
-		CSiteManagerItemData* data = 0;
-		wxTreeItemId item = pTree->GetSelection();
-		if (item.IsOk())
-			data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
-		if (!data)
-			XRCCTRL(*this, "wxID_OK", wxButton)->SetFocus();
-	}
+	CSiteManagerItemData* data = 0;
+	wxTreeItemId item = pTree->GetSelection();
+	if (item.IsOk())
+		data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+	if (!data)
+		XRCCTRL(*this, "wxID_OK", wxButton)->SetFocus();
 #endif
-
-	m_connected_sites = connected_sites;
-	MarkConnectedSites();
 
 	if (pServer)
 		CopyAddServer(*pServer);
+	else
+		MarkConnectedSite(connected_site_path);
 
 	return true;
 }
 
-void CSiteManager::MarkConnectedSites()
+void CSiteManager::MarkConnectedSite(wxString connected_site_path)
 {
-	for (int i = 0; i < (int)m_connected_sites->size(); i++)
-		MarkConnectedSite(i);
-}
-
-void CSiteManager::MarkConnectedSite(int connected_site)
-{
-	wxString connected_site_path = (*m_connected_sites)[connected_site].old_path;
-
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
 		return;
 
 	if (connected_site_path.Left(1) == _T("1"))
 	{
-		// Default sites never change
-		(*m_connected_sites)[connected_site].new_path = (*m_connected_sites)[connected_site].old_path;
+		m_changed_bookmark_path = connected_site_path;
 		return;
 	}
 
@@ -480,8 +442,7 @@ void CSiteManager::MarkConnectedSite(int connected_site)
 		return;
 
 	CSiteManagerItemData_Site *site_data = reinterpret_cast<CSiteManagerItemData_Site* >(data);
-	wxASSERT(site_data->connected_item == -1);
-	site_data->connected_item = connected_site;
+	site_data->is_connected_item = true;
 }
 
 void CSiteManager::CreateControls(wxWindow* parent)
@@ -573,13 +534,12 @@ public:
 class CSiteManagerXmlHandler_Tree : public CSiteManagerXmlHandler
 {
 public:
-	CSiteManagerXmlHandler_Tree(wxTreeCtrl* pTree, wxTreeItemId root, const wxString& lastSelection, bool predefined)
-		: m_pTree(pTree), m_item(root), m_predefined(predefined)
+	CSiteManagerXmlHandler_Tree(wxTreeCtrl* pTree, wxTreeItemId root, const wxString& lastSelection)
+		: m_pTree(pTree), m_item(root)
 	{
 		if (!CSiteManager::UnescapeSitePath(lastSelection, m_lastSelection))
 			m_lastSelection.clear();
 		m_wrong_sel_depth = 0;
-		m_kiosk = COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE);
 	}
 
 	virtual ~CSiteManagerXmlHandler_Tree()
@@ -617,14 +577,6 @@ public:
 
 	virtual bool AddSite(CSiteManagerItemData_Site* data)
 	{
-		if (m_kiosk && !m_predefined &&
-			data->m_server.GetLogonType() == NORMAL)
-		{
-			// Clear saved password
-			data->m_server.SetLogonType(ASK);
-			data->m_server.SetUser(data->m_server.GetUser());
-		}
-
 		const wxString name(data->m_server.GetName());
 
 		wxTreeItemId newItem = m_pTree->AppendItem(m_item, name, 2, 2, data);
@@ -697,9 +649,6 @@ protected:
 	int m_wrong_sel_depth;
 
 	std::list<bool> m_expand;
-
-	bool m_predefined;
-	int m_kiosk;
 };
 
 bool CSiteManager::Load()
@@ -749,7 +698,7 @@ bool CSiteManager::Load()
 	}
 	else
 		lastSelection = _T("");
-	CSiteManagerXmlHandler_Tree handler(pTree, treeId, lastSelection, false);
+	CSiteManagerXmlHandler_Tree handler(pTree, treeId, lastSelection);
 
 	bool res = Load(pElement, &handler);
 
@@ -804,7 +753,7 @@ bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler
 
 					TiXmlText* localDir = handle.FirstChildElement("LocalDir").FirstChild().Text();
 					if (localDir)
-						data->m_localDir = GetTextElement(pBookmark, "LocalDir");
+						data->m_localDir = ConvLocal(localDir->Value());
 
 					TiXmlText* remoteDir = handle.FirstChildElement("RemoteDir").FirstChild().Text();
 					if (remoteDir)
@@ -815,9 +764,6 @@ bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler
 						delete data;
 						continue;
 					}
-
-					if (!data->m_localDir.empty() && !data->m_remoteDir.IsEmpty())
-						data->m_sync = GetTextElementBool(pBookmark, "SyncBrowsing", false);
 
 					pHandler->AddBookmark(name, data);
 				}
@@ -855,9 +801,6 @@ CSiteManagerItemData_Site* CSiteManager::ReadServerElement(TiXmlElement *pElemen
 	if (remoteDir)
 		data->m_remoteDir.SetSafePath(ConvLocal(remoteDir->Value()));
 
-	if (!data->m_localDir.empty() && !data->m_remoteDir.IsEmpty())
-		data->m_sync = GetTextElementBool(pElement, "SyncBrowsing", false);
-
 	return data;
 }
 
@@ -876,7 +819,7 @@ bool CSiteManager::Save(TiXmlElement *pElement /*=0*/, wxTreeItemId treeId /*=wx
 		// to the same file or one is reading while the other one writes.
 		CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
-		wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("sitemanager.xml"));
+		wxFileName file(wxGetApp().GetSettingsDir(), _T("sitemanager.xml"));
 		CXmlFile xml(file);
 
 		TiXmlElement* pDocument = xml.Load();
@@ -894,7 +837,7 @@ bool CSiteManager::Save(TiXmlElement *pElement /*=0*/, wxTreeItemId treeId /*=wx
 			pDocument->RemoveChild(pServers);
 			pServers = pDocument->FirstChildElement("Servers");
 		}
-		pElement = pDocument->LinkEndChild(new TiXmlElement("Servers"))->ToElement();
+		pElement = pDocument->InsertEndChild(TiXmlElement("Servers"))->ToElement();
 
 		if (!pElement)
 			return true;
@@ -904,8 +847,6 @@ bool CSiteManager::Save(TiXmlElement *pElement /*=0*/, wxTreeItemId treeId /*=wx
 		wxString error;
 		if (!xml.Save(&error))
 		{
-			if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
-				return res;
 			wxString msg = wxString::Format(_("Could not write \"%s\", any changes to the Site Manager could not be saved: %s"), file.GetFullPath().c_str(), error.c_str());
 			wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
 		}
@@ -938,18 +879,18 @@ bool CSiteManager::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 	CSiteManagerItemData* data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(child));
 	if (!data)
 	{
-		TiXmlNode* pNode = pElement->LinkEndChild(new TiXmlElement("Folder"));
+		TiXmlNode* pNode = pElement->InsertEndChild(TiXmlElement("Folder"));
 		const bool expanded = pTree->IsExpanded(child);
 		SetTextAttribute(pNode->ToElement(), "expanded", expanded ? _T("1") : _T("0"));
 
-		pNode->LinkEndChild(new TiXmlText(utf8));
+		pNode->InsertEndChild(TiXmlText(utf8));
 
 		Save(pNode->ToElement(), child);
 	}
 	else if (data->m_type == CSiteManagerItemData::SITE)
 	{
 		CSiteManagerItemData_Site *site_data = reinterpret_cast<CSiteManagerItemData_Site* >(data);
-		TiXmlElement* pNode = pElement->LinkEndChild(new TiXmlElement("Server"))->ToElement();
+		TiXmlElement* pNode = pElement->InsertEndChild(TiXmlElement("Server"))->ToElement();
 		SetServer(pNode, site_data->m_server);
 
 		// Save comments
@@ -961,24 +902,19 @@ bool CSiteManager::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 		// Save remote dir
 		AddTextElement(pNode, "RemoteDir", data->m_remoteDir.GetSafePath());
 
-		AddTextElementRaw(pNode, "SyncBrowsing", data->m_sync ? "1" : "0");
-
-		pNode->LinkEndChild(new TiXmlText(utf8));
+		pNode->InsertEndChild(TiXmlText(utf8));
 
 		Save(pNode, child);
 
-		if (site_data->connected_item != -1)
+		if (site_data->is_connected_item)
 		{
-			if ((*m_connected_sites)[site_data->connected_item].server == site_data->m_server)
-			{
-				(*m_connected_sites)[site_data->connected_item].new_path = GetSitePath(child);
-				(*m_connected_sites)[site_data->connected_item].server = site_data->m_server;
-			}
+			m_changed_bookmark_path = GetSitePath(child);
+			m_changed_bookmark_server = site_data->m_server;
 		}
 	}
 	else
 	{
-		TiXmlElement* pNode = pElement->LinkEndChild(new TiXmlElement("Bookmark"))->ToElement();
+		TiXmlElement* pNode = pElement->InsertEndChild(TiXmlElement("Bookmark"))->ToElement();
 
 		AddTextElement(pNode, "Name", name);
 
@@ -987,8 +923,6 @@ bool CSiteManager::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 		
 		// Save remote dir
 		AddTextElement(pNode, "RemoteDir", data->m_remoteDir.GetSafePath());
-
-		AddTextElementRaw(pNode, "SyncBrowsing", data->m_sync ? "1" : "0");
 	}
 	
 	delete [] utf8;
@@ -1042,7 +976,7 @@ bool CSiteManager::Verify()
 		if (host == _T(""))
 		{
 			XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
-			wxMessageBox(_("You have to enter a hostname."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this); 
+			wxMessageBox(_("You have to enter a hostname."));
 			return false;
 		}
 
@@ -1054,16 +988,15 @@ bool CSiteManager::Verify()
 			logon_type == ACCOUNT)
 		{
 			XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetFocus();
-			wxMessageBox(_("'Account' logontype not supported by selected protocol"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+			wxMessageBox(_("'Account' logontype not supported by selected protocol"));
 			return false;
 		}
 
-		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 0 &&
-			!IsPredefinedItem(item) &&
+		if (COptions::Get()->GetDefaultVal(DEFAULT_KIOSKMODE) != 0 &&
 			(logon_type == ACCOUNT || logon_type == NORMAL))
 		{
 			XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetFocus();
-			wxMessageBox(_("FileZilla is running in kiosk mode.\n'Normal' and 'Account' logontypes are not available in this mode."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+			wxMessageBox(_("FileZilla is running in kiosk mode.\n'Normal' and 'Account' logontypes are not available in this mode."));
 			return false;
 		}
 
@@ -1074,13 +1007,14 @@ bool CSiteManager::Verify()
 		if (protocol != UNKNOWN)
 			server.SetProtocol(protocol);
 
-		wxString port = XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue();
+		unsigned long port;
+		XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue().ToULong(&port);
 		CServerPath path;
 		wxString error;
 		if (!server.ParseUrl(host, port, _T(""), _T(""), error, path))
 		{
 			XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
-			wxMessageBox(error, _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+			wxMessageBox(error);
 			return false;
 		}
 
@@ -1097,7 +1031,7 @@ bool CSiteManager::Verify()
 			if (XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->GetValue() == _T(""))
 			{
 				XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->SetFocus();
-				wxMessageBox(_("Need to specify a character encoding"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				wxMessageBox(_("Need to specify a character encoding"));
 				return false;
 			}
 		}
@@ -1110,7 +1044,7 @@ bool CSiteManager::Verify()
 			user == _T(""))
 		{
 			XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetFocus();
-			wxMessageBox(_("You have to specify a user name"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+			wxMessageBox(_("You have to specify a user name"));
 			return false;
 		}
 
@@ -1129,7 +1063,7 @@ bool CSiteManager::Verify()
 			if (space_only)
 			{
 				XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetFocus();
-				wxMessageBox(_("Username cannot be a series of spaces"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				wxMessageBox(_("Username cannot be a series of spaces"));
 				return false;
 			}
 		}
@@ -1139,32 +1073,19 @@ bool CSiteManager::Verify()
 			XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->GetValue() == _T(""))
 		{
 			XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->SetFocus();
-			wxMessageBox(_("You have to enter an account name"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+			wxMessageBox(_("You have to enter an account name"));
 			return false;
 		}
 
 		const wxString remotePathRaw = XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->GetValue();
 		if (remotePathRaw != _T(""))
 		{
-			const wxString serverType = XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->GetStringSelection();
-
 			CServerPath remotePath;
-			remotePath.SetType(CServer::GetServerTypeFromName(serverType));
+			remotePath.SetType(server.GetType());
 			if (!remotePath.SetPath(remotePathRaw))
 			{
 				XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->SetFocus();
-				wxMessageBox(_("Default remote path cannot be parsed. Make sure it is a valid absolute path for the selected server type."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
-				return false;
-			}
-		}
-
-		const wxString localPath = XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->GetValue();
-		if (XRCCTRL(*this, "ID_SYNC", wxCheckBox)->GetValue())
-		{
-			if (remotePathRaw.empty() || localPath.empty())
-			{
-				XRCCTRL(*this, "ID_SYNC", wxCheckBox)->SetFocus();
-				wxMessageBox(_("You need to enter both a local and a remote path to enable synchronized browsing for this site."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				wxMessageBox(_("Default remote path cannot be parsed. Make sure it is valid and is supported by the selected servertype."));
 				return false;
 			}
 		}
@@ -1189,7 +1110,7 @@ bool CSiteManager::Verify()
 					msg = wxString::Format(_("Remote path cannot be parsed. Make sure it is a valid absolute path and is supported by the servertype (%s) selected on the parent site."), CServer::GetNameFromServerType(pServer->m_server.GetType()).c_str());
 				else
 					msg = _("Remote path cannot be parsed. Make sure it is a valid absolute path.");
-				wxMessageBox(msg, _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				wxMessageBox(msg);
 				return false;
 			}
 		}
@@ -1199,18 +1120,8 @@ bool CSiteManager::Verify()
 		if (remotePathRaw.empty() && localPath.empty())
 		{
 			XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->SetFocus();
-			wxMessageBox(_("You need to enter at least one path, empty bookmarks are not supported."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+			wxMessageBox(_("You need to enter at least one path, empty bookmarks are not supported."));
 			return false;
-		}
-
-		if (XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->GetValue())
-		{
-			if (remotePathRaw.empty() || localPath.empty())
-			{
-				XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->SetFocus();
-				wxMessageBox(_("You need to enter both a local and a remote path to enable synchronized browsing for this bookmark."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
-				return false;
-			}
 		}
 	}
 
@@ -1428,7 +1339,6 @@ bool CSiteManager::UpdateBookmark(CSiteManagerItemData &bookmark, const CServer&
 	bookmark.m_remoteDir = CServerPath();
 	bookmark.m_remoteDir.SetType(server.GetType());
 	bookmark.m_remoteDir.SetPath(XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->GetValue());
-	bookmark.m_sync = XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->GetValue();
 
 	return true;
 }
@@ -1469,8 +1379,6 @@ bool CSiteManager::UpdateServer(CSiteManagerItemData_Site &server, const wxStrin
 	server.m_remoteDir = CServerPath();
 	server.m_remoteDir.SetType(server.m_server.GetType());
 	server.m_remoteDir.SetPath(XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->GetValue());
-	server.m_sync = XRCCTRL(*this, "ID_SYNC", wxCheckBox)->GetValue();
-
 	int hours, minutes;
 	hours = XRCCTRL(*this, "ID_TIMEZONE_HOURS", wxSpinCtrl)->GetValue();
 	minutes = XRCCTRL(*this, "ID_TIMEZONE_MINUTES", wxSpinCtrl)->GetValue();
@@ -1535,10 +1443,6 @@ bool CSiteManager::GetServer(CSiteManagerItemData_Site& data)
 			data.m_localDir = pData->m_localDir;
 		if (!pData->m_remoteDir.IsEmpty())
 			data.m_remoteDir = pData->m_remoteDir;
-		if (data.m_localDir.empty() || data.m_remoteDir.IsEmpty())
-			data.m_sync = false;
-		else
-			data.m_sync = pData->m_sync;
 	}
 	else
 		data = *(CSiteManagerItemData_Site *)pData;
@@ -1639,7 +1543,6 @@ void CSiteManager::SetCtrlState()
 		XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetSelection(0);
 		XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->SetValue(_T(""));
 		XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->SetValue(_T(""));
-		XRCCTRL(*this, "ID_SYNC", wxCheckBox)->SetValue(false);
 		XRCCTRL(*this, "ID_TIMEZONE_HOURS", wxSpinCtrl)->SetValue(0);
 		XRCCTRL(*this, "ID_TIMEZONE_MINUTES", wxSpinCtrl)->SetValue(0);
 
@@ -1708,8 +1611,6 @@ void CSiteManager::SetCtrlState()
 		XRCCTRL(*this, "ID_LOCALDIR", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->SetValue(site_data->m_remoteDir.GetPath());
 		XRCCTRL(*this, "ID_REMOTEDIR", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_SYNC", wxCheckBox)->Enable(!predefined);
-		XRCCTRL(*this, "ID_SYNC", wxCheckBox)->SetValue(site_data->m_sync);
 		XRCCTRL(*this, "ID_TIMEZONE_HOURS", wxSpinCtrl)->SetValue(site_data->m_server.GetTimezoneOffset() / 60);
 		XRCCTRL(*this, "ID_TIMEZONE_HOURS", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_TIMEZONE_MINUTES", wxSpinCtrl)->SetValue(site_data->m_server.GetTimezoneOffset() % 60);
@@ -1781,9 +1682,6 @@ void CSiteManager::SetCtrlState()
 		XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->SetValue(data->m_remoteDir.GetPath());
 		XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxWindow)->Enable(!predefined);
-
-		XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->Enable(true);
-		XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->SetValue(data->m_sync);
 	}
 #ifdef __WXGTK__
 	if (pFocus && !pFocus->IsEnabled())
@@ -1867,7 +1765,7 @@ void CSiteManager::OnCopySite(wxCommandEvent& event)
 	if (data->m_type == CSiteManagerItemData::SITE)
 	{
 		CSiteManagerItemData_Site* newData = new CSiteManagerItemData_Site(*(CSiteManagerItemData_Site *)data);
-		newData->connected_item = -1;
+		newData->is_connected_item = false;
 		newItem = pTree->AppendItem(parent, newName, 2, 2, newData);
 
 		wxTreeItemIdValue cookie;
@@ -1929,7 +1827,7 @@ bool CSiteManager::LoadDefaultSites()
 	}
 	else
 		lastSelection = _T("");
-	CSiteManagerXmlHandler_Tree handler(pTree, m_predefinedSites, lastSelection, true);
+	CSiteManagerXmlHandler_Tree handler(pTree, m_predefinedSites, lastSelection);
 
 	Load(pElement, &handler);
 
@@ -2342,7 +2240,7 @@ bool CSiteManager::MoveItems(wxTreeItemId source, wxTreeItemId target, bool copy
 		else if (data->m_type == CSiteManagerItemData::SITE)
 		{
 			CSiteManagerItemData_Site* newData = new CSiteManagerItemData_Site(*(CSiteManagerItemData_Site *)data);
-			newData->connected_item = -1;
+			newData->is_connected_item = false;
 			pTree->SetItemData(newItem, newData);
 		}
 		else
@@ -2451,7 +2349,7 @@ void CSiteManager::AddNewSite(wxTreeItemId parent, const CServer& server, bool c
 
 	CSiteManagerItemData_Site* pData = new CSiteManagerItemData_Site(server);
 	if (connected)
-		pData->connected_item = 0;
+		pData->is_connected_item = true;
 
 	wxTreeItemId newItem = pTree->AppendItem(parent, name, 2, 2, pData);
 	pTree->SortChildren(parent);
@@ -2647,12 +2545,6 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 		TiXmlText* remoteDir = handle.FirstChildElement("RemoteDir").FirstChild().Text();
 		if (remoteDir)
 			remotePath.SetSafePath(ConvLocal(remoteDir->Value()));
-		if (!localPath.empty() && !remotePath.IsEmpty())
-		{
-			data->m_sync = GetTextElementBool(pBookmark, "SyncBrowsing", false);
-		}
-		else
-			data->m_sync = false;
 
 		data->m_localDir = localPath;
 		data->m_remoteDir = remotePath;
@@ -2687,7 +2579,7 @@ void CSiteManager::OnExportSelected(wxCommandEvent& event)
 
 	TiXmlElement* exportRoot = xml.CreateEmpty();
 
-	TiXmlElement* pServers = exportRoot->LinkEndChild(new TiXmlElement("Servers"))->ToElement();
+	TiXmlElement* pServers = exportRoot->InsertEndChild(TiXmlElement("Servers"))->ToElement();
 	SaveChild(pServers, m_contextMenuItem);
 
 	wxString error;
@@ -2912,22 +2804,19 @@ wxString CSiteManager::AddServer(CServer server)
 
 	server.SetName(name);
 
-	TiXmlElement* pServer = pElement->LinkEndChild(new TiXmlElement("Server"))->ToElement();
+	TiXmlElement* pServer = pElement->InsertEndChild(TiXmlElement("Server"))->ToElement();
 	SetServer(pServer, server);
 
 	char* utf8 = ConvUTF8(name);
 	if (utf8)
 	{
-		pServer->LinkEndChild(new TiXmlText(utf8));
+		pServer->InsertEndChild(TiXmlText(utf8));
 		delete [] utf8;
 	}
 
 	wxString error;
 	if (!file.Save(&error))
 	{
-		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
-			return _T("");
-
 		wxString msg = wxString::Format(_("Could not write \"%s\", any changes to the Site Manager could not be saved: %s"), file.GetFileName().GetFullPath().c_str(), error.c_str());
 		wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
 		return _T("");
@@ -2972,7 +2861,7 @@ TiXmlElement* CSiteManager::GetElementByPath(TiXmlElement* pNode, std::list<wxSt
 	return pNode;
 }
 
-bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync)
+bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir)
 {
 	if (local_dir.empty() && remote_dir.IsEmpty())
 		return false;
@@ -3018,7 +2907,6 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 	}
 
 	// Bookmarks
-	TiXmlElement *pInsertBefore = 0;
 	TiXmlElement* pBookmark;
 	for (pBookmark = pChild->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark"))
 	{
@@ -3033,28 +2921,18 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 			wxMessageBox(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);
 			return false;
 		}
-		if (name < old_name && !pInsertBefore)
-			pInsertBefore = pBookmark;
 	}
 
-	if (pInsertBefore)
-		pBookmark = pChild->InsertBeforeChild(pInsertBefore, TiXmlElement("Bookmark"))->ToElement();
-	else
-		pBookmark = pChild->LinkEndChild(new TiXmlElement("Bookmark"))->ToElement();
+	pBookmark = pChild->InsertEndChild(TiXmlElement("Bookmark"))->ToElement();
 	AddTextElement(pBookmark, "Name", name);
 	if (!local_dir.empty())
 		AddTextElement(pBookmark, "LocalDir", local_dir);
 	if (!remote_dir.IsEmpty())
 		AddTextElement(pBookmark, "RemoteDir", remote_dir.GetSafePath());
-	if (sync)
-		AddTextElementRaw(pBookmark, "SyncBrowsing", "1");
 
 	wxString error;
 	if (!file.Save(&error))
 	{
-		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
-			return true;
-
 		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), file.GetFileName().GetFullPath().c_str(), error.c_str());
 		wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
@@ -3114,12 +2992,17 @@ bool CSiteManager::ClearBookmarks(wxString sitePath)
 	wxString error;
 	if (!file.Save(&error))
 	{
-		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
-			return true;
-
 		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), file.GetFileName().GetFullPath().c_str(), error.c_str());
 		wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 
 	return true;
+}
+
+wxString CSiteManager::GetChangedBookmarkPath(const CServer* pServer)
+{
+	if (pServer && m_changed_bookmark_server != *pServer)
+		return wxEmptyString;
+	
+	return m_changed_bookmark_path;
 }

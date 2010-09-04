@@ -17,6 +17,7 @@ public:
 	virtual int OnExit();
 
 	wxString GetResourceDir() const { return m_resourceDir; }
+	wxString GetSettingsDir() const { return m_settingsDir; }
 	wxString GetDefaultsDir() const { return m_defaultsDir; }
 	wxString GetLocalesDir() const { return m_localesDir; }
 
@@ -34,6 +35,8 @@ public:
 
 protected:
 	bool InitDefaultsDir();
+	bool InitSettingsDir();
+	wxString GetSettingsDirFromDefaults();
 	bool LoadResourceFiles();
 	bool LoadLocales();
 	int ProcessCommandLine();
@@ -42,6 +45,7 @@ protected:
 
 	wxString m_resourceDir;
 	wxString m_defaultsDir;
+	wxString m_settingsDir;
 	wxString m_localesDir;
 
 #if wxUSE_DEBUGREPORT && wxUSE_ON_FATAL_EXCEPTION

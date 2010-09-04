@@ -22,14 +22,9 @@ enum t_statechange_notifications
 	STATECHANGE_REMOTE_IDLE,
 	STATECHANGE_SERVER,
 
+	STATECHANGE_QUEUEPROCESSING,
 	STATECHANGE_SYNC_BROWSE,
 	STATECHANGE_COMPARISON,
-
-	/* Global notifications */
-	STATECHANGE_QUEUEPROCESSING,
-	STATECHANGE_NEWCONTEXT, /* New context created */
-	STATECHANGE_CHANGEDCONTEXT, /* Currently active context changed */
-	STATECHANGE_REMOVECONTEXT, /* Right before deleting a context */
 
 	STATECHANGE_MAX
 };
@@ -53,25 +48,14 @@ public:
 	void RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool current_only, bool blockable);
 	void UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification);
 
-	size_t HandlerCount(enum t_statechange_notifications notification) const;
-
 	CState* CreateState(CMainFrame* pMainFrame);
 	void DestroyState(CState* pState);
-	void DestroyAllStates();
 
 	CState* GetCurrentContext();
 	const std::vector<CState*>* GetAllStates() { return &m_contexts; }
 
 	static CContextManager* Get();
-
-	void NotifyAllHandlers(enum t_statechange_notifications notification, const wxString& data = _T(""), const void* data2 = 0);
-	void NotifyGlobalHandlers(enum t_statechange_notifications notification, const wxString& data = _T(""), const void* data2 = 0);
-
-	void SetCurrentContext(CState* pState);
-
 protected:
-	CContextManager();
-
 	std::vector<CState*> m_contexts;
 	int m_current_context;
 
@@ -84,8 +68,6 @@ protected:
 	std::list<t_handler> m_handlers[STATECHANGE_MAX];
 
 	void NotifyHandlers(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2, bool blocked);
-
-	static CContextManager m_the_context_manager;
 };
 
 class CState
@@ -104,8 +86,7 @@ public:
 	// Returns a file:// URL
 	static wxString GetAsURL(const wxString& dir);
 
-	bool Connect(const CServer& server, const CServerPath& path = CServerPath());
-	bool Disconnect();
+	bool Connect(const CServer& server, bool askBreak, const CServerPath& path = CServerPath());
 
 	bool ChangeRemoteDir(const CServerPath& path, const wxString& subdir = _T(""), int flags = 0, bool ignore_busy = false);
 	bool SetRemoteDir(const CDirectoryListing *m_pDirectoryListing, bool modified = false);
@@ -113,13 +94,10 @@ public:
 	const CServerPath GetRemotePath() const;
 
 	const CServer* GetServer() const;
-	wxString GetTitle() const;
 
 	void RefreshLocal();
 	void RefreshLocalFile(wxString file);
 	void LocalDirCreated(const CLocalPath& path);
-
-	bool RefreshRemote();
 
 	void RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool blockable = true);
 	void UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification);
@@ -154,15 +132,6 @@ public:
 	bool SetSyncBrowse(bool enable, const CServerPath& assumed_remote_root = CServerPath());
 	bool GetSyncBrowse() const { return !m_sync_browse.local_root.empty(); }
 
-	CServer GetLastServer() const { return m_last_server; }
-	CServerPath GetLastServerPath() const { return m_last_path; }
-	void SetLastServer(const CServer& server, const CServerPath& path)
-	{ m_last_server = server; m_last_path = path; }
-
-	bool GetSecurityInfo(CCertificateNotification *& pInfo);
-	bool GetSecurityInfo(CSftpEncryptionNotification *& pInfo);
-	void SetSecurityInfo(CCertificateNotification const& info);
-	void SetSecurityInfo(CSftpEncryptionNotification const& info);
 protected:
 	void SetServer(const CServer* server);
 
@@ -170,11 +139,7 @@ protected:
 	CSharedPointer<const CDirectoryListing> m_pDirectoryListing;
 
 	CServer* m_pServer;
-	wxString m_title;
 	bool m_successful_connect;
-
-	CServer m_last_server;
-	CServerPath m_last_path;
 
 	CMainFrame* m_pMainFrame;
 
@@ -200,9 +165,6 @@ protected:
 		bool is_changing;
 		bool compare;
 	} m_sync_browse;
-
-	CCertificateNotification* m_pCertificate;
-	CSftpEncryptionNotification* m_pSftpEncryptionInfo;
 };
 
 class CStateEventHandler

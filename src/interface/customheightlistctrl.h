@@ -2,7 +2,6 @@
 #define __CUSTOMHIGHTLISTCTRL_H__
 
 #include <set>
-#include <wx/scrolwin.h>
 
 class wxCustomHeightListCtrl : public wxScrolledWindow
 {

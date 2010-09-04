@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <resource version="2.3.0.1" xmlns="http://www.wxwindows.org/wxxrc">
-  <object class="wxToolBar" name="ID_TOOLBAR" subclass="CToolBar">
+  <object class="wxToolBar" name="ID_TOOLBAR">
     <style>wxTB_FLAT|wxTB_DOCKABLE|wxTB_HORIZONTAL</style>
     <bitmapsize>16,16</bitmapsize>
     <object class="separator" platform="win"/>
@@ -71,7 +71,7 @@
     <object class="tool" name="ID_TOOLBAR_COMPARISON">
       <bitmap stock_id="ART_COMPARE"></bitmap>
       <toggle>1</toggle>
-      <tooltip>Toggle directory comparison. Right-click to change comparison mode.\n\nColors:\nYellow: File only exists on one side\nGreen: File is newer than the unmarked file on other side\nRed: File sizes different</tooltip>
+      <tooltip>Toggle directory comparison. Right-click to change comparison mode.\n\nColors:\nYellow: File only exists on one side\nGreen: File is newer than the unmarked file on other side\nRed: Filesizes different</tooltip>
       <longhelp>Directory comparison</longhelp>
     </object>
     <object class="tool" name="ID_TOOLBAR_SYNCHRONIZED_BROWSING">

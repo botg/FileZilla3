@@ -12,7 +12,7 @@
   #include <winsock2.h>
   #include <ws2tcpip.h>
 #endif
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "socket.h"
 #include "threadex.h"
 #include <errno.h>
@@ -33,16 +33,6 @@
 #if !defined(EAI_ADDRFAMILY) && defined(EAI_FAMILY)
   #define EAI_ADDRFAMILY EAI_FAMILY
 #endif
-
-// Union for strict aliasing-safe casting between
-// the different address types
-union sockaddr_u
-{
-	struct sockaddr_storage storage;
-	struct sockaddr sockaddr;
-	struct sockaddr_in in4;
-	struct sockaddr_in6 in6;
-};
 
 // --------------------------
 // Windows 2000 compatibility
@@ -614,7 +604,7 @@ protected:
 
 		struct addrinfo *addressList = 0;
 		struct addrinfo hints = {0};
-		hints.ai_family = m_pSocket->m_family;
+		hints.ai_family = AF_UNSPEC;
 		hints.ai_socktype = SOCK_STREAM;
 
 #ifdef __WXMSW__
@@ -685,17 +675,6 @@ protected:
 				freeaddrinfo(addressList);
 			if (m_pSocket)
 				m_pSocket->m_state = CSocket::closed;
-			return false;
-		}
-
-		// If state isn't connecting, Close() was called.
-		// If m_pHost is set, Close() was called and Connect()
-		// afterwards, state is back at connecting.
-		// In either case, we need to abort this connection attempt.
-		if (m_pSocket->m_state != CSocket::connecting || m_pHost)
-		{
-			if (!res && addressList)
-				freeaddrinfo(addressList);
 			return false;
 		}
 
@@ -1090,7 +1069,6 @@ CSocket::CSocket(CSocketEventHandler* pEvtHandler)
 	m_flags = 0;
 
 	m_port = 0;
-	m_family = AF_UNSPEC;
 
 	m_buffer_sizes[0] = -1;
 	m_buffer_sizes[1] = -1;
@@ -1138,28 +1116,13 @@ void CSocket::DetachThread()
 	Cleanup(false);
 }
 
-int CSocket::Connect(wxString host, unsigned int port, enum address_family family /*=unsped*/)
+int CSocket::Connect(wxString host, unsigned int port)
 {
 	if (m_state != none)
 		return EISCONN;
 
 	if (port < 1 || port > 65535)
 		return EINVAL;
-
-	switch (family)
-	{
-	case unspec:
-		m_family = AF_UNSPEC;
-		break;
-	case ipv4:
-		m_family = AF_INET;
-		break;
-	case ipv6:
-		m_family = AF_INET6;
-		break;
-	default:
-		return EINVAL;
-	}
 
 	if (m_pSocketThread && m_pSocketThread->m_started)
 	{
@@ -1549,7 +1512,7 @@ int CSocket::Write(const void* buffer, unsigned int size, int& error)
 	return res;
 }
 
-wxString CSocket::AddressToString(const struct sockaddr* addr, int addr_len, bool with_port /*=true*/, bool strip_zone_index/*=false*/)
+wxString CSocket::AddressToString(const struct sockaddr* addr, int addr_len, bool with_port /*=true*/)
 {
 	char hostbuf[NI_MAXHOST];
 	char portbuf[NI_MAXSERV];
@@ -1581,17 +1544,8 @@ wxString CSocket::AddressToString(const struct sockaddr* addr, int addr_len, boo
 
 	// IPv6 uses colons as separator, need to enclose address
 	// to avoid ambiguity if also showing port
-	if (addr->sa_family == AF_INET6)
-	{
-		if (strip_zone_index)
-		{
-			int pos = host.Find('%');
-			if (pos != -1)
-				host.Truncate(pos);
-		}
-		if (with_port)
-			host = _T("[") + host + _T("]");
-	}
+	if (with_port && addr->sa_family == AF_INET6)
+		host = _T("[") + host + _T("]");
 
 	if (with_port)
 		return host + _T(":") + port;
@@ -1599,7 +1553,7 @@ wxString CSocket::AddressToString(const struct sockaddr* addr, int addr_len, boo
 		return host;
 }
 
-wxString CSocket::GetLocalIP(bool strip_zone_index /*=false*/) const
+wxString CSocket::GetLocalIP() const
 {
 	struct sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
@@ -1607,10 +1561,10 @@ wxString CSocket::GetLocalIP(bool strip_zone_index /*=false*/) const
 	if (res)
 		return _T("");
 
-	return AddressToString((sockaddr *)&addr, addr_len, false, strip_zone_index);
+	return AddressToString((sockaddr *)&addr, addr_len, false);
 }
 
-wxString CSocket::GetPeerIP(bool strip_zone_index /*=false*/) const
+wxString CSocket::GetPeerIP() const
 {
 	struct sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
@@ -1618,50 +1572,27 @@ wxString CSocket::GetPeerIP(bool strip_zone_index /*=false*/) const
 	if (res)
 		return _T("");
 
-	return AddressToString((sockaddr *)&addr, addr_len, false, strip_zone_index);
+	return AddressToString((sockaddr *)&addr, addr_len, false);
 }
 
-enum CSocket::address_family CSocket::GetAddressFamily() const
+int CSocket::GetAddressFamily() const
 {
-	sockaddr_u addr;
+	struct sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
-	int res = getsockname(m_fd, &addr.sockaddr, &addr_len);
+	int res = getsockname(m_fd, (sockaddr*)&addr, &addr_len);
 	if (res)
-		return unspec;
+		return AF_UNSPEC;
 
-	switch (addr.sockaddr.sa_family)
-	{
-	case AF_INET:
-		return ipv4;
-	case AF_INET6:
-		return ipv6;
-	default:
-		return unspec;
-	}
+	return ((sockaddr*)&addr)->sa_family;
 }
 
-int CSocket::Listen(enum address_family family, int port /*=0*/)
+int CSocket::Listen(int family, int port /*=0*/)
 {
 	if (m_state != none)
 		return EALREADY;
 
 	if (port < 0 || port > 65535)
 		return EINVAL;
-
-	switch (family)
-	{
-	case unspec:
-		m_family = AF_UNSPEC;
-		break;
-	case ipv4:
-		m_family = AF_INET;
-		break;
-	case ipv6:
-		m_family = AF_INET6;
-		break;
-	default:
-		return EINVAL;
-	}
 
 #ifdef __WXMSW__
 	if (!getaddrinfo)
@@ -1690,7 +1621,7 @@ int CSocket::Listen(enum address_family family, int port /*=0*/)
 #endif
 	{
 		struct addrinfo hints = {0};
-		hints.ai_family = m_family;
+		hints.ai_family = family;
 		hints.ai_socktype = SOCK_STREAM;
 		hints.ai_flags = AI_PASSIVE;
 #ifdef AI_NUMERICSERV
@@ -1770,9 +1701,9 @@ int CSocket::Listen(enum address_family family, int port /*=0*/)
 
 int CSocket::GetLocalPort(int& error)
 {
-	sockaddr_u addr;
+	struct sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
-	error = getsockname(m_fd, &addr.sockaddr, &addr_len);
+	error = getsockname(m_fd, (sockaddr*)&addr, &addr_len);
 	if (error)
 	{
 #ifdef __WXMSW__
@@ -1781,10 +1712,16 @@ int CSocket::GetLocalPort(int& error)
 		return -1;
 	}
 
-	if (addr.storage.ss_family == AF_INET)
-		return ntohs(addr.in4.sin_port);
-	else if (addr.storage.ss_family == AF_INET6)
-		return ntohs(addr.in6.sin6_port);
+	if (addr.ss_family == AF_INET)
+	{
+		struct sockaddr_in* addr_v4 = (sockaddr_in*)&addr;
+		return ntohs(addr_v4->sin_port);
+	}
+	else if (addr.ss_family == AF_INET6)
+	{
+		struct sockaddr_in6* addr_v6 = (sockaddr_in6*)&addr;
+		return ntohs(addr_v6->sin6_port);
+	}
 
 	error = EINVAL;
 	return -1;
@@ -1792,9 +1729,9 @@ int CSocket::GetLocalPort(int& error)
 
 int CSocket::GetRemotePort(int& error)
 {
-	sockaddr_u addr;		
+	struct sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
-	error = getpeername(m_fd, &addr.sockaddr, &addr_len);
+	error = getpeername(m_fd, (sockaddr*)&addr, &addr_len);
 	if (error)
 	{
 #ifdef __WXMSW__
@@ -1803,10 +1740,16 @@ int CSocket::GetRemotePort(int& error)
 		return -1;
 	}
 
-	if (addr.storage.ss_family == AF_INET)
-		return ntohs(addr.in4.sin_port);
-	else if (addr.storage.ss_family == AF_INET6)
-		return ntohs(addr.in6.sin6_port);
+	if (addr.ss_family == AF_INET)
+	{
+		struct sockaddr_in* addr_v4 = (sockaddr_in*)&addr;
+		return ntohs(addr_v4->sin_port);
+	}
+	else if (addr.ss_family == AF_INET6)
+	{
+		struct sockaddr_in6* addr_v6 = (sockaddr_in6*)&addr;
+		return ntohs(addr_v6->sin6_port);
+	}
 
 	error = EINVAL;
 	return -1;

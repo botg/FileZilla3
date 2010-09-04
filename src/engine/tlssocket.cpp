@@ -1,24 +1,10 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "tlssocket.h"
 #include "ControlSocket.h"
 
 #include <gnutls/gnutls.h>
 #include <gnutls/x509.h>
 #include <errno.h>
-
-//#define TLSDEBUG 1
-#if TLSDEBUG
-// This is quite ugly
-CControlSocket* pLoggingControlSocket;
-void log_func(int level, const char* msg)
-{
-	if (!msg)
-		return;
-	wxString s(msg, wxConvLocal);
-	s.Trim();
-	pLoggingControlSocket->LogMessage(Debug_Debug, _T("tls: %d %s"), level, s.c_str());
-}
-#endif
 
 CTlsSocket::CTlsSocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner)
 	: CBackend(pEvtHandler), m_pOwner(pOwner)
@@ -76,11 +62,6 @@ bool CTlsSocket::Init()
 		return false;
 	}
 
-#if TLSDEBUG
-	pLoggingControlSocket = m_pOwner;
-	gnutls_global_set_log_function(log_func);
-	gnutls_global_set_log_level(99);
-#endif
 	res = gnutls_certificate_allocate_credentials(&m_certCredentials);
 	if (res < 0)
 	{
@@ -178,10 +159,10 @@ void CTlsSocket::LogError(int code)
 #else
 		wxString str(error);
 #endif
-		m_pOwner->LogMessage(::Error, _T("GnuTLS error %d: %s"), code, str.c_str());
+		m_pOwner->LogMessage(::Debug_Warning, _T("GnuTLS error %d: %s"), code, str.c_str());
 	}
 	else
-		m_pOwner->LogMessage(::Error, _T("GnuTLS error %d"), code);
+		m_pOwner->LogMessage(::Debug_Warning, _T("GnuTLS error %d"), code);
 }
 
 void CTlsSocket::PrintAlert()
@@ -213,9 +194,6 @@ ssize_t CTlsSocket::PullFunction(gnutls_transport_ptr_t ptr, void* data, size_t 
 
 ssize_t CTlsSocket::PushFunction(const void* data, size_t len)
 {
-#if TLSDEBUG
-	m_pOwner->LogMessage(Debug_Debug, _T("CTlsSocket::PushFunction(%x, %d)"), data, len);
-#endif
 	if (!m_canWriteToSocket)
 	{
 		gnutls_transport_set_errno(m_session, EAGAIN);
@@ -244,18 +222,11 @@ ssize_t CTlsSocket::PushFunction(const void* data, size_t len)
 		return -1;
 	}
 
-#if TLSDEBUG
-	m_pOwner->LogMessage(Debug_Debug, _T("  returning %d"), written);
-#endif
-
 	return written;
 }
 
 ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 {
-#if TLSDEBUG
-	m_pOwner->LogMessage(Debug_Debug, _T("CTlsSocket::PullFunction(%x, %d)"), data, len);
-#endif
 	if (!m_pSocketBackend)
 	{
 		gnutls_transport_set_errno(m_session, 0);
@@ -297,10 +268,6 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 
 	if (!read)
 		m_socket_eof = true;
-
-#if TLSDEBUG
-	m_pOwner->LogMessage(Debug_Debug, _T("  returning %d"), read);
-#endif
 
 	return read;
 }
@@ -366,7 +333,7 @@ void CTlsSocket::OnRead()
 		return;
 
 	if (m_tlsState == handshake)
-		ContinueHandshake();
+		Handshake();
 	if (m_tlsState == closing)
 		ContinueShutdown();
 	else if (m_tlsState == conn)
@@ -390,7 +357,7 @@ void CTlsSocket::OnSend()
 		return;
 
 	if (m_tlsState == handshake)
-		ContinueHandshake();
+		Handshake();
 	else if (m_tlsState == closing)
 		ContinueShutdown();
 	else if (m_tlsState == conn)
@@ -462,15 +429,6 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket /*=0*/, bool try_resu
 			CopySessionData(pPrimarySocket);
 	}
 
-	return ContinueHandshake();
-}
-
-int CTlsSocket::ContinueHandshake()
-{
-	m_pOwner->LogMessage(Debug_Verbose, _T("CTlsSocket::ContinueHandshake()"));
-	wxASSERT(m_session);
-	wxASSERT(m_tlsState == handshake);
-
 	int res = gnutls_handshake(m_session);
 	if (!res)
 	{
@@ -503,7 +461,7 @@ int CTlsSocket::ContinueHandshake()
 	else if (res == GNUTLS_E_AGAIN || res == GNUTLS_E_INTERRUPTED)
 		return FZ_REPLY_WOULDBLOCK;
 
-	Failure(res, ECONNABORTED);
+	Failure(res, 0);
 
 	return FZ_REPLY_ERROR;
 }
@@ -719,7 +677,6 @@ void CTlsSocket::CheckResumeFailedReadWrite()
 
 void CTlsSocket::Failure(int code, int socket_error)
 {
-	m_pOwner->LogMessage(::Debug_Debug, _T("CTlsSocket::Failure(%d, %d)"), code, socket_error);
 	if (code)
 	{
 		LogError(code);
@@ -935,7 +892,7 @@ int CTlsSocket::VerifyCertificate()
 		gnutls_x509_crt_t cert;
 		if (gnutls_x509_crt_init(&cert))
 		{
-			m_pOwner->LogMessage(::Error, _("Could not initialize structure for peer certificates, gnutls_x509_crt_init failed"));
+			m_pOwner->LogMessage(::Error, _("Coult not initialize structure for peer certificates, gnutls_x509_crt_init failed"));
 			Failure(0, ECONNABORTED);
 			return FZ_REPLY_ERROR;
 		}

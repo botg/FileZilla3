@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "customheightlistctrl.h"
 
 BEGIN_EVENT_TABLE(wxCustomHeightListCtrl, wxScrolledWindow)

@@ -1,22 +1,18 @@
-#include <filezilla.h>
-
+#include "FileZilla.h"
 #include "ControlSocket.h"
 #include "httpcontrolsocket.h"
-#include "tlssocket.h"
-
-#include <wx/file.h>
-
 #include <errno.h>
+#include "tlssocket.h"
 
 #define FZ_REPLY_REDIRECTED FZ_REPLY_ALREADYCONNECTED
 
 // Connect is special for HTTP: It is done on a per-command basis, so we need
 // to establish a connection before each command.
-class CHttpConnectOpData : public CConnectOpData
+class CHttpConnectOpData : public COpData
 {
 public:
 	CHttpConnectOpData()
-		: tls(false)
+		: COpData(cmd_connect)
 	{
 	}
 
@@ -24,6 +20,8 @@ public:
 	{
 	}
 
+	wxString host;
+	unsigned int port;
 	bool tls;
 };
 
@@ -45,8 +43,6 @@ public:
 		m_totalSize = -1;
 		m_receivedData = 0;
 	}
-
-	virtual ~CHttpOpData() {}
 
 	bool m_gotHeader;
 	int m_responseCode;
@@ -79,8 +75,8 @@ public:
 class CHttpFileTransferOpData : public CFileTransferOpData, public CHttpOpData
 {
 public:
-	CHttpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
-		: CFileTransferOpData(is_download, local_file, remote_file, remote_path), CHttpOpData(this)
+	CHttpFileTransferOpData(const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
+		: CFileTransferOpData(local_file, remote_file, remote_path), CHttpOpData(this)
 	{
 		pFile = 0;
 	}
@@ -97,14 +93,11 @@ CHttpControlSocket::CHttpControlSocket(CFileZillaEnginePrivate *pEngine)
 	: CRealControlSocket(pEngine)
 {
 	m_pRecvBuffer = 0;
-	m_recvBufferPos = 0;
 	m_pTlsSocket = 0;
-	m_pHttpOpData = 0;
 }
 
 CHttpControlSocket::~CHttpControlSocket()
 {
-	DoClose();
 	delete [] m_pRecvBuffer;
 }
 
@@ -369,9 +362,11 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 		delete m_pCurOpData;
 	}
 
-	CHttpFileTransferOpData *pData = new CHttpFileTransferOpData(download, localFile, remoteFile, remotePath);
+	CHttpFileTransferOpData *pData = new CHttpFileTransferOpData(localFile, remoteFile, remotePath);
 	m_pCurOpData = pData;
 	m_pHttpOpData = pData;
+
+	pData->download = download;
 
 	if (localFile != _T(""))
 	{
@@ -460,7 +455,7 @@ int CHttpControlSocket::FileTransferSend()
 	if (pData->m_newLocation == _T(""))
 	{
 		if (m_pCurrentServer->GetProtocol() == HTTPS)
-			location = _T("https://") + m_pCurrentServer->FormatHost() + pData->remotePath.FormatFilename(pData->remoteFile).c_str();
+			location = _T("http://") + m_pCurrentServer->FormatHost() + pData->remotePath.FormatFilename(pData->remoteFile).c_str();
 		else
 			location = _T("http://") + m_pCurrentServer->FormatHost() + pData->remotePath.FormatFilename(pData->remoteFile).c_str();
 		hostWithPort = wxString::Format(_T("%s:%d"), m_pCurrentServer->FormatHost(true).c_str(), m_pCurrentServer->GetPort());
@@ -513,7 +508,8 @@ int CHttpControlSocket::DoInternalConnect()
 
 	CHttpConnectOpData *pData = static_cast<CHttpConnectOpData *>(m_pCurOpData);
 
-	delete m_pBackend;
+	if (m_pBackend)
+		delete m_pBackend;
 	m_pBackend = new CSocketBackend(this, m_pSocket);
 
 	int res = m_pSocket->Connect(pData->host, pData->port);

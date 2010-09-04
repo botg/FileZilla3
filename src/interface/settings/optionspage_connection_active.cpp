@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "../Options.h"
 #include "settingsdialog.h"
 #include "optionspage.h"
@@ -14,7 +14,7 @@ END_EVENT_TABLE();
 bool COptionsPageConnectionActive::LoadPage()
 {
 	bool failure = false;
-	SetCheckFromOption(XRCID("ID_LIMITPORTS"), OPTION_LIMITPORTS, failure);
+	SetCheck(XRCID("ID_LIMITPORTS"), m_pOptions->GetOptionVal(OPTION_LIMITPORTS) != 0, failure);
 	SetTextFromOption(XRCID("ID_LOWESTPORT"), OPTION_LIMITPORTS_LOW, failure);
 	SetTextFromOption(XRCID("ID_HIGHESTPORT"), OPTION_LIMITPORTS_HIGH, failure);
 	
@@ -24,7 +24,7 @@ bool COptionsPageConnectionActive::LoadPage()
 
 	SetTextFromOption(XRCID("ID_ACTIVEIP"), OPTION_EXTERNALIP, failure);
 	SetTextFromOption(XRCID("ID_ACTIVERESOLVER"), OPTION_EXTERNALIPRESOLVER, failure);
-	SetCheckFromOption(XRCID("ID_NOEXTERNALONLOCAL"), OPTION_NOEXTERNALONLOCAL, failure);
+	SetCheck(XRCID("ID_NOEXTERNALONLOCAL"), m_pOptions->GetOptionVal(OPTION_NOEXTERNALONLOCAL) != 0, failure);
 
 	if (!failure)
 		SetCtrlState();
@@ -34,23 +34,24 @@ bool COptionsPageConnectionActive::LoadPage()
 
 bool COptionsPageConnectionActive::SavePage()
 {
-	SetOptionFromCheck(XRCID("ID_LIMITPORTS"), OPTION_LIMITPORTS);
-	
-	SetIntOptionFromText(XRCID("ID_LOWESTPORT"), OPTION_LIMITPORTS_LOW);
-	SetIntOptionFromText(XRCID("ID_HIGHESTPORT"), OPTION_LIMITPORTS_HIGH);
+	m_pOptions->SetOption(OPTION_LIMITPORTS, GetCheck(XRCID("ID_LIMITPORTS")) ? 1 : 0);
+
+	long tmp;
+	GetText(XRCID("ID_LOWESTPORT")).ToLong(&tmp); m_pOptions->SetOption(OPTION_LIMITPORTS_LOW, tmp);
+	GetText(XRCID("ID_HIGHESTPORT")).ToLong(&tmp); m_pOptions->SetOption(OPTION_LIMITPORTS_HIGH, tmp);
 	
 	int mode;
-	if (GetRCheck(XRCID("ID_ACTIVEMODE1")))
+	if (XRCCTRL(*this, "ID_ACTIVEMODE1", wxRadioButton)->GetValue())
 		mode = 0;
 	else
-		mode = GetRCheck(XRCID("ID_ACTIVEMODE2")) ? 1 : 2;
+		mode = XRCCTRL(*this, "ID_ACTIVEMODE2", wxRadioButton)->GetValue() ? 1 : 2;
 	m_pOptions->SetOption(OPTION_EXTERNALIPMODE, mode);
 
 	if (mode == 1)
-		SetOptionFromText(XRCID("ID_ACTIVEIP"), OPTION_EXTERNALIP);
+		m_pOptions->SetOption(OPTION_EXTERNALIP, XRCCTRL(*this, "ID_ACTIVEIP", wxTextCtrl)->GetValue());
 	else if (mode == 2)
-		SetOptionFromText(XRCID("ID_ACTIVERESOLVER"), OPTION_EXTERNALIPRESOLVER);
-	SetOptionFromCheck(XRCID("ID_NOEXTERNALONLOCAL"), OPTION_NOEXTERNALONLOCAL);
+		m_pOptions->SetOption(OPTION_EXTERNALIPRESOLVER, XRCCTRL(*this, "ID_ACTIVERESOLVER", wxTextCtrl)->GetValue());
+	m_pOptions->SetOption(OPTION_NOEXTERNALONLOCAL, XRCCTRL(*this, "ID_NOEXTERNALONLOCAL", wxCheckBox)->GetValue());
 
 	return true;
 }
@@ -77,10 +78,10 @@ bool COptionsPageConnectionActive::Validate()
 	}
 
 	int mode;
-	if (GetRCheck(XRCID("ID_ACTIVEMODE1")))
+	if (XRCCTRL(*this, "ID_ACTIVEMODE1", wxRadioButton)->GetValue())
 		mode = 0;
 	else
-		mode = GetRCheck(XRCID("ID_ACTIVEMODE2")) ? 1 : 2;
+		mode = XRCCTRL(*this, "ID_ACTIVEMODE2", wxRadioButton)->GetValue() ? 1 : 2;
 
 	if (mode == 1)
 	{
@@ -98,10 +99,10 @@ void COptionsPageConnectionActive::SetCtrlState()
 	FindWindow(XRCID("ID_HIGHESTPORT"))->Enable(GetCheck(XRCID("ID_LIMITPORTS")));
 
 	int mode;
-	if (GetRCheck(XRCID("ID_ACTIVEMODE1")))
+	if (XRCCTRL(*this, "ID_ACTIVEMODE1", wxRadioButton)->GetValue())
 		mode = 0;
 	else
-		mode = GetRCheck(XRCID("ID_ACTIVEMODE2")) ? 1 : 2;
+		mode = XRCCTRL(*this, "ID_ACTIVEMODE2", wxRadioButton)->GetValue() ? 1 : 2;
 	FindWindow(XRCID("ID_ACTIVEIP"))->Enable(mode == 1);
 	FindWindow(XRCID("ID_ACTIVERESOLVER"))->Enable(mode == 2);
 

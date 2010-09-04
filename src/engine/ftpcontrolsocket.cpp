@@ -1,24 +1,19 @@
-#include <filezilla.h>
-
-#include "directorycache.h"
-#include "directorylistingparser.h"
-#include "externalipresolver.h"
+#include "FileZilla.h"
 #include "ftpcontrolsocket.h"
 #include "transfersocket.h"
+#include "directorylistingparser.h"
+#include "directorycache.h"
 #include "iothread.h"
+#include <wx/regex.h>
+#include "externalipresolver.h"
 #include "servercapabilities.h"
 #include "tlssocket.h"
 #include "pathcache.h"
-#include "local_filesys.h"
-#include "proxy.h"
-
-#include <wx/filename.h>
-#include <wx/log.h>
-#include <wx/regex.h>
-#include <wx/tokenzr.h>
-
 #include <algorithm>
+#include <wx/tokenzr.h>
+#include "local_filesys.h"
 #include <errno.h>
+#include "proxy.h"
 
 #define LOGON_WELCOME	0
 #define LOGON_AUTH_TLS	1
@@ -55,8 +50,8 @@ CFtpTransferOpData::CFtpTransferOpData()
 	binary = true;
 }
 
-CFtpFileTransferOpData::CFtpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
-	: CFileTransferOpData(is_download, local_file, remote_file, remote_path)
+CFtpFileTransferOpData::CFtpFileTransferOpData(const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
+	: CFileTransferOpData(local_file, remote_file, remote_path)
 {
 	pIOThread = 0;
 	fileDidExist = true;
@@ -1646,12 +1641,12 @@ int CFtpControlSocket::ListParseResponse()
 		const wxChar *res = date.ParseFormat(m_Response.Mid(4), _T("%Y%m%d%H%M%S"));
 		if (res && date.IsValid())
 		{
-			wxASSERT(pData->directoryListing[pData->mdtm_index].has_date());
+			wxASSERT(pData->directoryListing[pData->mdtm_index].hasTimestamp != CDirentry::timestamp_none);
 			wxDateTime listTime = pData->directoryListing[pData->mdtm_index].time;
 			listTime -= wxTimeSpan(0, m_pCurrentServer->GetTimezoneOffset(), 0);
 
 			int serveroffset = (date - listTime).GetSeconds().GetLo();
-			if (!pData->directoryListing[pData->mdtm_index].has_seconds())
+			if (pData->directoryListing[pData->mdtm_index].hasTimestamp != CDirentry::timestamp_seconds)
 			{
 				// Round offset to full minutes
 				if (serveroffset < 0)
@@ -1672,7 +1667,7 @@ int CFtpControlSocket::ListParseResponse()
 			for (int i = 0; i < count; i++)
 			{
 				CDirentry& entry = pData->directoryListing[i];
-				if (!entry.has_time())
+				if (entry.hasTimestamp < CDirentry::timestamp_time)
 					continue;
 
 				entry.time += span;
@@ -1715,7 +1710,7 @@ int CFtpControlSocket::ListCheckTimezoneDetection(CDirectoryListing& listing)
 			const int count = listing.GetCount();
 			for (int i = 0; i < count; i++)
 			{
-				if (!listing[i].is_dir() && listing[i].has_time())
+				if (!listing[i].dir && listing[i].hasTimestamp >= CDirentry::timestamp_time)
 				{
 					pData->opState = list_mdtm;
 					pData->directoryListing = listing;
@@ -2218,9 +2213,10 @@ int CFtpControlSocket::FileTransfer(const wxString localFile, const CServerPath 
 		delete m_pCurOpData;
 	}
 
-	CFtpFileTransferOpData *pData = new CFtpFileTransferOpData(download, localFile, remoteFile, remotePath);
+	CFtpFileTransferOpData *pData = new CFtpFileTransferOpData(localFile, remoteFile, remotePath);
 	m_pCurOpData = pData;
 
+	pData->download = download;
 	pData->transferSettings = transferSettings;
 	pData->binary = transferSettings.binary;
 
@@ -2379,18 +2375,18 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			}
 			else
 			{
-				if (entry.is_unsure())
+				if (entry.unsure)
 					pData->opState = filetransfer_waitlist;
 				else
 				{
 					if (matchedCase)
 					{
 						pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
-						if (entry.has_date())
+						if (entry.hasTimestamp != CDirentry::timestamp_none)
 							pData->fileTime = entry.time;
 
 						if (pData->download &&
-							!entry.has_time() &&
+							entry.hasTimestamp < CDirentry::timestamp_time &&
 							m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 							CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
 						{
@@ -2448,14 +2444,14 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			}
 			else
 			{
-				if (matchedCase && !entry.is_unsure())
+				if (matchedCase && !entry.unsure)
 				{
 					pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
-					if (entry.has_date())
+					if (entry.hasTimestamp != CDirentry::timestamp_none)
 						pData->fileTime = entry.time;
 
 					if (pData->download &&
-						!entry.has_time() &&
+						entry.hasTimestamp < CDirentry::timestamp_time &&
 						m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 						CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
 					{
@@ -2868,11 +2864,11 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 						if (matched_case)
 						{
 							pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
-							if (entry.has_date())
+							if (entry.hasTimestamp != CDirentry::timestamp_none)
 								pData->fileTime = entry.time;
 
 							if (pData->download &&
-								!entry.has_time() &&
+								entry.hasTimestamp < CDirentry::timestamp_time &&
 								m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 								CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
 							{
@@ -2984,10 +2980,7 @@ int CFtpControlSocket::RawCommandSend()
 
 	CDirectoryCache cache;
 	cache.InvalidateServer(*m_pCurrentServer);
-	CPathCache::InvalidateServer(*m_pCurrentServer);
 	m_CurrentPath.Clear();
-
-	m_lastTypeBinary = -1;
 
 	CRawCommandOpData *pData = static_cast<CRawCommandOpData *>(m_pCurOpData);
 
@@ -3928,7 +3921,7 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 
 getLocalIP:
 
-	address = m_pSocket->GetLocalIP(true);
+	address = m_pSocket->GetLocalIP();
 	if (address == _T(""))
 	{
 		LogMessage(::Error, _("Failed to retrieve local ip address."), 1);

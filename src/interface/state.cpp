@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "state.h"
 #include "commandqueue.h"
 #include "FileZillaEngine.h"
@@ -209,17 +209,11 @@ CState::CState(CMainFrame* pMainFrame)
 	m_sync_browse.compare = false;
 
 	m_localDir.SetPath(CLocalPath::path_separator);
-
-	m_pCertificate = 0;
-	m_pSftpEncryptionInfo = 0;
 }
 
 CState::~CState()
 {
 	delete m_pServer;
-	
-	delete m_pCertificate;
-	delete m_pSftpEncryptionInfo;
 
 	delete m_pComparisonManager;
 	delete m_pCommandQueue;
@@ -479,10 +473,6 @@ void CState::SetServer(const CServer* server)
 
 		SetRemoteDir(0);
 		delete m_pServer;
-		delete m_pCertificate;
-		m_pCertificate = 0;
-		delete m_pSftpEncryptionInfo;
-		m_pSftpEncryptionInfo = 0;
 	}
 	if (server)
 	{
@@ -711,24 +701,25 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 
 	for (unsigned int i = 0; i < files.Count(); i++)
 	{
-		wxLongLong size;
-		bool is_link;
-		CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileInfo(files[i], is_link, &size, 0, 0);
-		if (type == CLocalFileSystem::file)
+		if (wxFile::Exists(files[i]))
 		{
-			wxString localFile;
-			const CLocalPath localPath(files[i], &localFile);
-			m_pMainFrame->GetQueue()->QueueFile(queueOnly, false, localPath, localFile, localFile, path, *m_pServer, size);
+			const wxFileName name(files[i]);
+			const wxLongLong size = name.GetSize().GetValue();
+			m_pMainFrame->GetQueue()->QueueFile(queueOnly, false, files[i], name.GetFullName(), path, *m_pServer, size);
 			m_pMainFrame->GetQueue()->QueueFile_Finish(!queueOnly);
 		}
-		else if (type == CLocalFileSystem::dir)
+		else if (wxDir::Exists(files[i]))
 		{
-			CLocalPath localPath(files[i]);
-			if (localPath.HasParent())
+			wxString dir = files[i];
+			if (dir.Last() == CLocalPath::path_separator && dir.Len() > 1)
+				dir.RemoveLast();
+			int pos = dir.Find(CLocalPath::path_separator, true);
+			if (pos != -1 && pos != (int)dir.Len() - 1)
 			{
+				wxString lastSegment = dir.Mid(pos + 1);
 				CServerPath target = path;
-				target.AddSegment(localPath.GetLastSegment());
-				m_pMainFrame->GetQueue()->QueueFolder(queueOnly, false, localPath, target, *m_pServer);
+				target.AddSegment(lastSegment);
+				m_pMainFrame->GetQueue()->QueueFolder(queueOnly, false, dir, target, *m_pServer);
 			}
 		}
 	}
@@ -773,32 +764,29 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 #else
 	for (unsigned int i = 0; i < files.Count(); i++)
 	{
-		const wxString& file(files[i]);
-
-		wxLongLong size;
-		bool is_link;
-		CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileInfo(file, is_link, &size, 0, 0);
-		if (type == CLocalFileSystem::file)
+		const wxString& file = files[i];
+		if (wxFile::Exists(file))
 		{
-			wxString name;
-			CLocalPath sourcePath(file, &name);
-			if (name.empty())
+			int pos = file.Find(CLocalPath::path_separator, true);
+			if (pos == -1 || pos == (int)file.Len() - 1)
 				continue;
+			const wxString& name = file.Mid(pos + 1);
 			if (copy)
 				wxCopyFile(file, path.GetPath() + name);
 			else
 				wxRenameFile(file, path.GetPath() + name);
 		}
-		else if (type == CLocalFileSystem::dir)
+		else if (wxDir::Exists(file))
 		{
 			if (copy)
-				RecursiveCopy(CLocalPath(file), path);
+				RecursiveCopy(file, path.GetPath());
 			else
 			{
-				CLocalPath sourcePath(file);
-				if (!sourcePath.HasParent())
+				int pos = file.Find(CLocalPath::path_separator, true);
+				if (pos == -1 || pos == (int)file.Len() - 1)
 					continue;
-				wxRenameFile(file, path.GetPath() + sourcePath.GetLastSegment());
+				const wxString& name = file.Mid(pos + 1);
+				wxRenameFile(file, path.GetPath() + name);
 			}
 		}
 	}
@@ -885,7 +873,7 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 	}
 
 	if (hasFiles)
-		m_pMainFrame->GetQueue()->QueueFiles(queueOnly, path, *pRemoteDataObject);
+		m_pMainFrame->GetQueue()->QueueFiles(queueOnly, path.GetPath(), *pRemoteDataObject);
 
 	if (!hasDirs)
 		return true;
@@ -895,9 +883,7 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 		if (!iter->dir)
 			continue;
 
-		CLocalPath newPath(path);
-		newPath.AddSegment(CQueueView::ReplaceInvalidCharacters(iter->name));
-		m_pRecursiveOperation->AddDirectoryToVisit(pRemoteDataObject->GetServerPath(), iter->name, newPath, iter->link);
+		m_pRecursiveOperation->AddDirectoryToVisit(pRemoteDataObject->GetServerPath(), iter->name, path.GetPath() + CQueueView::ReplaceInvalidCharacters(iter->name), iter->link);
 	}
 
 	if (m_pComparisonManager->IsComparing())
@@ -1082,10 +1068,7 @@ bool CState::SetSyncBrowse(bool enable, const CServerPath& assumed_remote_root /
 	}
 
 	if (!m_pDirectoryListing && assumed_remote_root.IsEmpty())
-	{
-		NotifyHandlers(STATECHANGE_SYNC_BROWSE);
 		return false;
-	}
 
 	m_sync_browse.is_changing = false;
 	m_sync_browse.local_root = m_localDir;
@@ -1157,34 +1140,4 @@ bool CState::RefreshRemote()
 		return false;
 
 	return ChangeRemoteDir(GetRemotePath(), _T(""), LIST_FLAG_REFRESH);
-}
-
-bool CState::GetSecurityInfo(CCertificateNotification *& pInfo)
-{
-	pInfo = m_pCertificate;
-	return m_pCertificate != 0;
-}
-
-bool CState::GetSecurityInfo(CSftpEncryptionNotification *& pInfo)
-{
-	pInfo = m_pSftpEncryptionInfo;
-	return m_pSftpEncryptionInfo != 0;
-}
-
-void CState::SetSecurityInfo(CCertificateNotification const& info)
-{
-	delete m_pCertificate;
-	m_pCertificate = 0;
-	delete m_pSftpEncryptionInfo;
-	m_pSftpEncryptionInfo = 0;
-	m_pCertificate = new CCertificateNotification(info);
-}
-
-void CState::SetSecurityInfo(CSftpEncryptionNotification const& info)
-{
-	delete m_pCertificate;
-	m_pCertificate = 0;
-	delete m_pSftpEncryptionInfo;
-	m_pSftpEncryptionInfo = 0;
-	m_pSftpEncryptionInfo = new CSftpEncryptionNotification(info);
 }

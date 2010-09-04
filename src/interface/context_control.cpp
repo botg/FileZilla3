@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "commandqueue.h"
 #include "context_control.h"
 #include "filelist_statusbar.h"
@@ -10,7 +10,6 @@
 #include "recursive_operation.h"
 #include "RemoteListView.h"
 #include "RemoteTreeView.h"
-#include "sitemanager.h"
 #include "splitter.h"
 #include "view.h"
 #include "viewheader.h"
@@ -26,8 +25,9 @@ EVT_MENU(XRCID("ID_TABCONTEXT_CLOSEOTHERS"), CContextControl::OnTabContextCloseO
 EVT_MENU(XRCID("ID_TABCONTEXT_NEW"), CContextControl::OnTabContextNew)
 END_EVENT_TABLE()
 
-CContextControl::CContextControl(CMainFrame* pMainFrame)
-	: CStateEventHandler(0),
+CContextControl::CContextControl(CMainFrame* pMainFrame, wxWindow *parent)
+	: wxSplitterWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_NOBORDER),
+	CStateEventHandler(0),
 	m_tabs(0), m_right_clicked_tab(-1), m_pMainFrame(pMainFrame)
 {
 	m_current_context_controls = -1;
@@ -40,11 +40,6 @@ CContextControl::CContextControl(CMainFrame* pMainFrame)
 
 CContextControl::~CContextControl()
 {
-}
-
-void CContextControl::Create(wxWindow *parent)
-{
-	wxSplitterWindow::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_NOBORDER);
 }
 
 void CContextControl::CreateTab()
@@ -121,7 +116,7 @@ void CContextControl::CreateContextControls(CState* pState)
 			m_tabs = new wxAuiNotebookEx();
 
 			wxSize splitter_size = m_context_controls[m_current_context_controls].pViewSplitter->GetSize();
-			m_tabs->Create(this, wxID_ANY, initial_position, splitter_size, wxNO_BORDER | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_CLOSE_ON_ALL_TABS);
+			m_tabs->Create(this, wxID_ANY, initial_position, splitter_size, wxNO_BORDER | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_CLOSE_ON_ALL_TABS);
 			m_tabs->SetExArtProvider();
 			m_tabs->SetSelectedFont(*wxNORMAL_FONT);
 			m_tabs->SetMeasuringFont(*wxNORMAL_FONT);
@@ -185,8 +180,6 @@ void CContextControl::CreateContextControls(CState* pState)
 		pRemoteFilelistStatusBar->Hide();
 	context_controls.pRemoteListViewPanel->SetStatusBar(pRemoteFilelistStatusBar);
 	context_controls.pRemoteListView->SetFilelistStatusBar(pRemoteFilelistStatusBar);
-	pRemoteFilelistStatusBar->SetConnected(false);
-
 
 	const int layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
 	const int swap = COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP);
@@ -276,10 +269,6 @@ void CContextControl::CreateContextControls(CState* pState)
 		context_controls.tab_index = 0;
 		context_controls.site_bookmarks = new CContextControl::_context_controls::_site_bookmarks;
 		
-		context_controls.site_bookmarks->path = COptions::Get()->GetOption(OPTION_LAST_CONNECTED_SITE);
-		CSiteManager::GetBookmarks(context_controls.site_bookmarks->path,
-			context_controls.site_bookmarks->bookmarks);
-
 		Initialize(context_controls.pViewSplitter);
 	}
 
@@ -534,28 +523,12 @@ bool CContextControl::SelectTab(int i)
 	if (i < 0)
 		return false;
 
-	if (!m_tabs)
-	{
-		if (i != 0)
-			return false;
-
-		return true;
-	}
-
 	if ((int)m_tabs->GetPageCount() <= i)
 		return false;
 
 	m_tabs->SetSelection(i);
 
 	return true;
-}
-
-void CContextControl::AdvanceTab(bool forward)
-{
-	if (!m_tabs)
-		return;
-
-	m_tabs->AdvanceTab(forward);
 }
 
 void CContextControl::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)

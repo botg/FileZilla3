@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 
 #if FZ_MANUALUPDATECHECK
 
@@ -12,8 +12,6 @@
 #include <wx/dynlib.h> // Used by GetDownloadDir
 #endif //__WXMSW__
 #include "dialogex.h"
-
-#include <wx/gauge.h>
 
 // This is ugly but does the job
 #define SHA512_STANDALONE
@@ -130,13 +128,6 @@ CUpdateWizard::CUpdateWizard(wxWindow* pParent)
 	// Makes not much sense to submit OS version on Linux, *BSD and the likes, too many flavours.
 	wxString osVersion = wxString::Format(_T("&osversion=%d.%d"), wxPlatformInfo::Get().GetOSMajorVersion(), wxPlatformInfo::Get().GetOSMinorVersion());
 	m_urlFile += osVersion;
-#endif
-
-#ifdef __WXMSW__
-	if (wxIsPlatform64Bit())
-		m_urlFile += _T("&osarch=64");
-	else
-		m_urlFile += _T("&osarch=32");
 #endif
 
 	m_statusTimer.SetOwner(this);
@@ -275,7 +266,7 @@ GUID VISTASHIT_FOLDERID_Downloads = { 0x374de290, 0x123f, 0x4565, 0x91, 0x64, 0x
 extern "C" typedef HRESULT (WINAPI *tSHGetKnownFolderPath)(const GUID& rfid, DWORD dwFlags, HANDLE hToken, PWSTR *ppszPath);
 #endif
 
-CLocalPath CUpdateWizard::GetDownloadDir() const
+wxString CUpdateWizard::GetDownloadDir()
 {
 #ifdef __WXMSW__
 	// Old Vista has a profile directory for downloaded files,
@@ -293,76 +284,11 @@ CLocalPath CUpdateWizard::GetDownloadDir() const
 		{
 			wxString dir = path;
 			CoTaskMemFree(path);
-			return CLocalPath(dir);
+			return dir;
 		}
 	}
 #endif
-	return CLocalPath(wxStandardPaths::Get().GetDocumentsDir());
-}
-
-bool CUpdateWizard::SetLocalFile()
-{
-	wxString filename = m_urlFile;
-	int pos = filename.Find('/', true);
-	if (pos != -1)
-		filename = filename.Mid(pos + 1);
-
-	const CLocalPath defaultDownloadDir = GetDownloadDir();
-	CLocalPath downloadDir(COptions::Get()->GetOption(OPTION_UPDATECHECK_DOWNLOADDIR));
-	if (downloadDir.empty() || !downloadDir.Exists())
-		downloadDir = defaultDownloadDir;
-	
-	const int flags = wxFD_SAVE | wxFD_OVERWRITE_PROMPT;
-
-	const wxString& ext = filename.Right(4);
-	wxString type;
-	if (ext == _T(".exe"))
-		type = _("Executable");
-	if (ext == _T(".bz2"))
-		type = _("Archive");
-	else
-		type = _("Package");
-
-	wxString filter = wxString::Format(_T("%s (*%s)|*%s"), type.c_str(), ext.c_str(), ext.c_str());
-
-	wxFileDialog dialog(this, _("Select download location for package"), downloadDir.GetPath(), filename, filter, flags);
-	if (dialog.ShowModal() != wxID_OK)
-		return false;
-
-	wxString targetFile;
-	if (!downloadDir.SetPath(dialog.GetPath(), &targetFile))
-	{
-		wxMessageBox(_("Error, file name cannot be parsed."));
-		return false;
-	}
-
-	if (downloadDir != defaultDownloadDir)
-		COptions::Get()->SetOption(OPTION_UPDATECHECK_DOWNLOADDIR, downloadDir.GetPath());
-	else
-		COptions::Get()->SetOption(OPTION_UPDATECHECK_DOWNLOADDIR, _T(""));
-
-	{
-		wxLogNull log;
-		wxRemoveFile(downloadDir.GetPath() + targetFile);
-	}
-
-	if (wxFileName::FileExists(downloadDir.GetPath() + targetFile))
-	{
-		wxMessageBox(_("Error, local file exists but cannot be removed"));
-		return false;
-	}
-
-	const wxString file = downloadDir.GetPath() + targetFile + _T(".tmp");
-	m_localFile = file;
-
-	int i = 1;
-	while (wxFileName::FileExists(m_localFile))
-	{
-		i++;
-		m_localFile = file + wxString::Format(_T("%d"), i);
-	}
-
-	return true;
+	return wxStandardPaths::Get().GetDocumentsDir();
 }
 
 void CUpdateWizard::OnPageChanging(wxWizardEvent& event)
@@ -380,11 +306,55 @@ void CUpdateWizard::OnPageChanging(wxWizardEvent& event)
 	}
 	if (event.GetPage() == m_pages[1] && m_pages[1]->GetNext())
 	{
-		if (!SetLocalFile())
+		wxString filename = m_urlFile;
+		int pos = filename.Find('/', true);
+		if (pos != -1)
+			filename = filename.Mid(pos + 1);
+
+		const wxString defaultDir = GetDownloadDir();
+
+		const int flags = wxFD_SAVE | wxFD_OVERWRITE_PROMPT;
+
+		const wxString& ext = filename.Right(4);
+		wxString type;
+		if (ext == _T(".exe"))
+			type = _("Executable");
+		if (ext == _T(".bz2"))
+			type = _("Archive");
+		else
+			type = _("Package");
+
+		wxString filter = wxString::Format(_T("%s (*%s)|*%s"), type.c_str(), ext.c_str(), ext.c_str());
+
+		wxFileDialog dialog(this, _("Select download location for package"), defaultDir, filename, filter, flags);
+		if (dialog.ShowModal() != wxID_OK)
 		{
 			event.Veto();
 			m_skipPageChanging = false;
 			return;
+		}
+
+		{
+			wxLogNull log;
+			wxRemoveFile(dialog.GetPath());
+		}
+		
+		if (wxFileName::FileExists(dialog.GetPath()))
+		{
+			wxMessageBox(_("Error, local file exists but cannot be removed"));
+			event.Veto();
+			m_skipPageChanging = false;
+			return;
+		}
+
+		const wxString file = dialog.GetPath() + _T(".tmp");
+		m_localFile = file;
+
+		int i = 1;
+		while (wxFileName::FileExists(m_localFile))
+		{
+			i++;
+			m_localFile = file + wxString::Format(_T("%d"), i);
 		}
 	}
 	
@@ -606,9 +576,9 @@ void CUpdateWizard::OnEngineEvent(wxEvent& event)
 #ifdef __WXMSW__
 					pText->SetLabel(_("The most recent version has been downloaded. Click on Finish to close FileZilla and to start the installation."));
 #else
-					pText->SetLabel(_("The most recent version has been downloaded. Please install it the same way you installed this version."));
-#endif
+					pText->SetLabel(_("The most recent version has been downloaded. Please install like you did install this version."));
 
+#endif
 					pText->Show();
 					RewrapPage(2);
 

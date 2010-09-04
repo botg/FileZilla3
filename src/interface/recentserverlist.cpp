@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "recentserverlist.h"
 #include "ipcmutex.h"
 #include "filezillaapp.h"

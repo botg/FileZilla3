@@ -43,9 +43,6 @@ public:
 	// Refresh list but not header
 	void RefreshListOnly(bool eraseBackground = true);
 
-	void CancelLabelEdit();
-	void SetLabelEditBlock(bool block);
-
 #ifndef __WXMSW__
 	wxScrolledWindow* GetMainWindow();
 #endif
@@ -74,9 +71,6 @@ private:
 	void OnMouseWheel(wxMouseEvent& event);
 	void OnSelectionChanged(wxListEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
-	void OnBeginLabelEdit(wxListEvent& event);
-	void OnEndLabelEdit(wxListEvent& event);
-	void OnColumnDragging(wxListEvent& event);
 
 	bool m_prefixSearch_enabled;
 	wxDateTime m_prefixSearch_lastKeyPress;
@@ -86,9 +80,6 @@ private:
 	void SaveColumnWidths(unsigned int optionId);
 
 	void CreateVisibleColumnMapping();
-
-	virtual bool OnBeginRename(const wxListEvent& event);
-	virtual bool OnAcceptRename(const wxListEvent& event);
 
 	struct t_columnInfo
 	{
@@ -101,25 +92,6 @@ private:
 	};
 	std::vector<t_columnInfo> m_columnInfo;
 	unsigned int *m_pVisibleColumnMapping;
-
-#ifdef __WXMSW__
-	virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
-	bool m_columnDragging;
-#endif
-
-#ifndef __WXMSW__
-	bool m_editing;
-#endif
-	int m_blockedLabelEditing;
-};
-
-class CLabelEditBlocker
-{
-public:
-	CLabelEditBlocker(wxListCtrlEx& listCtrl);
-	virtual ~CLabelEditBlocker();
-private:
-	wxListCtrlEx& m_listCtrl;
 };
 
 #endif //__LISTCTRLEX_H__

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="engine"
 	ProjectGUID="{AAD2642D-D07A-4415-BB32-D678D89D546F}"
 	RootNamespace="engine"
@@ -42,16 +42,17 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;../include/"
+				AdditionalIncludeDirectories="../include/"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;ENGINE"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="filezilla.h"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough="FileZilla.h"
 				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -109,17 +110,14 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/MP"
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories=".;../include/"
+				AdditionalIncludeDirectories="../include/"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="filezilla.h"
-				PrecompiledHeaderFile="$(IntDir)\filezilla.pch"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
@@ -197,22 +195,6 @@
 			<File
 				RelativePath=".\FileZillaEngine.cpp"
 				>
-				<FileConfiguration
-					Name="Debug Unicode|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release Unicode|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\ftpcontrolsocket.cpp"
@@ -275,48 +257,12 @@
 				>
 			</File>
 			<File
-				RelativePath=".\sizeformatting_base.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\socket.cpp"
 				>
-				<FileConfiguration
-					Name="Debug Unicode|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release Unicode|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\threadex.cpp"
 				>
-				<FileConfiguration
-					Name="Debug Unicode|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release Unicode|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\timeex.cpp"
@@ -377,7 +323,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\filezilla.h"
+				RelativePath="..\include\FileZilla.h"
 				>
 			</File>
 			<File
@@ -394,10 +340,6 @@
 			</File>
 			<File
 				RelativePath=".\iothread.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\libfilezilla.h"
 				>
 			</File>
 			<File
@@ -454,10 +396,6 @@
 			</File>
 			<File
 				RelativePath=".\sftpcontrolsocket.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\sizeformatting_base.h"
 				>
 			</File>
 			<File

@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include <wx/aui/aui.h>
 #include "aui_notebook_ex.h"
 #include <wx/dcmirror.h>
@@ -395,13 +395,8 @@ void wxAuiNotebookEx::OnNavigationKey(wxNavigationKeyEvent& event)
 		return;
 	}
 
-	AdvanceTab(event.GetDirection());
-}
-
-void wxAuiNotebookEx::AdvanceTab(bool forward)
-{
 	int page = GetSelection();
-	if (forward)
+	if (event.GetDirection())
 		page++;
 	else
 		page--;

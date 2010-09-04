@@ -22,8 +22,6 @@ class CStatusBar;
 class CMainFrameStateEventHandler;
 class CSplitterWindowEx;
 class CContextControl;
-class CToolBar;
-class CMenuBar;
 
 class CMainFrame : public wxFrame
 {
@@ -52,29 +50,39 @@ public:
 
 	CStatusBar* GetStatusBar() { return m_pStatusBar; }
 
+	void UpdateToolbarState();
+	void UpdateMenubarState();
+
 	void ProcessCommandLine();
+
+	void ClearBookmarks();
 
 	void PostInitialize();
 	
-	bool ConnectToServer(const CServer& server, const CServerPath& path = CServerPath());
-
-	CContextControl* GetContextControl() { return m_pContextControl; }
-
-	bool ConnectToSite(CSiteManagerItemData_Site* const pData);
+	bool Connect(const CServer& server, const CServerPath& path = CServerPath());
 
 protected:
 	bool CreateMenus();
 	bool CreateQuickconnectBar();
 	bool CreateToolBar();
+	void SetProgress(const CTransferStatus* pStatus);
+	bool ConnectToSite(CSiteManagerItemData_Site* const pData);
 	void OpenSiteManager(const CServer* pServer = 0);
+	void InitToolbarState();
+	void InitMenubarState();
 
 	void FocusNextEnabled(std::list<wxWindow*>& windowOrder, std::list<wxWindow*>::iterator iter, bool skipFirst, bool forward);
 
 	void SetBookmarksFromPath(const wxString& path);
+	void UpdateBookmarkMenu();
+
+	std::list<int> m_bookmark_menu_ids;
+	std::map<int, wxString> m_bookmark_menu_id_map_global;
+	std::map<int, wxString> m_bookmark_menu_id_map_site;
 
 	CStatusBar* m_pStatusBar;
-	CMenuBar* m_pMenuBar;
-	CToolBar* m_pToolBar;
+	wxMenuBar* m_pMenuBar;
+	wxToolBar* m_pToolBar;
 	CQuickconnectBar* m_pQuickconnectBar;
 
 	CSplitterWindowEx* m_pTopSplitter; // If log position is 0, splits message log from rest of panes
@@ -95,6 +103,9 @@ protected:
 	void ShowLocalTree();
 	void ShowRemoteTree();
 
+#if defined(EVT_TOOL_DROPDOWN) && defined(__WXMSW__)
+	void MakeDropdownTool(wxToolBar* pToolBar, int id);
+#endif
 	void ShowDropdownMenu(wxMenu* pMenu, wxToolBar* pToolBar, wxCommandEvent& event);
 
 #ifdef __WXMSW__
@@ -107,6 +118,7 @@ protected:
 	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent& event);
 	void OnMenuHandler(wxCommandEvent& event);
+	void OnMenuOpenHandler(wxMenuEvent& event);
 	void OnEngineEvent(wxEvent& event);
 	void OnDisconnect(wxCommandEvent& event);
 	void OnCancel(wxCommandEvent& event);

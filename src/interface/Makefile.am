@@ -49,9 +49,7 @@ filezilla_SOURCES = aboutdialog.cpp \
 		loginmanager.cpp \
 		Mainfrm.cpp \
 		manual_transfer.cpp \
-		menu_bar.cpp \
 		netconfwizard.cpp \
-		option_change_event_handler.cpp \
 		Options.cpp \
 		power_management.cpp \
 		queue.cpp \
@@ -89,8 +87,6 @@ filezilla_SOURCES = aboutdialog.cpp \
 		settings/settingsdialog.cpp \
 		sftp_crypt_info_dlg.cpp \
 		sitemanager.cpp \
-		sizeformatting.cpp \
-		speedlimits_dialog.cpp \
 		splitter.cpp \
 		state.cpp \
 		statusbar.cpp \
@@ -98,7 +94,6 @@ filezilla_SOURCES = aboutdialog.cpp \
 		StatusView.cpp \
 		systemimagelist.cpp \
 		themeprovider.cpp \
-		toolbar.cpp \
 		treectrlex.cpp \
 		updatewizard.cpp \
 		verifycertdialog.cpp \
@@ -109,7 +104,6 @@ filezilla_SOURCES = aboutdialog.cpp \
 		welcome_dialog.cpp \
 		window_state_manager.cpp \
 		wrapengine.cpp \
-		xh_menu_ex.cpp \
 		xh_toolb_ex.cpp \
 		xmlfunctions.cpp
  
@@ -139,7 +133,6 @@ noinst_HEADERS = aboutdialog.h \
 		 fileexistsdlg.h \
 		 filelistctrl.h \
 		 filelist_statusbar.h \
-		 filezilla.h \
 		 filezillaapp.h \
 		 filter.h \
 		 filter_conditions_dialog.h \
@@ -156,9 +149,7 @@ noinst_HEADERS = aboutdialog.h \
 		 loginmanager.h \
 		 Mainfrm.h \
 		 manual_transfer.h \
-		 menu_bar.h \
 		 netconfwizard.h \
-		 option_change_event_handler.h \
 		 Options.h \
 		 power_management.h \
 		 prefix.h \
@@ -197,8 +188,6 @@ noinst_HEADERS = aboutdialog.h \
 		 settings/settingsdialog.h \
 		 sftp_crypt_info_dlg.h \
 		 sitemanager.h \
-		 sizeformatting.h \
-		 speedlimits_dialog.h \
 		 splitter.h \
 		 state.h \
 		 statuslinectrl.h \
@@ -206,7 +195,6 @@ noinst_HEADERS = aboutdialog.h \
 		 StatusView.h \
 		 systemimagelist.h \
 		 themeprovider.h \
-		 toolbar.h \
 		 treectrlex.h \
 		 updatewizard.h \
 		 verifycertdialog.h \
@@ -217,7 +205,6 @@ noinst_HEADERS = aboutdialog.h \
 		 welcome_dialog.h \
 		 window_state_manager.h \
 		 wrapengine.h \
-		 xh_menu_ex.h \
 		 xh_toolb_ex.h \
 		 xmlfunctions.h
 
@@ -248,10 +235,6 @@ if MINGW
 filezilla_LDFLAGS += -lole32 -luuid -lnetapi32 -lmpr
 endif
 
-# GTK+ libs, empty if not using wxGTK
-filezilla_CPPFLAGS += $(LIBGTK_CFLAGS)
-filezilla_LDFLAGS += $(LIBGTK_LIBS)
-
 if MINGW
 filezilla_DEPENDENCIES += resources/filezilla.o
 endif
@@ -273,22 +256,3 @@ $(top_builddir)/FileZilla.app/Contents/MacOS/filezilla$(EXEEXT): filezilla
 	mkdir -p $(top_builddir)/FileZilla.app/Contents/Resources
 	$(MAKE) -C resources mac-copy-resources
 	cp -f filezilla $(top_builddir)/FileZilla.app/Contents/MacOS/filezilla
-	cp -f $(top_srcdir)/COPYING $(top_builddir)/FileZilla.app/COPYING
-	mkdir -p $(top_builddir)/FileZilla.app/docs
-	cp -f $(top_srcdir)/docs/fzdefaults.xml.example $(top_builddir)/FileZilla.app/docs/fzdefaults.xml.example
-	cp -f $(top_srcdir)/docs/*.man $(top_builddir)/FileZilla.app/docs
-
-CLEANFILES = filezilla.h.gch
-
-if ENABLE_PRECOMP
-
-BUILT_SOURCES = filezilla.h.gch
-
-include ./$(DEPDIR)/filezilla.Po
-
-filezilla.h.gch: filezilla.h
-	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filezilla_CPPFLAGS) $(CPPFLAGS) $(filezilla_CXXFLAGS) $(CXXFLAGS) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o "$@" $<; \
-	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-
-endif
-

@@ -1,6 +1,5 @@
-AC_INIT(FileZilla, 3.3.4.1, tim.kosse@filezilla-project.org)
+AC_INIT(FileZilla, 3.3.1, tim.kosse@filezilla-project.org)
 AC_CONFIG_HEADERS([src/include/config.h])
-AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE([dist-bzip2])
 
@@ -280,7 +279,7 @@ if test "$buildmain" = "yes"; then
   AH_TEMPLATE(ENABLE_BINRELOC, [Define ENABLE_BINRELOC on systems where the executable
                                 location can be obtained using /proc/self/maps])
   AC_MSG_CHECKING([whether to use BinReloc])
-  if echo $host_os | grep -i "cygwin\|mingw\|mac\|apple" > /dev/null 2>&1 ; then
+  if echo $host_os | grep -i "cygwin\|mingw\|mac" > /dev/null 2>&1 ; then
     use_binreloc=no
   else
     use_binreloc=yes
@@ -319,7 +318,6 @@ if test "$buildmain" = "yes"; then
     fi
   fi
   if test "x$use_precomp" = "xyes"; then
-    CPPFLAGS="$CPPFLAGS -fpch-preprocess"
     AC_MSG_RESULT([yes])
   else
     AC_MSG_RESULT([no])
@@ -370,7 +368,42 @@ if test "$buildmain" = "yes"; then
   # TinyXML
   # ------
 
-  FZ_CHECK_TINYXML()
+  AC_ARG_WITH(tinyxml, AC_HELP_STRING([--with-tinyxml=type], [Selects which version of tinyxml to use. Type has to be either system or builtin]),
+    [
+      if test "x$with_tinyxml" != "xbuiltin"; then
+        if test "x$with_tinyxml" != "xsystem"; then
+          AC_MSG_ERROR([--with-tinyxml has to be set to either builtin or system])
+        fi
+      fi
+    ],
+    [
+      with_tinyxml=auto
+    ])
+
+  if test "x$with_tinyxml" != "xbuiltin"; then
+    AC_HAVE_LIBRARY(tinyxml,
+      [
+         with_tinyxml=system
+      ],
+      [
+        if test "x$with_tinyxml" = "xsystem"; then
+          AC_MSG_ERROR([tinyxml sytem library not found but requested])
+        else
+          with_tinyxml=builtin
+        fi
+      ])
+  fi
+
+  if test "x$with_tinyxml" = "xsystem"; then
+    AC_MSG_NOTICE([Using system tinyxml])
+    AC_DEFINE(HAVE_LIBTINYXML, 1, [Define to 1 if your system has the `tinyxml' library (-ltinyxml).])
+    TINYXML_LIBS="-ltinyxml"
+  else
+    AC_MSG_NOTICE([Using builtin tinyxml])
+    TINYXML_LIBS="../tinyxml/libtinyxml.a"
+  fi
+
+  AC_SUBST(TINYXML_LIBS)
 
   # Libdbus
   # -------
@@ -383,9 +416,9 @@ if test "$buildmain" = "yes"; then
     ])
 
   if test "$with_dbus" = "auto"; then
-    if echo $WX_CPPFLAGS | grep __WXMAC__ > /dev/null 2>&1; then
+    if echo $WX_CPPFLAGS | grep __WXMAC__; then
       with_dbus="no"
-    elif echo $WX_CPPFLAGS | grep __WXMSW__ > /dev/null 2>&1; then
+    elif echo $WX_CPPFLAGS | grep __WXMSW__; then
       with_dbus="no"
     else
       with_dbus="yes"
@@ -415,19 +448,12 @@ if test "$buildmain" = "yes"; then
   AC_MSG_RESULT([$with_dbus])
 
   # We want xdg-open on *nix
-  if echo "$WX_CPPFLAGS" | grep __WXGTK__ > /dev/null 2>&1; then
+  if echo "$WX_CPPFLAGS" | grep __WXGTK__; then
 
     AC_PATH_PROG(xdgopen, xdg-open)
     if test -z "$xdgopen"; then
       AC_MSG_ERROR([xdg-open not found. This program is the preferred way to launch the default browser. Please install the xdg-utils.])
     fi
-
-    PKG_CHECK_MODULES(LIBGTK, gtk+-2.0,, [
-      AC_MSG_ERROR([gtk+-2.0 was not found, even though the used version of wxWidgets depends on it. Are you missing the gtk+2.0 development files?])
-    ])
-
-    AC_SUBST(LIBGTK_LIBS)
-    AC_SUBST(LIBGTK_CFLAGS)
   fi
 
   # Some more obscure platforms (e.g. HP-UX) don't have setenv which is required by POSIX

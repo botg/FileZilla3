@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "treectrlex.h"
 
 IMPLEMENT_CLASS(wxTreeCtrlEx, wxTreeCtrl);

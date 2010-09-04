@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="FileZilla"
 	ProjectGUID="{760BA430-BB7F-44AB-9542-F8705CAFF92B}"
 	RootNamespace="FileZilla"
@@ -49,17 +49,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;../include/"
+				AdditionalIncludeDirectories="../include/"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;PACKAGE_VERSION=\&quot;3.0.11.1\&quot;;USED_HOST=\&quot;i586-pc-mingw32msvc\&quot;"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="filezilla.h"
-				PrecompiledHeaderFile=".\Debug Unicode/filezilla.pch"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough="FileZilla.h"
+				PrecompiledHeaderFile=".\Debug Unicode/FileZilla.pch"
 				AssemblerListingLocation=".\Debug Unicode/"
 				ObjectFile=".\Debug Unicode/"
 				ProgramDataBaseFileName=".\Debug Unicode/"
@@ -148,12 +147,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/MP"
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="true"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories=".;../include/"
+				AdditionalIncludeDirectories="../include/"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;PACKAGE_VERSION=\&quot;3.0.1\&quot;;USED_HOST=\&quot;i586-pc-mingw32msvc\&quot;"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -316,26 +314,10 @@
 			<File
 				RelativePath=".\filelistctrl.cpp"
 				>
-				<FileConfiguration
-					Name="Debug Unicode|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="FileZilla.cpp"
 				>
-				<FileConfiguration
-					Name="Debug Unicode|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\filter.cpp"
@@ -394,15 +376,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\menu_bar.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\netconfwizard.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\option_change_event_handler.cpp"
 				>
 			</File>
 			<File
@@ -554,14 +528,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\sizeformatting.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\speedlimits_dialog.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\splitter.cpp"
 				>
 			</File>
@@ -590,7 +556,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\toolbar.cpp"
+				RelativePath="..\tinyxml\tinystr.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\tinyxml\tinyxml.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\tinyxml\tinyxmlerror.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\tinyxml\tinyxmlparser.cpp"
 				>
 			</File>
 			<File
@@ -631,10 +609,6 @@
 			</File>
 			<File
 				RelativePath=".\wrapengine.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\xh_menu_ex.cpp"
 				>
 			</File>
 			<File
@@ -795,15 +769,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\menu_bar.h"
-				>
-			</File>
-			<File
 				RelativePath=".\netconfwizard.h"
-				>
-			</File>
-			<File
-				RelativePath=".\option_change_event_handler.h"
 				>
 			</File>
 			<File
@@ -959,14 +925,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\sizeformatting.h"
-				>
-			</File>
-			<File
-				RelativePath=".\speedlimits_dialog.h"
-				>
-			</File>
-			<File
 				RelativePath=".\splitter.h"
 				>
 			</File>
@@ -996,10 +954,6 @@
 			</File>
 			<File
 				RelativePath=".\themeprovider.h"
-				>
-			</File>
-			<File
-				RelativePath=".\toolbar.h"
 				>
 			</File>
 			<File
@@ -1040,10 +994,6 @@
 			</File>
 			<File
 				RelativePath=".\wrapengine.h"
-				>
-			</File>
-			<File
-				RelativePath=".\xh_menu_ex.h"
 				>
 			</File>
 			<File
@@ -1152,10 +1102,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\ClassDiagram1.cd"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

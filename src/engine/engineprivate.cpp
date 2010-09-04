@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 #include "ControlSocket.h"
 #include "ftpcontrolsocket.h"
 #include "sftpcontrolsocket.h"
@@ -516,7 +516,7 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 		return;
 	}
 
-	CDirectoryCache cache;
+	const CDirectoryCache cache;
 	
 	CTimeEx changeTime;
 	if (!cache.GetChangeTime(changeTime, *pOwnServer, path))

@@ -1,4 +1,4 @@
-#include <filezilla.h>
+#include "FileZilla.h"
 
 #if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
 

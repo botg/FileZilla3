@@ -139,13 +139,15 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 
 	t_queueEntry &entry = m_requestList.front();
 
-	if (!entry.pEngine->IsPendingAsyncRequestReply(entry.pNotification)) {
+	if (!entry.pEngine->IsPendingAsyncRequestReply(entry.pNotification))
+	{
 		delete entry.pNotification;
 		m_requestList.pop_front();
 		return true;
 	}
 
-	if (entry.pNotification->GetRequestID() == reqId_fileexists) {
+	if (entry.pNotification->GetRequestID() == reqId_fileexists)
+	{
 		CFileExistsNotification *pNotification = reinterpret_cast<CFileExistsNotification *>(entry.pNotification);
 
 		// Get the action, go up the hierarchy till one is found
@@ -437,8 +439,9 @@ bool CAsyncRequestQueue::CheckWindowState()
 {
 	m_timer.Stop();
 	wxMouseState mouseState = wxGetMouseState();
-	if (mouseState.LeftIsDown() || mouseState.MiddleIsDown() || mouseState.RightIsDown()) {
-		m_timer.Start(100, true);
+	if (mouseState.LeftIsDown() || mouseState.MiddleIsDown() || mouseState.RightIsDown())
+	{
+		m_timer.Start(1000, true);
 		return false;
 	}
 

@@ -53,7 +53,7 @@ CLogging::~CLogging()
 
 bool CLogging::ShouldLog(MessageType nMessageType) const
 {
-	const int debugLevel = m_pEngine->GetOptions().GetOptionVal(OPTION_LOGGING_DEBUGLEVEL);
+	const int debugLevel = m_pEngine->GetOptions()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL);
 	switch (nMessageType)
 	{
 	case MessageType::Debug_Warning:
@@ -73,7 +73,7 @@ bool CLogging::ShouldLog(MessageType nMessageType) const
 			return false;
 		break;
 	case MessageType::RawList:
-		if (!m_pEngine->GetOptions().GetOptionVal(OPTION_LOGGING_RAWLISTING))
+		if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_LOGGING_RAWLISTING))
 			return false;
 		break;
 	default:
@@ -89,7 +89,7 @@ void CLogging::InitLogFile() const
 
 	m_logfile_initialized = true;
 
-	m_file = m_pEngine->GetOptions().GetOption(OPTION_LOGGING_FILE);
+	m_file = m_pEngine->GetOptions()->GetOption(OPTION_LOGGING_FILE);
 	if (m_file.empty())
 		return;
 
@@ -117,7 +117,7 @@ void CLogging::InitLogFile() const
 
 	m_pid = wxGetProcessId();
 
-	m_max_size = m_pEngine->GetOptions().GetOptionVal(OPTION_LOGGING_FILE_SIZELIMIT);
+	m_max_size = m_pEngine->GetOptions()->GetOptionVal(OPTION_LOGGING_FILE_SIZELIMIT);
 	if (m_max_size < 0)
 		m_max_size = 0;
 	else if (m_max_size > 2000)
@@ -146,11 +146,14 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 		now.Format(_T("%Y-%m-%d %H:%M:%S")), m_pid, m_pEngine->GetEngineId(), m_prefixes[static_cast<int>(nMessageType)], msg));
 
 	const wxWX2MBbuf utf8 = out.mb_str(wxConvUTF8);
-	if (utf8) {
+	if (utf8)
+	{
 #ifdef __WXMSW__
-		if (m_max_size) {
+		if (m_max_size)
+		{
 			LARGE_INTEGER size;
-			if (!GetFileSizeEx(m_log_fd, &size) || size.QuadPart > m_max_size) {
+			if (!GetFileSizeEx(m_log_fd, &size) || size.QuadPart > m_max_size)
+			{
 				CloseHandle(m_log_fd);
 
 				// m_log_fd might no longer be the original file.
@@ -158,7 +161,8 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				HANDLE hMutex = ::CreateMutex(0, true, _T("FileZilla 3 Logrotate Mutex"));
 
 				HANDLE hFile = CreateFile(m_file, FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-				if (hFile == INVALID_HANDLE_VALUE) {
+				if (hFile == INVALID_HANDLE_VALUE)
+				{
 					wxString error = wxSysErrorMsg();
 
 					// Oh dear..
@@ -171,7 +175,8 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				}
 
 				wxString error;
-				if (GetFileSizeEx(hFile, &size) && size.QuadPart > m_max_size) {
+				if (GetFileSizeEx(hFile, &size) && size.QuadPart > m_max_size)
+				{
 					CloseHandle(hFile);
 
 					// MoveFileEx can fail if trying to access a deleted file for which another process still has

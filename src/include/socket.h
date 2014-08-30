@@ -1,8 +1,6 @@
 #ifndef __SOCKET_H__
 #define __SOCKET_H__
 
-#include "event_loop.h"
-
 // IPv6 capable, non-blocking socket class for use with wxWidgets.
 // Error codes are the same as used by the POSIX socket functions,
 // see 'man 2 socket', 'man 2 connect', ...
@@ -25,12 +23,12 @@ public:
 		close
 	};
 
-	CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, EventType type, const wxChar* data);
-	CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, EventType type, int error = 0);
+	CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, enum EventType type, const wxChar* data);
+	CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, enum EventType type, int error = 0);
 	~CSocketEvent();
 
 	CSocketEventSource* GetSocketEventSource() const { return m_pSource; }
-	EventType GetType() const { return m_type; }
+	enum EventType GetType() const { return m_type; }
 	CSocketEventHandler* GetSocketEventHandler() const { return m_pSocketEventHandler; }
 
 	wxString GetData() const;
@@ -38,7 +36,7 @@ public:
 
 protected:
 	CSocketEventSource* m_pSource;
-	const EventType m_type;
+	const enum EventType m_type;
 	wxChar *m_data;
 	int m_error;
 	CSocketEventHandler* m_pSocketEventHandler;
@@ -46,50 +44,44 @@ protected:
 	friend class CSocketEventDispatcher;
 };
 
-class CSocketEventDispatcher final : public CEventHandler
+class CSocketEventDispatcher final : protected wxEvtHandler
 {
 public:
-	CSocketEventDispatcher(CEventLoop & event_loop);
-	~CSocketEventDispatcher();
-
 	void SendEvent(CSocketEvent* evt);
 	void RemovePending(const CSocketEventHandler* pHandler);
 	void RemovePending(const CSocketEventSource* pSource);
 	void UpdatePending(const CSocketEventHandler* pOldHandler, const CSocketEventSource* pOldSource, CSocketEventHandler* pNewHandler, CSocketEventSource* pNewSource);
 
+	static CSocketEventDispatcher& Get();
+
 private:
-	virtual void operator()(CEventBase const& ev);
+	CSocketEventDispatcher();
+	~CSocketEventDispatcher();
+
+	virtual bool ProcessEvent(wxEvent& event);
 
 	std::list<CSocketEvent*> m_pending_events;
 
 	wxCriticalSection m_sync;
+
+	static CSocketEventDispatcher m_dispatcher;
+
+	bool m_inside_loop{};
 };
 
 class CSocketEventHandler
 {
 public:
-	CSocketEventHandler(CSocketEventDispatcher& dispatcher)
-		: dispatcher_(dispatcher)
-	{};
-
+	CSocketEventHandler() {};
 	virtual ~CSocketEventHandler();
 
 	virtual void OnSocketEvent(CSocketEvent& event) = 0;
-
-	CSocketEventDispatcher& dispatcher_;
 };
 
 class CSocketEventSource
 {
 public:
-	CSocketEventSource(CSocketEventDispatcher& dispatcher)
-		: dispatcher_(dispatcher)
-	{
-	}
-
 	virtual ~CSocketEventSource();
-
-	CSocketEventDispatcher& dispatcher_;
 };
 
 class CCallback
@@ -103,7 +95,7 @@ class CSocket : public CSocketEventSource
 {
 	friend class CSocketThread;
 public:
-	CSocket(CSocketEventHandler* pEvtHandler, CSocketEventDispatcher& dispatcher);
+	CSocket(CSocketEventHandler* pEvtHandler);
 	virtual ~CSocket();
 
 	CSocket(CSocket const&) = delete;
@@ -126,7 +118,7 @@ public:
 		closing,
 		closed
 	};
-	SocketState GetState();
+	enum SocketState GetState();
 
 	enum address_family
 	{
@@ -142,7 +134,7 @@ public:
 	// If host is a name that can be resolved, a hostaddress socket event gets sent.
 	// Once connections got established, a connection event gets sent. If
 	// connection could not be established, a close event gets sent.
-	int Connect(wxString host, unsigned int port, address_family family = unspec);
+	int Connect(wxString host, unsigned int port, enum address_family family = unspec);
 
 	// After receiving a send or receive event, you can call these functions
 	// as long as their return value is positive.
@@ -164,7 +156,7 @@ public:
 	int GetRemotePort(int& error);
 
 	// If connected, either ipv4 or ipv6, unspec otherwise
-	address_family GetAddressFamily() const;
+	enum address_family GetAddressFamily() const;
 
 	static wxString GetErrorString(int error);
 	static wxString GetErrorDescription(int error);
@@ -177,7 +169,7 @@ public:
 
 	static wxString AddressToString(const struct sockaddr* addr, int addr_len, bool with_port = true, bool strip_zone_index = false);
 
-	int Listen(address_family family, int port = 0);
+	int Listen(enum address_family family, int port = 0);
 	CSocket* Accept(int& error);
 
 	enum Flags
@@ -206,7 +198,7 @@ protected:
 
 	int m_fd;
 
-	SocketState m_state;
+	enum SocketState m_state;
 
 	CSocketThread* m_pSocketThread;
 

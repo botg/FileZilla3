@@ -8,20 +8,22 @@ CBackend::CBackend(CSocketEventHandler* pEvtHandler) : m_pEvtHandler(pEvtHandler
 {
 }
 
-CSocketBackend::CSocketBackend(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CRateLimiter& rateLimiter)
-	: CBackend(pEvtHandler)
-	, CSocketEventSource(pEvtHandler->dispatcher_)
-	, m_pSocket(pSocket)
-	, m_rateLimiter(rateLimiter)
+CSocketBackend::CSocketBackend(CSocketEventHandler* pEvtHandler, CSocket* pSocket) : CBackend(pEvtHandler), m_pSocket(pSocket)
 {
 	m_pSocket->SetEventHandler(pEvtHandler);
-	m_rateLimiter.AddObject(this);
+
+	CRateLimiter* pRateLimiter = CRateLimiter::Get();
+	if (pRateLimiter)
+		pRateLimiter->AddObject(this);
 }
 
 CSocketBackend::~CSocketBackend()
 {
 	m_pSocket->SetEventHandler(0);
-	m_rateLimiter.RemoveObject(this);
+
+	CRateLimiter* pRateLimiter = CRateLimiter::Get();
+	if (pRateLimiter)
+		pRateLimiter->RemoveObject(this);
 }
 
 int CSocketBackend::Write(const void *buffer, unsigned int len, int& error)
@@ -77,5 +79,5 @@ void CSocketBackend::OnRateAvailable(enum CRateLimiter::rate_direction direction
 	else
 		evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::read);
 
-	dispatcher_.SendEvent(evt);
+	CSocketEventDispatcher::Get().SendEvent(evt);
 }

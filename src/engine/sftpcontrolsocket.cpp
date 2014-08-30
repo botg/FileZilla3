@@ -44,72 +44,18 @@ struct sftp_message
 	};
 };
 
-class CProcess : protected wxProcess
-{
-public:
-	explicit CProcess(CEventHandler * handler)
-		: m_handler(handler)
-	{
-		Redirect();
-	}
+DECLARE_EVENT_TYPE(fzEVT_SFTP, -1)
+DEFINE_EVENT_TYPE(fzEVT_SFTP)
 
-	bool Execute(wxString const& cmd)
-	{
-		wxASSERT(!m_pid && !m_terminated);
-		m_pid = wxExecute(cmd, wxEXEC_ASYNC, this);
-		return m_pid != 0;
-	}
-
-	void ClearHandler()
-	{
-		m_handler = 0;
-	}
-
-	virtual void OnTerminate(int, int)
-	{
-		m_terminated = true;
-		if (m_handler) {
-			m_handler->SendEvent(CTerminateEvent());
-		}
-		else {
-			delete this;
-		}
-	}
-
-	void Kill()
-	{
-		if (!m_terminated && m_pid) {
-			// Disable logging, fzsftp might have already closed itself.
-			wxLogNull log;
-			wxProcess::Kill(m_pid, wxSIGKILL);
-		}
-	}
-
-	void Detach()
-	{
-		m_handler = 0;
-		Kill();
-		if (m_terminated || !m_pid) {
-			delete this;
-		}
-	}
-
-	wxInputStream *GetInputStream() const { return wxProcess::GetInputStream(); }
-	wxInputStream *GetErrorStream() const { return wxProcess::GetErrorStream(); }
-	wxOutputStream *GetOutputStream() const { return wxProcess::GetOutputStream(); }
-
-protected:
-	~CProcess() {};
-
-	bool m_terminated{};
-	CEventHandler * m_handler{};
-	int m_pid{};
-};
+BEGIN_EVENT_TABLE(CSftpControlSocket, CControlSocket)
+EVT_COMMAND(wxID_ANY, fzEVT_SFTP, CSftpControlSocket::OnSftpEvent)
+EVT_END_PROCESS(wxID_ANY, CSftpControlSocket::OnTerminate)
+END_EVENT_TABLE()
 
 class CSftpInputThread final : public wxThread
 {
 public:
-	CSftpInputThread(CSftpControlSocket* pOwner, CProcess* pProcess)
+	CSftpInputThread(CSftpControlSocket* pOwner, wxProcess* pProcess)
 		: wxThread(wxTHREAD_JOINABLE), m_pProcess(pProcess),
 		  m_pOwner(pOwner)
 	{
@@ -151,8 +97,9 @@ protected:
 		m_sftpMessages.push_back(message);
 		m_criticalSection.Leave();
 
+		wxCommandEvent evt(fzEVT_SFTP, wxID_ANY);
 		if (sendEvent)
-			m_pOwner->SendEvent(CSftpEvent());
+			wxPostEvent(m_pOwner, evt);
 	}
 
 	int ReadNumber(wxInputStream* pInputStream, bool &error)
@@ -368,7 +315,7 @@ loopexit:
 		return 0;
 	}
 
-	CProcess* m_pProcess;
+	wxProcess* m_pProcess;
 	CSftpControlSocket* m_pOwner;
 
 	std::list<sftp_message*> m_sftpMessages;
@@ -405,13 +352,14 @@ CSftpControlSocket::CSftpControlSocket(CFileZillaEnginePrivate *pEngine) : CCont
 	m_useUTF8 = true;
 	m_pProcess = 0;
 	m_pInputThread = 0;
+	m_pid = 0;
+	m_inDestructor = false;
+	m_termindatedInDestructor = false;
 }
 
 CSftpControlSocket::~CSftpControlSocket()
 {
 	DoClose();
-
-	RemoveHandler();
 }
 
 enum connectStates
@@ -473,32 +421,40 @@ int CSftpControlSocket::Connect(const CServer &server)
 
 	pData->opState = connect_init;
 
-	wxStringTokenizer* pTokenizer = new wxStringTokenizer(m_pEngine->GetOptions().GetOption(OPTION_SFTP_KEYFILES), _T("\n"), wxTOKEN_DEFAULT);
+	wxStringTokenizer* pTokenizer = new wxStringTokenizer(m_pEngine->GetOptions()->GetOption(OPTION_SFTP_KEYFILES), _T("\n"), wxTOKEN_DEFAULT);
 	if (!pTokenizer->HasMoreTokens())
 		delete pTokenizer;
 	else
 		pData->pKeyFiles = pTokenizer;
 
-	m_pProcess = new CProcess(this);
+	m_pProcess = new wxProcess(this);
+	m_pProcess->Redirect();
 
-	m_pEngine->GetRateLimiter().AddObject(this);
+	CRateLimiter::Get()->AddObject(this);
 
-	wxString executable = m_pEngine->GetOptions().GetOption(OPTION_FZSFTP_EXECUTABLE);
+	wxString executable = m_pEngine->GetOptions()->GetOption(OPTION_FZSFTP_EXECUTABLE);
 	if (executable.empty())
 		executable = _T("fzsftp");
 	LogMessage(MessageType::Debug_Verbose, _T("Going to execute %s"), executable);
 
-	if (!m_pProcess->Execute(executable + _T(" -v"))) {
+	m_pid = wxExecute(executable + _T(" -v"), wxEXEC_ASYNC, m_pProcess);
+	if (!m_pid)
+	{
 		LogMessage(MessageType::Debug_Warning, _T("wxExecute failed"));
+		delete m_pProcess;
+		m_pProcess = 0;
 		DoClose();
 		return FZ_REPLY_ERROR;
 	}
 
 	m_pInputThread = new CSftpInputThread(this, m_pProcess);
-	if (!m_pInputThread->Init()) {
+	if (!m_pInputThread->Init())
+	{
 		LogMessage(MessageType::Debug_Warning, _T("Thread creation failed"));
 		delete m_pInputThread;
 		m_pInputThread = 0;
+		m_pProcess->Detach();
+		m_pProcess = 0;
 		DoClose();
 		return FZ_REPLY_ERROR;
 	}
@@ -510,12 +466,14 @@ int CSftpControlSocket::ConnectParseResponse(bool successful, const wxString& re
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::ConnectParseResponse(%s)"), reply);
 
-	if (!successful) {
+	if (!successful)
+	{
 		DoClose(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (!m_pCurOpData) {
+	if (!m_pCurOpData)
+	{
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		DoClose(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -532,7 +490,7 @@ int CSftpControlSocket::ConnectParseResponse(bool successful, const wxString& re
 	switch (pData->opState)
 	{
 	case connect_init:
-		if (m_pEngine->GetOptions().GetOptionVal(OPTION_PROXY_TYPE) && !m_pCurrentServer->GetBypassProxy())
+		if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_TYPE) && !m_pCurrentServer->GetBypassProxy())
 			pData->opState = connect_proxy;
 		else if (pData->pKeyFiles)
 			pData->opState = connect_keys;
@@ -587,7 +545,7 @@ int CSftpControlSocket::ConnectSend()
 	case connect_proxy:
 		{
 			int type;
-			switch (m_pEngine->GetOptions().GetOptionVal(OPTION_PROXY_TYPE))
+			switch (m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_TYPE))
 			{
 			case CProxySocket::HTTP:
 				type = 1;
@@ -605,15 +563,15 @@ int CSftpControlSocket::ConnectSend()
 			}
 
 			wxString cmd = wxString::Format(_T("proxy %d \"%s\" %d"), type,
-											m_pEngine->GetOptions().GetOption(OPTION_PROXY_HOST),
-											m_pEngine->GetOptions().GetOptionVal(OPTION_PROXY_PORT));
-			wxString user = m_pEngine->GetOptions().GetOption(OPTION_PROXY_USER);
+											m_pEngine->GetOptions()->GetOption(OPTION_PROXY_HOST),
+											m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_PORT));
+			wxString user = m_pEngine->GetOptions()->GetOption(OPTION_PROXY_USER);
 			if (!user.empty())
 				cmd += _T(" \"") + user + _T("\"");
 
 			wxString show = cmd;
 
-			wxString pass = m_pEngine->GetOptions().GetOption(OPTION_PROXY_PASS);
+			wxString pass = m_pEngine->GetOptions()->GetOption(OPTION_PROXY_PASS);
 			if (!pass.empty())
 			{
 				cmd += _T(" \"") + pass + _T("\"");
@@ -640,7 +598,7 @@ int CSftpControlSocket::ConnectSend()
 		return FZ_REPLY_ERROR;
 }
 
-void CSftpControlSocket::OnSftpEvent()
+void CSftpControlSocket::OnSftpEvent(wxCommandEvent&)
 {
 	if (!m_pCurrentServer)
 		return;
@@ -650,8 +608,10 @@ void CSftpControlSocket::OnSftpEvent()
 
 	std::list<sftp_message*> messages;
 	m_pInputThread->GetMessages(messages);
-	for (auto iter = messages.begin(); iter != messages.end(); ++iter) {
-		if (!m_pInputThread) {
+	for (auto iter = messages.begin(); iter != messages.end(); ++iter)
+	{
+		if (!m_pInputThread)
+		{
 			delete *iter;
 			continue;
 		}
@@ -809,11 +769,30 @@ void CSftpControlSocket::OnSftpEvent()
 	}
 }
 
-void CSftpControlSocket::OnTerminate()
+void CSftpControlSocket::OnTerminate(wxProcessEvent& event)
 {
-	if (m_pProcess) {
-		DoClose();
+	// Check if we're inside the destructor, if so, return, all cleanup will be
+	// done there.
+	if (m_inDestructor)
+	{
+		m_termindatedInDestructor = true;
+		return;
 	}
+
+	if (!m_pInputThread)
+	{
+		event.Skip();
+		return;
+	}
+
+	CControlSocket::DoClose();
+
+	m_pInputThread->Wait(wxTHREAD_WAIT_BLOCK);
+	delete m_pInputThread;
+	m_pInputThread = 0;
+	m_pid = 0;
+	delete m_pProcess;
+	m_pProcess = 0;
 }
 
 bool CSftpControlSocket::SendCommand(wxString const& cmd, const wxString& show)
@@ -1053,7 +1032,8 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 		if (res != FZ_REPLY_OK)
 			return res;
 
-		m_pEngine->GetDirectoryCache().Store(pData->directoryListing, *m_pCurrentServer);
+		CDirectoryCache cache;
+		cache.Store(pData->directoryListing, *m_pCurrentServer);
 
 		m_pEngine->SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true, false);
 
@@ -1118,7 +1098,8 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 			}
 		}
 
-		m_pEngine->GetDirectoryCache().Store(pData->directoryListing, *m_pCurrentServer);
+		CDirectoryCache cache;
+		cache.Store(pData->directoryListing, *m_pCurrentServer);
 
 		m_pEngine->SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true, false);
 
@@ -1234,10 +1215,11 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 		wxASSERT(!pData->pNextOpData);
 
 		// Do a cache lookup now that we know the correct directory
+		CDirectoryCache cache;
 
 		int hasUnsureEntries;
 		bool is_outdated = false;
-		bool found = m_pEngine->GetDirectoryCache().DoesExist(*m_pCurrentServer, m_CurrentPath, hasUnsureEntries, is_outdated);
+		bool found = cache.DoesExist(*m_pCurrentServer, m_CurrentPath, hasUnsureEntries, is_outdated);
 		if (found)
 		{
 			// We're done if listins is recent and has no outdated entries
@@ -1321,17 +1303,22 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 		path.SetType(m_pCurrentServer->GetType());
 
 	CServerPath target;
-	if (path.empty()) {
+	if (path.empty())
+	{
 		if (m_CurrentPath.empty())
 			state = cwd_pwd;
 		else
 			return FZ_REPLY_OK;
 	}
-	else {
-		if (!subDir.empty()) {
+	else
+	{
+		if (!subDir.empty())
+		{
 			// Check if the target is in cache already
-			target = m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, path, subDir);
-			if (!target.empty()) {
+			CPathCache cache;
+			target = cache.Lookup(*m_pCurrentServer, path, subDir);
+			if (!target.empty())
+			{
 				if (m_CurrentPath == target)
 					return FZ_REPLY_OK;
 
@@ -1339,10 +1326,12 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 				subDir = _T("");
 				state = cwd_cwd;
 			}
-			else {
+			else
+			{
 				// Target unknown, check for the parent's target
-				target = m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, path, _T(""));
-				if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath)) {
+				target = cache.Lookup(*m_pCurrentServer, path, _T(""));
+				if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath))
+				{
 					target.clear();
 					state = cwd_cwd_subdir;
 				}
@@ -1350,8 +1339,10 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 					state = cwd_cwd;
 			}
 		}
-		else {
-			target = m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, path, _T(""));
+		else
+		{
+			CPathCache cache;
+			target = cache.Lookup(*m_pCurrentServer, path, _T(""));
 			if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath))
 				return FZ_REPLY_OK;
 			state = cwd_cwd;
@@ -1417,10 +1408,13 @@ int CSftpControlSocket::ChangeDirParseResponse(bool successful, const wxString& 
 		}
 		else if (reply.empty())
 			error = true;
-		else if (ParsePwdReply(reply)) {
-			m_pEngine->GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path);
+		else if (ParsePwdReply(reply))
+		{
+			CPathCache cache;
+			cache.Store(*m_pCurrentServer, m_CurrentPath, pData->path);
 
-			if (pData->subDir.empty()) {
+			if (pData->subDir.empty())
+			{
 				ResetOperation(FZ_REPLY_OK);
 				return FZ_REPLY_OK;
 			}
@@ -1443,8 +1437,10 @@ int CSftpControlSocket::ChangeDirParseResponse(bool successful, const wxString& 
 			else
 				error = true;
 		}
-		else if (ParsePwdReply(reply)) {
-			m_pEngine->GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
+		else if (ParsePwdReply(reply))
+		{
+			CPathCache cache;
+			cache.Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
 
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
@@ -1690,13 +1686,14 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			bool found = m_pEngine->GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
+			CDirectoryCache cache;
+			bool found = cache.LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
 			if (!found)
 			{
 				if (!dirDidExist)
 					pData->opState = filetransfer_waitlist;
 				else if (pData->download &&
-					m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
+					m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 				{
 					pData->opState = filetransfer_mtime;
 				}
@@ -1716,7 +1713,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 							pData->fileTime = entry.time;
 
 						if (pData->download && !entry.has_time() &&
-							m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
+							m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 						{
 							pData->opState = filetransfer_mtime;
 						}
@@ -1755,13 +1752,14 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			bool found = m_pEngine->GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
+			CDirectoryCache cache;
+			bool found = cache.LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
 			if (!found)
 			{
 				if (!dirDidExist)
 					pData->opState = filetransfer_mtime;
 				else if (pData->download &&
-					m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
+					m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 				{
 					pData->opState = filetransfer_mtime;
 				}
@@ -1777,7 +1775,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 						pData->fileTime = entry.time;
 
 					if (pData->download && !entry.has_time() &&
-						m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
+						m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 					{
 						pData->opState = filetransfer_mtime;
 					}
@@ -1919,7 +1917,7 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 			return FZ_REPLY_ERROR;
 		}
 
-		if (m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
+		if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 		{
 			if (pData->download)
 			{
@@ -1993,33 +1991,45 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 
 int CSftpControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 {
-	m_pEngine->GetRateLimiter().RemoveObject(this);
+	CRateLimiter::Get()->RemoveObject(this);
 
-	if (m_pProcess) {
-		m_pProcess->Kill();
-	}
-
-	if (m_pInputThread) {
+	if (m_pInputThread)
+	{
 		wxThread* pThread = m_pInputThread;
 		m_pInputThread = 0;
-
-		if (pThread) {
+		{
+			// Disable logging, fzsftp might have already closed itself.
+			wxLogNull log;
+			wxProcess::Kill(m_pid, wxSIGKILL);
+		}
+		m_inDestructor = true;
+		if (pThread)
+		{
 			pThread->Wait(wxTHREAD_WAIT_BLOCK);
 			delete pThread;
 		}
-	}
-	if (m_pProcess) {
-		m_pProcess->Detach();
-		m_pProcess = 0;
+		if (!m_termindatedInDestructor)
+			m_pProcess->Detach();
+		else
+		{
+			delete m_pProcess;
+			m_pProcess = 0;
+		}
 	}
 	return CControlSocket::DoClose(nErrorCode);
 }
 
 void CSftpControlSocket::Cancel()
 {
-	if (GetCurrentCommandId() != Command::none) {
+	if (GetCurrentCommandId() != Command::none)
+	{
 		DoClose(FZ_REPLY_CANCELED);
 	}
+}
+
+void CSftpControlSocket::SetActive(bool recv)
+{
+	m_pEngine->SetActive(recv);
 }
 
 enum mkdStates
@@ -2120,7 +2130,8 @@ int CSftpControlSocket::MkdirParseResponse(bool successful, const wxString&)
 				ResetOperation(FZ_REPLY_INTERNALERROR);
 				return FZ_REPLY_ERROR;
 			}
-			m_pEngine->GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->currentPath, pData->segments.front(), true, CDirectoryCache::dir);
+			CDirectoryCache cache;
+			cache.UpdateFile(*m_pCurrentServer, pData->currentPath, pData->segments.front(), true, CDirectoryCache::dir);
 			m_pEngine->SendDirectoryListingNotification(pData->currentPath, false, true, false);
 
 			pData->currentPath.AddSegment(pData->segments.front());
@@ -2256,7 +2267,8 @@ int CSftpControlSocket::DeleteParseResponse(bool successful, const wxString&)
 	{
 		const wxString& file = pData->files.front();
 
-		m_pEngine->GetDirectoryCache().RemoveFile(*m_pCurrentServer, pData->path, file);
+		CDirectoryCache cache;
+		cache.RemoveFile(*m_pCurrentServer, pData->path, file);
 
 		wxDateTime now = wxDateTime::UNow();
 		if (now.IsValid() && pData->m_time.IsValid() && (now - pData->m_time).GetSeconds() >= 1)
@@ -2304,7 +2316,8 @@ int CSftpControlSocket::DeleteSend()
 		return FZ_REPLY_ERROR;
 	}
 
-	m_pEngine->GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->path, file);
+	CDirectoryCache cache;
+	cache.InvalidateFile(*m_pCurrentServer, pData->path, file);
 
 	if (!SendCommand(_T("rm ") + WildcardEscape(QuoteFilename(filename)),
 			  _T("rm ") + QuoteFilename(filename)))
@@ -2337,7 +2350,7 @@ int CSftpControlSocket::RemoveDir(const CServerPath& path /*=CServerPath()*/, co
 	pData->path = path;
 	pData->subDir = subDir;
 
-	CServerPath fullPath = m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, pData->path, pData->subDir);
+	CServerPath fullPath = CPathCache::Lookup(*m_pCurrentServer, pData->path, pData->subDir);
 	if (fullPath.empty())
 	{
 		CServerPath fullPath = pData->path;
@@ -2349,9 +2362,10 @@ int CSftpControlSocket::RemoveDir(const CServerPath& path /*=CServerPath()*/, co
 		}
 	}
 
-	m_pEngine->GetDirectoryCache().InvalidateFile(*m_pCurrentServer, path, subDir);
+	CDirectoryCache cache;
+	cache.InvalidateFile(*m_pCurrentServer, path, subDir);
 
-	m_pEngine->GetPathCache().InvalidatePath(*m_pCurrentServer, pData->path, pData->subDir);
+	CPathCache::InvalidatePath(*m_pCurrentServer, pData->path, pData->subDir);
 
 	m_pEngine->InvalidateCurrentWorkingDirs(fullPath);
 	if (!SendCommand(_T("rmdir ") + WildcardEscape(QuoteFilename(fullPath.GetPath())),
@@ -2386,7 +2400,8 @@ int CSftpControlSocket::RemoveDirParseResponse(bool successful, const wxString&)
 		return FZ_REPLY_ERROR;
 	}
 
-	m_pEngine->GetDirectoryCache().RemoveDir(*m_pCurrentServer, pData->path, pData->subDir, m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, pData->path, pData->subDir));
+	CDirectoryCache cache;
+	cache.RemoveDir(*m_pCurrentServer, pData->path, pData->subDir, CPathCache::Lookup(*m_pCurrentServer, pData->path, pData->subDir));
 	m_pEngine->SendDirectoryListingNotification(pData->path, false, true, false);
 
 	return ResetOperation(FZ_REPLY_OK);
@@ -2490,7 +2505,8 @@ int CSftpControlSocket::ChmodSend()
 	{
 	case chmod_chmod:
 		{
-			m_pEngine->GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->m_cmd.GetPath(), pData->m_cmd.GetFile(), false, CDirectoryCache::unknown);
+			CDirectoryCache cache;
+			cache.UpdateFile(*m_pCurrentServer, pData->m_cmd.GetPath(), pData->m_cmd.GetFile(), false, CDirectoryCache::unknown);
 
 			wxString quotedFilename = QuoteFilename(pData->m_cmd.GetPath().FormatFilename(pData->m_cmd.GetFile(), !pData->m_useAbsolute));
 
@@ -2575,7 +2591,8 @@ int CSftpControlSocket::RenameParseResponse(bool successful, const wxString&)
 	const CServerPath& fromPath = pData->m_cmd.GetFromPath();
 	const CServerPath& toPath = pData->m_cmd.GetToPath();
 
-	m_pEngine->GetDirectoryCache().Rename(*m_pCurrentServer, fromPath, pData->m_cmd.GetFromFile(), toPath, pData->m_cmd.GetToFile());
+	CDirectoryCache cache;
+	cache.Rename(*m_pCurrentServer, fromPath, pData->m_cmd.GetFromFile(), toPath, pData->m_cmd.GetToFile());
 
 	m_pEngine->SendDirectoryListingNotification(fromPath, false, true, false);
 	if (fromPath != toPath)
@@ -2620,20 +2637,21 @@ int CSftpControlSocket::RenameSend()
 	{
 	case rename_rename:
 		{
+			CDirectoryCache cache;
 			bool wasDir = false;
-			m_pEngine->GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile(), &wasDir);
-			m_pEngine->GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
+			cache.InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile(), &wasDir);
+			cache.InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
 			wxString fromQuoted = QuoteFilename(pData->m_cmd.GetFromPath().FormatFilename(pData->m_cmd.GetFromFile(), !pData->m_useAbsolute));
 			wxString toQuoted = QuoteFilename(pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()));
 
-			m_pEngine->GetPathCache().InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
-			m_pEngine->GetPathCache().InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
+			CPathCache::InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
+			CPathCache::InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
 			if (wasDir)
 			{
 				// Need to invalidate current working directories
-				CServerPath path = m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
+				CServerPath path = CPathCache::Lookup(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
 				if (path.empty())
 				{
 					path = pData->m_cmd.GetFromPath();
@@ -2767,16 +2785,4 @@ int CSftpControlSocket::ListCheckTimezoneDetection()
 	}
 
 	return FZ_REPLY_OK;
-}
-
-void CSftpControlSocket::operator()(CEventBase const& ev)
-{
-	if (Dispatch<CTerminateEvent>(ev, this, &CSftpControlSocket::OnTerminate)) {
-		return;
-	}
-	if (Dispatch<CSftpEvent>(ev, this, &CSftpControlSocket::OnSftpEvent)) {
-		return;
-	}
-
-	CControlSocket::operator()(ev);
 }

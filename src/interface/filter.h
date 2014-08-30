@@ -128,8 +128,9 @@ protected:
 	void SetCtrlState();
 
 	DECLARE_EVENT_TABLE()
-	void OnOkOrApply(wxCommandEvent& event);
+	void OnOK(wxCommandEvent& event);
 	void OnCancel(wxCommandEvent& event);
+	void OnApply(wxCommandEvent& event);
 	void OnEdit(wxCommandEvent& event);
 	void OnFilterSelect(wxCommandEvent& event);
 	void OnMouseEvent(wxMouseEvent& event);

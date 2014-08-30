@@ -19,9 +19,8 @@ bool CInputDialog::Create(wxWindow* parent, const wxString& title, wxString text
 	m_allowEmpty = false;
 	SetParent(parent);
 
-	if (!Load(parent, _T("ID_INPUTDIALOG"))) {
+	if (!wxXmlResource::Get()->LoadDialog(this, parent, _T("ID_INPUTDIALOG")))
 		return false;
-	}
 
 	SetTitle(title);
 

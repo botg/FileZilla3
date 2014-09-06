@@ -3,20 +3,34 @@
 
 #include "socket.h"
 
-struct external_ip_resolve_event_type;
-typedef CEvent<external_ip_resolve_event_type> CExternalIPResolveEvent;
+class fzExternalIPResolveEvent final : public wxEvent
+{
+public:
+	fzExternalIPResolveEvent(int id = wxID_ANY);
+	virtual wxEvent *Clone() const;
+};
+
+typedef void (wxEvtHandler::*fzExternalIPResolveEventFunction)(fzExternalIPResolveEvent&);
+
+extern const wxEventType fzEVT_EXTERNALIPRESOLVE;
+#define EVT_FZ_EXTERNALIPRESOLVE(id, fn) \
+	DECLARE_EVENT_TABLE_ENTRY(           \
+		fzEVT_EXTERNALIPRESOLVE, id, -1, \
+		(wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( fzExternalIPResolveEventFunction, &fn ), \
+		(wxObject *) NULL                \
+	),
 
 class CExternalIPResolver final : public CSocketEventHandler
 {
 public:
-	CExternalIPResolver(CSocketEventDispatcher& dispatcher, CEventHandler & handler);
+	CExternalIPResolver(wxEvtHandler* handler, int id = wxID_ANY);
 	virtual ~CExternalIPResolver();
 
 	bool Done() const { return m_done; }
 	bool Successful() const { return !m_ip.empty(); }
 	wxString GetIP() const { return m_ip; }
 
-	void GetExternalIP(const wxString& address, CSocket::address_family protocol, bool force = false);
+	void GetExternalIP(const wxString& address, enum CSocket::address_family protocol, bool force = false);
 
 protected:
 
@@ -25,7 +39,7 @@ protected:
 	wxString m_address;
 	CSocket::address_family m_protocol{};
 	unsigned long m_port{80};
-	CEventHandler * m_handler;
+	wxEvtHandler* m_handler;
 	int m_id;
 
 	bool m_done{};
@@ -70,7 +84,7 @@ protected:
 		unknown
 	};
 
-	transferEncodings m_transferEncoding;
+	enum transferEncodings m_transferEncoding;
 
 	struct t_chunkData
 	{

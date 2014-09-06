@@ -2,13 +2,27 @@
 #define __IOTHREAD_H__
 
 #include <wx/file.h>
-#include "event_loop.h"
 
 #define BUFFERCOUNT 3
 #define BUFFERSIZE 65536
 
-struct io_thread_event_type{};
-typedef CEvent<io_thread_event_type> CIOThreadEvent;
+class CIOThreadEvent : public wxEvent
+{
+public:
+	CIOThreadEvent(int id = wxID_ANY);
+
+	virtual wxEvent *Clone() const;
+};
+
+typedef void (wxEvtHandler::*CIOThreadEventFunction)(CIOThreadEvent&);
+
+extern const wxEventType fzEVT_IOTHREAD;
+#define EVT_IOTHREAD(id, fn) \
+	DECLARE_EVENT_TABLE_ENTRY(  \
+		fzEVT_IOTHREAD, id, -1, \
+		(wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( CIOThreadEventFunction, &fn ), \
+		(wxObject *) NULL       \
+	),
 
 enum IORet
 {
@@ -30,7 +44,7 @@ public:
 	// This handler will receive the CIOThreadEvent events. The events
 	// get triggerd iff a buffer is available after a call to the
 	// GetNext*Buffer functions returned IO_Again
-	void SetEventHandler(CEventHandler* handler){ m_evtHandler = handler; }
+	void SetEventHandler(wxEvtHandler* handler){ m_evtHandler = handler; }
 
 	// Gets next buffer
 	// Return value:  IO_Success on EOF
@@ -56,7 +70,7 @@ protected:
 	bool WriteToFile(char* pBuffer, int len);
 	bool DoWrite(const char* pBuffer, int len);
 
-	CEventHandler* m_evtHandler;
+	wxEvtHandler* m_evtHandler;
 
 	bool m_read;
 	bool m_binary;

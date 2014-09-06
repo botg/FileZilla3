@@ -112,7 +112,7 @@ enum class TransferEndReason
 };
 
 class CTransferStatus;
-class CControlSocket: public CLogging, public CEventHandler
+class CControlSocket: public wxEvtHandler, public CLogging
 {
 public:
 	CControlSocket(CFileZillaEnginePrivate *pEngine);
@@ -157,8 +157,6 @@ public:
 	wxChar* ConvToLocalBuffer(const char* buffer);
 	wxChar* ConvToLocalBuffer(const char* buffer, wxMBConv& conv);
 	wxCharBuffer ConvToServer(const wxString& str, bool force_utf8 = false);
-
-	void SetActive(CFileZillaEngine::_direction direction);
 
 	// ---
 	// The following two functions control the timeout behaviour:
@@ -205,14 +203,14 @@ protected:
 
 	CServerPath m_CurrentPath;
 
-	CTransferStatus *m_pTransferStatus; // Todo: Need to mutex this
+	CTransferStatus *m_pTransferStatus;
 	int m_transferStatusSendState;
 
 	wxCSConv *m_pCSConv;
 	bool m_useUTF8;
 
 	// Timeout data
-	int m_timer{ -1 };
+	wxTimer m_timer;
 	wxStopWatch m_stopWatch;
 
 	// -------------------------
@@ -271,10 +269,9 @@ protected:
 
 	bool m_invalidateCurrentPath;
 
-	virtual void operator()(CEventBase const& ev);
-
-	void OnTimer(int timer_id);
-	void OnObtainLock();
+	DECLARE_EVENT_TABLE()
+	void OnTimer(wxTimerEvent& event);
+	void OnObtainLock(wxCommandEvent& event);
 };
 
 class CProxySocket;

@@ -16,7 +16,7 @@ version.
 
 const int CACHE_TIMEOUT = 1800; // In seconds
 
-class CDirectoryCache final
+class CDirectoryCache
 {
 public:
 	enum Filetype
@@ -43,7 +43,7 @@ public:
 
 protected:
 
-	class CCacheEntry final
+	class CCacheEntry
 	{
 	public:
 		CCacheEntry() : lruIt() { };
@@ -63,7 +63,7 @@ protected:
 		void* lruIt; // void* to break cyclic declaration dependency
 	};
 
-	class CServerEntry final
+	class CServerEntry
 	{
 	public:
 		CServerEntry() {}
@@ -85,9 +85,9 @@ protected:
 
 	bool Lookup(tCacheIter &cacheIter, tServerIter &sit, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated);
 
-	wxCriticalSection mutex_;
+	static std::list<CServerEntry> m_serverList;
 
-	std::list<CServerEntry> m_serverList;
+	static int m_nRefCount;
 
 	void UpdateLru(tServerIter const& sit, tCacheIter const& cit);
 
@@ -95,9 +95,9 @@ protected:
 
 	typedef std::pair<tServerIter, tCacheIter> tFullEntryPosition;
 	typedef std::list<tFullEntryPosition> tLruList;
-	tLruList m_leastRecentlyUsedList;
+	static tLruList m_leastRecentlyUsedList;
 
-	wxLongLong_t m_totalFileCount{};
+	static wxLongLongNative m_totalFileCount;
 };
 
 #endif

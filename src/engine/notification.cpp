@@ -1,6 +1,6 @@
 #include <filezilla.h>
 
-wxDEFINE_EVENT(fzEVT_NOTIFICATION, wxFzEvent);
+const wxEventType fzEVT_NOTIFICATION = wxNewEventType();
 
 wxFzEvent::wxFzEvent(int id /*=wxID_ANY*/) : wxEvent(id, fzEVT_NOTIFICATION)
 {

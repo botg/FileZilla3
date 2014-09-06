@@ -10,19 +10,20 @@
 #define new DEBUG_NEW
 #endif
 
-CFileZillaEngine::CFileZillaEngine(CFileZillaEngineContext& engine_context)
-	: CFileZillaEnginePrivate(engine_context)
+CFileZillaEngine::CFileZillaEngine()
 {
 }
 
 CFileZillaEngine::~CFileZillaEngine()
 {
-	m_maySendNotificationEvent = false;
 }
 
-int CFileZillaEngine::Init(wxEvtHandler *pEventHandler)
+int CFileZillaEngine::Init(wxEvtHandler *pEventHandler, COptionsBase *pOptions)
 {
 	m_pEventHandler = pEventHandler;
+	m_pOptions = pOptions;
+	m_pRateLimiter = CRateLimiter::Create(m_pOptions);
+
 	return FZ_REPLY_OK;
 }
 
@@ -99,7 +100,7 @@ bool CFileZillaEngine::IsConnected() const
 
 CNotification* CFileZillaEngine::GetNextNotification()
 {
-	wxCriticalSectionLocker lock(notification_mutex_);
+	wxCriticalSectionLocker lock(m_lock);
 
 	if (m_NotificationList.empty()) {
 		m_maySendNotificationEvent = true;
@@ -128,13 +129,13 @@ bool CFileZillaEngine::SetAsyncRequestReply(CAsyncRequestNotification *pNotifica
 	if (!IsBusy())
 		return false;
 
-	notification_mutex_.Enter();
+	m_lock.Enter();
 	if (pNotification->requestNumber != m_asyncRequestCounter)
 	{
-		notification_mutex_.Leave();
+		m_lock.Leave();
 		return false;
 	}
-	notification_mutex_.Leave();
+	m_lock.Leave();
 
 	if (!m_pControlSocket)
 		return false;
@@ -153,15 +154,14 @@ bool CFileZillaEngine::IsPendingAsyncRequestReply(const CAsyncRequestNotificatio
 	if (!IsBusy())
 		return false;
 
-	wxCriticalSectionLocker lock(notification_mutex_);
+	wxCriticalSectionLocker lock(m_lock);
 	return pNotification->requestNumber == m_asyncRequestCounter;
 }
 
 bool CFileZillaEngine::IsActive(enum CFileZillaEngine::_direction direction)
 {
-	wxCriticalSectionLocker lock(mutex_);
-
-	if (m_activeStatus[direction] == 2) {
+	if (m_activeStatus[direction] == 2)
+	{
 		m_activeStatus[direction] = 1;
 		return true;
 	}
@@ -172,9 +172,8 @@ bool CFileZillaEngine::IsActive(enum CFileZillaEngine::_direction direction)
 
 bool CFileZillaEngine::GetTransferStatus(CTransferStatus &status, bool &changed)
 {
-	wxCriticalSectionLocker lock(mutex_);
-
-	if (!m_pControlSocket) {
+	if (!m_pControlSocket)
+	{
 		changed = false;
 		return false;
 	}
@@ -184,16 +183,14 @@ bool CFileZillaEngine::GetTransferStatus(CTransferStatus &status, bool &changed)
 
 int CFileZillaEngine::CacheLookup(const CServerPath& path, CDirectoryListing& listing)
 {
-	// TODO: Possible optimization: Atomically get current server. The cache has its own mutex.
-	wxCriticalSectionLocker lock(mutex_);
-
 	if (!IsConnected())
 		return FZ_REPLY_ERROR;
 
 	wxASSERT(m_pControlSocket->GetCurrentServer());
 
+	CDirectoryCache cache;
 	bool is_outdated = false;
-	if (!directory_cache_.Lookup(listing, *m_pControlSocket->GetCurrentServer(), path, true, is_outdated))
+	if (!cache.Lookup(listing, *m_pControlSocket->GetCurrentServer(), path, true, is_outdated))
 		return FZ_REPLY_ERROR;
 
 	return FZ_REPLY_OK;

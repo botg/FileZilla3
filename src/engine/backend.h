@@ -24,7 +24,7 @@ class CSocket;
 class CSocketBackend final : public CBackend, public CSocketEventSource
 {
 public:
-	CSocketBackend(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CRateLimiter& rateLimiter);
+	CSocketBackend(CSocketEventHandler* pEvtHandler, CSocket* pSocket);
 	virtual ~CSocketBackend();
 	// Backend definitions
 	virtual int Read(void *buffer, unsigned int size, int& error);
@@ -35,7 +35,6 @@ protected:
 	virtual void OnRateAvailable(enum CRateLimiter::rate_direction direction);
 
 	CSocket* m_pSocket;
-	CRateLimiter& m_rateLimiter;
 };
 
 #endif //__BACKEND_H__

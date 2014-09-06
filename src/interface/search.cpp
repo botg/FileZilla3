@@ -201,7 +201,6 @@ EVT_BUTTON(XRCID("ID_START"), CSearchDialog::OnSearch)
 EVT_BUTTON(XRCID("ID_STOP"), CSearchDialog::OnStop)
 EVT_CONTEXT_MENU(CSearchDialog::OnContextMenu)
 EVT_MENU(XRCID("ID_MENU_SEARCH_DOWNLOAD"), CSearchDialog::OnDownload)
-EVT_MENU(XRCID("ID_MENU_SEARCH_EDIT"), CSearchDialog::OnEdit)
 EVT_MENU(XRCID("ID_MENU_SEARCH_DELETE"), CSearchDialog::OnDelete)
 EVT_CHAR_HOOK(CSearchDialog::OnCharHook)
 END_EVENT_TABLE()
@@ -327,7 +326,8 @@ void CSearchDialog::ProcessDirectoryListing()
 	m_results->m_fileData.reserve(m_results->m_fileData.size() + listing->GetCount());
 	m_results->m_indexMapping.reserve(m_results->m_indexMapping.size() + listing->GetCount());
 
-	for (unsigned int i = 0; i < listing->GetCount(); ++i) {
+	for (unsigned int i = 0; i < listing->GetCount(); i++)
+	{
 		const CDirentry& entry = (*listing)[i];
 
 		if (!m_search_filter.filters.empty() && !CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, listing->path.GetPath(), entry.is_dir(), entry.size, 0, entry.time))
@@ -690,64 +690,6 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 	}
 }
 
-void CSearchDialog::OnEdit(wxCommandEvent&)
-{
-	if (!m_pState->IsRemoteIdle())
-		return;
-	
-	// Find all selected files and directories
-	std::list<CServerPath> selected_dirs;
-	std::list<int> selected_files;
-	ProcessSelection(selected_files, selected_dirs);
-
-	if (selected_files.empty() && selected_dirs.empty())
-		return;
-
-	if (selected_dirs.size() > 0)
-	{
-		wxMessageBoxEx(_("Editing directories is not supported"), _("Editing search results"), wxICON_EXCLAMATION);
-		return;
-	}
-
-	CEditHandler* pEditHandler = CEditHandler::Get();
-	if (!pEditHandler)
-	{
-		wxBell();
-		return;
-	}
-
-	const wxString& localDir = pEditHandler->GetLocalDirectory();
-	if (localDir.empty())
-	{
-		wxMessageBoxEx(_("Could not get temporary directory to download file into."), _("Cannot edit file"), wxICON_STOP);
-		return;
-	}
-
-	const CServer* pServer = m_pState->GetServer();
-	if (!pServer)
-	{
-		wxBell();
-		return;
-	}
-
-	if (selected_files.size() > 10)
-	{
-		CConditionalDialog dlg(this, CConditionalDialog::many_selected_for_edit, CConditionalDialog::yesno);
-		dlg.SetTitle(_("Confirmation needed"));
-		dlg.AddText(_("You have selected more than 10 files for editing, do you really want to continue?"));
-
-		if (!dlg.Run())
-			return;
-	}
-
-	for (auto const& item : selected_files) {
-		const CDirentry& entry = m_results->m_fileData[item];
-		const CServerPath path = m_results->m_fileData[item].path;
-
-		pEditHandler->Edit(CEditHandler::remote, entry.name, path, *pServer, entry.size, this);
-	}
-}
-
 void CSearchDialog::OnDelete(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteIdle())
@@ -853,7 +795,7 @@ void CSearchDialog::LoadConditions()
 void CSearchDialog::SaveConditions()
 {
 	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
-
+	
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("search")));
 	TiXmlElement* pDocument = file.Load();
 	if (!pDocument) {

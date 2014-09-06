@@ -41,15 +41,7 @@ enum sftpRequestTypes
 	sftpReqUnknown
 };
 
-class CProcess;
 class CSftpInputThread;
-
-struct sftp_event_type;
-typedef CEvent<sftp_event_type> CSftpEvent;
-
-struct terminate_event_type;
-typedef CEvent<terminate_event_type> CTerminateEvent;
-
 class CSftpControlSocket : public CControlSocket, public CRateLimiterObject
 {
 public:
@@ -69,6 +61,8 @@ public:
 	virtual bool Connected() { return m_pInputThread != 0; }
 
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
+
+	void SetActive(bool recv);
 
 protected:
 	// Replaces filename"with"quotes with
@@ -129,12 +123,19 @@ protected:
 	// see src/putty/wildcard.c
 	wxString WildcardEscape(const wxString& file);
 
-	CProcess* m_pProcess;
+	wxProcess* m_pProcess;
 	CSftpInputThread* m_pInputThread;
+	int m_pid;
 
-	virtual void operator()(CEventBase const& ev);
-	void OnSftpEvent();
-	void OnTerminate();
+	DECLARE_EVENT_TABLE()
+	void OnTerminate(wxProcessEvent& event);
+	void OnSftpEvent(wxCommandEvent& event);
+
+	// Set to true in destructor of CSftpControlSocket
+	// If sftp process dies (or gets killed), OnTerminate will be called.
+	// To avoid a race condition, abort OnTerminate if m_inDestructor is set
+	bool m_inDestructor;
+	bool m_termindatedInDestructor;
 
 	wxString m_requestPreamble;
 	wxString m_requestInstruction;

@@ -1,7 +1,6 @@
 #include <filezilla.h>
 #include "ControlSocket.h"
 #include "directorycache.h"
-#include "event_loop.h"
 #include "local_filesys.h"
 #include "local_path.h"
 #include "logging_private.h"
@@ -21,10 +20,19 @@ extern "C" {
 
 #include <errno.h>
 
-struct obtain_lock_event_type;
-typedef CEvent<obtain_lock_event_type> CObtainLockEvent;
+DECLARE_EVENT_TYPE(fzOBTAINLOCK, -1)
+DEFINE_EVENT_TYPE(fzOBTAINLOCK)
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
 
 std::list<CControlSocket::t_lockInfo> CControlSocket::m_lockInfoList;
+
+BEGIN_EVENT_TABLE(CControlSocket, wxEvtHandler)
+	EVT_TIMER(wxID_ANY, CControlSocket::OnTimer)
+	EVT_COMMAND(wxID_ANY, fzOBTAINLOCK, CControlSocket::OnObtainLock)
+END_EVENT_TABLE()
 
 COpData::COpData(Command op_Id)
 	: opId(op_Id)
@@ -45,7 +53,6 @@ COpData::~COpData()
 
 CControlSocket::CControlSocket(CFileZillaEnginePrivate *pEngine)
 	: CLogging(pEngine)
-	, CEventHandler(pEngine->event_loop_)
 {
 	m_pEngine = pEngine;
 	m_pCurOpData = 0;
@@ -56,6 +63,8 @@ CControlSocket::CControlSocket(CFileZillaEnginePrivate *pEngine)
 
 	m_pCSConv = 0;
 	m_useUTF8 = false;
+
+	m_timer.SetOwner(this);
 
 	m_closed = false;
 
@@ -68,8 +77,6 @@ CControlSocket::~CControlSocket()
 
 	delete m_pCSConv;
 	m_pCSConv = 0;
-
-	RemoveHandler();
 }
 
 int CControlSocket::Disconnect()
@@ -100,7 +107,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 			elapsed);
 
 		wxLongLong transferred = m_pTransferStatus->currentOffset - m_pTransferStatus->startOffset;
-		wxString size = CSizeFormatBase::Format(&m_pEngine->GetOptions(), transferred, true);
+		wxString size = CSizeFormatBase::Format(m_pEngine->GetOptions(), transferred, true);
 
 		MessageType msgType = MessageType::Error;
 		wxString msg;
@@ -139,7 +146,8 @@ int CControlSocket::ResetOperation(int nErrorCode)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CControlSocket::ResetOperation(%d)"), nErrorCode);
 
-	if (nErrorCode & FZ_REPLY_WOULDBLOCK) {
+	if (nErrorCode & FZ_REPLY_WOULDBLOCK)
+	{
 		LogMessage(MessageType::Debug_Warning, _T("ResetOperation with FZ_REPLY_WOULDBLOCK in nErrorCode (%d)"), nErrorCode);
 	}
 
@@ -196,11 +204,15 @@ int CControlSocket::ResetOperation(int nErrorCode)
 		case Command::transfer:
 			{
 				CFileTransferOpData *pData = static_cast<CFileTransferOpData *>(m_pCurOpData);
-				if (!pData->download && pData->transferInitiated) {
+				if (!pData->download && pData->transferInitiated)
+				{
 					if (!m_pCurrentServer)
 						LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurrentServer is 0"));
-					else {
-						bool updated = m_pEngine->GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->remotePath, pData->remoteFile, true, CDirectoryCache::file, (nErrorCode == FZ_REPLY_OK) ? pData->localFileSize : -1);
+					else
+					{
+						CDirectoryCache cache;
+						bool updated = cache.UpdateFile(*m_pCurrentServer, pData->remotePath, pData->remoteFile, true, CDirectoryCache::file, (nErrorCode == FZ_REPLY_OK) ? pData->localFileSize : -1);
+
 						if (updated)
 							m_pEngine->SendDirectoryListingNotification(pData->remotePath, false, true, false);
 					}
@@ -233,7 +245,8 @@ int CControlSocket::ResetOperation(int nErrorCode)
 int CControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 {
 	LogMessage(MessageType::Debug_Debug, _T("CControlSocket::DoClose(%d)"), nErrorCode);
-	if (m_closed) {
+	if (m_closed)
+	{
 		wxASSERT(!m_pCurOpData);
 		return nErrorCode;
 	}
@@ -337,7 +350,6 @@ void CControlSocket::SetTransferStatusMadeProgress()
 
 void CControlSocket::UpdateTransferStatus(wxFileOffset transferredBytes)
 {
-	// Todo: Mutex
 	if (!m_pTransferStatus)
 		return;
 
@@ -350,20 +362,22 @@ void CControlSocket::UpdateTransferStatus(wxFileOffset transferredBytes)
 
 bool CControlSocket::GetTransferStatus(CTransferStatus &status, bool &changed)
 {
-	// Todo: Mutex, called by interface.
-	if (!m_pTransferStatus) {
+	if (!m_pTransferStatus)
+	{
 		changed = false;
 		m_transferStatusSendState = 0;
 		return false;
 	}
 
 	status = *m_pTransferStatus;
-	if (m_transferStatusSendState == 2) {
+	if (m_transferStatusSendState == 2)
+	{
 		changed = true;
 		m_transferStatusSendState = 1;
 		return true;
 	}
-	else {
+	else
+	{
 		changed = false;
 		m_transferStatusSendState = 0;
 		return true;
@@ -445,12 +459,13 @@ int CControlSocket::CheckOverwriteFile()
 	CDirentry entry;
 	bool dirDidExist;
 	bool matchedCase;
+	CDirectoryCache cache;
 	CServerPath remotePath;
 	if (pData->tryAbsolutePath || m_CurrentPath.empty())
 		remotePath = pData->remotePath;
 	else
 		remotePath = m_CurrentPath;
-	bool found = m_pEngine->GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, remotePath, pData->remoteFile, dirDidExist, matchedCase);
+	bool found = cache.LookupFile(entry, *m_pCurrentServer, remotePath, pData->remoteFile, dirDidExist, matchedCase);
 
 	// Ignore entries with wrong case
 	if (found && !matchedCase)
@@ -611,9 +626,9 @@ wxCharBuffer CControlSocket::ConvToServer(const wxString& str, bool force_utf8 /
 	return buffer;
 }
 
-void CControlSocket::OnTimer(int timer_id)
+void CControlSocket::OnTimer(wxTimerEvent&)
 {
-	int timeout = m_pEngine->GetOptions().GetOptionVal(OPTION_TIMEOUT);
+	int timeout = m_pEngine->GetOptions()->GetOptionVal(OPTION_TIMEOUT);
 	if (!timeout)
 		return;
 
@@ -623,9 +638,11 @@ void CControlSocket::OnTimer(int timer_id)
 	if (IsWaitingForLock())
 		return;
 
-	if (m_stopWatch.Time() > (timeout * 1000)) {
+	if (m_stopWatch.Time() > (timeout * 1000))
+	{
 		LogMessage(MessageType::Error, _("Connection timed out"));
 		DoClose(FZ_REPLY_TIMEOUT);
+		wxASSERT(!m_timer.IsRunning());
 	}
 }
 
@@ -636,17 +653,16 @@ void CControlSocket::SetAlive()
 
 void CControlSocket::SetWait(bool wait)
 {
-	if (wait) {
-		if (m_timer != -1)
+	if (wait)
+	{
+		if (m_timer.IsRunning())
 			return;
 
 		m_stopWatch.Start();
-		m_timer = AddTimer(1000, false);
+		m_timer.Start(1000);
 	}
-	else if (m_timer != -1) {
-		StopTimer(m_timer);
-		m_timer = -1;
-	}
+	else if (m_timer.IsRunning())
+		m_timer.Stop();
 }
 
 int CControlSocket::SendNextCommand()
@@ -776,27 +792,31 @@ void CControlSocket::UnlockCache()
 	m_lockInfoList.erase(iter);
 
 	// Find other instance waiting for the lock
-	if (!m_pCurrentServer) {
+	if (!m_pCurrentServer)
+	{
 		LogMessage(MessageType::Debug_Warning, _T("UnlockCache called with !m_pCurrentServer"));
 		return;
 	}
-	for (auto & lockInfo : m_lockInfoList) {
-		if (!lockInfo.pControlSocket->m_pCurrentServer){
+	for (std::list<t_lockInfo>::const_iterator iter = m_lockInfoList.begin(); iter != m_lockInfoList.end(); ++iter)
+	{
+		if (!iter->pControlSocket->m_pCurrentServer)
+		{
 			LogMessage(MessageType::Debug_Warning, _T("UnlockCache found other instance with !m_pCurrentServer"));
 			continue;
 		}
 
-		if (*m_pCurrentServer != *lockInfo.pControlSocket->m_pCurrentServer)
+		if (*m_pCurrentServer != *iter->pControlSocket->m_pCurrentServer)
 			continue;
 
-		if (lockInfo.directory != directory)
+		if (iter->directory != directory)
 			continue;
 
-		if (lockInfo.reason != reason)
+		if (iter->reason != reason)
 			continue;
 
 		// Send notification
-		lockInfo.pControlSocket->SendEvent(CObtainLockEvent());
+		wxCommandEvent evt(fzOBTAINLOCK);
+		iter->pControlSocket->AddPendingEvent(evt);
 		break;
 	}
 }
@@ -834,7 +854,7 @@ enum CControlSocket::locking_reason CControlSocket::ObtainLockFromEvent()
 	return own->reason;
 }
 
-void CControlSocket::OnObtainLock()
+void CControlSocket::OnObtainLock(wxCommandEvent&)
 {
 	if (ObtainLockFromEvent() == lock_unknown)
 		return;
@@ -897,11 +917,10 @@ void CControlSocket::SendAsyncRequest(CAsyncRequestNotification* pNotification)
 
 CRealControlSocket::CRealControlSocket(CFileZillaEnginePrivate *pEngine)
 	: CControlSocket(pEngine)
-	, CSocketEventHandler(pEngine->socket_event_dispatcher_)
 {
-	m_pSocket = new CSocket(this, dispatcher_);
+	m_pSocket = new CSocket(this);
 
-	m_pBackend = new CSocketBackend(this, m_pSocket, m_pEngine->GetRateLimiter());
+	m_pBackend = new CSocketBackend(this, m_pSocket);
 	m_pProxyBackend = 0;
 
 	m_pSendBuffer = 0;
@@ -948,7 +967,7 @@ bool CRealControlSocket::Send(const char *buffer, int len)
 		}
 
 		if (written)
-			SetActive(CFileZillaEngine::send);
+			m_pEngine->SetActive(CFileZillaEngine::send);
 
 		if (written < len)
 		{
@@ -982,14 +1001,17 @@ void CRealControlSocket::OnSocketEvent(CSocketEvent &event)
 			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()));
 		break;
 	case CSocketEvent::connection:
-		if (event.GetError()) {
+		if (event.GetError())
+		{
 			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\"."), CSocket::GetErrorDescription(event.GetError()));
 			OnClose(event.GetError());
 		}
-		else {
-			if (m_pProxyBackend && !m_pProxyBackend->Detached()) {
+		else
+		{
+			if (m_pProxyBackend && !m_pProxyBackend->Detached())
+			{
 				m_pProxyBackend->Detach();
-				m_pBackend = new CSocketBackend(this, m_pSocket, m_pEngine->GetRateLimiter());
+				m_pBackend = new CSocketBackend(this, m_pSocket);
 			}
 			OnConnect();
 		}
@@ -1042,16 +1064,20 @@ void CRealControlSocket::OnSend()
 			return;
 		}
 
-		if (written) {
-			SetActive(CFileZillaEngine::send);
+		if (written)
+		{
+			SetAlive();
+			m_pEngine->SetActive(CFileZillaEngine::send);
 		}
 
-		if (written == m_nSendBufferLen) {
+		if (written == m_nSendBufferLen)
+		{
 			m_nSendBufferLen = 0;
 			delete [] m_pSendBuffer;
 			m_pSendBuffer = 0;
 		}
-		else {
+		else
+		{
 			memmove(m_pSendBuffer, m_pSendBuffer + written, m_nSendBufferLen - written);
 			m_nSendBufferLen -= written;
 		}
@@ -1096,20 +1122,20 @@ int CRealControlSocket::ContinueConnect()
 	wxString host;
 	unsigned int port = 0;
 
-	const int proxy_type = m_pEngine->GetOptions().GetOptionVal(OPTION_PROXY_TYPE);
+	const int proxy_type = m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_TYPE);
 	if (proxy_type > CProxySocket::unknown && proxy_type < CProxySocket::proxytype_count && !m_pCurrentServer->GetBypassProxy()) {
 		LogMessage(MessageType::Status, _("Connecting to %s through proxy"), m_pCurrentServer->FormatHost());
 
-		host = m_pEngine->GetOptions().GetOption(OPTION_PROXY_HOST);
-		port = m_pEngine->GetOptions().GetOptionVal(OPTION_PROXY_PORT);
+		host = m_pEngine->GetOptions()->GetOption(OPTION_PROXY_HOST);
+		port = m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_PORT);
 
 		delete m_pBackend;
 		m_pProxyBackend = new CProxySocket(this, m_pSocket, this);
 		m_pBackend = m_pProxyBackend;
 		int res = m_pProxyBackend->Handshake((enum CProxySocket::ProxyType)proxy_type,
-											m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(),
-											m_pEngine->GetOptions().GetOption(OPTION_PROXY_USER),
-											m_pEngine->GetOptions().GetOption(OPTION_PROXY_PASS));
+											 m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(),
+											  m_pEngine->GetOptions()->GetOption(OPTION_PROXY_USER),
+											  m_pEngine->GetOptions()->GetOption(OPTION_PROXY_PASS));
 
 		if (res != EINPROGRESS) {
 			LogMessage(MessageType::Error, _("Could not start proxy handshake: %s"), CSocket::GetErrorDescription(res));
@@ -1258,7 +1284,8 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		SendNextCommand();
 		break;
 	case CFileExistsNotification::rename:
-		if (pData->download) {
+		if (pData->download)
+		{
 			wxFileName fn = pData->localFile;
 			fn.SetFullName(pFileExistsNotification->newName);
 			pData->localFile = fn.GetFullPath();
@@ -1273,13 +1300,16 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			if (CheckOverwriteFile() == FZ_REPLY_OK)
 				SendNextCommand();
 		}
-		else {
+		else
+		{
 			pData->remoteFile = pFileExistsNotification->newName;
+
+			CDirectoryCache cache;
 
 			CDirentry entry;
 			bool dir_did_exist;
 			bool matched_case;
-			if (m_pEngine->GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dir_did_exist, matched_case) &&
+			if (cache.LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dir_did_exist, matched_case) &&
 				matched_case)
 			{
 				wxLongLong size = entry.size;
@@ -1290,7 +1320,8 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 				if (CheckOverwriteFile() != FZ_REPLY_OK)
 					break;
 			}
-			else {
+			else
+			{
 				pData->fileTime = CDateTime();
 				pData->remoteFileSize = -1;
 			}
@@ -1404,18 +1435,4 @@ int CControlSocket::Rename(const CRenameCommand&)
 int CControlSocket::Chmod(const CChmodCommand&)
 {
 	return FZ_REPLY_NOTSUPPORTED;
-}
-
-void CControlSocket::operator()(CEventBase const& ev)
-{
-	if (Dispatch<CTimerEvent>(ev, this, &CControlSocket::OnTimer)) {
-		return;
-	}
-	Dispatch<CObtainLockEvent>(ev, this, &CControlSocket::OnObtainLock);
-}
-
-void CControlSocket::SetActive(CFileZillaEngine::_direction direction)
-{
-	SetAlive();
-	m_pEngine->SetActive(direction);
 }

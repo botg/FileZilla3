@@ -1,3 +1,5 @@
+# these are the headers for your project
+
 noinst_LIBRARIES = libengine.a
 
 libengine_a_CPPFLAGS = -I$(srcdir)/../include
@@ -12,10 +14,7 @@ libengine_a_SOURCES = \
 		directorycache.cpp \
 		directorylisting.cpp \
 		directorylistingparser.cpp \
-		engine_context.cpp \
 		engineprivate.cpp \
-		event_handler.cpp \
-		event_loop.cpp \
 		externalipresolver.cpp \
 		FileZillaEngine.cpp \
 		ftpcontrolsocket.cpp \

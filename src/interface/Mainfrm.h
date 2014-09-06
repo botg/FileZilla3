@@ -69,7 +69,6 @@ public:
 
 	bool ConnectToSite(CSiteManagerItemData_Site* const pData, bool newTab = false);
 
-	CFileZillaEngineContext& GetEngineContext() { return m_engineContext; }
 protected:
 	void FixTabOrder();
 
@@ -92,7 +91,6 @@ protected:
 	CSplitterWindowEx* m_pBottomSplitter{}; // Top contains view splitter, bottom queue (or queuelog splitter if in position 1)
 	CSplitterWindowEx* m_pQueueLogSplitter{};
 
-	CFileZillaEngineContext m_engineContext;
 	CContextControl* m_pContextControl{};
 
 	CStatusView* m_pStatusView{};
@@ -121,7 +119,7 @@ protected:
 	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent& event);
 	void OnMenuHandler(wxCommandEvent& event);
-	void OnEngineEvent(wxFzEvent& event);
+	void OnEngineEvent(wxEvent& event);
 	void OnUpdateLedTooltip(wxCommandEvent&);
 	void OnDisconnect(wxCommandEvent&);
 	void OnCancel(wxCommandEvent&);

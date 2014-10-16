@@ -300,8 +300,7 @@ void CFtpControlSocket::ParseLine(wxString line)
 #endif
 			challenge += line;
 		}
-		else if (pData->opState == LOGON_FEAT)
-		{
+		else if (pData->opState == LOGON_FEAT) {
 			wxString up = line.Upper();
 			if (up == _T(" UTF8"))
 				CServerCapabilities::SetCapability(*m_pCurrentServer, utf8_command, yes);
@@ -309,14 +308,13 @@ void CFtpControlSocket::ParseLine(wxString line)
 				CServerCapabilities::SetCapability(*m_pCurrentServer, clnt_command, yes);
 			else if (up == _T(" MLSD") || up.Left(6) == _T(" MLSD "))
 				CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes);
-			else if (up == _T(" MLST") || up.Left(6) == _T(" MLST "))
-			{
+			else if (up == _T(" MLST") || up.Left(6) == _T(" MLST ")) {
 				CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes, line.Mid(6));
 
 				// MSLT/MLSD specs require use of UTC
 				CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
 			}
-			else if (up == _T(" MODE Z") || up.Left(6) == _T(" MODE Z "))
+			else if (up == _T(" MODE Z") || up.Left(8) == _T(" MODE Z "))
 				CServerCapabilities::SetCapability(*m_pCurrentServer, mode_z_support, yes);
 			else if (up == _T(" MFMT") || up.Left(6) == _T(" MFMT "))
 				CServerCapabilities::SetCapability(*m_pCurrentServer, mfmt_command, yes);
@@ -330,13 +328,12 @@ void CFtpControlSocket::ParseLine(wxString line)
 				CServerCapabilities::SetCapability(*m_pCurrentServer, tvfs_support, yes);
 			else if (up == _T(" REST STREAM"))
 				CServerCapabilities::SetCapability(*m_pCurrentServer, rest_stream, yes);
+			else if (up == _T(" EPSV"))
+				CServerCapabilities::SetCapability(*m_pCurrentServer, epsv_command, yes);
 		}
-		else if (pData->opState == LOGON_WELCOME)
-		{
-			if (!pData->gotFirstWelcomeLine)
-			{
-				if (line.Upper().Left(3) == _T("SSH"))
-				{
+		else if (pData->opState == LOGON_WELCOME) {
+			if (!pData->gotFirstWelcomeLine) {
+				if (line.Upper().Left(3) == _T("SSH")) {
 					LogMessage(MessageType::Error, _("Cannot establish FTP connection to an SFTP server. Please select proper protocol."));
 					DoClose(FZ_REPLY_CRITICALERROR);
 					return;
@@ -346,12 +343,9 @@ void CFtpControlSocket::ParseLine(wxString line)
 		}
 	}
 	//Check for multi-line responses
-	if (line.Len() > 3)
-	{
-		if (!m_MultilineResponseCode.empty())
-		{
-			if (line.Left(4) == m_MultilineResponseCode)
-			{
+	if (line.Len() > 3) {
+		if (!m_MultilineResponseCode.empty()) {
+			if (line.Left(4) == m_MultilineResponseCode) {
 				// end of multi-line found
 				m_MultilineResponseCode.clear();
 				m_Response = line;
@@ -363,14 +357,12 @@ void CFtpControlSocket::ParseLine(wxString line)
 				m_MultilineResponseLines.push_back(line);
 		}
 		// start of new multi-line
-		else if (line.GetChar(3) == '-')
-		{
+		else if (line.GetChar(3) == '-') {
 			// DDD<SP> is the end of a multi-line response
 			m_MultilineResponseCode = line.Left(3) + _T(" ");
 			m_MultilineResponseLines.push_back(line);
 		}
-		else
-		{
+		else {
 			m_Response = line;
 			ParseResponse();
 			m_Response = _T("");
@@ -3849,7 +3841,13 @@ bool CFtpControlSocket::ParseEpsvResponse(CRawTransferOpData* pData)
 	   return false;
 
 	pData->port = port;
-	pData->host = m_pSocket->GetPeerIP();
+
+	if (m_pProxyBackend) {
+		pData->host = m_pCurrentServer->GetHost();
+	}
+	else {
+		pData->host = m_pSocket->GetPeerIP();
+	}
 	return true;
 }
 
@@ -4111,17 +4109,14 @@ int CFtpControlSocket::TransferParseResponse()
 				pData->bPasv = true;
 			break;
 		}
-		if (pData->bPasv)
-		{
+		if (pData->bPasv) {
 			bool parsed;
-			if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
+			if (GetPassiveCommand(*pData) == _T("EPSV"))
 				parsed = ParseEpsvResponse(pData);
 			else
 				parsed = ParsePasvResponse(pData);
-			if (!parsed)
-			{
-				if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK))
-				{
+			if (!parsed) {
+				if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK)) {
 					error = true;
 					break;
 				}
@@ -4242,16 +4237,10 @@ int CFtpControlSocket::TransferSend()
 		measureRTT = true;
 		break;
 	case rawtransfer_port_pasv:
-		if (pData->bPasv)
-		{
-			pData->bTriedPasv = true;
-			if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
-				cmd = _T("EPSV");
-			else
-				cmd = _T("PASV");
+		if (pData->bPasv) {
+			cmd = GetPassiveCommand(*pData);
 		}
-		else
-		{
+		else {
 			wxString address;
 			int res = GetExternalIPAddress(address);
 			if (res == FZ_REPLY_WOULDBLOCK)
@@ -4278,12 +4267,8 @@ int CFtpControlSocket::TransferSend()
 			}
 			LogMessage(MessageType::Debug_Warning, _("Failed to create listening socket for active mode transfer"));
 			pData->bTriedActive = true;
-			pData->bTriedPasv = true;
 			pData->bPasv = true;
-			if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
-				cmd = _T("EPSV");
-			else
-				cmd = _T("PASV");
+			cmd = GetPassiveCommand(*pData);
 		}
 		break;
 	case rawtransfer_rest:
@@ -4603,4 +4588,26 @@ int CFtpControlSocket::ParseSubcommandResult(int prevResult)
 	}
 
 	return FZ_REPLY_ERROR;
+}
+
+wxString CFtpControlSocket::GetPassiveCommand(CRawTransferOpData& data)
+{
+	wxString ret = _T("PASV");
+
+	wxASSERT(data.bPasv);
+	data.bTriedPasv = true;
+
+	if (m_pProxyBackend) { 
+		// We don't actually know the address family the other end of the proxy uses to reach the server. Hence prefer EPSV
+		// if the server supports it.
+		if (CServerCapabilities::GetCapability(*m_pCurrentServer, epsv_command) == yes) {
+			ret = _T("EPSV");
+		}
+	}
+	else if (m_pSocket->GetAddressFamily() == CSocket::ipv6) {
+		// EPSV is mandatory for IPv6, don't check capabilities
+		ret = _T("EPSV");
+	}
+
+	return ret;
 }

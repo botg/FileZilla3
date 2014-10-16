@@ -90,6 +90,8 @@ static int ConvertMSWErrorCode(int error)
 		return EACCES;
 	case WSAETIMEDOUT:
 		return ETIMEDOUT;
+	case WSAECONNRESET:
+		return ECONNRESET;
 	default:
 		return error;
 	}

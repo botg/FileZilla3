@@ -112,7 +112,7 @@ enum class TransferEndReason
 };
 
 class CTransferStatus;
-class CControlSocket: public CLogging, public CEventHandler
+class CControlSocket: public wxEvtHandler, public CLogging
 {
 public:
 	CControlSocket(CFileZillaEnginePrivate *pEngine);
@@ -157,8 +157,6 @@ public:
 	wxChar* ConvToLocalBuffer(const char* buffer);
 	wxChar* ConvToLocalBuffer(const char* buffer, wxMBConv& conv);
 	wxCharBuffer ConvToServer(const wxString& str, bool force_utf8 = false);
-
-	void SetActive(CFileZillaEngine::_direction direction);
 
 	// ---
 	// The following two functions control the timeout behaviour:
@@ -205,14 +203,14 @@ protected:
 
 	CServerPath m_CurrentPath;
 
-	CTransferStatus *m_pTransferStatus; // Todo: Need to mutex this
+	CTransferStatus *m_pTransferStatus;
 	int m_transferStatusSendState;
 
 	wxCSConv *m_pCSConv;
 	bool m_useUTF8;
 
 	// Timeout data
-	timer_id m_timer{};
+	wxTimer m_timer;
 	wxStopWatch m_stopWatch;
 
 	// -------------------------
@@ -246,6 +244,10 @@ protected:
 
 	bool IsWaitingForLock();
 
+#ifdef __VISUALC__
+	// Retarded compiler does not like my code
+	public:
+#endif
 	struct t_lockInfo
 	{
 		CControlSocket* pControlSocket;
@@ -255,6 +257,9 @@ protected:
 		int lockcount;
 	};
 	static std::list<t_lockInfo> m_lockInfoList;
+#ifdef __VISUALC__
+	protected:
+#endif
 
 	const std::list<t_lockInfo>::iterator GetLockStatus();
 
@@ -264,10 +269,9 @@ protected:
 
 	bool m_invalidateCurrentPath;
 
-	virtual void operator()(CEventBase const& ev);
-
-	void OnTimer(timer_id id);
-	void OnObtainLock();
+	DECLARE_EVENT_TABLE()
+	void OnTimer(wxTimerEvent& event);
+	void OnObtainLock(wxCommandEvent& event);
 };
 
 class CProxySocket;

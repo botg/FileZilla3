@@ -3,25 +3,17 @@
 
 #include "timeex.h"
 
-#include "engine_context.h"
-#include "event.h"
-#include "event_handler.h"
-
-class CControlSocket;
-class CLogging;
-class CRateLimiter;
-class CSocketEventDispatcher;
-
 enum EngineNotificationType
 {
 	engineCancel,
 	engineTransferEnd
 };
 
-struct filezilla_engine_event_type;
-typedef CEvent<filezilla_engine_event_type, EngineNotificationType> CFileZillaEngineEvent;
-
-class CFileZillaEnginePrivate : public CEventHandler
+class wxFzEngineEvent;
+class CControlSocket;
+class CLogging;
+class CRateLimiter;
+class CFileZillaEnginePrivate : public wxEvtHandler
 {
 public:
 	int ResetOperation(int nErrorCode);
@@ -32,16 +24,16 @@ public:
 
 	unsigned int GetNextAsyncRequestNumber();
 
+	// Event handling
+	bool SendEvent(enum EngineNotificationType eventType, int data = 0);
+
 	bool IsBusy() const;
 	bool IsConnected() const;
 
 	const CCommand *GetCurrentCommand() const;
 	Command GetCurrentCommandId() const;
 
-	COptionsBase& GetOptions() { return m_options; }
-	CRateLimiter& GetRateLimiter() { return m_rateLimiter; }
-	CDirectoryCache& GetDirectoryCache() { return directory_cache_; }
-	CPathCache& GetPathCache() { return path_cache_; }
+	COptionsBase *GetOptions() { return m_pOptions; }
 
 	void SendDirectoryListingNotification(const CServerPath& path, bool onList, bool modified, bool failed);
 
@@ -56,18 +48,14 @@ public:
 
 	int GetEngineId() const {return m_engine_id; }
 
-	CEventLoop& event_loop_;
-	CSocketEventDispatcher& socket_event_dispatcher_;
-
 protected:
-	CFileZillaEnginePrivate(CFileZillaEngineContext& engine_context);
+	CFileZillaEnginePrivate();
 	virtual ~CFileZillaEnginePrivate();
-
-	int CheckPreconditions(CCommand const& command);
 
 	// Command handlers, only called by CFileZillaEngine::Command
 	int Connect(const CConnectCommand &command);
 	int Disconnect(const CDisconnectCommand &command);
+	int Cancel(const CCancelCommand &command);
 	int List(const CListCommand &command);
 	int FileTransfer(const CFileTransferCommand &command);
 	int RawCommand(const CRawCommand& command);
@@ -77,26 +65,15 @@ protected:
 	int Rename(const CRenameCommand& command);
 	int Chmod(const CChmodCommand& command);
 
-	void DoCancel();
-
 	int ContinueConnect();
 
-	void operator()(CEventBase const& ev);
-	void OnEngineEvent(EngineNotificationType type);
-	void OnTimer(int timer_id);
-	void OnCommandEvent();
-
-	// General mutex for operations on the engine
-	// Todo: More fine-grained locking, a global mutex isn't nice
-	static wxCriticalSection mutex_;
-
-	// Used to synchronize access to the notification list
-	wxCriticalSection notification_mutex_;
+	DECLARE_EVENT_TABLE()
+	void OnEngineEvent(wxFzEngineEvent &event);
+	void OnTimer(wxTimerEvent& event);
 
 	wxEvtHandler *m_pEventHandler{};
 
 	int m_engine_id;
-
 	static std::list<CFileZillaEnginePrivate*> m_engineList;
 
 	// Indicicates if data has been received/sent and whether to send any notifications
@@ -106,19 +83,22 @@ protected:
 	CServerPath m_lastListDir;
 	CMonotonicTime m_lastListTime;
 
-	std::unique_ptr<CControlSocket> m_pControlSocket;
+	CControlSocket *m_pControlSocket{};
 
-	std::unique_ptr<CCommand> m_pCurrentCommand;
+	CCommand *m_pCurrentCommand{};
 
-	// Protect access to these three with notification_mutex_
 	std::list<CNotification*> m_NotificationList;
 	bool m_maySendNotificationEvent{true};
-	unsigned int m_asyncRequestCounter{};
 
 	bool m_bIsInCommand{}; //true if Command is on the callstack
 	int m_nControlSocketError{};
 
-	COptionsBase& m_options;
+	COptionsBase *m_pOptions{};
+
+	unsigned int m_asyncRequestCounter{};
+
+	// Used to synchronize access to the notification list
+	wxCriticalSection m_lock;
 
 	CLogging* m_pLogging;
 
@@ -138,14 +118,9 @@ protected:
 	};
 	static std::list<t_failedLogins> m_failedLogins;
 	int m_retryCount{};
-	timer_id m_retryTimer{};
+	wxTimer m_retryTimer;
 
-	CRateLimiter& m_rateLimiter;
-	CDirectoryCache& directory_cache_;
-	CPathCache& path_cache_;
+	CRateLimiter* m_pRateLimiter{};
 };
-
-struct command_event_type{};
-typedef CEvent<command_event_type> CCommandEvent;
 
 #endif //__FILEZILLAENGINEPRIVATE_H__

@@ -19,7 +19,7 @@ enum class TransferMode
 
 class CIOThread;
 class CTlsSocket;
-class CTransferSocket : public CEventHandler, public CSocketEventHandler
+class CTransferSocket : public wxEvtHandler, public CSocketEventHandler
 {
 public:
 	CTransferSocket(CFileZillaEnginePrivate *pEngine, CFtpControlSocket *pControlSocket, TransferMode transferMode);
@@ -54,6 +54,7 @@ protected:
 	virtual void OnReceive();
 	virtual void OnSend();
 	virtual void OnClose(int error);
+	virtual void OnIOThreadEvent(CIOThreadEvent& event);
 
 	// Create a socket server
 	CSocket* CreateSocketServer();
@@ -61,8 +62,7 @@ protected:
 
 	void SetSocketBufferSizes(CSocket* pSocket);
 
-	virtual void operator()(CEventBase const& ev);
-	void OnIOThreadEvent();
+	DECLARE_EVENT_TABLE()
 
 	CSocket *m_pSocket;
 

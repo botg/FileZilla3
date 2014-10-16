@@ -74,7 +74,8 @@ bool wxDialogEx::SetChildLabel(int id, const wxString& label, unsigned long maxL
 
 	if (!maxLength)
 		pText->SetLabel(label);
-	else {
+	else
+	{
 		wxString wrapped = label;
 		WrapText(this, wrapped, maxLength);
 		pText->SetLabel(wrapped);

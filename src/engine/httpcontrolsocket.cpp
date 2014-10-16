@@ -180,7 +180,7 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 		break;
 	case reqId_certificate:
 		{
-			if (!m_pTlsSocket || m_pTlsSocket->GetState() != CTlsSocket::TlsState::verifycert)
+			if (!m_pTlsSocket || m_pTlsSocket->GetState() != CTlsSocket::verifycert)
 			{
 				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %d"), pNotification->GetRequestID());
 				return false;
@@ -230,9 +230,10 @@ int CHttpControlSocket::DoReceive()
 			return 0;
 		}
 
-		SetActive(CFileZillaEngine::recv);
+		m_pEngine->SetActive(CFileZillaEngine::recv);
 
-		if (!m_pCurOpData || m_pCurOpData->opId == Command::connect) {
+		if (!m_pCurOpData || m_pCurOpData->opId == Command::connect)
+		{
 			// Just ignore all further data
 			m_recvBufferPos = 0;
 			return 0;
@@ -240,7 +241,8 @@ int CHttpControlSocket::DoReceive()
 
 		m_recvBufferPos += read;
 
-		if (!m_pHttpOpData->m_gotHeader) {
+		if (!m_pHttpOpData->m_gotHeader)
+		{
 			if (!read)
 			{
 				ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
@@ -299,6 +301,13 @@ void CHttpControlSocket::OnConnect()
 
 			if (!m_pTlsSocket->Init()) {
 				LogMessage(MessageType::Error, _("Failed to initialize TLS."));
+				DoClose();
+				return;
+			}
+
+			const wxString trusted_rootcert = m_pEngine->GetOptions()->GetOption(OPTION_INTERNAL_ROOTCERT);
+			if (!trusted_rootcert.empty() && !m_pTlsSocket->AddTrustedRootCertificate(trusted_rootcert)) {
+				LogMessage(MessageType::Error, _("Failed to parse trusted root cert."));
 				DoClose();
 				return;
 			}
@@ -485,7 +494,7 @@ int CHttpControlSocket::DoInternalConnect()
 	CHttpConnectOpData *pData = static_cast<CHttpConnectOpData *>(m_pCurOpData);
 
 	delete m_pBackend;
-	m_pBackend = new CSocketBackend(this, m_pSocket, m_pEngine->GetRateLimiter());
+	m_pBackend = new CSocketBackend(this, m_pSocket);
 
 	int res = m_pSocket->Connect(pData->host, pData->port);
 	if (!res)
@@ -581,7 +590,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 		}
 
 		m_pRecvBuffer[i] = 0;
-		wxString const line = wxString(m_pRecvBuffer, wxConvLocal);
+		const wxString& line = wxString(m_pRecvBuffer, wxConvLocal);
 		if (!line.empty())
 			LogMessageRaw(MessageType::Response, line);
 
@@ -909,7 +918,8 @@ void CHttpControlSocket::OnClose(int error)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::OnClose(%d)"), error);
 
-	if (error) {
+	if (error)
+	{
 		LogMessage(MessageType::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error));
 		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 		return;
@@ -919,24 +929,30 @@ void CHttpControlSocket::OnClose(int error)
 	if (!m_pCurOpData)
 		return;
 
-	if (m_pCurOpData->pNextOpData) {
+	if (m_pCurOpData->pNextOpData)
+	{
 		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 		return;
 	}
 
-	if (!m_pHttpOpData->m_gotHeader) {
+	if (!m_pHttpOpData->m_gotHeader)
+	{
 		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 		return;
 	}
 
-	if (m_pHttpOpData->m_transferEncoding == CHttpOpData::chunked) {
-		if (!m_pHttpOpData->m_chunkData.getTrailer) {
+	if (m_pHttpOpData->m_transferEncoding == CHttpOpData::chunked)
+	{
+		if (!m_pHttpOpData->m_chunkData.getTrailer)
+		{
 			ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 			return;
 		}
 	}
-	else {
-		if (m_pHttpOpData->m_totalSize != -1 && m_pHttpOpData->m_receivedData != m_pHttpOpData->m_totalSize) {
+	else
+	{
+		if (m_pHttpOpData->m_totalSize != -1 && m_pHttpOpData->m_receivedData != m_pHttpOpData->m_totalSize)
+		{
 			ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 			return;
 		}

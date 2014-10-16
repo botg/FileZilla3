@@ -6,22 +6,25 @@
 class CFileZillaEngine final : public CFileZillaEnginePrivate
 {
 public:
-	CFileZillaEngine(CFileZillaEngineContext& engine_context);
+	CFileZillaEngine();
 	virtual ~CFileZillaEngine();
 
 	// Initialize the engine. Pass over the event handler that should receive notification
 	// events as defined in notification.h
-	int Init(wxEvtHandler *pEventHandler);
+	// You also need to pass an options handler as defined in optionsbase.h
+	//
+	// The COptionsBase instance has to be the same for every instance of CFileZillaEngine
+	int Init(wxEvtHandler *pEventHandler, COptionsBase *pOptions);
 
 	// TODO: Init function with a function pointer for a callback function for
 	// notifications. Not all users of the engine use wxWidgets.
 
 	// Execute the given command. See commands.h for a list of the available
 	// commands and reply codes.
-	int Execute(CCommand const& command);
+	int Execute(const CCommand &command);
 
-	// Cancels the current command
-	int Cancel();
+	bool IsBusy() const;
+	bool IsConnected() const;
 
 	// IsActive returns true only if data has been transferred in the
 	// given direction since the last time IsActive was called with
@@ -31,7 +34,7 @@ public:
 		send,
 		recv
 	};
-	static bool IsActive(_direction direction);
+	static bool IsActive(enum _direction direction);
 
 	// Returns the next pending notification.
 	// It is mandatory to call this function until it returns 0 each time you
@@ -40,9 +43,12 @@ public:
 	// See notification.h for details.
 	CNotification* GetNextNotification();
 
+	const CCommand *GetCurrentCommand() const;
+	Command GetCurrentCommandId() const;
+
 	// Sets the reply to an async request, e.g. a file exists request.
 	// See notifiction.h for details.
-	bool IsPendingAsyncRequestReply(CAsyncRequestNotification const* pNotification);
+	bool IsPendingAsyncRequestReply(const CAsyncRequestNotification *pNotification);
 	bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
 
 	// Get a progress update about the current transfer. changed will be set
@@ -50,7 +56,7 @@ public:
 	// GetTransferStatus was called.
 	bool GetTransferStatus(CTransferStatus &status, bool &changed);
 
-	int CacheLookup(CServerPath const& path, CDirectoryListing& listing);
+	int CacheLookup(const CServerPath& path, CDirectoryListing& listing);
 };
 
 #endif

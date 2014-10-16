@@ -19,10 +19,13 @@ CCommandQueue::CCommandQueue(CFileZillaEngine *pEngine, CMainFrame* pMainFrame, 
 	m_exclusiveEngineRequest = false;
 	m_exclusiveEngineLock = false;
 	m_requestId = 0;
+	m_inside_commandqueue = false;
 }
 
 CCommandQueue::~CCommandQueue()
 {
+	for (auto iter = m_CommandList.begin(); iter != m_CommandList.end(); ++iter)
+		delete *iter;
 }
 
 bool CCommandQueue::Idle() const
@@ -36,8 +39,9 @@ void CCommandQueue::ProcessCommand(CCommand *pCommand)
 		delete pCommand;
 	}
 
-	m_CommandList.emplace_back(pCommand);
-	if (m_CommandList.size() == 1) {
+	m_CommandList.push_back(pCommand);
+	if (m_CommandList.size() == 1)
+	{
 		m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 		ProcessNextCommand();
 	}
@@ -54,7 +58,7 @@ void CCommandQueue::ProcessNextCommand()
 	if (m_pEngine->IsBusy())
 		return;
 
-	++m_inside_commandqueue;
+	m_inside_commandqueue = true;
 
 	if (m_CommandList.empty()) {
 		// Possible sequence of events:
@@ -66,19 +70,69 @@ void CCommandQueue::ProcessNextCommand()
 		m_pState->GetRecursiveOperationHandler()->NextOperation();
 	}
 
-	while (!m_CommandList.empty()) {
-		std::unique_ptr<CCommand> const& pCommand = m_CommandList.front();
+	while (!m_CommandList.empty())
+	{
+		CCommand *pCommand = m_CommandList.front();
 
 		int res = m_pEngine->Execute(*pCommand);
-		ProcessReply(res, pCommand->GetId());
-		if (res == FZ_REPLY_WOULDBLOCK) {
+
+		if (pCommand->GetId() != Command::cancel &&
+			pCommand->GetId() != Command::connect &&
+			pCommand->GetId() != Command::disconnect)
+		{
+			if (res == FZ_REPLY_NOTCONNECTED)
+			{
+				// Try automatic reconnect
+				const CServer* pServer = m_pState->GetServer();
+				if (pServer)
+				{
+					CCommand *pCommand = new CConnectCommand(*pServer);
+					m_CommandList.push_front(pCommand);
+					continue;
+				}
+			}
+		}
+
+		if (res == FZ_REPLY_WOULDBLOCK)
 			break;
+		else if (res == FZ_REPLY_OK)
+		{
+			delete pCommand;
+			m_CommandList.pop_front();
+			continue;
+		}
+		else if (res == FZ_REPLY_ALREADYCONNECTED)
+		{
+			res = m_pEngine->Execute(CDisconnectCommand());
+			if (res == FZ_REPLY_WOULDBLOCK)
+			{
+				m_CommandList.push_front(new CDisconnectCommand);
+				break;
+			}
+			else if (res != FZ_REPLY_OK)
+			{
+				wxBell();
+				delete pCommand;
+				m_CommandList.pop_front();
+				continue;
+			}
+		}
+		else
+		{
+			wxBell();
+
+			if (pCommand->GetId() == Command::list)
+				m_pState->ListingFailed(res);
+
+			m_CommandList.pop_front();
+			delete pCommand;
 		}
 	}
 
-	--m_inside_commandqueue;
+	m_inside_commandqueue = false;
 
-	if (m_CommandList.empty()) {
+	if (m_CommandList.empty())
+	{
 		if (m_exclusiveEngineRequest)
 			GrantExclusiveEngineRequest();
 		else
@@ -97,18 +151,27 @@ bool CCommandQueue::Cancel()
 	if (m_CommandList.empty())
 		return true;
 
-	m_CommandList.erase(++m_CommandList.begin(), m_CommandList.end());
+	auto iter = m_CommandList.begin();
+	CCommand *pCommand = *(iter++);
+
+	for (; iter != m_CommandList.end(); ++iter)
+		delete *iter;
+
+	m_CommandList.clear();
+	m_CommandList.push_back(pCommand);
 
 	if (!m_pEngine)	{
+		delete pCommand;
 		m_CommandList.clear();
 		m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 		return true;
 	}
 
-	int res = m_pEngine->Cancel();
+	int res = m_pEngine->Execute(CCancelCommand());
 	if (res == FZ_REPLY_WOULDBLOCK)
 		return false;
 	else {
+		delete pCommand;
 		m_CommandList.clear();
 		m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 		return true;
@@ -117,88 +180,80 @@ bool CCommandQueue::Cancel()
 
 void CCommandQueue::Finish(COperationNotification *pNotification)
 {
-	if (m_exclusiveEngineLock) {
+	if (pNotification->nReplyCode & FZ_REPLY_DISCONNECTED)
+	{
+		if (pNotification->commandId == Command::none && !m_CommandList.empty())
+		{
+			// Pending event, has no relevance during command execution
+			delete pNotification;
+			return;
+		}
+		if (pNotification->nReplyCode & FZ_REPLY_PASSWORDFAILED)
+			CLoginManager::Get().CachedPasswordFailed(*m_pState->GetServer());
+	}
+
+	if (m_exclusiveEngineLock)
+	{
 		m_pMainFrame->GetQueue()->ProcessNotification(m_pEngine, pNotification);
 		return;
 	}
 
-	ProcessReply(pNotification->nReplyCode, pNotification->commandId);
-	delete pNotification;
-}
-
-void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
-{
-	if (nReplyCode == FZ_REPLY_WOULDBLOCK) {
-		return;
-	}
-	if (nReplyCode & FZ_REPLY_DISCONNECTED) {
-		if (commandId == Command::none && !m_CommandList.empty()) {
-			// Pending event, has no relevance during command execution
-			return;
-		}
-		if (nReplyCode & FZ_REPLY_PASSWORDFAILED)
-			CLoginManager::Get().CachedPasswordFailed(*m_pState->GetServer());
-	}
-
-	if (m_CommandList.empty()) {
-		return;
-	}
-
-	if (commandId != Command::cancel &&
-		commandId != Command::connect &&
-		commandId != Command::disconnect)
+	if (m_CommandList.empty())
 	{
-		if (nReplyCode == FZ_REPLY_NOTCONNECTED) {
-			// Try automatic reconnect
-			const CServer* pServer = m_pState->GetServer();
-			if (pServer) {
-				m_CommandList.emplace_front(make_unique<CConnectCommand>(*pServer));
-				return;
-			}
-		}
+		delete pNotification;
+		return;
 	}
 
-	++m_inside_commandqueue;
+	wxASSERT(!m_inside_commandqueue);
+	m_inside_commandqueue = true;
 
-	auto const& pCommand = m_CommandList.front();
+	CCommand* pCommand = m_CommandList.front();
 
-	if (pCommand->GetId() == Command::list && nReplyCode != FZ_REPLY_OK) {
-		if (nReplyCode & FZ_REPLY_LINKNOTDIR)
+	if (pCommand->GetId() == Command::list && pNotification->nReplyCode != FZ_REPLY_OK)
+	{
+		if (pNotification->nReplyCode & FZ_REPLY_LINKNOTDIR)
 		{
 			// Symbolic link does not point to a directory. Either points to file
 			// or is completely invalid
-			CListCommand* pListCommand = reinterpret_cast<CListCommand*>(pCommand.get());
+			CListCommand* pListCommand = (CListCommand*)pCommand;
 			wxASSERT(pListCommand->GetFlags() & LIST_FLAG_LINK);
 
 			m_pState->LinkIsNotDir(pListCommand->GetPath(), pListCommand->GetSubDir());
 		}
 		else
-			m_pState->ListingFailed(nReplyCode);
+			m_pState->ListingFailed(pNotification->nReplyCode);
 		m_CommandList.pop_front();
 	}
-	else if (nReplyCode == FZ_REPLY_ALREADYCONNECTED && pCommand->GetId() == Command::connect) {
-		m_CommandList.emplace_front(make_unique<CDisconnectCommand>());
-	}
-	else if (pCommand->GetId() == Command::connect && nReplyCode != FZ_REPLY_OK) {
+	else if (pCommand->GetId() == Command::connect && pNotification->nReplyCode != FZ_REPLY_OK)
+	{
 		// Remove pending events
-		auto it = ++m_CommandList.begin();
-		while (it != m_CommandList.end() && (*it)->GetId() != Command::connect) {
-			++it;
+		m_CommandList.pop_front();
+		while (!m_CommandList.empty())
+		{
+			CCommand* pPendingCommand = m_CommandList.front();
+			if (pPendingCommand->GetId() == Command::connect)
+				break;
+			m_CommandList.pop_front();
+			delete pPendingCommand;
 		}
-		m_CommandList.erase(m_CommandList.begin(), it);
 
 		// If this was an automatic reconnect during a recursive
 		// operation, stop the recursive operation
 		m_pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
 	}
-	else if (pCommand->GetId() == Command::connect && nReplyCode == FZ_REPLY_OK) {
+	else if (pCommand->GetId() == Command::connect && pNotification->nReplyCode == FZ_REPLY_OK)
+	{
 		m_pState->SetSuccessfulConnect();
 		m_CommandList.pop_front();
 	}
 	else
 		m_CommandList.pop_front();
 
-	--m_inside_commandqueue;
+	delete pCommand;
+
+	delete pNotification;
+
+	m_inside_commandqueue = false;
 
 	ProcessNextCommand();
 }

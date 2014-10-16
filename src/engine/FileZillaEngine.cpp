@@ -10,43 +10,97 @@
 #define new DEBUG_NEW
 #endif
 
-CFileZillaEngine::CFileZillaEngine(CFileZillaEngineContext& engine_context)
-	: CFileZillaEnginePrivate(engine_context)
+CFileZillaEngine::CFileZillaEngine()
 {
 }
 
 CFileZillaEngine::~CFileZillaEngine()
 {
-	// fixme: Might be too late? Two-phase shutdown perhaps?
-	RemoveHandler();
-	m_maySendNotificationEvent = false;
 }
 
-int CFileZillaEngine::Init(wxEvtHandler *pEventHandler)
+int CFileZillaEngine::Init(wxEvtHandler *pEventHandler, COptionsBase *pOptions)
 {
-	wxCriticalSectionLocker lock(mutex_);
 	m_pEventHandler = pEventHandler;
+	m_pOptions = pOptions;
+	m_pRateLimiter = CRateLimiter::Create(m_pOptions);
+
 	return FZ_REPLY_OK;
 }
 
 int CFileZillaEngine::Execute(const CCommand &command)
 {
-	wxCriticalSectionLocker lock(mutex_);
+	if (command.GetId() != Command::cancel && IsBusy())
+		return FZ_REPLY_BUSY;
 
-	int res = CheckPreconditions(command);
-	if (res != FZ_REPLY_OK) {
-		return res;
+	m_bIsInCommand = true;
+
+	int res = FZ_REPLY_INTERNALERROR;
+	switch (command.GetId())
+	{
+	case Command::connect:
+		res = Connect(reinterpret_cast<const CConnectCommand &>(command));
+		break;
+	case Command::disconnect:
+		res = Disconnect(reinterpret_cast<const CDisconnectCommand &>(command));
+		break;
+	case Command::cancel:
+		res = Cancel(reinterpret_cast<const CCancelCommand &>(command));
+		break;
+	case Command::list:
+		res = List(reinterpret_cast<const CListCommand &>(command));
+		break;
+	case Command::transfer:
+		res = FileTransfer(reinterpret_cast<const CFileTransferCommand &>(command));
+		break;
+	case Command::raw:
+		res = RawCommand(reinterpret_cast<const CRawCommand&>(command));
+		break;
+	case Command::del:
+		res = Delete(reinterpret_cast<const CDeleteCommand&>(command));
+		break;
+	case Command::removedir:
+		res = RemoveDir(reinterpret_cast<const CRemoveDirCommand&>(command));
+		break;
+	case Command::mkdir:
+		res = Mkdir(reinterpret_cast<const CMkdirCommand&>(command));
+		break;
+	case Command::rename:
+		res = Rename(reinterpret_cast<const CRenameCommand&>(command));
+		break;
+	case Command::chmod:
+		res = Chmod(reinterpret_cast<const CChmodCommand&>(command));
+		break;
+	default:
+		return FZ_REPLY_SYNTAXERROR;
 	}
 
-	m_pCurrentCommand.reset(command.Clone());
-	SendEvent(CCommandEvent());
+	if (res != FZ_REPLY_WOULDBLOCK)
+		ResetOperation(res);
 
-	return FZ_REPLY_WOULDBLOCK;
+	m_bIsInCommand = false;
+
+	if (command.GetId() != Command::disconnect)
+		res |= m_nControlSocketError;
+	else if (res & FZ_REPLY_DISCONNECTED)
+		res = FZ_REPLY_OK;
+	m_nControlSocketError = 0;
+
+	return res;
+}
+
+bool CFileZillaEngine::IsBusy() const
+{
+	return CFileZillaEnginePrivate::IsBusy();
+}
+
+bool CFileZillaEngine::IsConnected() const
+{
+	return CFileZillaEnginePrivate::IsConnected();
 }
 
 CNotification* CFileZillaEngine::GetNextNotification()
 {
-	wxCriticalSectionLocker lock(notification_mutex_);
+	wxCriticalSectionLocker lock(m_lock);
 
 	if (m_NotificationList.empty()) {
 		m_maySendNotificationEvent = true;
@@ -58,20 +112,30 @@ CNotification* CFileZillaEngine::GetNextNotification()
 	return pNotification;
 }
 
+const CCommand *CFileZillaEngine::GetCurrentCommand() const
+{
+	return CFileZillaEnginePrivate::GetCurrentCommand();
+}
+
+Command CFileZillaEngine::GetCurrentCommandId() const
+{
+	return CFileZillaEnginePrivate::GetCurrentCommandId();
+}
+
 bool CFileZillaEngine::SetAsyncRequestReply(CAsyncRequestNotification *pNotification)
 {
-	wxCriticalSectionLocker lock(mutex_);
 	if (!pNotification)
 		return false;
 	if (!IsBusy())
 		return false;
 
-	notification_mutex_.Enter();
-	if (pNotification->requestNumber != m_asyncRequestCounter) {
-		notification_mutex_.Leave();
+	m_lock.Enter();
+	if (pNotification->requestNumber != m_asyncRequestCounter)
+	{
+		m_lock.Leave();
 		return false;
 	}
-	notification_mutex_.Leave();
+	m_lock.Leave();
 
 	if (!m_pControlSocket)
 		return false;
@@ -87,19 +151,17 @@ bool CFileZillaEngine::IsPendingAsyncRequestReply(const CAsyncRequestNotificatio
 {
 	if (!pNotification)
 		return false;
-
 	if (!IsBusy())
 		return false;
 
-	wxCriticalSectionLocker lock(notification_mutex_);
+	wxCriticalSectionLocker lock(m_lock);
 	return pNotification->requestNumber == m_asyncRequestCounter;
 }
 
 bool CFileZillaEngine::IsActive(enum CFileZillaEngine::_direction direction)
 {
-	wxCriticalSectionLocker lock(mutex_);
-
-	if (m_activeStatus[direction] == 2) {
+	if (m_activeStatus[direction] == 2)
+	{
 		m_activeStatus[direction] = 1;
 		return true;
 	}
@@ -110,9 +172,8 @@ bool CFileZillaEngine::IsActive(enum CFileZillaEngine::_direction direction)
 
 bool CFileZillaEngine::GetTransferStatus(CTransferStatus &status, bool &changed)
 {
-	wxCriticalSectionLocker lock(mutex_);
-
-	if (!m_pControlSocket) {
+	if (!m_pControlSocket)
+	{
 		changed = false;
 		return false;
 	}
@@ -122,27 +183,15 @@ bool CFileZillaEngine::GetTransferStatus(CTransferStatus &status, bool &changed)
 
 int CFileZillaEngine::CacheLookup(const CServerPath& path, CDirectoryListing& listing)
 {
-	// TODO: Possible optimization: Atomically get current server. The cache has its own mutex.
-	wxCriticalSectionLocker lock(mutex_);
-
 	if (!IsConnected())
 		return FZ_REPLY_ERROR;
 
 	wxASSERT(m_pControlSocket->GetCurrentServer());
 
+	CDirectoryCache cache;
 	bool is_outdated = false;
-	if (!directory_cache_.Lookup(listing, *m_pControlSocket->GetCurrentServer(), path, true, is_outdated))
+	if (!cache.Lookup(listing, *m_pControlSocket->GetCurrentServer(), path, true, is_outdated))
 		return FZ_REPLY_ERROR;
 
 	return FZ_REPLY_OK;
-}
-
-int CFileZillaEngine::Cancel()
-{
-	wxCriticalSectionLocker lock(mutex_);
-	if (!IsBusy())
-		return FZ_REPLY_OK;
-
-	SendEvent(CFileZillaEngineEvent(engineCancel));
-	return FZ_REPLY_WOULDBLOCK;
 }

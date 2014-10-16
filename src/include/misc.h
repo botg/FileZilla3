@@ -8,7 +8,7 @@ wxString GetIPV6LongForm(wxString short_address);
 
 int DigitHexToDecNum(wxChar c);
 
-bool IsRoutableAddress(const wxString& address, CSocket::address_family family);
+bool IsRoutableAddress(const wxString& address, enum CSocket::address_family family);
 
 bool IsIpAddress(const wxString& address);
 
@@ -47,13 +47,5 @@ wxString ListTlsCiphers(const wxString& priority);
 // This function instead returns the actual Windows version. On non-Windows systems, it's equivalent to
 // wxGetOsVersion
 bool GetRealOsVersion( int& major, int& minor );
-
-// C++11 sadly lacks make_unique, provide our own.
-template<typename T, typename... Args>
-std::unique_ptr<T> make_unique(Args&&... args)
-{
-	return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-}
-
 
 #endif //__MISC_H__
